@@ -31,8 +31,6 @@ public class Player {
 		} catch(IOException e) { e.printStackTrace(); }
 	}
 
-	
-	
 	public ArrayList<Card> getHand() {
 		return hand;
 	}
