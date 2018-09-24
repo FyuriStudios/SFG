@@ -39,7 +39,7 @@ public class Game {
 	}
 	
 	public Player getCurrentPlayer() {
-		return whoseTurn()? getPlayer1():getPlayer2();
+		return whoseTurn() ? getPlayer1():getPlayer2();
 	}
 	
 	

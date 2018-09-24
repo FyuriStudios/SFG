@@ -3,7 +3,7 @@ package testCards;
 import base.Card;
 import base.Monster;
 
-public class Potato extends Monster{
+public class Potato extends Monster {
 	
 	private static final int POWER = 4;
 			

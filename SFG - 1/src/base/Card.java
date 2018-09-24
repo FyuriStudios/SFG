@@ -1,5 +1,8 @@
 package base;
 
+/**
+ * Defines a generic Card and all of the things that are common between Cards.
+ */
 public class Card {
 	
 	/**
@@ -15,6 +18,11 @@ public class Card {
 	public static enum Rarity {
 		COMMON, UNCOMMON, LEGENDARY, SECRET_WEAPON;
 	}
+	
+	/**
+	 * The title of the card.
+	 */
+	public final String name;
 	
 	/**
 	 * The cost of the card, as defined by the card text (might not necessarily be the actual cost of the card.)
@@ -41,9 +49,10 @@ public class Card {
 	 * @param cost  the (initial) cost of the card
 	 * @param tokenType  the type of tokens required to play the card
 	 */
-	public Card(int cost, TokenType tokenType, Rarity rarity) {
+	public Card(int cost, String name, TokenType tokenType, Rarity rarity) {
 		cardCost = cost;
 		playCost = cardCost;
+		this.name = name;
 		this.tokenType = tokenType;
 		this.rarity = rarity;
 	}

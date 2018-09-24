@@ -34,11 +34,6 @@ public class Monster extends Card implements Character{
 	public final int enteredBoardOn;
 
 	/**
-	 * The name of the card. Doesn't change.
-	 */
-	public final String title;
-
-	/**
 	 * The list of activateable abilities that the card has. Private, but it's referenced by a few of other methods in this class.
 	 */
 	private ArrayList<ActivateableAbility> activAbilities;
@@ -54,10 +49,9 @@ public class Monster extends Card implements Character{
 	 * @param type  the type of the monster (GOON, CROW, etc.)
 	 */
 	public Monster(int power, int cost, int enteredOn, String title, Card.TokenType tokenType, Card.Rarity rarity, Type type) {
-		super(cost, tokenType, rarity);
+		super(cost, title, tokenType, rarity);
 		this.power = power;
 		this.enteredBoardOn = enteredOn;
-		this.title = title;
 		this.type = type;
 	}
 
@@ -100,7 +94,7 @@ public class Monster extends Card implements Character{
 	/**
 	 * Determines whether or not an attack is valid.
 	 * @param g  a reference to the Game
-	 * @param enemyIndex  the index to be targeted on the enemy board (
+	 * @param enemyIndex  the index to be targeted on the enemy board (-1 is enemy hero, 0-> end of board is their board)
 	 * @return  whether or not the attack is valid.
 	 */
 	public boolean validAttack(Game g, int enemyIndex) {
