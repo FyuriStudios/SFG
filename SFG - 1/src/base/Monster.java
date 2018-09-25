@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Generally, the methods you will care about are the ability methods, like {@code signature()} and {@code entersBoard()}. When you override these methods you should also override the corresponding boolean method, like {@code hasSignature()} and {@code hasEntersBoard()}.
  * @author Hughes 
  */
-public class Monster extends Card implements Character{
+public class Monster extends Card implements Targetable{
 
 	/**
 	 * A list of all of the different types of monsters.
@@ -56,9 +56,8 @@ public class Monster extends Card implements Character{
 	}
 
 	@Override
-	public boolean takeDamage(int damage) {
+	public void takeDamage(int damage) {
 		this.currentPower -= damage;
-		return power<=0;
 	}
 
 	/**
@@ -67,7 +66,7 @@ public class Monster extends Card implements Character{
 	 * @param g  a reference to the Game
 	 * @param c  the Character target (pass {@code null} if there's no target)
 	 */
-	public void useActivateableAbility(int index, Game g, Character c) {
+	public void useActivateableAbility(int index, Game g, Targetable c) {
 		activAbilities.get(index).run(g, c);
 	}
 
@@ -142,7 +141,7 @@ public class Monster extends Card implements Character{
 	 * @param g  a reference to the game
 	 * @param c  the target of the attack
 	 */
-	public void onSelfAttack(Game g, Character c) {
+	public void onSelfAttack(Game g, Targetable c) {
 		return;
 	}
 
@@ -156,7 +155,7 @@ public class Monster extends Card implements Character{
 	 * @param g  a reference to the game
 	 * @param c  the monster that is attacking
 	 */
-	public void onEnemyAttack(Game g, Character c) {
+	public void onEnemyAttack(Game g, Targetable c) {
 		return;
 	}
 

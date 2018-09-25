@@ -4,14 +4,17 @@ import java.util.ArrayList;
 
 public class Game {
 	
+	private boolean gameRunning;
+	
 	private Player player1, player2;
 	
 	private int turnCounter;
 	
 	public Game(int port1, int port2) {
 		turnCounter = -1;
-		player1 = new Player(0, true);
-		player2 = new Player(0, false);
+		player1 = new Player(port1, true);
+		player2 = new Player(port2, false);
+		gameRunning = true;
 	}
 	
 	public Player getPlayer1() {
@@ -40,6 +43,12 @@ public class Game {
 	
 	public Player getCurrentPlayer() {
 		return whoseTurn() ? getPlayer1():getPlayer2();
+	}
+	
+	public void runGame() {
+		while(gameRunning) {
+			
+		}
 	}
 	
 	

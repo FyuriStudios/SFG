@@ -3,7 +3,7 @@ package testCards;
 import base.Card;
 import base.Game;
 import base.Spell;
-import base.Character;
+import base.Targetable;
 
 public class CarrotRain extends Spell{
 	
@@ -24,7 +24,7 @@ public class CarrotRain extends Spell{
 	}
 	
 	@Override
-	public void play(Game g, Character target) {
+	public void play(Game g, Targetable target) {
 		target.takeDamage(CARROT_DAMAGE);
 	}
 

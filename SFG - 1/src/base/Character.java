@@ -1,10 +1,27 @@
 package base;
 
-/**
- * Everything that can be targeted by attacks and spells should implement this interface.
- */
-public interface Character {
+public abstract class Character implements Targetable{
+
+	public static final int MAX_HEALTH = 50;
 	
-	public boolean takeDamage(int damage);
+	private int currentHealth;
 	
+	public final String name;
+	
+	public Character(String name) {
+		this.currentHealth = MAX_HEALTH;
+		this.name = name;
+	}
+	
+	abstract void heroPower(Game g, Targetable t);
+	
+	@Override
+	public void takeDamage(int damage) {
+		
+	}
+	
+	public boolean isDead() {
+		return currentHealth <= 0;
+	}
+
 }
