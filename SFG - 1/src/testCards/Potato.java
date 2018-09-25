@@ -5,6 +5,8 @@ import base.Monster;
 
 public class Potato extends Monster {
 	
+	private static final int ID = 1;
+	
 	private static final int POWER = 4;
 			
 	private static final int COST = 3;
@@ -19,6 +21,10 @@ public class Potato extends Monster {
 	
 	public Potato(int enteredOn) {
 		super(POWER, COST, enteredOn, NAME, TOKEN_TYPE, RARITY, TYPE);
+	}
+	
+	public int getID() {
+		return ID;
 	}
 	
 }

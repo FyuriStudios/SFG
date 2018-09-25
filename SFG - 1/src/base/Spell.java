@@ -22,9 +22,8 @@ public abstract class Spell extends Card{
 	/**
 	 * Does the card's effect.
 	 * @param g  takes a reference to the game
-	 * @param target  the target of the spell. Null if no target. 
 	 */
-	public abstract void play(Game g, Targetable target);
+	public abstract void play(Game g);
 
 	
 }

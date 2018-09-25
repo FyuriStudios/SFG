@@ -3,7 +3,9 @@ package base;
 /**
  * Defines a generic Card and all of the things that are common between Cards.
  */
-public class Card {
+public abstract class Card {
+	
+	public abstract int getID();
 	
 	/**
 	 * Defines the types of tokens that can be used to play cards.

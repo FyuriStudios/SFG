@@ -7,7 +7,7 @@ import java.util.ArrayList;
  * Generally, the methods you will care about are the ability methods, like {@code signature()} and {@code entersBoard()}. When you override these methods you should also override the corresponding boolean method, like {@code hasSignature()} and {@code hasEntersBoard()}.
  * @author Hughes 
  */
-public class Monster extends Card implements Targetable{
+public abstract class Monster extends Card implements Targetable{
 
 	/**
 	 * A list of all of the different types of monsters.
@@ -37,6 +37,8 @@ public class Monster extends Card implements Targetable{
 	 * The list of activateable abilities that the card has. Private, but it's referenced by a few of other methods in this class.
 	 */
 	private ArrayList<ActivateableAbility> activAbilities;
+	
+	private boolean stat;
 
 	/**
 	 * The constructor of the Monster class.
@@ -53,6 +55,7 @@ public class Monster extends Card implements Targetable{
 		this.power = power;
 		this.enteredBoardOn = enteredOn;
 		this.type = type;
+		this.stat = false;
 	}
 
 	@Override
@@ -66,8 +69,8 @@ public class Monster extends Card implements Targetable{
 	 * @param g  a reference to the Game
 	 * @param c  the Character target (pass {@code null} if there's no target)
 	 */
-	public void useActivateableAbility(int index, Game g, Targetable c) {
-		activAbilities.get(index).run(g, c);
+	public void useActivateableAbility(int index, Game g) {
+		activAbilities.get(index).run(g);
 	}
 
 	/**
@@ -97,7 +100,9 @@ public class Monster extends Card implements Targetable{
 	 * @return  whether or not the attack is valid.
 	 */
 	public boolean validAttack(Game g, int enemyIndex) {
-		if(enemyIndex != -1 && g.getCurrentPlayer().getBoard().get(enemyIndex).hasDefender())
+		if(stat)
+			return false;
+		else if(enemyIndex != -1 && g.getCurrentPlayer().getBoard().get(enemyIndex).hasDefender())
 			return true;
 		boolean validAttack = true;
 		for(Monster m: g.getCurrentPlayer().getBoard())
@@ -106,10 +111,11 @@ public class Monster extends Card implements Targetable{
 		return validAttack;
 	}
 
-	public void attack() {
-		//TODO add stuff here
+	public void attack(Game g, int enemyIndex) {
+		g.getOtherPlayer().getBoard().get(enemyIndex).takeDamage(power);
+		this.takeDamage(g.getOtherPlayer().getBoard().get(enemyIndex).getCurrentPower());
 	}
-
+	
 	/**
 	 * Executes the signature method of a monster, if it has one.
 	 * @param g  A reference to the game
@@ -188,6 +194,24 @@ public class Monster extends Card implements Targetable{
 	/**
 	 * @return whether or not the monster has a spell cast ability
 	 */
-	public boolean hasSpellCast(Game g) {return false;}
+	public boolean hasSpellCast() {return false;}
 
+	/**
+	 * Executes when the turn increments (start and end of turns), if it exists.
+	 * @param g  a reference to the game
+	 */
+	public void turnIncrement(Game g) {
+		return;
+	}
+	
+	/**
+	 * @return Whether or not the monster has a turn increment ability
+	 */
+	public boolean hasTurnIncrement() {return false;}
+	
+	public boolean isStat() {return stat;}
+	
+	public int getCurrentPower() {return currentPower;}
+	
+	public void setCurrentPower(int power) {this.currentPower = power;}
 }
