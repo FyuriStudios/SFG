@@ -13,10 +13,10 @@ public class Game {
 
 	private int turnCounter;
 
-	public Game(int port1, int port2) {
+	public Game(Host h1, Host h2) {
 		turnCounter = -1;
-		player1 = new Player(port1, true);
-		player2 = new Player(port2, false);
+		player1 = new Player(h1, true);
+		player2 = new Player(h2, false);
 		gameRunning = true;
 	}
 
