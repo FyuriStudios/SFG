@@ -13,15 +13,11 @@ public abstract class Character implements Targetable{
 		this.name = name;
 	}
 	
-	abstract void heroPower(Game g, Targetable t);
+	abstract void heroPower(Game g);
 	
 	@Override
 	public void takeDamage(int damage) {
 		
-	}
-	
-	public boolean isDead() {
-		return currentHealth <= 0;
 	}
 
 }

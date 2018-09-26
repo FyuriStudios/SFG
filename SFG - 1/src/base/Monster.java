@@ -102,7 +102,7 @@ public abstract class Monster extends Card implements Targetable{
 	public boolean validAttack(Game g, int enemyIndex) {
 		if(stat)
 			return false;
-		else if(enemyIndex != -1 && g.getCurrentPlayer().getBoard().get(enemyIndex).hasDefender())
+		else if(enemyIndex != -1 && g.getCurrentPlayer().getBoard().get(enemyIndex).hasDefender())//make sure it's not the hero so an error doesn't get thrown
 			return true;
 		boolean validAttack = true;
 		for(Monster m: g.getCurrentPlayer().getBoard())
@@ -112,7 +112,9 @@ public abstract class Monster extends Card implements Targetable{
 	}
 
 	public void attack(Game g, int enemyIndex) {
-		g.getOtherPlayer().getBoard().get(enemyIndex).takeDamage(power);
+		if(enemyIndex == -1)
+			g.getOtherPlayer().getCharacter().takeDamage(currentPower);
+		g.getOtherPlayer().getBoard().get(enemyIndex).takeDamage(currentPower);
 		this.takeDamage(g.getOtherPlayer().getBoard().get(enemyIndex).getCurrentPower());
 	}
 	

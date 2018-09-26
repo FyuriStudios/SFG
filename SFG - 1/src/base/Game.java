@@ -95,6 +95,7 @@ public class Game {
 			current.getOutput().writeInt(temp.getID());//writes the ID of the card to the client
 
 		int playerInput;//the player's input. Gets repeatedly written to.
+		boolean turnRunning = true;
 		do {
 			playerInput = current.getInput().readInt();
 
@@ -130,13 +131,32 @@ public class Game {
 							m.onEnemyAttack(this, current.getBoard().get(selectIndex));
 							killDead();
 						}
+					for(Effect e:other.getEffects())
+						if(e.hasOnEnemyAttack()) {
+							e.onEnemyAttack(this, current.getBoard().get(selectIndex));
+							killDead();
+						}
 				}
 			}
 
 			else if(playerInput == ACTIVATE_ABILITY) {
-
+				int indexToActivate = current.getInput().readInt();
+				int abilityActivated = current.getInput().readInt();
+				
+				try {
+					current.getBoard().get(indexToActivate).useActivateableAbility(abilityActivated, this);
+					killDead();
+				} catch(ArrayIndexOutOfBoundsException e) { current.getOutput().writeInt(-1); }
 			}
-		} while(true);
+			else if(playerInput == HERO_POWER) {
+				current.getCharacter().heroPower(this);
+				killDead();
+			}
+			else if(playerInput == END_TURN) {
+				endTurn();
+				turnRunning = false;
+			}
+		} while(turnRunning);
 	}
 
 }

@@ -11,6 +11,10 @@ public class Player {
 	private ArrayList<Monster> board;
 	private ArrayList<Card> deck;
 	
+	private ArrayList<Effect> effects;
+	
+	private Effect fieldSpell;
+	
 	private Host h;
 	private DataOutputStream out;
 	private DataInputStream in;
@@ -148,9 +152,38 @@ public class Player {
 			((Monster)temp).playCard();
 		} else if(temp instanceof Spell) {
 			((Spell)temp).play(g);
+			for(Monster m: g.getCurrentPlayer().getBoard())
+				if(m.hasSpellCast()) {
+					m.spellCast(g);
+					g.killDead();
+				}
+			for(Monster m: g.getOtherPlayer().getBoard())
+				if(m.hasSpellCast()) {
+					m.spellCast(g);
+					g.killDead();
+				}
+			for(Effect e: g.getCurrentPlayer().getEffects())
+				if(e.hasSpellCast()) {
+					e.spellCast(g);
+					g.killDead();
+				}
+			for(Effect e: g.getOtherPlayer().getEffects())
+				if(e.hasSpellCast()) {
+					e.spellCast(g);
+					g.killDead();
+				}
 		}
 		return temp;
 	}
 	
+	public Character getCharacter() {return character;}
+	
+	public Effect getFieldSpell() {return fieldSpell;}
+	
+	public void setFieldSpell(Effect spell) {
+		fieldSpell = spell;
+	}
+	
+	public ArrayList<Effect> getEffects() {return effects;}
 	
 }
