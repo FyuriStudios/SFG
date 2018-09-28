@@ -96,6 +96,15 @@ public class Player {
 		return temp;
 	}
 
+	public ArrayList<Effectable> getAllEffectables() {
+		ArrayList<Effectable> retVal = new ArrayList<Effectable>();
+		retVal.addAll(effects);
+		retVal.addAll(board);
+		if(fieldSpell!=null)
+			retVal.add(fieldSpell);
+		return retVal;
+	}
+
 	public Card playCard(Game g, int index) {
 
 		if(hand.get(index).tokenType == Card.TokenType.MONSTER) {
@@ -155,26 +164,12 @@ public class Player {
 		if(temp instanceof Monster) {
 			try {
 				board.add(getInput().readInt(), (Monster)temp);
+				((Monster) temp).setTurnPlayedOn(g.getTurnCounter());
 			} catch (IOException e) {e.printStackTrace();}
 			((Monster)temp).playCard();
 		} else if(temp instanceof Spell) {
 			((Spell)temp).play(g);
-			for(Monster m: g.getCurrentPlayer().getBoard())
-				if(m.hasSpellCast()) {
-					m.spellCast(g);
-					g.killDead();
-				}
-			for(Monster m: g.getOtherPlayer().getBoard())
-				if(m.hasSpellCast()) {
-					m.spellCast(g);
-					g.killDead();
-				}
-			for(Effect e: g.getCurrentPlayer().getEffects())
-				if(e.hasSpellCast()) {
-					e.spellCast(g);
-					g.killDead();
-				}
-			for(Effect e: g.getOtherPlayer().getEffects())
+			for(Effectable e: g.getCurrentPlayer().getAllEffectables())
 				if(e.hasSpellCast()) {
 					e.spellCast(g);
 					g.killDead();

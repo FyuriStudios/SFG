@@ -19,8 +19,8 @@ public class Potato extends Monster {
 	
 	private static final String NAME = "Potato";
 	
-	public Potato(int enteredOn) {
-		super(POWER, COST, enteredOn, NAME, TOKEN_TYPE, RARITY, TYPE);
+	public Potato() {
+		super(POWER, COST, NAME, TOKEN_TYPE, RARITY, TYPE);
 	}
 	
 	public int getID() {

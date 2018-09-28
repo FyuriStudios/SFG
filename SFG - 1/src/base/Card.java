@@ -1,14 +1,26 @@
+/*
+ * Edit list:
+ * 0.1.0
+ * 9-26-18, Hughes: finished the first version of this file and added comments
+ */
 package base;
 
 /**
- * Defines a generic Card and all of the things that are common between Cards.
+ * Defines a generic Card and all of the things that are common between Cards.<br>
+ * Doesn't have flavor text because the server couldn't care less what the flavor text is.
+ * @author Hughes
  */
 public abstract class Card {
 	
+	/**
+	 * Gives each card a card ID number.
+	 * @return  the ID number of this card.
+	 */
 	public abstract int getID();
 	
 	/**
-	 * Defines the types of tokens that can be used to play cards.
+	 * Defines the types of tokens that can be used to play cards.<br>
+	 * SFLEX is spell flex and MFLEX is monster flex.
 	 */
 	public static enum TokenType {
 		SPELL, MONSTER, SFLEX, MFLEX;
@@ -22,7 +34,7 @@ public abstract class Card {
 	}
 	
 	/**
-	 * The title of the card.
+	 * The title of the card. Doesn't change.
 	 */
 	public final String name;
 	
@@ -49,7 +61,9 @@ public abstract class Card {
 	/**
 	 * The base constructor for the {@code Card} class.
 	 * @param cost  the (initial) cost of the card
+	 * @param name  the String title of the card (e.g. {@code "Potato"})
 	 * @param tokenType  the type of tokens required to play the card
+	 * @param rarity  the rarity of the card
 	 */
 	public Card(int cost, String name, TokenType tokenType, Rarity rarity) {
 		cardCost = cost;

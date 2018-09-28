@@ -1,3 +1,8 @@
+/*
+ * Edit List:
+ * 0.1.0
+ * 9-27-18, Hughes: Added the edit list. This file was already done beforehand.
+ */
 package base;
 
 import java.io.DataInputStream;
@@ -8,7 +13,10 @@ import java.net.Socket;
 
 /**
  * This class is used to connect to another computer and get input and output from the computer.<br>
- * If you're having issues with this class (ie it's not connecting to another server properly), ask Hughes to fix it.
+ * If you're having issues with this class (ie it's not connecting to another server properly), ask Hughes to fix it.<p>
+ * 
+ * This class requires the computer that is hosting to be using a port forward to forward the port (lmao).<br>
+ * Basically, it only works on a dedicated server.
  * @author Hughes
  */
 public class Host {

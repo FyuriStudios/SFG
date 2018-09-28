@@ -1,13 +1,25 @@
+/*
+ * Edit List:
+ * 0.1.0
+ * 9-27-2018, Hughes: Added comments, finalized v1 of the class
+ */
 package base;
 
 import java.util.ArrayList;
 
 /**
- * The base for all monsters. When making a monster card you should extend this class and then reference all of the methods in this class to see which methods to override.<p>
- * Generally, the methods you will care about are the ability methods, like {@code signature()} and {@code entersBoard()}. When you override these methods you should also override the corresponding boolean method, like {@code hasSignature()} and {@code hasEntersBoard()}.
+ * The base for all monsters. When making a monster card you should extend this class 
+ * and then reference all of the methods in this class to see which methods to override.<p>
+ * Generally, the methods you will care about are the ability methods, 
+ * like {@code signature()} and {@code entersBoard()}. 
+ * When you override these methods you should also override the corresponding boolean method, 
+ * like {@code hasSignature()} and {@code hasEntersBoard()}.
+ * <p>
+ * As of SFG server v0.1.0, this class extends Effectable. If that solution really doesn't work, then this class needs to be reworked.
  * @author Hughes 
+ * @since SFG v0.1.0
  */
-public abstract class Monster extends Card implements Targetable{
+public abstract class Monster extends Card implements Targetable, Effectable{
 
 	/**
 	 * A list of all of the different types of monsters.
@@ -31,29 +43,27 @@ public abstract class Monster extends Card implements Targetable{
 	/**
 	 * The turn the monster entered the board on (as the Game class's turnCounter variable). It doesn't change.
 	 */
-	public final int enteredBoardOn;
+	private int enteredBoardOn;
 
 	/**
 	 * The list of activateable abilities that the card has. Private, but it's referenced by a few of other methods in this class.
 	 */
 	private ArrayList<ActivateableAbility> activAbilities;
-	
+
 	private boolean stat;
 
 	/**
 	 * The constructor of the Monster class.
 	 * @param power  the power of the card
 	 * @param cost  the play cost of the card
-	 * @param enteredOn  the turn that the card entered the board on
 	 * @param title  the name of the card
 	 * @param tokenType  the type of tokens required to play the card (generally MONSTER)
 	 * @param rarity  the rarity of the card
 	 * @param type  the type of the monster (GOON, CROW, etc.)
 	 */
-	public Monster(int power, int cost, int enteredOn, String title, Card.TokenType tokenType, Card.Rarity rarity, Type type) {
+	public Monster(int power, int cost, String title, Card.TokenType tokenType, Card.Rarity rarity, Type type) {
 		super(cost, title, tokenType, rarity);
 		this.power = power;
-		this.enteredBoardOn = enteredOn;
 		this.type = type;
 		this.stat = false;
 	}
@@ -67,7 +77,6 @@ public abstract class Monster extends Card implements Targetable{
 	 * Uses an activateable ability of the card.
 	 * @param index  the index of the ability to be used
 	 * @param g  a reference to the Game
-	 * @param c  the Character target (pass {@code null} if there's no target)
 	 */
 	public void useActivateableAbility(int index, Game g) {
 		activAbilities.get(index).run(g);
@@ -117,7 +126,7 @@ public abstract class Monster extends Card implements Targetable{
 		g.getOtherPlayer().getBoard().get(enemyIndex).takeDamage(currentPower);
 		this.takeDamage(g.getOtherPlayer().getBoard().get(enemyIndex).getCurrentPower());
 	}
-	
+
 	/**
 	 * Executes the signature method of a monster, if it has one.
 	 * @param g  A reference to the game
@@ -205,15 +214,22 @@ public abstract class Monster extends Card implements Targetable{
 	public void turnIncrement(Game g) {
 		return;
 	}
-	
+
 	/**
 	 * @return Whether or not the monster has a turn increment ability
 	 */
 	public boolean hasTurnIncrement() {return false;}
-	
+
 	public boolean isStat() {return stat;}
-	
+
 	public int getCurrentPower() {return currentPower;}
-	
+
 	public void setCurrentPower(int power) {this.currentPower = power;}
+
+	public void setTurnPlayedOn(int playedOn) {
+		this.enteredBoardOn = playedOn;
+	}
+
+	public int getTurnPlayedOn() {return this.enteredBoardOn;}
 }
+
