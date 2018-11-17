@@ -48,7 +48,7 @@ class TurnBeginsEvent {
     }
 }
   
-class TurnEndEvent {
+class TurnEndsEvent {
     constructor(game) {
       this.player = game.currentPlayer
     }
@@ -65,4 +65,4 @@ export default {
     QuestFulfilledEvent,
     TargetedSpellPlayedEvent,
     UntargetedSpellPlayedEvent,
-    TurnEndEvent}
+    TurnEndsEvent}

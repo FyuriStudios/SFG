@@ -1,8 +1,9 @@
+import "./Effect"
 /**
  * This class contains the basis for a generic Card. You should never simply extend it, rather, you should override all of the functions in this class.
  * In theory, errors will be thrown unless you extend all of these functions.
  */
-class Card {
+class Card extends Effect{
 
   constructor() {
     this.playCost = this.cost
@@ -30,4 +31,4 @@ class Card {
 
 }
 
-module.exports = Card
+export default Card

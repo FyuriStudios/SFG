@@ -28,9 +28,8 @@ class Game {
     }
     killDead()
   }
-
   startTurn() {
-    eventHistory.push(new events.TurnBeginsEvent(this))
+    eventHistory.push(new TurnBeginsEvent(this))
     turnCounter++
     for(element in effects){
       if(element.hasTurnIncrement())
