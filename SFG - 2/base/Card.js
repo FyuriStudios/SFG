@@ -1,5 +1,6 @@
 /**
- *
+ * This class contains the basis for a generic Card. You should never simply extend it, rather, you should override all of the functions in this class.
+ * In theory, errors will be thrown unless you extend all of these functions.
  */
 class Card {
 
