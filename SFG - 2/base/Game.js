@@ -19,6 +19,10 @@ class Game {
     //if it's 3,4... 7.8... player 2's turn.
   }
 
+  get otherPlayer() {
+    return (turnCounter%4 == 1 || turnCounter%4 == 2) ? player2:player1
+  }
+
   endTurn() {
     eventHistory.push(new TurnEndEvent(this))
     turnCounter++
