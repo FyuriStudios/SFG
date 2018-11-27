@@ -1,5 +1,8 @@
 //import './Events'
 
+const MAX_TOKS = 15
+const TOKS_PER_TURN = 3
+
 class Game {
 
     constructor(socket1, socket2) {
@@ -13,18 +16,24 @@ class Game {
 	 */
 	this.player1 = {
 		id: 1,
+		character: new Character(),//TODO: change this to a real character
 		socket: socket1,
 		board: [],
 		hand: [],
-		graveyard: []
+		graveyard: [],
+		mToks = 0,
+		sToks = 0
 	}
 
 	this.player2 = {
 		id: 2,
+		character: new Character(),//TODO: change this to a real character
 		socket: socket2,
 		board: [],
 		hand: [],
-		graveyard: []
+		graveyard: [],
+		mToks = 0,
+		sToks = 0
 	}
     }
 
@@ -35,18 +44,9 @@ class Game {
     start() {
 	player1.board = []//TODO: add a default deck
 	player2.board = []
-	
-	var doTurn = function(input) {
-	    if(input.player != this.currentPlayer) {
-		return //If we receive input from the other player, ignore it.
-	    } else {
-		
-	    }
-	}
 
-	player1.socket.on('move', function(input) {
 
-	})
+
     }
 
 
@@ -65,32 +65,107 @@ class Game {
 		//Just the opposite of currentPlayer.
     }
 
-    endTurn() {
+    endTurn(input) {
 //	eventHistory.push(new TurnEndEvent(this))
 	turnCounter++
 //	for(element in effects){
 //	if(element.hasTurnIncrement())
-//	element.turnIncrement()
+//	element.turnIncrement() //TODO: write to history, effects
 //	}
 	killDead()
+	startTurn(input)
     }
 
-    startTurn() {
+    startTurn(input) {
+	var temp = this.currentPlayer
+	if(temp.sToks >= MAX_TOKS-TOKS_PER_TURN) {
+	    temp.sToks += (TOKS_PER_TURN-(MAX_TOKS-TOKS_PER_TURN))
+	} else {
+	    temp.sToks += TOKS_PER_TURN
+	}
+	if(temp.mToks >= MAX_TOKS-TOKS_PER_TURN) {
+	    temp.mToks += (TOKS_PER_TURN-(MAX_TOKS-TOKS_PER_TURN)) //give the player their frickin tokens
+	} else {
+	    temp.mToks += TOKS_PER_TURN
+	}
 //	eventHistory.push(new TurnBeginsEvent(this))
 	turnCounter++
 //	for(element in effects){
 //	if(element.hasTurnIncrement())
-//	element.turnIncrement()
+//	element.turnIncrement() //TODO: write to history, effects
 //	}
 	killDead()
+
     }
 
     killDead() {
 
+	if(player1.character.health == 0){
+	    player1.socket.emit('game over', 1)
+	    player2.socket.emit('game over', 1)
+	    player1.socket.disconnect()
+	    player2.socket.disconnect()
+	} else if(player2.character.health == 0) {//check for game over first.
+	    player1.socket.emit('game over', 2)
+	    player2.socket.emit('game over', 2)
+	    player1.socket.disconnect()
+	    player2.socket.disconnect()
+	}
+
+	for(i in player1.board) {
+	    if(i.power == 0)
+		player1.graveyard.push(i)//add all dead guys to graveyards.
+	}
+	for(i in player2.board) {
+	    if(i.power == 0)
+		player2.graveyard.push(i)//TODO: Add effects and event writing
+	}
+
+	player1.board = player1.board.filter((n) => {n.power > 0})//remove all dead guys.
+	player2.board = player2.board.filter((n) => {n.power > 0})
     }
 
     start() {
+	doTurn(player1.socket)
+	doTurn(player2.socket)
+    }
 
+    doTurn(socket) {
+	socket.on('move', function(input) {
+	    if(input.player != currentPlayer) {
+		return
+	    } else if(input.type == 'attack') {
+		attack(input)
+	    } else if(input.type == 'end turn') {
+		endTurn(input)
+	    } else if(input.type == 'play card') {
+		playCard(input)
+	    }
+
+	})
+    }
+
+    attack(input) {
+	if((input.attackerLoc >= currentPlayer.board.length || input.attackerLoc == -1) || input.targetLoc >= currentPlayer.board.length) { //just real quick making sure that the locations are valid
+	    return
+	}
+
+	var attacker = currentPlayer.board[input.attackerLoc]
+
+	if(input.targetLoc == -1) { //set the target equal to the enemy character if the targetLoc is -1.
+	    var target = otherPlayer.character
+	    target.health -= attacker.power
+	} else {
+	    var target = otherPlayer.board[input.targetLoc]
+	    var tempPower = target.power
+	    target.power -= attacker.power
+	    attacker.power -= tempPower //TODO: write this to history, resolve effects
+	}
+	killDead()
+    }
+    
+    playCard(input) {
+	//finish this.
     }
 
 }
