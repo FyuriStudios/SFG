@@ -15,5 +15,9 @@
   "bugs": {
     "url": "https://github.com/FyuriStudios/SFG/issues"
   },
-  "homepage": "https://github.com/FyuriStudios/SFG#readme"
+  "homepage": "https://github.com/FyuriStudios/SFG#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.1.1"
+  }
 }
