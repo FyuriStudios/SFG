@@ -2,6 +2,7 @@
 
 const MAX_TOKS = 15
 const TOKS_PER_TURN = 3
+const MAX_HAND_SIZE = 10
 
 class Game {
 
@@ -88,8 +89,23 @@ class Game {
 	} else {
 	    temp.mToks += TOKS_PER_TURN
 	}
+
+	if(temp.deck.length > 0 && temp.hand.length < MAX_HAND_SIZE) { //TODO: write this to history, resolve effects.
+	    temp.hand.append(temp.deck.pop())
+	} else if(temp.deck.length == 0) {
+	    //TODO: ya boy is in fatigue and we need to add a rule about this, since I forget what we were doing
+	} else if(temp.hand.length >= MAX_HAND_SIZE) {
+	    temp.deck.pop()
+	}
+	
+	
 //	eventHistory.push(new TurnBeginsEvent(this))
-	turnCounter++
+	turnCounter++ //TODO: effects, history
+	for(dude in temp.board) {
+	    if(!dude.isDefender) {
+		dude.canAttack = true
+	    }
+	}
 //	for(element in effects){
 //	if(element.hasTurnIncrement())
 //	element.turnIncrement() //TODO: write to history, effects
@@ -149,8 +165,13 @@ class Game {
 	if((input.attackerLoc >= currentPlayer.board.length || input.attackerLoc == -1) || input.targetLoc >= currentPlayer.board.length) { //just real quick making sure that the locations are valid
 	    return
 	}
+	
+	if(!attacker.canAttack) {
+	    return
+	}
 
 	var attacker = currentPlayer.board[input.attackerLoc]
+	attacker.canAttack = false
 
 	if(input.targetLoc == -1) { //set the target equal to the enemy character if the targetLoc is -1.
 	    var target = otherPlayer.character
@@ -163,9 +184,11 @@ class Game {
 	}
 	killDead()
     }
-    
+
     playCard(input) {
 	//finish this.
+
+
     }
 
 }
