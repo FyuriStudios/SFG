@@ -1,0 +1,23 @@
+{
+  "name": "sfg",
+  "version": "0.0.1",
+  "description": "The main project for the SFG project, written in NodeJS.",
+  "main": "Server.js",
+  "scripts": {
+    "test": "node test.js"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/FyuriStudios/SFG.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/FyuriStudios/SFG/issues"
+  },
+  "homepage": "https://github.com/FyuriStudios/SFG#readme",
+  "dependencies": {
+    "express": "^4.16.4",
+    "socket.io": "^2.1.1"
+  }
+}
