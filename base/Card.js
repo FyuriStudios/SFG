@@ -8,6 +8,10 @@ class Card extends Effect{
   constructor() {
     this.playCost = this.cost
   }
+  
+  get type() {
+    throw 'Type needs to be implemented'
+  }
 
   get id() {
     throw 'ID needs to be implemented'
