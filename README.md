@@ -4,8 +4,8 @@ The main code is mostly sitting under "base". Go in there, unless you're writing
 If you need help with that, ask ~~Jesus~~ the Internet. I recommend setting the server up on port 6001 because then you won't have to edit the code at all.
 Then, you'll need to run "Server.js" because I haven't properly configured the startup file yet. I'm lazy, sorry.
 Something like:
-```bash
-> cd "~/git/SFG/base"
+```PowerShell
+> cd SFG/base
 > node Server.js
 ```
 If that doesn't work, ask ~~Jesus~~ Hughes for help. Or just ask him to host a server for you since he wrote the source code.
