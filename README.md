@@ -1,4 +1,4 @@
-# The repository currently housing the NodeJS SFG project.
+# The repository currently houses the NodeJS SFG project.
 The main code is mostly sitting under "base". Go in there, unless you're writing the frontend.
 ## If you want to host your own server, you'll have to set up a port forward on your home router. 
 If you need help with that, ask ~~Jesus~~ the Internet. I recommend setting the server up on port 6001 because then you won't have to edit the code at all.
