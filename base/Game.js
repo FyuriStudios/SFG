@@ -1,3 +1,4 @@
+var Character = require('./Character')
 /**
  * This file contains all of the logic required to run the base game.
  * I'm thinking about whether or not we should be writing a bunch of helper functions to make this easier,
@@ -44,7 +45,7 @@ class Game {
 	 */
 	this.player1 = {
 		id: 1,
-		//character: new Character(),//TODO: change this to a real character
+		character: new Character(),//TODO: change this to a real character
 		socket: socket1,
 		board: [],
 		hand: [],
@@ -55,7 +56,7 @@ class Game {
 
 	this.player2 = {
 		id: 2,
-		//character: new Character(),//TODO: change this to a real character
+		character: new Character(),//TODO: change this to a real character
 		socket: socket2,
 		board: [],
 		hand: [],
@@ -91,7 +92,7 @@ class Game {
     updatePlayers() {
 	this.player1.socket.emit('game state', {
 	    self: {
-		board: this.player1.board,
+		board: this.player1.board, //TODO: figure out how to map board, hand, and graveyard into arrays of anonymous objects
 		hand: this.player1.hand,
 		graveyard: this.player1.graveyard,
 		mToks: this.player1.mToks,
@@ -166,19 +167,19 @@ class Game {
 	    player2.socket.disconnect()
 	}
 
-	for(i in this.player1.board) {
-	    if(i.power == 0)
+	for(var i in this.player1.board) {
+	    if(i.currentPower <= 0)
 		this.player1.graveyard.push(i)//add all dead guys to graveyards.
 	}
-	for(i in this.player2.board) {
-	    if(i.power == 0)
+	for(var k in this.player2.board) {
+	    if(i.currentPower <= 0)
 		this.player2.graveyard.push(i)//TODO: Add effects and event writing
 	}
 
 	this.player1.board = this.player1.board.filter((n) => {n.power > 0})//remove all dead guys.
 	this.player2.board = this.player2.board.filter((n) => {n.power > 0})
 
-	this.updatePlayers()
+	//this.updatePlayers() TODO: fix update players function
     }
 
     /** Done (0.0.1)

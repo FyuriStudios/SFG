@@ -1,9 +1,10 @@
 var Monster = require('../base/Monster')
 
-class Potato extends Monster() {
+class Potato extends Monster {
     
     constructor() {
 	super(false) //doesn't have defender
+	this.currentPower = this.power
     }
     
     get id() {
@@ -28,3 +29,5 @@ class Potato extends Monster() {
     
     
 }
+
+module.exports = Potato

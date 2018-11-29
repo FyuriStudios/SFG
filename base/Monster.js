@@ -8,14 +8,17 @@ class Monster extends Card {
 
   constructor(hasDefender) {
     super()
-    this.currentPower = power
-    if(!hasDefender) {
-	this.canAttack = true
-    } else {
-	this.canAttack = false
-    }
-    
-    this.defender = hasDefender
+  }
+  
+  init() {
+      this.currentPower = this.power
+      if(!hasDefender) {
+		this.canAttack = true
+	    } else {
+		this.canAttack = false
+	    }
+	    
+      this.defender = hasDefender
   }
   
   get type() {

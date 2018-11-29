@@ -1,15 +1,33 @@
 var Game = require('../base/Game')
 var Card = require('../base/Card')
+var Potato = require('../cards/Potato')
 
-currentPlayer()
-cardErrors()
+//currentPlayer() this test is broken, TODO: fix it
+//cardErrors()
+killDead()
 
-function test(input, match, testName) {
-    if(input == match) {
+function arraysEqual(a, b) {
+  if (a === b) return true;
+  if (a == null || b == null) return false;
+  if (a.length != b.length) return false;
+
+  // If you don't care about the order of the elements inside
+  // the array, you should sort both arrays here.
+  // Please note that calling sort on an array will modify that array.
+  // you might want to clone your array first.
+
+  for (var i = 0; i < a.length; ++i) {
+    if (a[i] != b[i]) return false;
+  }
+  return true;
+}
+
+function test(input, testName) {
+    if(input) {
 	console.log('Test passed: ' + testName)
     }
     else {
-	console.log('Test FAILED' + testName + '\ninput: ' + input + '\nmatch: ' + match)
+	console.log('Test FAILED: ' + testName + ';input: ' + input)
     }
 }
 
@@ -51,4 +69,23 @@ function currentPlayer() {
 function cardErrors() {
     var cardTest = new Card()
     console.log(cardTest.ID)
+}
+
+
+function killDead() {
+    var deadTest = new Game(null, null)
+    deadTest.player1.board.push(new Potato())
+    console.log(deadTest.player1.board[0].currentPower)
+    deadTest.player1.board[0].currentPower = 0
+    deadTest.killDead()
+    test(arraysEqual(deadTest.player1.board, []), 'KillDead 1')
+    
+    deadTest.player1.board = []
+    var potato = new Potato()
+    deadTest.player1.board.push(potato)
+    console.log(deadTest.player1.board)
+    potato.currentPower = 0
+    deadTest.killDead()
+    console.log(deadTest.player1.graveyard)
+    test(arraysEqual(deadTest.player1.graveyard, [potato]), 'KillDead 2')
 }
