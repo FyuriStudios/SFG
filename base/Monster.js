@@ -6,9 +6,16 @@ var Card = require('./Card')
  */
 class Monster extends Card {
 
-  constructor() {
+  constructor(hasDefender) {
     super()
     this.currentPower = power
+    if(!hasDefender) {
+	this.canAttack = true
+    } else {
+	this.canAttack = false
+    }
+    
+    this.defender = hasDefender
   }
   
   get type() {

@@ -3,7 +3,7 @@ var Monster = require('../base/Monster')
 class Potato extends Monster() {
     
     constructor() {
-	super()
+	super(false) //doesn't have defender
     }
     
     get id() {

@@ -215,11 +215,17 @@ class Game {
 	}
 
 	var attacker = currentPlayer.board[input.attackerLoc]
-	
+
 	if(!attacker.canAttack) {
 	    return
 	}
-	
+
+	for(var i = 0; i < currentPlayer.board.length; i++) {
+	    if(currentPlayer.board[i].defender && i != input.targetLoc) { //check to see if there's a dude with defender blocking the way
+		return
+	    } 
+	}
+
 	attacker.canAttack = false
 
 	if(input.targetLoc == -1) { //set the target equal to the enemy character if the targetLoc is -1.
@@ -240,27 +246,27 @@ class Game {
 	if(input.cardLocation > temp.hand.length || input.cardLocation < 0) {
 	    return
 	}
-	
+
 	var toPlay = temp.hand[toPlay]
 	//TODO: add flex token implementation
 	var tokens = toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks
-		
-	if(!(toPlay.playCost<=tokens) || temp.board.length == MAX_BOARD_SIZE) {
-	    return //they don't have enough tokens to play the card.
-	}
-	
+
+		if(!(toPlay.playCost<=tokens) || temp.board.length == MAX_BOARD_SIZE) {
+		    return //they don't have enough tokens to play the card.
+		}
+
 	toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks -= toPlay.playCost //this line might just not work, but I don't want to rewrite it.
-	
-	temp.hand = temp.hand.splice(input.cardLocation)//this line also might not work, but it's supposed to remove the card at input.cardLocation
-	
-	if(toPlay.type == 'monster') {
-	    temp.board.splice(input.playLocation, 0, toPlay) //TODO: write to history
-	}
+
+		temp.hand = temp.hand.splice(input.cardLocation)//this line also might not work, but it's supposed to remove the card at input.cardLocation
+
+		if(toPlay.type == 'monster') {
+		    temp.board.splice(input.playLocation, 0, toPlay) //TODO: write to history
+		}
 	if(toPlay.type == 'spell') {
 	    //add code here
 	}
-	
-	
+
+
     }
 
     /**
@@ -292,7 +298,7 @@ class Game {
 	//	eventHistory.push(new TurnBeginsEvent(this))
 	turnCounter++ //TODO: effects, history
 	for(dude in temp.board) {
-	    if(!dude.isDefender) {
+	    if(!dude.defender) {
 		dude.canAttack = true
 	    }
 	}
