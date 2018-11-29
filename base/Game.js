@@ -38,30 +38,30 @@ class Game {
 	//this.eventHistory = []
 
 	/*
-		Here, I'm creating non-prototypical objects for player1 and player2. They don't need any functions, just some variables.
-		These player objects contain the exact same variable names, so it's super easy to just ask for something like currentPlayer().board
-		or something like that.
+	Here, I'm creating non-prototypical objects for player1 and player2. They don't need any functions, just some variables.
+	These player objects contain the exact same variable names, so it's super easy to just ask for something like currentPlayer().board
+	or something like that.
 	 */
 	this.player1 = {
 		id: 1,
-		character: new Character(),//TODO: change this to a real character
+		//character: new Character(),//TODO: change this to a real character
 		socket: socket1,
 		board: [],
 		hand: [],
 		graveyard: [],
-		mToks = 0,
-		sToks = 0
+		mToks: 0,
+		sToks: 0
 	}
 
 	this.player2 = {
 		id: 2,
-		character: new Character(),//TODO: change this to a real character
+		//character: new Character(),//TODO: change this to a real character
 		socket: socket2,
 		board: [],
 		hand: [],
 		graveyard: [],
-		mToks = 0,
-		sToks = 0
+		mToks: 0,
+		sToks: 0
 	}
     }
 
@@ -73,10 +73,13 @@ class Game {
     start() {
 	player1.board = []//TODO: add a default deck
 	player2.board = []
+	player1.socket.emit('player id', player1.id)
+	player2.socket.emit('player id', player2.id)
 
 	this.doTurn(this.player1.socket)
 	this.doTurn(this.player2.socket)
 	this.updatePlayers()
+	this.startTurn(null)
     }
 
     /** Done (0.0.1)
@@ -134,13 +137,13 @@ class Game {
 //  } /* I'm commenting this out because we aren't implementing effects yet. */
 
     get currentPlayer() {
-	return (turnCounter%4 == 1 || turnCounter%4 == 2) ? player1:player2
+	return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player1:this.player2
 		//if it's 1,2... 5,6... 9,10... then player 1's turn.
 		//if it's 3,4... 7.8... player 2's turn.
     }										//these functions simply return the current player and other player. Call them like instance variables.
 
     get otherPlayer() {
-	return (turnCounter%4 == 1 || turnCounter%4 == 2) ? player2:player1
+	return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player2:this.player1
 		//Just the opposite of currentPlayer.
     }
 
@@ -151,29 +154,29 @@ class Game {
      */
     killDead() {
 
-	if(player1.character.health == 0){
+	if(this.player1.character.health == 0){
 	    player1.socket.emit('game over', 1)
 	    player2.socket.emit('game over', 1)
 	    player1.socket.disconnect()
 	    player2.socket.disconnect()
-	} else if(player2.character.health == 0) {//check for game over first.
+	} else if(this.player2.character.health == 0) {//check for game over first.
 	    player1.socket.emit('game over', 2)
 	    player2.socket.emit('game over', 2)
 	    player1.socket.disconnect()
 	    player2.socket.disconnect()
 	}
 
-	for(i in player1.board) {
+	for(i in this.player1.board) {
 	    if(i.power == 0)
-		player1.graveyard.push(i)//add all dead guys to graveyards.
+		this.player1.graveyard.push(i)//add all dead guys to graveyards.
 	}
-	for(i in player2.board) {
+	for(i in this.player2.board) {
 	    if(i.power == 0)
-		player2.graveyard.push(i)//TODO: Add effects and event writing
+		this.player2.graveyard.push(i)//TODO: Add effects and event writing
 	}
 
-	player1.board = player1.board.filter((n) => {n.power > 0})//remove all dead guys.
-	player2.board = player2.board.filter((n) => {n.power > 0})
+	this.player1.board = this.player1.board.filter((n) => {n.power > 0})//remove all dead guys.
+	this.player2.board = this.player2.board.filter((n) => {n.power > 0})
 
 	this.updatePlayers()
     }
@@ -211,11 +214,12 @@ class Game {
 	    return
 	}
 
+	var attacker = currentPlayer.board[input.attackerLoc]
+	
 	if(!attacker.canAttack) {
 	    return
 	}
-
-	var attacker = currentPlayer.board[input.attackerLoc]
+	
 	attacker.canAttack = false
 
 	if(input.targetLoc == -1) { //set the target equal to the enemy character if the targetLoc is -1.
@@ -302,7 +306,7 @@ class Game {
     }
 
     endTurn(input) {
-	//ventHistory.push(new TurnEndEvent(this))
+	//eventHistory.push(new TurnEndEvent(this))
 	turnCounter++
 	//for(element in effects){
 	//if(element.hasTurnIncrement())
