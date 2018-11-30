@@ -114,7 +114,8 @@ class Game {
 		sToks: this.player2.sToks,
 		deckSize: this.player2.deck.length,
 		characterHealth: this.player2.character.health
-	    }
+	    },
+	    turnCounter: this.turnCounter
 	})
 	this.player2.socket.emit('game state', {
 	    self: {
@@ -134,7 +135,8 @@ class Game {
 		sToks: this.player1.sToks,
 		deckSize: this.player1.deck.length,
 		characterHealth: this.player1.character.health
-	    }
+	    },
+	    turnCounter: this.turnCounter
 	})
     }
 
