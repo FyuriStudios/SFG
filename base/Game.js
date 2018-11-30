@@ -1,4 +1,10 @@
 var Character = require('./Character')
+var _ = require('lodash')
+
+Array.prototype.extend = function (other_array) {
+    /* You should include a test to check whether other_array really is an array */
+    other_array.forEach(function(v) {this.push(v)}, this);
+}
 /**
  * This file contains all of the logic required to run the base game.
  * I'm thinking about whether or not we should be writing a bunch of helper functions to make this easier,
@@ -167,19 +173,11 @@ class Game {
 	    player2.socket.disconnect()
 	}
 
-	for(var i in this.player1.board) {
-	    if(i.currentPower <= 0)
-		this.player1.graveyard.push(i)//add all dead guys to graveyards.
-	}
-	for(var k in this.player2.board) {
-	    if(i.currentPower <= 0)
-		this.player2.graveyard.push(i)//TODO: Add effects and event writing
-	}
+	this.player1.graveyard.extend(_.remove(this.player1.board, (n) => {return n.currentPower <= 0}))
+	this.player2.graveyard.extend(_.remove(this.player2.board, (n) => {return n.currentPower <= 0}))
+	
 
-	this.player1.board = this.player1.board.filter((n) => {n.power > 0})//remove all dead guys.
-	this.player2.board = this.player2.board.filter((n) => {n.power > 0})
-
-	//this.updatePlayers() TODO: fix update players function
+	//this.updatePlayers() TODO: fix update players func
     }
 
     /** Done (0.0.1)
@@ -238,7 +236,7 @@ class Game {
 	    target.power -= attacker.power
 	    attacker.power -= tempPower //TODO: write this to history, resolve effects
 	}
-	this.updatePlayers()
+	//this.updatePlayers()
 	killDead()
     }
 

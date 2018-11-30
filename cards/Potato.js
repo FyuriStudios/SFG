@@ -4,7 +4,6 @@ class Potato extends Monster {
     
     constructor() {
 	super(false) //doesn't have defender
-	this.currentPower = this.power
     }
     
     get id() {

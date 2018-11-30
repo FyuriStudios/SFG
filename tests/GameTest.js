@@ -75,17 +75,19 @@ function cardErrors() {
 function killDead() {
     var deadTest = new Game(null, null)
     deadTest.player1.board.push(new Potato())
-    console.log(deadTest.player1.board[0].currentPower)
     deadTest.player1.board[0].currentPower = 0
     deadTest.killDead()
     test(arraysEqual(deadTest.player1.board, []), 'KillDead 1')
     
+    deadTest = new Game(null, null)
     deadTest.player1.board = []
     var potato = new Potato()
     deadTest.player1.board.push(potato)
-    console.log(deadTest.player1.board)
     potato.currentPower = 0
     deadTest.killDead()
-    console.log(deadTest.player1.graveyard)
     test(arraysEqual(deadTest.player1.graveyard, [potato]), 'KillDead 2')
+}
+function attack() {
+    var game = new Game(null, null)
+    game.player1.push()
 }

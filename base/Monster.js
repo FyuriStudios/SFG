@@ -8,17 +8,14 @@ class Monster extends Card {
 
   constructor(hasDefender) {
     super()
-  }
-  
-  init() {
-      this.currentPower = this.power
-      if(!hasDefender) {
+    this.currentPower = this.power
+    if(!hasDefender) {
 		this.canAttack = true
 	    } else {
 		this.canAttack = false
 	    }
 	    
-      this.defender = hasDefender
+    this.defender = hasDefender
   }
   
   get type() {
@@ -51,4 +48,4 @@ class Monster extends Card {
 
 }
 
-module.exports = Card
+module.exports = Monster
