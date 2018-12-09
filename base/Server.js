@@ -7,7 +7,7 @@ var express = require('express')
 var http = require('http')
 var path = require('path')
 var socketIO = require('socket.io')
-var createjs = require('createjs')
+var createjs = require('create.js')
 var Game = require('../static/game.js')
 //Create the server and instances of all the packages we'll need.
 var app = express()

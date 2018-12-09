@@ -1,3 +1,4 @@
+var createjs = require('create.js')
 var createcanvas = new createjs.Stage("canvas")
 //var socket = io()
 //
