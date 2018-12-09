@@ -1,4 +1,4 @@
-var canvas = new createjs.Stage("canvas")
+var createcanvas = new createjs.Stage("canvas")
 //var socket = io()
 //
 //var playerID
@@ -19,8 +19,5 @@ var canvas = new createjs.Stage("canvas")
 //})
 //
 //function gameUpdate() {
-//    
+//
 //}
-
-canvas.height = window.innerHeight()
-canvas.width = window.innderWidth()
