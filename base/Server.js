@@ -7,9 +7,7 @@ var express = require('express')
 var http = require('http')
 var path = require('path')
 var socketIO = require('socket.io')
-
-import './Game'
-
+var Game = require('../static/game.js')
 //Create the server and instances of all the packages we'll need.
 var app = express()
 var server = http.Server(app)
@@ -23,18 +21,18 @@ app.set('port', port)
 /*
 This line of code sets the "Static" directory for the webapp: That is, the outward-facing chunk of this project. When I launch this app and someone connects to it,
 they'll be able to access the directory named 'static' as specified below.
-__dirname is a global variable that is just the current directory that this file is living in. 
+__dirname is a global variable that is just the current directory that this file is living in.
 '/static' is appended to it to point to the [current]/static directory.
 */
 app.use('/static', express.static(__dirname + '/static'))
 
 /*
 This runs while the server is running and gives the root file every time that someone connects to the server. By default, when connecting to a server your computer will ask for the
-root directory of the server ('/'). This will respond by giving back the path to the index.html file, which is the file that gets loaded by default on connection from 
+root directory of the server ('/'). This will respond by giving back the path to the index.html file, which is the file that gets loaded by default on connection from
 the user.
 */
 app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, 'static/index.html'))//I'm leaving it like this for now. But we can totally change it.
+    res.sendFile(path.join(__dirname, '../static/index.html'))//I'm leaving it like this for now. But we can totally change it.
 })
 
 //Set the server to listen on port 4000 for a webapp running. When the webapp is running, it calls the function below that simply outputs to the console that the application is working.
@@ -44,7 +42,7 @@ server.listen(port, function() {
 
 /*
 This variable is sitting here so that I can hold one extra socket reference inside it.
-Since we need two players to play the game, I'll keep a second reference while I'm waiting for two players. 
+Since we need two players to play the game, I'll keep a second reference while I'm waiting for two players.
 This will get overwritten when I have both players and I can place them into a game.
 */
 //FIXME: We should probably find a better way to do this.
