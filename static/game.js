@@ -1,5 +1,15 @@
-var createjs = require('create.js')
-var createcanvas = new createjs.Stage("canvas")
+//var createjs = require('create.js')
+var stage = new createjs.Stage("canvas");
+
+
+var circle = new createjs.Shape();
+circle.graphics.beginFill("DeepSkyBlue").drawRect(0, 0, window.innerWidth, window.innerHeight);
+console.log(window.innerWidth + " " + window.innerHeight)
+circle.x = 0;
+circle.y = 0;
+stage.addChild(circle);
+stage.update();
+
 //var socket = io()
 //
 //var playerID

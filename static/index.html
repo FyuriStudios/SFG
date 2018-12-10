@@ -20,7 +20,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
     <script type="text/javascript">
     function resize_canvas(){
-        canvas = document.getElementById("c");
+        canvas = document.getElementById("canvas");
         if (canvas.width  < window.innerWidth)
         {
             canvas.width  = window.innerWidth;
@@ -34,7 +34,7 @@
 </script>
   </head>
   <body onresize="resize_canvas()" onload="resize_canvas()">
-    <canvas id='c' style='position:absolute; left:0px; top:0px;'>
+    <canvas id='canvas' style='position:absolute; left:0px; top:0px;'>
     </canvas>
   </body>
   <script src="game.js"></script>
