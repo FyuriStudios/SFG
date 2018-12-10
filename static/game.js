@@ -22,3 +22,6 @@ var createcanvas = new createjs.Stage("canvas")
 //function gameUpdate() {
 //
 //}
+
+
+//checking to see how to use github on linux
