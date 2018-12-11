@@ -18,24 +18,10 @@
     </style>
     <script src="https://code.createjs.com/1.0.0/createjs.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-    <script type="text/javascript">
-    function resize_canvas(){
-        canvas = document.getElementById("canvas");
-        if (canvas.width  < window.innerWidth)
-        {
-            canvas.width  = window.innerWidth;
-        }
-
-        if (canvas.height < window.innerHeight)
-        {
-            canvas.height = window.innerHeight;
-        }
-    }
-</script>
+   <script src="game.js"></script>
   </head>
-  <body onresize="resize_canvas()" onload="resize_canvas()">
-    <canvas id='canvas' style='position:absolute; left:0px; top:0px;'>
-    </canvas>
+  <body onload='init()' onresize='resize_canvas()'>
+    <canvas id='canvas' style='position:absolute; left:0px; top:0px;'></canvas>
   </body>
-  <script src="game.js"></script>
+
 </html>
