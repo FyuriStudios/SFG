@@ -1,5 +1,8 @@
-
-function resize_canvas() {
+/**
+ * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
+ * to the new dimensions of the screen.
+ */
+function resizeCanvas() {
 
     var canvas = document.getElementById('canvas')
     var stage = new createjs.Stage("canvas");
@@ -19,6 +22,13 @@ function resize_canvas() {
     drawBoard();
 }
 
+/**
+ * This function should draw the board to the screen. You should call this every time that something graphically changes, e.g. a play 
+ * is made or the screen size changes.
+ * 
+ * We might want to change this function though, since it's not reasonable to redraw the screen every time that someone moves a card or something.
+ * Maybe we should cache the board somehow and just redefine it when the screen changes size.
+ */
 function drawBoard() {
 
     //redeclare canvas and stage since for some reason we can't declare them globally
@@ -65,6 +75,7 @@ function drawBoard() {
     boardLine5.graphics.endStroke();
     stage.addChild(boardLine5);
 
+    //drawing all of the lines on the friendly side of the board
     for(var i = 0; i< 10; i++) {
 	var playerField = new createjs.Shape();
 	playerField.graphics.beginStroke("#000");
@@ -75,6 +86,7 @@ function drawBoard() {
 	stage.addChild(playerField);
     }
 
+    //drawing all of the lines on the enemy side of the board
     for(var i = 0; i< 10; i++) {
 	var enemyField = new createjs.Shape();
 	enemyField.graphics.beginStroke("#000");
@@ -91,7 +103,7 @@ function drawBoard() {
 function init() {
 
     //initialize game objects here
-    resize_canvas();
+    resizeCanvas();
 }
 
 
