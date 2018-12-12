@@ -23,9 +23,9 @@ function resizeCanvas() {
 }
 
 /**
- * This function should draw the board to the screen. You should call this every time that something graphically changes, e.g. a play 
+ * This function should draw the board to the screen. You should call this every time that something graphically changes, e.g. a play
  * is made or the screen size changes.
- * 
+ *
  * We might want to change this function though, since it's not reasonable to redraw the screen every time that someone moves a card or something.
  * Maybe we should cache the board somehow and just redefine it when the screen changes size.
  */
@@ -96,7 +96,23 @@ function drawBoard() {
 	enemyField.graphics.endStroke();
 	stage.addChild(enemyField);
     }
-    
+
+    var playerDeck = new createjs.Shape();
+    playerDeck.graphics.beginStroke("#000");
+    playerDeck.graphics.setStrokeStyle(1);
+    playerDeck.snapToPixel = true;
+    playerDeck.graphics.drawRoundRect(canvas.width/50, 0, canvas.width/13, canvas.width/8, canvas.width/90)
+    playerDeck.graphics.endStroke();
+  	stage.addChild(playerDeck);
+
+    var enemyDeck = new createjs.Shape();
+    enemyDeck.graphics.beginStroke("#000");
+    enemyDeck.graphics.setStrokeStyle(1);
+    enemyDeck.snapToPixel = true;
+    enemyDeck.graphics.drawRoundRect(canvas.width/50, canvas.height*6.22/8, canvas.width/13, canvas.width/8, canvas.width/90)
+    enemyDeck.graphics.endStroke();
+    stage.addChild(enemyDeck);
+
     stage.update();
 }
 
@@ -130,4 +146,3 @@ function init() {
 //function gameUpdate() {
 
 //}
-
