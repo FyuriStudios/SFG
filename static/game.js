@@ -1,11 +1,22 @@
 //var createjs = require('create.js')
 function resize_canvas(){
   canvas = document.getElementById('canvas')
-canvas.width = innerWidth
-canvas.height = innerHeight
+
+var AspectRatio = 9/16
+
+if (innerWidth * AspectRatio  <= innerHeight) {
+  canvas.width = innerWidth
+  canvas.height = innerWidth * AspectRatio;
+} else if (innerWidth * AspectRatio  >= innerHeight) {
+  canvas.width = innerHeight / AspectRatio
+  canvas.height = innerHeight
+}
+canvas.style.left = (innerWidth - canvas.width)/2
+canvas.style.top =  (innerHeight - canvas.height)/2
+
 var stage = new createjs.Stage("canvas");
 var circle = new createjs.Shape();
-circle.graphics.beginFill("DeepSkyBlue").drawCircle(innerWidth/2, innerHeight/2, 50)
+circle.graphics.beginFill("DeepSkyBlue").drawRect(0, 0, canvas.width, canvas.height)
 console.log(window.innerWidth + " " + window.innerHeight)
 circle.x = 0;
 circle.y = 0;
