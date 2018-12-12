@@ -113,6 +113,22 @@ function drawBoard() {
     enemyDeck.graphics.endStroke();
     stage.addChild(enemyDeck);
 
+    var playerFieldAction = new createjs.Shape();
+    playerFieldAction.graphics.beginStroke("#000");
+    playerFieldAction.graphics.setStrokeStyle(1);
+    playerFieldAction.snapToPixel = true;
+    playerFieldAction.graphics.drawRect(canvas.width/50, canvas.height/2,canvas.width/13,canvas.width/13)
+    playerFieldAction.graphics.endStroke();
+    stage.addChild(playerFieldAction);
+
+    var enemyFieldAction = new createjs.Shape();
+    enemyFieldAction.graphics.beginStroke("#000");
+    enemyFieldAction.graphics.setStrokeStyle(1);
+    enemyFieldAction.snapToPixel = true;
+    enemyFieldAction.graphics.drawRect(canvas.width/50, canvas.height*5.8/16,canvas.width/13,canvas.width/13)
+    enemyFieldAction.graphics.endStroke();
+    stage.addChild(enemyFieldAction);
+
     stage.update();
 }
 
