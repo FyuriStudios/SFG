@@ -11,7 +11,7 @@
  * @param id the id number of the card, probably passed in from the server
  * @returns the path to the requested image
  */
-function getCardAsset(id) {
+export function getCardAsset(id) {
     let path = 'assets/cards/';
 
     //the test card case
@@ -26,7 +26,7 @@ function getCardAsset(id) {
  * @param id the id number of the card, probably passed in from the server
  * @returns the path to the requested image
  */
-function getMonsterAsset(id) {
+export function getMonsterAsset(id) {
 
     let path = 'static/monster_pieces';
 
@@ -34,7 +34,7 @@ function getMonsterAsset(id) {
 	return path + 'Potato.png';
 }
 
-function getQuestAsset(id) {
+export function getQuestAsset(id) {
     let path = 'static/quests' //TODO: this folder doesn't exist yet
 }
 
