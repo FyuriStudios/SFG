@@ -1,6 +1,5 @@
-var otherPlayer;
-var ownPlayer;
-
+import './ClientGame';
+var game;
 /**
  * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
  * to the new dimensions of the screen.
@@ -141,8 +140,7 @@ function init() {
     socket.emit('connected', {}); //TODO: input your deck and hero here
     
     socket.on('init', function(info) {
-	ownPlayer = info.ownPlayer;
-	otherPlayer = info.otherPlayer; //TODO: we need a fancy game starting animation here
+	 game = new Game(info.thisPlayer, info.otherPlayer);//TODO: we need a fancy game starting animation here, also I don't think this import works
     });
     
     socket.on('update', function(info) { 
