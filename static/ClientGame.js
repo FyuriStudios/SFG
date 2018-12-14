@@ -3,7 +3,7 @@
  * It also contains the event history needed to do ~fancy~ animations (or it will, TODO: get events working)
  * 
  */
-export class Game {
+export class Game { //FIXME: I'm pretty sure this import line doesn't actually work
     
     constructor(own, other) {
 	this.ownPlayer = own;
@@ -30,8 +30,14 @@ export class Game {
 	}
     }
     
-    doEvent(event) {
-	
+    doEvent(event) { //TODO: we need to figure out how animations are gonna happen
+	//start by checking to see what kind of event the event is, for now we only handle two kinds: dude attacking and dude dying.
+	//TODO: implement the other stuff
+	if(event.type == 'attack') {
+	    var target = 
+	} else if(event.type == 'death') {
+	    
+	}
     }
     
 }
