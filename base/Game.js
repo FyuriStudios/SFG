@@ -1,10 +1,19 @@
-var Character = require('./Character')
-var _ = require('lodash')
+var Character = require('./Character');
+var _ = require('lodash');
+var idToCard = require('./IdToCard');
 
 Array.prototype.extend = function (other_array) {
     /* You should include a test to check whether other_array really is an array */
     other_array.forEach(function(v) {this.push(v)}, this);
 }
+
+array.prototype.shuffle = function() {
+    for (let i = this.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        [this[i], this[j]] = [this[j], this[i]];
+    }
+}
+
 /**
  * This file contains all of the logic required to run the base game.
  * I'm thinking about whether or not we should be writing a bunch of helper functions to make this easier,
@@ -15,33 +24,37 @@ Array.prototype.extend = function (other_array) {
 /**
  * The maximum number of each kind of tokens.
  */
-const MAX_TOKS = 15
+const MAX_TOKS = 15;
 
 /**
  * The number of tokens that each player can gain per turn.
  */
-const TOKS_PER_TURN = 3
+const TOKS_PER_TURN = 3;
 
 /**
  * The maximum number of cards in a player's hand.
  */
-const MAX_HAND_SIZE = 10
+const MAX_HAND_SIZE = 10;
 
 /**
  * The maximum board size.
  */
-const MAX_BOARD_SIZE = 10
+const MAX_BOARD_SIZE = 10;
 
 /**
- * The number of updates that the players receive from the server per second. Set higher for more smooth gameplay.
- * Set lower if you want to stress out the server less.
+ * The number of cards that a player draws for their starting turn. This number is here so that it's easier to balance.
  */
-const UPDATE_FREQUENCY = 10
+const STARTING_CARDS_DRAWN = 5;
+
+/**
+ * The damage taken due to fatigue. We haven't actually hashed out a real rule about this, pretty sure
+ */
+const FATIGUE_DAMAGE = 20;
 
 class Game {
 
     constructor(socket1, socket2) {
-	this.turnCounter = 0
+	this.turnCounter = 0;
 	//this.eventHistory = []
 
 	/*
@@ -50,6 +63,7 @@ class Game {
 	or something like that.
 	 */
 	this.player1 = {
+		ready: false,
 		id: 1,
 		character: new Character(),//TODO: change this to a real character
 		socket: socket1,
@@ -58,9 +72,10 @@ class Game {
 		graveyard: [],
 		mToks: 0,
 		sToks: 0
-	}
+	};
 
 	this.player2 = {
+		ready: false,
 		id: 2,
 		character: new Character(),//TODO: change this to a real character
 		socket: socket2,
@@ -69,24 +84,53 @@ class Game {
 		graveyard: [],
 		mToks: 0,
 		sToks: 0
-	}
+	};
     }
 
-    /** Done (0.0.1)
+    /**
      * Starts the game. Call this function when you're ready for the entire game to start.
      * This function is separate from the initializer, just in case. Like, maybe we want to let both players ready up?
      * @author Hughes
      */
     start() {
-	player1.board = []//TODO: add a default deck
-	player2.board = []
+	//TODO: add a default deck
 	player1.socket.emit('player id', player1.id)
 	player2.socket.emit('player id', player2.id)
 
-	this.doTurn(this.player1.socket)
-	this.doTurn(this.player2.socket)
-	this.updatePlayers()
-	this.startTurn(null)
+	function deckConstruction(player) {
+	    player.socket.on('deck', function(input) {
+		//TODO: deck verification and stuff!
+		for(var i = 0; i<10; i++)
+		    player.deck.push(idToCard(-1)); //just constructs a potato list for the deck
+		player.ready = true;
+
+		this.tryStart();//this function checks to make sure that the game can start
+	    });
+	}
+    }
+
+    /**
+     * This function makes sure that both players are ready. Then, it sends the hands of both players to them (TODO: add mulligans?).
+     * Then it sets up all of the input listeners required to make the game run. This function should be called when a player sends their deck to the server and
+     * it's a valid deck.
+     * @author Hughes
+     */
+    tryStart() {
+	if(player1.ready && player2.ready) {
+	    player1.deck.shuffle();
+	    player2.deck.shuffle();
+	}
+    }
+    
+    /**
+     * Draws a card off of the player's deck. Makes sure that 
+     */
+    drawCard(player) {
+	if(player.deck.length == 0) {
+	    player.takeDamage(FATIGUE_DAMAGE);
+	} else {
+	    var temp = player.deck.pop();
+	}
     }
 
     /** Done (0.0.1)
@@ -177,32 +221,9 @@ class Game {
 
 	this.player1.graveyard.extend(_.remove(this.player1.board, (n) => {return n.currentPower <= 0}))
 	this.player2.graveyard.extend(_.remove(this.player2.board, (n) => {return n.currentPower <= 0}))
-	
+
 
 	//this.updatePlayers() TODO: fix update players func
-    }
-
-    /** Done (0.0.1)
-     * We probably need to change this doTurn function a fair amount once we're up and running with
-     * the rest of the event structure and stuff. But for now, it's simple and easy and I like it.
-     * This function is called on a socket to create a listening event for user inputs. It rejects 
-     * input from the user who isn't currently playing and otherwise calls various helper functions
-     * to deal with the different types of input.
-     * @param {socket} socket  A reference to the socket that's being called.
-     */
-    doTurn(socket) {
-	socket.on('move', function(input) {
-	    if((turnCounter%4 == 1 || turnCounter%4 == 2)?1:2 != input.player) {/*this probably needs to be fixed. TODO: test this.*/
-		return
-	    } else if(input.type == 'attack') {
-		attack(input)
-	    } else if(input.type == 'end turn') {
-		endTurn(input)
-	    } else if(input.type == 'play card') {
-		playCard(input)
-	    }
-
-	})
     }
 
     /** Done (0.0.1)
