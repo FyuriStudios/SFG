@@ -90,42 +90,41 @@ class Game {
 		};
     }
 
-    /**
+	/**
      * Starts the game. Call this function when you're ready for the entire game to start.
      * This function is separate from the initializer, just in case. Like, maybe we want to let both players ready up?
-     * @author Hughes
-     */
-    start() {
-		//TODO: add a default deck
-		player1.socket.emit('player id', player1.id)
-		player2.socket.emit('player id', player2.id)
-
-		function deckConstruction(player) {
-			player.socket.on('deck', function(input) {
-				//TODO: deck verification and stuff!
-				if(player.setDeck == false) {
-					for(var i = 0; i<10; i++)
-						player.deck.push(idToCard(-1)); //just constructs a potato list for the deck, TODO: make this a real function that does real stuff!
-
-					player.setDeck = true;
-
-					this.tryStart();//this function checks to make sure that the game can start
-				}
-			});
-		}
-		
-		deckConstruction(player1);
-		deckConstruction(player2);
-    }
-
-    /**
-     * This function makes sure that both players are ready. Then, it sends the hands of both players to them (TODO: add mulligans?).
+	 * 
+     * This function makes sure that both players are ready. Then, it sends the hands of both players to them and asks for a mulligan.
      * Then it sets up all of the input listeners required to make the game run. This function should be called when a player sends their deck to the server and
      * it's a valid deck.
      * @author Hughes
      */
-    tryStart() {
-		if((player1.setDeck && player2.setDeck) && !(player1.mulliganed && player2.mulliganed)) {
+    start() {
+		
+		//first, we're going to handle the case where both players haven't mulliganed or set their decks.
+		if(!(player1.setDeck && player2.setDeck) && !(player1.mulliganed && player2.mulliganed)) {
+			//TODO: add a default deck
+			player1.socket.emit('player id', player1.id);
+			player2.socket.emit('player id', player2.id);
+
+			function deckConstruction(player) {
+				player.socket.on('deck', function(input) {
+					//TODO: deck verification and stuff!
+					if(!player.setDeck) {
+						for(var i = 0; i<10; i++)
+							player.deck.push(idToCard(-1)); //just constructs a potato list for the deck, TODO: make this a real function that does real stuff!
+						player.setDeck = true;
+
+						this.start();//call itself to check to see if we can progress to the next step
+					}
+				});
+			}
+			
+			deckConstruction(player1);
+			deckConstruction(player2);
+
+		} else if((player1.setDeck && player2.setDeck) && !(player1.mulliganed && player2.mulliganed)) {
+
 	   		player1.deck.shuffle();
 			player2.deck.shuffle();
 
@@ -135,15 +134,32 @@ class Game {
 			for(var i = 0; i < STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
 				player2.hand.push(player1.deck.pop());
 			}
+
+			player1.socket.emit('starting hand', {cards: player1.hand});
+			player2.socket.emit('starting hand', {cards: player2.hand});
 			
 			function setMulligan(player) {
-				if(player.mulliganed == false)
-				player.socket.on('mulligan', function(input) { //then give them the option to mulligan
-					
-				})
-			}
-		} else if(player1.mulliganed && player2.mulliganed) {
+					player.socket.on('mulligan', function(input) { //then give them the option to mulligan
+						if(!player.mulliganed) {
+							temp = [];
 
+							for(var i of input.replace) { //iterating through the things that input needs
+								temp.push(player.board[i]);
+								player.board[i] = deck.pop();
+							}
+							player.deck.extend(temp);
+							player.deck.shuffle();
+							player.mulliganed = true;
+							player.socket.emit('hand', {cards: player.hand});
+						}
+					});
+			}
+			setMulligan(player1);
+			setMulligan(player2);
+
+			start();
+		} else if(player1.mulliganed && player2.mulliganed) {
+			setupGameInput();
 		}
     }
     
@@ -151,63 +167,25 @@ class Game {
      * Draws a card off of the player's deck. Makes sure that they actually have cards to take off of their deck or they take damage.
 	 * This function also deals internally with the pain in the booty bit where you have to make events and shit.
      */
-    drawCard(player) {
+    drawCard(player, eventChain) {
+		var temp;
 		if(player.deck.length == 0) {
 			player.takeDamage(FATIGUE_DAMAGE);
+			var event = {type: 'fatigue', damage: FATIGUE_DAMAGE};
+			eventChain.current.append(event);
+			eventChain.other.append(event);
 		} else {
-			var temp = player.deck.pop();
+			temp = player.deck.pop();
+			if(player.hand.length == MAX_HAND_SIZE) {
+				var event = {type: 'burn card', card: temp};
+				eventChain.current.append(event);
+				eventChain.other.append(event);
+			} else {
+				player.hand.push(temp);
+				eventChain
+			}
 		}
-    }
-
-    /** Done (0.0.1)
-     * Updates the board state for each player. I was considering running this on an interval but it's probably easier this way.
-     * Each player should expect an object passed to them in the format shown below.
-     * TODO: add events to this
-     * @author Hughes
-     */
-    updatePlayers() {
-		this.player1.socket.emit('game state', {
-			self: {
-			board: this.player1.board, //TODO: figure out how to map board, hand, and graveyard into arrays of anonymous objects
-			hand: this.player1.hand,
-			graveyard: this.player1.graveyard,
-			mToks: this.player1.mToks,
-			sToks: this.player1.sToks,
-			deckSize: this.player1.deck.length,
-			characterHealth: this.player1.character.health
-			},
-			other: {
-			board: this.player2.board,
-			handSize: this.player2.hand.length,
-			graveyard: this.player2.graveyard,
-			mToks: this.player2.mToks,
-			sToks: this.player2.sToks,
-			deckSize: this.player2.deck.length,
-			characterHealth: this.player2.character.health
-			},
-			turnCounter: this.turnCounter
-		})
-		this.player2.socket.emit('game state', {
-			self: {
-			board: this.player2.board,
-			hand: this.player2.hand,
-			graveyard: this.player2.graveyard,
-			mToks: this.player2.mToks,
-			sToks: this.player2.sToks,
-			deckSize: this.player2.deck.length,
-			characterHealth: this.player2.character.health
-			},
-			other: {
-			board: this.player1.board,
-			handSize: this.player1.hand.length,
-			graveyard: this.player1.graveyard,
-			mToks: this.player1.mToks,
-			sToks: this.player1.sToks,
-			deckSize: this.player1.deck.length,
-			characterHealth: this.player1.character.health
-			},
-			turnCounter: this.turnCounter
-		})
+		
     }
 
     get currentPlayer() {
