@@ -123,15 +123,24 @@ class Game {
      * @author Hughes
      */
     tryStart() {
-		if(player1.setDeck && player2.setDeck) {
+		if((player1.setDeck && player2.setDeck) && !(player1.mulliganed && player2.mulliganed)) {
 	   		player1.deck.shuffle();
 			player2.deck.shuffle();
+
+			for(var i = 0; i < STARTING_CARDS_DRAWN; i++) {
+				player1.hand.push(player1.deck.pop());
+			}
+			for(var i = 0; i < STARTING_CARDS_DRAWN; i++) {
+				player2.hand.push(player1.deck.pop());
+			}
 			
 			function setMulligan(player) {
 				player.socket.on('mulligan', function(input) {
 					
 				})
 			}
+		} else if(player1.mulliganed && player2.mulliganed) {
+
 		}
     }
     
