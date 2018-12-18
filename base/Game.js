@@ -103,12 +103,14 @@ class Game {
 		function deckConstruction(player) {
 			player.socket.on('deck', function(input) {
 				//TODO: deck verification and stuff!
-				for(var i = 0; i<10; i++)
-					player.deck.push(idToCard(-1)); //just constructs a potato list for the deck, TODO: make this a real function that does real stuff!
+				if(player.setDeck == false) {
+					for(var i = 0; i<10; i++)
+						player.deck.push(idToCard(-1)); //just constructs a potato list for the deck, TODO: make this a real function that does real stuff!
 
-				player.setDeck = true;
+					player.setDeck = true;
 
-				this.tryStart();//this function checks to make sure that the game can start
+					this.tryStart();//this function checks to make sure that the game can start
+				}
 			});
 		}
 		
@@ -130,12 +132,13 @@ class Game {
 			for(var i = 0; i < STARTING_CARDS_DRAWN; i++) {
 				player1.hand.push(player1.deck.pop());
 			}
-			for(var i = 0; i < STARTING_CARDS_DRAWN; i++) {
+			for(var i = 0; i < STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
 				player2.hand.push(player1.deck.pop());
 			}
 			
 			function setMulligan(player) {
-				player.socket.on('mulligan', function(input) {
+				if(player.mulliganed == false)
+				player.socket.on('mulligan', function(input) { //then give them the option to mulligan
 					
 				})
 			}
