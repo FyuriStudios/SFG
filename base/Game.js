@@ -1,3 +1,11 @@
+/**
+ * This file contains all of the logic required to run the base game.
+ * I'm thinking about whether or not we should be writing a bunch of helper functions to make this easier,
+ * like maybe a drawCard function, etc.
+ * @author Hughes
+ */
+
+//require everything that we need, probably this list will expand as we go
 var Character = require('./Character');
 var _ = require('lodash');
 var idToCard = require('./IdToCard');
@@ -7,19 +15,12 @@ Array.prototype.extend = function (other_array) {
     other_array.forEach(function(v) {this.push(v)}, this);
 }
 
-array.prototype.shuffle = function() {
-    for (let i = this.length - 1; i > 0; i--) {
+Array.prototype.shuffle = function() {
+    for (let i = this.length - 1; i > 0; i--) { //here I'm adding two functions to make the array class not suck
         const j = Math.floor(Math.random() * (i + 1));
         [this[i], this[j]] = [this[j], this[i]];
     }
 }
-
-/**
- * This file contains all of the logic required to run the base game.
- * I'm thinking about whether or not we should be writing a bunch of helper functions to make this easier,
- * like maybe a drawCard function, etc.
- * @author Hughes
- */
 
 /**
  * The maximum number of each kind of tokens.
@@ -54,37 +55,39 @@ const FATIGUE_DAMAGE = 20;
 class Game {
 
     constructor(socket1, socket2) {
-	this.turnCounter = 0;
-	//this.eventHistory = []
+		this.turnCounter = 0;
+		this.eventHistory = [];
 
-	/*
-	Here, I'm creating non-prototypical objects for player1 and player2. They don't need any functions, just some variables.
-	These player objects contain the exact same variable names, so it's super easy to just ask for something like currentPlayer().board
-	or something like that.
-	 */
-	this.player1 = {
-		ready: false,
-		id: 1,
-		character: new Character(),//TODO: change this to a real character
-		socket: socket1,
-		board: [],
-		hand: [],
-		graveyard: [],
-		mToks: 0,
-		sToks: 0
-	};
+		/*
+		Here, I'm creating non-prototypical objects for player1 and player2. They don't need any functions, just some variables.
+		These player objects contain the exact same variable names, so it's super easy to just ask for something like currentPlayer().board
+		or something like that.
+		*/
+		this.player1 = {
+			setDeck: false,
+			mulliganed: false,
+			id: 1,
+			character: new Character(),//TODO: change this to a real character
+			socket: socket1,
+			board: [],
+			hand: [],
+			graveyard: [],
+			mToks: 0,
+			sToks: 0
+		};
 
-	this.player2 = {
-		ready: false,
-		id: 2,
-		character: new Character(),//TODO: change this to a real character
-		socket: socket2,
-		board: [],
-		hand: [],
-		graveyard: [],
-		mToks: 0,
-		sToks: 0
-	};
+		this.player2 = {
+			setDeck: false,
+			mulliganed: false,
+			id: 2,
+			character: new Character(),//TODO: change this to a real character
+			socket: socket2,
+			board: [],
+			hand: [],
+			graveyard: [],
+			mToks: 0,
+			sToks: 0
+		};
     }
 
     /**
@@ -93,20 +96,24 @@ class Game {
      * @author Hughes
      */
     start() {
-	//TODO: add a default deck
-	player1.socket.emit('player id', player1.id)
-	player2.socket.emit('player id', player2.id)
+		//TODO: add a default deck
+		player1.socket.emit('player id', player1.id)
+		player2.socket.emit('player id', player2.id)
 
-	function deckConstruction(player) {
-	    player.socket.on('deck', function(input) {
-		//TODO: deck verification and stuff!
-		for(var i = 0; i<10; i++)
-		    player.deck.push(idToCard(-1)); //just constructs a potato list for the deck
-		player.ready = true;
+		function deckConstruction(player) {
+			player.socket.on('deck', function(input) {
+				//TODO: deck verification and stuff!
+				for(var i = 0; i<10; i++)
+					player.deck.push(idToCard(-1)); //just constructs a potato list for the deck, TODO: make this a real function that does real stuff!
 
-		this.tryStart();//this function checks to make sure that the game can start
-	    });
-	}
+				player.setDeck = true;
+
+				this.tryStart();//this function checks to make sure that the game can start
+			});
+		}
+		
+		deckConstruction(player1);
+		deckConstruction(player2);
     }
 
     /**
@@ -116,21 +123,28 @@ class Game {
      * @author Hughes
      */
     tryStart() {
-	if(player1.ready && player2.ready) {
-	    player1.deck.shuffle();
-	    player2.deck.shuffle();
-	}
+		if(player1.setDeck && player2.setDeck) {
+	   		player1.deck.shuffle();
+			player2.deck.shuffle();
+			
+			function setMulligan(player) {
+				player.socket.on('mulligan', function(input) {
+					
+				})
+			}
+		}
     }
     
     /**
-     * Draws a card off of the player's deck. Makes sure that 
+     * Draws a card off of the player's deck. Makes sure that they actually have cards to take off of their deck or they take damage.
+	 * This function also deals internally with the pain in the booty bit where you have to make events and shit.
      */
     drawCard(player) {
-	if(player.deck.length == 0) {
-	    player.takeDamage(FATIGUE_DAMAGE);
-	} else {
-	    var temp = player.deck.pop();
-	}
+		if(player.deck.length == 0) {
+			player.takeDamage(FATIGUE_DAMAGE);
+		} else {
+			var temp = player.deck.pop();
+		}
     }
 
     /** Done (0.0.1)
@@ -140,54 +154,49 @@ class Game {
      * @author Hughes
      */
     updatePlayers() {
-	this.player1.socket.emit('game state', {
-	    self: {
-		board: this.player1.board, //TODO: figure out how to map board, hand, and graveyard into arrays of anonymous objects
-		hand: this.player1.hand,
-		graveyard: this.player1.graveyard,
-		mToks: this.player1.mToks,
-		sToks: this.player1.sToks,
-		deckSize: this.player1.deck.length,
-		characterHealth: this.player1.character.health
-	    },
-	    other: {
-		board: this.player2.board,
-		handSize: this.player2.hand.length,
-		graveyard: this.player2.graveyard,
-		mToks: this.player2.mToks,
-		sToks: this.player2.sToks,
-		deckSize: this.player2.deck.length,
-		characterHealth: this.player2.character.health
-	    },
-	    turnCounter: this.turnCounter
-	})
-	this.player2.socket.emit('game state', {
-	    self: {
-		board: this.player2.board,
-		hand: this.player2.hand,
-		graveyard: this.player2.graveyard,
-		mToks: this.player2.mToks,
-		sToks: this.player2.sToks,
-		deckSize: this.player2.deck.length,
-		characterHealth: this.player2.character.health
-	    },
-	    other: {
-		board: this.player1.board,
-		handSize: this.player1.hand.length,
-		graveyard: this.player1.graveyard,
-		mToks: this.player1.mToks,
-		sToks: this.player1.sToks,
-		deckSize: this.player1.deck.length,
-		characterHealth: this.player1.character.health
-	    },
-	    turnCounter: this.turnCounter
-	})
+		this.player1.socket.emit('game state', {
+			self: {
+			board: this.player1.board, //TODO: figure out how to map board, hand, and graveyard into arrays of anonymous objects
+			hand: this.player1.hand,
+			graveyard: this.player1.graveyard,
+			mToks: this.player1.mToks,
+			sToks: this.player1.sToks,
+			deckSize: this.player1.deck.length,
+			characterHealth: this.player1.character.health
+			},
+			other: {
+			board: this.player2.board,
+			handSize: this.player2.hand.length,
+			graveyard: this.player2.graveyard,
+			mToks: this.player2.mToks,
+			sToks: this.player2.sToks,
+			deckSize: this.player2.deck.length,
+			characterHealth: this.player2.character.health
+			},
+			turnCounter: this.turnCounter
+		})
+		this.player2.socket.emit('game state', {
+			self: {
+			board: this.player2.board,
+			hand: this.player2.hand,
+			graveyard: this.player2.graveyard,
+			mToks: this.player2.mToks,
+			sToks: this.player2.sToks,
+			deckSize: this.player2.deck.length,
+			characterHealth: this.player2.character.health
+			},
+			other: {
+			board: this.player1.board,
+			handSize: this.player1.hand.length,
+			graveyard: this.player1.graveyard,
+			mToks: this.player1.mToks,
+			sToks: this.player1.sToks,
+			deckSize: this.player1.deck.length,
+			characterHealth: this.player1.character.health
+			},
+			turnCounter: this.turnCounter
+		})
     }
-
-
-//  get allEffects() {
-//  return player1.board.concat(player1.effects).concat(player1)
-//  } /* I'm commenting this out because we aren't implementing effects yet. */
 
     get currentPlayer() {
 	return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player1:this.player2
@@ -296,24 +305,24 @@ class Game {
      * @param {object} input - the input from the user. Should be just an anonymous object, we'll define the format later.
      */
     startTurn(input) {
-	var temp = this.currentPlayer
-	if(temp.sToks >= MAX_TOKS-TOKS_PER_TURN) {
-	    temp.sToks += (TOKS_PER_TURN-(MAX_TOKS-TOKS_PER_TURN))
-	} else {
-	    temp.sToks += TOKS_PER_TURN
-	}
-	if(temp.mToks >= MAX_TOKS-TOKS_PER_TURN) {
-	    temp.mToks += (TOKS_PER_TURN-(MAX_TOKS-TOKS_PER_TURN)) //give the player their frickin tokens
-	} else {
-	    temp.mToks += TOKS_PER_TURN
-	}
+		var temp = this.currentPlayer
+		if(temp.sToks >= MAX_TOKS-TOKS_PER_TURN) {
+			temp.sToks += (TOKS_PER_TURN-(MAX_TOKS-TOKS_PER_TURN))
+		} else {
+			temp.sToks += TOKS_PER_TURN
+		}
+		if(temp.mToks >= MAX_TOKS-TOKS_PER_TURN) {
+			temp.mToks += (TOKS_PER_TURN-(MAX_TOKS-TOKS_PER_TURN)) //give the player their frickin tokens
+		} else {
+			temp.mToks += TOKS_PER_TURN
+		}
 
-	if(temp.deck.length > 0 && temp.hand.length < MAX_HAND_SIZE) { //TODO: write this to history, resolve effects.
-	    temp.hand.append(temp.deck.pop())
-	} else if(temp.deck.length == 0) {
-	    //TODO: ya boy is in fatigue and we need to add a rule about this, since I forget what we were doing
-	} else if(temp.hand.length >= MAX_HAND_SIZE) {
-	    temp.deck.pop()
+		if(temp.deck.length > 0 && temp.hand.length < MAX_HAND_SIZE) { //TODO: write this to history, resolve effects.
+			temp.hand.append(temp.deck.pop())
+		} else if(temp.deck.length == 0) {
+			//TODO: ya boy is in fatigue and we need to add a rule about this, since I forget what we were doing
+		} else if(temp.hand.length >= MAX_HAND_SIZE) {
+			temp.deck.pop()
 	}
 
 
