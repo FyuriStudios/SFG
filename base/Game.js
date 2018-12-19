@@ -283,6 +283,11 @@ class Game {
 		killDead();
     }
 
+	/**
+	 * This function should deal with playing a card.
+	 * @param {*} input - a JSON object containing the information required to do this action.
+	 * @param {*} eventChain 
+	 */
     playCard(input, eventChain) {
 		
 		var temp = this.currentPlayer //storing it so we don't waste computation time on recalculating the current player
