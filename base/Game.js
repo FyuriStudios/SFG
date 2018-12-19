@@ -159,16 +159,21 @@ class Game {
 
 			start();
 		} else if(player1.mulliganed && player2.mulliganed) {
-			setupGameInput();
+			function setupGameInput(player) {
+				player.socket.on('attack', this.attack);
+				player.socket.on('end turn', this.endTurn);
+			}
 		}
     }
     
     /**
      * Draws a card off of the player's deck. Makes sure that they actually have cards to take off of their deck or they take damage.
 	 * This function also deals internally with the pain in the booty bit where you have to make events and shit.
+	 * @param player - a reference to the player who's drawing the card.
+	 * @param eventChain - An object 
      */
     drawCard(player, eventChain) {
-		var temp;
+		var temp; //TODO: add effect triggers to this
 		if(player.deck.length == 0) {
 			player.takeDamage(FATIGUE_DAMAGE);
 			var event = {type: 'fatigue', damage: FATIGUE_DAMAGE};
@@ -182,21 +187,22 @@ class Game {
 				eventChain.other.append(event);
 			} else {
 				player.hand.push(temp);
-				eventChain
+				eventChain.current.append({type: 'draw card', player: player.id, card: temp});
+				eventChain.other.append({type: 'draw card', player: player.id == 1? 2:1});
 			}
 		}
 		
     }
 
     get currentPlayer() {
-	return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player1:this.player2
-		//if it's 1,2... 5,6... 9,10... then player 1's turn.
-		//if it's 3,4... 7.8... player 2's turn.
+		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player1:this.player2
+			//if it's 1,2... 5,6... 9,10... then player 1's turn.
+			//if it's 3,4... 7.8... player 2's turn.
     }										//these functions simply return the current player and other player. Call them like instance variables.
 
     get otherPlayer() {
-	return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player2:this.player1
-		//Just the opposite of currentPlayer.
+		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player2:this.player1
+			//Just the opposite of currentPlayer.
     }
 
     /** Done (0.0.1)
@@ -206,23 +212,23 @@ class Game {
      */
     killDead() {
 
-	if(this.player1.character.health == 0){
-	    player1.socket.emit('game over', 1)
-	    player2.socket.emit('game over', 1)
-	    player1.socket.disconnect()
-	    player2.socket.disconnect()
-	} else if(this.player2.character.health == 0) {//check for game over first.
-	    player1.socket.emit('game over', 2)
-	    player2.socket.emit('game over', 2)
-	    player1.socket.disconnect()
-	    player2.socket.disconnect()
-	}
+		if(this.player1.character.health == 0){
+			player1.socket.emit('game over', 1)
+			player2.socket.emit('game over', 1)
+			player1.socket.disconnect()
+			player2.socket.disconnect()
+		} else if(this.player2.character.health == 0) {//check for game over first.
+			player1.socket.emit('game over', 2)
+			player2.socket.emit('game over', 2)
+			player1.socket.disconnect()
+			player2.socket.disconnect()
+		}
 
-	this.player1.graveyard.extend(_.remove(this.player1.board, (n) => {return n.currentPower <= 0}))
-	this.player2.graveyard.extend(_.remove(this.player2.board, (n) => {return n.currentPower <= 0}))
+		this.player1.graveyard.extend(_.remove(this.player1.board, (n) => {return n.currentPower <= 0}))
+		this.player2.graveyard.extend(_.remove(this.player2.board, (n) => {return n.currentPower <= 0}))
 
 
-	//this.updatePlayers() TODO: fix update players func
+		//this.updatePlayers() TODO: fix update players func
     }
 
     /** Done (0.0.1)
@@ -231,35 +237,35 @@ class Game {
      * @author Hughes
      */
     attack(input) {
-	if((input.attackerLoc >= currentPlayer.board.length || input.attackerLoc == -1) || input.targetLoc >= currentPlayer.board.length) { //just real quick making sure that the locations are valid
-	    return
-	}
+		if((input.attackerLoc >= currentPlayer.board.length || input.attackerLoc == -1) || input.targetLoc >= currentPlayer.board.length) { //just real quick making sure that the locations are valid
+			return;
+		}
 
-	var attacker = currentPlayer.board[input.attackerLoc]
+		var attacker = currentPlayer.board[input.attackerLoc];
 
-	if(!attacker.canAttack) {
-	    return
-	}
+		if(!attacker.canAttack) {
+			return;
+		}
 
-	for(var i = 0; i < currentPlayer.board.length; i++) {
-	    if(currentPlayer.board[i].defender && i != input.targetLoc) { //check to see if there's a dude with defender blocking the way
-		return
-	    } 
-	}
+		for(var i = 0; i < currentPlayer.board.length; i++) {
+			if(currentPlayer.board[i].defender && i != input.targetLoc) { //check to see if there's a dude with defender blocking the way
+				return;
+			} 
+		}
 
-	attacker.canAttack = false
+		attacker.canAttack = false;
 
-	if(input.targetLoc == -1) { //set the target equal to the enemy character if the targetLoc is -1.
-	    var target = otherPlayer.character
-	    target.health -= attacker.power
-	} else {
-	    var target = otherPlayer.board[input.targetLoc]
-	    var tempPower = target.power
-	    target.power -= attacker.power
-	    attacker.power -= tempPower //TODO: write this to history, resolve effects
-	}
-	//this.updatePlayers()
-	killDead()
+		if(input.targetLoc == -1) { //set the target equal to the enemy character if the targetLoc is -1.
+			var target = otherPlayer.character;
+			target.health -= attacker.power;
+		} else {
+			var target = otherPlayer.board[input.targetLoc];
+			var tempPower = target.power;
+			target.power -= attacker.power;
+			attacker.power -= tempPower; //TODO: write this to history, resolve effects
+		}
+
+		killDead();
     }
 
     playCard(input) {
