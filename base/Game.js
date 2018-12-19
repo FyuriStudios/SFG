@@ -262,9 +262,9 @@ class Game {
      * The helper function to deal with attacks. Use this when a player asks to attack.
      * This function should also deal with invalid attacks.
 	 * 
-	 * TODO: add effect processing
 	 * @param input - the input from the player detailing what's gonna happen with the attack.
 	 * @param eventChain - the chain of events that this function should append to.
+	 * TODO: add events
      */
     attack(input, eventChain) {
 		
@@ -280,13 +280,14 @@ class Game {
 
 		attacker.attack(this, target, eventChain);
 
-		killDead();
+		killDead(eventChain);
     }
 
 	/**
 	 * This function should deal with playing a card.
 	 * @param {*} input - a JSON object containing the information required to do this action.
-	 * @param {*} eventChain 
+	 * @param {*} eventChain - the chain of events.
+	 * //TODO: add events
 	 */
     playCard(input, eventChain) {
 		
@@ -317,6 +318,9 @@ class Game {
 
     }
 
+	/**
+	 * TODO: add events
+	 */
     startTurn(eventChain) {
 		var temp = this.currentPlayer
 		if(temp.sToks >= MAX_TOKS-TOKS_PER_TURN) {
@@ -355,6 +359,11 @@ class Game {
 
     }
 
+	/**
+	 * TODO: add events
+	 * @param {*} input 
+	 * @param {*} eventChain 
+	 */
     endTurn(input, eventChain) {
 		turnCounter++;
 		killDead();
