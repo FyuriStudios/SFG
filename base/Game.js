@@ -283,7 +283,7 @@ class Game {
 		killDead();
     }
 
-    playCard(input) {
+    playCard(input, eventChain) {
 		
 		var temp = this.currentPlayer //storing it so we don't waste computation time on recalculating the current player
 		if(input.cardLocation > temp.hand.length || input.cardLocation < 0) {
@@ -312,11 +312,7 @@ class Game {
 
     }
 
-    /**
-     * 
-     * @param {object} input - the input from the user. Should be just an anonymous object, we'll define the format later.
-     */
-    startTurn(input) {
+    startTurn(eventChain) {
 		var temp = this.currentPlayer
 		if(temp.sToks >= MAX_TOKS-TOKS_PER_TURN) {
 			temp.sToks += (TOKS_PER_TURN-(MAX_TOKS-TOKS_PER_TURN))
@@ -335,35 +331,29 @@ class Game {
 			//TODO: ya boy is in fatigue and we need to add a rule about this, since I forget what we were doing
 		} else if(temp.hand.length >= MAX_HAND_SIZE) {
 			temp.deck.pop()
-	}
+		}
 
 
-	//	eventHistory.push(new TurnBeginsEvent(this))
-	turnCounter++ //TODO: effects, history
-	for(dude in temp.board) {
-	    if(!dude.defender) {
-		dude.canAttack = true
-	    }
-	}
-	//	for(element in effects){
-	//	if(element.hasTurnIncrement())
-	//	element.turnIncrement() //TODO: write to history, effects
-	//	}
-	this.updatePlayers()
-	killDead()
+		//	eventHistory.push(new TurnBeginsEvent(this))
+		turnCounter++ //TODO: effects, history
+		for(dude in temp.board) {
+			if(!dude.defender) {
+			dude.canAttack = true
+			}
+		}
+		//	for(element in effects){
+		//	if(element.hasTurnIncrement())
+		//	element.turnIncrement() //TODO: write to history, effects
+		//	}
+		this.updatePlayers()
+		killDead()
 
     }
 
-    endTurn(input) {
-	//eventHistory.push(new TurnEndEvent(this))
-	turnCounter++
-	//for(element in effects){
-	//if(element.hasTurnIncrement())
-	//element.turnIncrement() //TODO: write to history, effects
-	//}
-	this.updatePlayers()
-	killDead()
-	startTurn(input)
+    endTurn(input, eventChain) {
+		turnCounter++;
+		killDead();
+		startTurn();
 	}
 	
 	get currentPlayer() {
