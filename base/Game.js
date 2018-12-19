@@ -170,47 +170,51 @@ class Game {
      * Draws a card off of the player's deck. Makes sure that they actually have cards to take off of their deck or they take damage.
 	 * This function also deals internally with the pain in the booty bit where you have to make events and shit.
 	 * @param player - a reference to the player who's drawing the card.
-	 * @param eventChain - An object 
+	 * @param eventChain - An object containing the chain of events that can be sent to the frontend
      */
     drawCard(player, eventChain) {
+
+		var event = {current:{}, other:{}};
+		eventChain.append(event);
 		var temp; //TODO: add effect triggers to this
+
+		/*
+		Here, we're going to check for fatigue and do the fatigues if it seems to be a thing
+		*/
 		if(player.deck.length == 0) {
 			player.takeDamage(FATIGUE_DAMAGE);
-			var event = {type: 'fatigue', damage: FATIGUE_DAMAGE};
-			eventChain.current.append(event);
-			eventChain.other.append(event);
-		} else {
+			var ev = {type: 'fatigue', damage: FATIGUE_DAMAGE};
+			event.current.append(ev);
+			event.other.append(ev);
+		} 
+		
+		/*
+		Otherwise, either a card gets burned or drawn
+		*/
+		else {
+			
 			temp = player.deck.pop();
 			if(player.hand.length == MAX_HAND_SIZE) {
-				var event = {type: 'burn card', card: temp};
-				eventChain.current.append(event);
-				eventChain.other.append(event);
-			} else {
+				var ev = {type: 'burn card', card: temp};
+				event.current.append(ev);
+				event.other.append(ev);
+			} 
+			else {
 				player.hand.push(temp);
-				eventChain.current.append({type: 'draw card', player: player.id, card: temp});
-				eventChain.other.append({type: 'draw card', player: player.id == 1? 2:1});
+				event.current.append({type: 'draw card', player: player.id, card: temp});
+				event.other.append({type: 'draw card', player: player.id == 1? 2:1});
 			}
+
 		}
 		
     }
 
-    get currentPlayer() {
-		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player1:this.player2
-			//if it's 1,2... 5,6... 9,10... then player 1's turn.
-			//if it's 3,4... 7.8... player 2's turn.
-    }										//these functions simply return the current player and other player. Call them like instance variables.
-
-    get otherPlayer() {
-		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player2:this.player1
-			//Just the opposite of currentPlayer.
-    }
-
-    /** Done (0.0.1)
+    /**
      * This function simply goes through the board and kills all dead dudes.
-     * TODO: add event processing and effects
-     * @author Hughes
+	 * It also will end the game if a hero is dead.
+	 * @param eventChain - An object containing the chain of events that can be sent to the frontend. If this function decides that it needs to add something to the chain, it will.
      */
-    killDead() {
+    killDead(eventChain) {
 
 		if(this.player1.character.health == 0){
 			player1.socket.emit('game over', 1)
@@ -224,74 +228,86 @@ class Game {
 			player2.socket.disconnect()
 		}
 
-		this.player1.graveyard.extend(_.remove(this.player1.board, (n) => {return n.currentPower <= 0}))
-		this.player2.graveyard.extend(_.remove(this.player2.board, (n) => {return n.currentPower <= 0}))
+		shouldDoEvent = false;
+		player1.board.forEach((dude) => {if(dude.currentPower <= 0) {shouldDoEvent = true;}});
+		player2.board.forEach((dude) => {if(dude.currentPower <= 0) {shouldDoEvent = true;}});
 
+		if(!shouldDoEvent) //this code is disgusting but I don't want to make an empty event.
+			return;
 
-		//this.updatePlayers() TODO: fix update players func
+		var event = {type: 'dead', dead: []};
+
+		/*
+		Here, I've extended the array prototype to allow for a function called "extend" that appends an array to another one.
+		We're using this to add all dead monsters to the graveyard.
+		*/
+		function removeDead(player) {
+			var deadDudes = [];
+			for(var i = player.board.length-1; i >= 0; i--) {
+				if(player.board[i].currentPower <= 0) {
+					event.dead.append({id: player.board[i].id, position: i, player: player.id});
+					deadDudes.append[player.board[i]];
+				}
+			}
+			player.graveyard.extend(deadDudes);
+		}
+
+		removeDead(this.currentPlayer);
+		removeDead(this.otherPlayer);
+
+		//TODO: add deathrattles
     }
 
-    /** Done (0.0.1)
+    /**
      * The helper function to deal with attacks. Use this when a player asks to attack.
      * This function should also deal with invalid attacks.
-     * @author Hughes
+	 * 
+	 * TODO: add effect processing
+	 * @param input - the input from the player detailing what's gonna happen with the attack.
+	 * @param eventChain - the chain of events that this function should append to.
      */
-    attack(input) {
+    attack(input, eventChain) {
+		
 		if((input.attackerLoc >= currentPlayer.board.length || input.attackerLoc == -1) || input.targetLoc >= currentPlayer.board.length) { //just real quick making sure that the locations are valid
 			return;
 		}
 
 		var attacker = currentPlayer.board[input.attackerLoc];
 
-		if(!attacker.canAttack) {
+		if(!attacker.validAttack(this, input.targetLoc)) {
 			return;
 		}
 
-		for(var i = 0; i < currentPlayer.board.length; i++) {
-			if(currentPlayer.board[i].defender && i != input.targetLoc) { //check to see if there's a dude with defender blocking the way
-				return;
-			} 
-		}
-
-		attacker.canAttack = false;
-
-		if(input.targetLoc == -1) { //set the target equal to the enemy character if the targetLoc is -1.
-			var target = otherPlayer.character;
-			target.health -= attacker.power;
-		} else {
-			var target = otherPlayer.board[input.targetLoc];
-			var tempPower = target.power;
-			target.power -= attacker.power;
-			attacker.power -= tempPower; //TODO: write this to history, resolve effects
-		}
+		attacker.attack(this, target, eventChain);
 
 		killDead();
     }
 
     playCard(input) {
-	var temp = this.currentPlayer //storing it so we don't waste computation time on recalculating the current player
-	if(input.cardLocation > temp.hand.length || input.cardLocation < 0) {
-	    return
-	}
-
-	var toPlay = temp.hand[toPlay]
-	//TODO: add flex token implementation
-	var tokens = toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks
-
-		if(!(toPlay.playCost<=tokens) || temp.board.length == MAX_BOARD_SIZE) {
-		    return //they don't have enough tokens to play the card.
+		
+		var temp = this.currentPlayer //storing it so we don't waste computation time on recalculating the current player
+		if(input.cardLocation > temp.hand.length || input.cardLocation < 0) {
+			return
 		}
 
-	toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks -= toPlay.playCost //this line might just not work, but I don't want to rewrite it.
+		var toPlay = temp.hand[toPlay]
+		//TODO: add flex token implementation
+		var tokens = toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks
 
-		temp.hand = temp.hand.splice(input.cardLocation)//this line also might not work, but it's supposed to remove the card at input.cardLocation
+			if(!(toPlay.playCost<=tokens) || temp.board.length == MAX_BOARD_SIZE) {
+				return //they don't have enough tokens to play the card.
+			}
 
-		if(toPlay.type == 'monster') {
-		    temp.board.splice(input.playLocation, 0, toPlay) //TODO: write to history
+		toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks -= toPlay.playCost //this line might just not work, but I don't want to rewrite it.
+
+			temp.hand = temp.hand.splice(input.cardLocation)//this line also might not work, but it's supposed to remove the card at input.cardLocation
+
+			if(toPlay.type == 'monster') {
+				temp.board.splice(input.playLocation, 0, toPlay) //TODO: write to history
+			}
+		if(toPlay.type == 'spell') {
+			//add code here
 		}
-	if(toPlay.type == 'spell') {
-	    //add code here
-	}
 
 
     }
@@ -348,6 +364,17 @@ class Game {
 	this.updatePlayers()
 	killDead()
 	startTurn(input)
+	}
+	
+	get currentPlayer() {
+		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player1:this.player2
+			//if it's 1,2... 5,6... 9,10... then player 1's turn.
+			//if it's 3,4... 7.8... player 2's turn.
+    }										//these functions simply return the current player and other player. Call them like instance variables.
+
+    get otherPlayer() {
+		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player2:this.player1
+			//Just the opposite of currentPlayer.
     }
 
 }
