@@ -158,10 +158,39 @@ class Game {
 			setMulligan(player2);
 
 			start();
+
 		} else if(player1.mulliganed && player2.mulliganed) {
+
 			function setupGameInput(player) {
-				player.socket.on('attack', this.attack);
-				player.socket.on('end turn', this.endTurn);
+				player.socket.on('end turn', function(input) {
+					eventChain = {current:[], other:[]};
+					this.endTurn(eventChain);
+					if(eventChain.current.length>0) {
+						this.currentPlayer.socket.emit('events', eventChain.current);
+						this.otherPlayer.socket.emit('events', eventChain.other);
+					}
+				});
+
+				player.socket.on('attack', function(input) {
+					eventChain = {current:[], other:[]};
+					this.attack(input, eventChain);
+					if(eventChain.current.length>0) {
+						this.currentPlayer.socket.emit('events', eventChain.current);
+						this.otherPlayer.socket.emit('events', eventChain.other);
+					}
+				});
+
+				player.socket.on('play card', function(input) {
+					eventChain = {current:[], other:[]};
+					this.playCard(input, eventChain);
+					if(eventChain.current.length>0) {
+						this.currentPlayer.socket.emit('events', eventChain.current);
+						this.otherPlayer.socket.emit('events', eventChain.current);
+					}
+				});
+
+				setupGameInput(player1);
+				setupGameInput(player2);
 			}
 		}
     }
@@ -174,18 +203,16 @@ class Game {
      */
     drawCard(player, eventChain) {
 
-		var event = {current:{}, other:{}};
-		eventChain.append(event);
-		var temp; //TODO: add effect triggers to this
+		var currentEvent = {};
+		var otherEvent = {};
 
 		/*
 		Here, we're going to check for fatigue and do the fatigues if it seems to be a thing
 		*/
 		if(player.deck.length == 0) {
 			player.takeDamage(FATIGUE_DAMAGE);
-			var ev = {type: 'fatigue', damage: FATIGUE_DAMAGE};
-			event.current.append(ev);
-			event.other.append(ev);
+			currentEvent.type = otherEvent.type = 'fatigue';
+			currentEvent.damage = otherEvent.damage = FATIGUE_DAMAGE;
 		} 
 		
 		/*
@@ -195,25 +222,29 @@ class Game {
 			
 			temp = player.deck.pop();
 			if(player.hand.length == MAX_HAND_SIZE) {
-				var ev = {type: 'burn card', card: temp};
-				event.current.append(ev);
-				event.other.append(ev);
+				currentEvent.type = otherEvent.type = 'burn card';
+				currentEvent.card = otherEvent.card = temp;
+				player.graveyard.push(temp);
 			} 
 			else {
 				player.hand.push(temp);
-				event.current.append({type: 'draw card', player: player.id, card: temp});
-				event.other.append({type: 'draw card', player: player.id == 1? 2:1});
+				currentEvent.type = otherEvent.type = 'draw card';
+				currentEvent.player = otherEvent.player = player.id;
+				currentEvent.card = temp;
 			}
 
 		}
+
+		eventChain.current.push(currentEvent);
+		eventChain.other.push(otherEvent);
 		
-    }
+	}
 
     /**
      * This function simply goes through the board and kills all dead dudes.
 	 * It also will end the game if a hero is dead.
 	 * @param eventChain - An object containing the chain of events that can be sent to the frontend. If this function decides that it needs to add something to the chain, it will.
-     */
+     */ //TODO: fix events
     killDead(eventChain) {
 
 		if(this.player1.character.health == 0){
