@@ -163,29 +163,29 @@ class Game {
 
 			function setupGameInput(player) {
 				player.socket.on('end turn', function(input) {
-					eventChain = {current:[], other:[]};
+					eventChain = [];
 					this.endTurn(eventChain);
 					if(eventChain.current.length>0) {
-						this.currentPlayer.socket.emit('events', eventChain.current);
-						this.otherPlayer.socket.emit('events', eventChain.other);
+						this.currentPlayer.socket.emit('events', eventChain);
+						this.otherPlayer.socket.emit('events', eventChain);
 					}
 				});
 
 				player.socket.on('attack', function(input) {
-					eventChain = {current:[], other:[]};
+					eventChain = [];
 					this.attack(input, eventChain);
 					if(eventChain.current.length>0) {
-						this.currentPlayer.socket.emit('events', eventChain.current);
-						this.otherPlayer.socket.emit('events', eventChain.other);
+						this.currentPlayer.socket.emit('events', eventChain);
+						this.otherPlayer.socket.emit('events', eventChain);
 					}
 				});
 
 				player.socket.on('play card', function(input) {
-					eventChain = {current:[], other:[]};
+					eventChain = [];
 					this.playCard(input, eventChain);
 					if(eventChain.current.length>0) {
-						this.currentPlayer.socket.emit('events', eventChain.current);
-						this.otherPlayer.socket.emit('events', eventChain.current);
+						this.currentPlayer.socket.emit('events', eventChain);
+						this.otherPlayer.socket.emit('events', eventChain);
 					}
 				});
 
@@ -203,16 +203,17 @@ class Game {
      */
     drawCard(player, eventChain) {
 
-		var currentEvent = {};
-		var otherEvent = {};
+		var event = {};
 
 		/*
 		Here, we're going to check for fatigue and do the fatigues if it seems to be a thing
 		*/
 		if(player.deck.length == 0) {
 			player.takeDamage(FATIGUE_DAMAGE);
-			currentEvent.type = otherEvent.type = 'fatigue';
-			currentEvent.damage = otherEvent.damage = FATIGUE_DAMAGE;
+			event.view = 1;//public
+			event.type = 'fatigue';
+			event.damage = FATIGUE_DAMAGE;
+			event.player = player.id;
 		} 
 		
 		/*
@@ -222,21 +223,22 @@ class Game {
 			
 			temp = player.deck.pop();
 			if(player.hand.length == MAX_HAND_SIZE) {
-				currentEvent.type = otherEvent.type = 'burn card';
-				currentEvent.card = otherEvent.card = temp;
+				event.type = 'burn card';
+				event.view = 1;
+				event.player = player.id;
 				player.graveyard.push(temp);
 			} 
 			else {
 				player.hand.push(temp);
-				currentEvent.type = otherEvent.type = 'draw card';
-				currentEvent.player = otherEvent.player = player.id;
-				currentEvent.card = temp;
+				event.type = 'draw card';
+				event.player = player.id;
+				event.view = 2;//semi-private
+				event.card = temp;
 			}
 
 		}
 
-		eventChain.current.push(currentEvent);
-		eventChain.other.push(otherEvent);
+		eventChain.current.push(event);
 		
 	}
 
@@ -414,4 +416,4 @@ class Game {
 
 }
 
-module.exports = Game
+module.exports = Game;
