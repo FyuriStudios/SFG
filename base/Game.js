@@ -246,7 +246,7 @@ class Game {
      * This function simply goes through the board and kills all dead dudes.
 	 * It also will end the game if a hero is dead.
 	 * @param eventChain - An object containing the chain of events that can be sent to the frontend. If this function decides that it needs to add something to the chain, it will.
-     */ //TODO: fix events
+     */
     killDead(eventChain) {
 
 		if(this.player1.character.health == 0){
@@ -268,7 +268,7 @@ class Game {
 		if(!shouldDoEvent) //this code is disgusting but I don't want to make an empty event.
 			return;
 
-		var event = {type: 'dead', dead: []};
+		var event = {type: 'dead', view: 1, dead: []};
 
 		/*
 		Here, I've extended the array prototype to allow for a function called "extend" that appends an array to another one.
@@ -280,6 +280,7 @@ class Game {
 				if(player.board[i].currentPower <= 0) {
 					event.dead.append({id: player.board[i].id, position: i, player: player.id});
 					deadDudes.append[player.board[i]];
+				
 				}
 			}
 			player.graveyard.extend(deadDudes);
@@ -288,16 +289,16 @@ class Game {
 		removeDead(this.currentPlayer);
 		removeDead(this.otherPlayer);
 
-		//TODO: add deathrattles
+		eventChain.push(event);
     }
 
     /**
      * The helper function to deal with attacks. Use this when a player asks to attack.
      * This function should also deal with invalid attacks.
 	 * 
-	 * @param input - the input from the player detailing what's gonna happen with the attack.
-	 * @param eventChain - the chain of events that this function should append to.
-	 * TODO: add events
+	 * @param {*} input - the input from the player detailing what's gonna happen with the attack.
+	 * @param {*} eventChain - the chain of events that this function should append to.
+	 *
      */
     attack(input, eventChain) {
 		
@@ -324,7 +325,7 @@ class Game {
 	 */
     playCard(input, eventChain) {
 		
-		var temp = this.currentPlayer //storing it so we don't waste computation time on recalculating the current player
+		var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
 		if(input.cardLocation > temp.hand.length || input.cardLocation < 0) {
 			return
 		}
