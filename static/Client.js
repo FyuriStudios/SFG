@@ -1,4 +1,4 @@
-var game;
+var game;//test
 /**
  * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
  * to the new dimensions of the screen.
