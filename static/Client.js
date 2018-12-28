@@ -1,4 +1,3 @@
-import './ClientGame';
 var game;
 /**
  * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
