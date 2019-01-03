@@ -17,7 +17,7 @@ Array.prototype.extend = function (other_array) {
 
 Array.prototype.shuffle = function() {
     for (let i = this.length - 1; i > 0; i--) { //here I'm adding two functions to make the array class not suck
-        const j = Math.floor(Math.random() * (i + 1));
+        const j = Math.floor(Math.random() * (i + 1)); //I'm pretty sure this function works but I might be wrong
         [this[i], this[j]] = [this[j], this[i]];
     }
 }
@@ -162,36 +162,32 @@ class Game {
 		} else if(player1.mulliganed && player2.mulliganed) {
 
 			function setupGameInput(player) {
+
+				function emitEvents(eventChain) {
+					function sanitizeEventChain(eventChain, player) {
+						//TODO: finish this
+					}
+				}
 				player.socket.on('end turn', function(input) {
 					eventChain = [];
 					this.endTurn(eventChain);
-					if(eventChain.current.length>0) {
-						this.currentPlayer.socket.emit('events', eventChain);
-						this.otherPlayer.socket.emit('events', eventChain);
-					}
+					emitEvents(eventChain);
 				});
 
 				player.socket.on('attack', function(input) {
 					eventChain = [];
 					this.attack(input, eventChain);
-					if(eventChain.current.length>0) {
-						this.currentPlayer.socket.emit('events', eventChain);
-						this.otherPlayer.socket.emit('events', eventChain);
-					}
+					emitEvents(eventChain);
 				});
 
 				player.socket.on('play card', function(input) {
 					eventChain = [];
 					this.playCard(input, eventChain);
-					if(eventChain.current.length>0) {
-						this.currentPlayer.socket.emit('events', eventChain);
-						this.otherPlayer.socket.emit('events', eventChain);
-					}
+					emitEvents(eventChain);
 				});
-
-				setupGameInput(player1);
-				setupGameInput(player2);
 			}
+			setupGameInput(player1);
+			setupGameInput(player2);
 		}
     }
     
@@ -250,15 +246,15 @@ class Game {
     killDead(eventChain) {
 
 		if(this.player1.character.health == 0){
-			player1.socket.emit('game over', 1)
-			player2.socket.emit('game over', 1)
-			player1.socket.disconnect()
-			player2.socket.disconnect()
+			player1.socket.emit('game over', 1);
+			player2.socket.emit('game over', 1);
+			player1.socket.disconnect();
+			player2.socket.disconnect();
 		} else if(this.player2.character.health == 0) {//check for game over first.
-			player1.socket.emit('game over', 2)
-			player2.socket.emit('game over', 2)
-			player1.socket.disconnect()
-			player2.socket.disconnect()
+			player1.socket.emit('game over', 2);
+			player2.socket.emit('game over', 2);
+			player1.socket.disconnect();
+			player2.socket.disconnect();
 		}
 
 		shouldDoEvent = false;
