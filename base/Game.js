@@ -54,9 +54,16 @@ const FATIGUE_DAMAGE = 20;
 
 class Game {
 
+	/**
+	 * Sets up the game so that it can be started. All this function does is initialize variables, not to user input specifications.
+	 * Currently, the function start() is the one that gets user input to actually initialize decks and characters and etc.
+	 * @param {*} socket1 a reference to the socket connection to player 2
+	 * @param {*} socket2 a reference to the socket connection to player 2
+	 */
     constructor(socket1, socket2) {
-		this.turnCounter = 0;
-		this.eventHistory = [];
+
+		this.turnCounter = 0; //start the turn counter at zero since the game hasn't started yet
+		this.eventHistory = []; //there are no events that have been written yet
 
 		/*
 		Here, I'm creating non-prototypical objects for player1 and player2. They don't need any functions, just some variables.
@@ -64,19 +71,19 @@ class Game {
 		or something like that.
 		*/
 		this.player1 = {
-			setDeck: false,
-			mulliganed: false,
-			id: 1,
+			setDeck: false, //the player has not input their deck yet
+			mulliganed: false, //the player has not mulliganed yet
+			id: 1, //the player's id is player 1
 			character: new Character(),//TODO: change this to a real character
-			socket: socket1,
-			board: [],
-			hand: [],
-			graveyard: [],
-			mToks: 0,
+			socket: socket1, //a reference to their socket connection
+			board: [], //there's nothing on their board
+			hand: [], //they don't have a hand yet
+			graveyard: [], //there's nothing in the graveyard
+			mToks: 0, //they have 0 monster tokens and spell tokens
 			sToks: 0
 		};
 
-		this.player2 = {
+		this.player2 = { //see above for details on the variables
 			setDeck: false,
 			mulliganed: false,
 			id: 2,
@@ -94,9 +101,9 @@ class Game {
      * Starts the game. Call this function when you're ready for the entire game to start.
      * This function is separate from the initializer, just in case. Like, maybe we want to let both players ready up?
 	 * 
-     * This function makes sure that both players are ready. Then, it sends the hands of both players to them and asks for a mulligan.
-     * Then it sets up all of the input listeners required to make the game run. This function should be called when a player sends their deck to the server and
-     * it's a valid deck.
+     * This function lets the players set their decks and TODO: let the players choose characters, then gives them a mulligan opportunity.
+	 * After that, it sets up the game input required so that the players can start. This function repeatedly calls itself so that
+	 * the players can ready up all of their stuff.
      * @author Hughes
      */
     start() {
@@ -104,9 +111,13 @@ class Game {
 		//first, we're going to handle the case where both players haven't mulliganed or set their decks.
 		if(!(player1.setDeck && player2.setDeck) && !(player1.mulliganed && player2.mulliganed)) {
 			//TODO: add a default deck
-			player1.socket.emit('player id', player1.id);
+			player1.socket.emit('player id', player1.id); //Send both players their IDs just in case they need them.
 			player2.socket.emit('player id', player2.id);
 
+			/*
+			Here, I'm making a function that constructs the deck for each player. It sets up a callback that asks for a deck input,
+			then turns that deck input into their deck.
+			*/
 			function deckConstruction(player) {
 				player.socket.on('deck', function(input) {
 					//TODO: deck verification and stuff!
@@ -120,15 +131,19 @@ class Game {
 				});
 			}
 			
-			deckConstruction(player1);
+			deckConstruction(player1);//we're going to run this function for each player. This design pattern has been abused a lot by me (Hughes).
 			deckConstruction(player2);
 
+		/*
+		When a player sets their deck, this function gets called again. When both players have set their decks, this function will be called.
+		This part of the function is almost identical pattern-wise to the part above.
+		*/
 		} else if((player1.setDeck && player2.setDeck) && !(player1.mulliganed && player2.mulliganed)) {
 
 	   		player1.deck.shuffle();
 			player2.deck.shuffle();
 
-			for(var i = 0; i < STARTING_CARDS_DRAWN; i++) {
+			for(var i = 0; i < STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
 				player1.hand.push(player1.deck.pop());
 			}
 			for(var i = 0; i < STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
