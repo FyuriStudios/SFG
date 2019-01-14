@@ -338,12 +338,18 @@ class Game {
 		
 		var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
 		if(input.cardLocation > temp.hand.length || input.cardLocation < 0) {
-			return
+			return;
 		}
 
-		var toPlay = temp.hand[toPlay]
+		var event = {
+			view: 1,
+			type: 'card played',
+			locationInHand: input.toPlay,//TODO: stopped here last time
+		};
+
+		var toPlay = temp.hand[input.toPlay];
 		//TODO: add flex token implementation
-		var tokens = toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks
+		var tokens = toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks;
 
 			if(!(toPlay.playCost<=tokens) || temp.board.length == MAX_BOARD_SIZE) {
 				return //they don't have enough tokens to play the card.

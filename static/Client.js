@@ -55,7 +55,7 @@ function resizeCanvas() {
 function drawBoard(friend) {
     // draw a rectangle
     friend.removeChildren();
-    friend.drawRect(++grass, grass, 200, 200);
+    friend.drawRect(++grass, grass, 200, 200); //this stuff doesn't work, we need to fix it
 }
 
 function init() {
