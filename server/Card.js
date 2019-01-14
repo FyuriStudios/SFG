@@ -6,33 +6,14 @@ var Effect = require('./Effect')
  */
 class Card extends Effect{
 
-    constructor() {
-	super()
-	this.playCost = this.cost
-    }
-
-    get type() {
-	throw 'Type needs to be implemented'
-    }
-
-    get id() {
-	throw 'ID needs to be implemented'
-    }
-
-    get tokenType() {
-	throw 'Token Type needs to be implemented'
-    }
-
-    get rarity() {
-	throw 'Rarity needs to be implemented'
-    }
-
-    get name() {
-	throw 'name needs to be implemented'
-    }
-
-    get cost() {
-	throw 'cost needs to be implemented'
+    constructor(type, id, tokenType, rarity, name, cost) {
+    	this.type = type;
+    	this.id = id;
+    	this.tokenType = tokenType;
+    	this.rarity = rarity;
+    	this.name = name;
+    	this.cost = cost;
+    	this.currentCost = cost;//current cost and absolute cost are different
     }
 
 }
