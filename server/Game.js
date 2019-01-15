@@ -1,9 +1,70 @@
-/**
- * This file contains all of the logic required to run the base game.
- * I'm thinking about whether or not we should be writing a bunch of helper functions to make this easier,
- * like maybe a drawCard function, etc.
- * @author Hughes
- */
+/*
+Quick reference guide for events:
+
+Events are the most important thing that anyone who handles the frontend needs to deal with. Every time an action occurs on the backend,
+an event chain will be sent to the frontend. Then you need to deal with the event's information to update what's happening on the frontend,
+for example animating attacks and drawn cards.
+
+The event chain contains a full description of every event that occurred, in order. It's an array containing event objects. Event objects
+follow this general format:
+
+{
+	type: string,
+}
+
+The type specifies what kind of event is denoted; for example 'draw card' if a card was drawn. 
+Here's a complete list and set of descriptions for all of the various event types (list is a work in progress):
+
+1) type: 'fatigue' - This event occurs when a player draws a card but doesn't have a card in their deck to draw. They take damage to their
+face as a result of it.
+	Follows this format:
+	
+	{
+		type: 'fatigue',
+		damage: {int},
+		player: {int}
+	}
+		* damage {int} - This is the amount of damage taken by the player due to fatigue.
+		* player: {int} - This is the ID of the player that took the damage, either 1 or 2.
+
+
+2) type: 'burn card' - This event occurs when a player draws a card but their hand is full and they burn the card. We're thinking about
+   changing this rule but it's how I'm going to leave it for now because it's easier to implement.
+	It follows this format:
+
+	{
+		type: 'burn card',
+		player: {int},
+		card: {Card}
+	}
+		* player {int} - This is the ID of the player that burned the card, 1 or 2.
+		* card {Card} - This is the card that was burned. Contains probably a lot more information than needed but I'm leaving it like this
+		  just in case it matters.
+
+
+3) type: 'draw card' - This event occurs when a player draws a card. This is special because the player who drew the card receives
+   information about the card that they drew but the other player only gets to know that they drew a card.
+	For the current player, it follows this format:
+
+	{
+		type: 'draw card',
+		player: {int},
+		card: {Card}
+	}
+		* player {int} - The ID of the player who drew the card, 1 or 2.
+		* card {Card} - The exact card object that was drawn. See Card.js for details.
+	For the other player, it follows this format:
+
+	{
+		type: 'draw card',
+		player: {int}
+	}
+	It's exactly the same except they don't get the card ID.
+
+
+4) type: 
+
+*/
 
 //require everything that we need, probably this list will expand as we go
 var Character = require('./Character');
@@ -208,7 +269,7 @@ class Game {
     
     /**
      * Draws a card off of the player's deck. Makes sure that they actually have cards to take off of their deck or they take damage.
-	 * This function also deals internally with the pain in the booty bit where you have to make events and shit.
+	 * This function also deals internally with the pain in the booty bit where you have to make events.
 	 * @param player - a reference to the player who's drawing the card.
 	 * @param eventChain - An object containing the chain of events that can be sent to the frontend
      */
@@ -237,6 +298,7 @@ class Game {
 				event.type = 'burn card';
 				event.view = 1;
 				event.player = player.id;
+				event.card = temp;
 				player.graveyard.push(temp);
 			} 
 			else {
@@ -354,48 +416,60 @@ class Game {
 			type: 'card played',
 			locationInHand: input.toPlay,
 			cost: toPlay.playCost,
-			type: toPlay.tokenType
+			tokenType: toPlay.tokenType,
+			cardType: toPlay.type,
+			player: temp.id
 		};
 
 		toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks -= toPlay.playCost; //this line might just not work, but I don't want to rewrite it.
 
 		temp.hand = temp.hand.splice(input.cardLocation);//this line also might not work, but it's supposed to remove the card at input.cardLocation
 
+		eventChain.push(event);
+
 		if(toPlay.type == 'monster') {
+			event.monster = toPlay;
 			temp.board.splice(input.playLocation, 0, toPlay); 
 			//TODO: add battlecry effect
-			event.monster = toPlay;
 		}
 
 		if(toPlay.type == 'spell') {
 			//TODO: add code here
 		}
-		eventChain.append(event);
+		
     }
 
-	/**
-	 * TODO: add events
-	 */
     startTurn(eventChain) {
-		var temp = this.currentPlayer
-		if(temp.sToks >= MAX_TOKS-TOKS_PER_TURN) {
-			temp.sToks += (TOKS_PER_TURN-(MAX_TOKS-TOKS_PER_TURN))
+
+		var temp = this.currentPlayer;
+		var event = {
+			type: 'start turn',
+			view: 1,
+			player: temp.id
+		};
+		
+
+		if(currSToks >= MAX_TOKS-TOKS_PER_TURN) {
+			var currSToks = temp.sToks;
+			temp.sToks = MAX_TOKS;
+			event.sToks = MAX_TOKS - currSToks;
 		} else {
-			temp.sToks += TOKS_PER_TURN
-		}
-		if(temp.mToks >= MAX_TOKS-TOKS_PER_TURN) {
-			temp.mToks += (TOKS_PER_TURN-(MAX_TOKS-TOKS_PER_TURN)) //give the player their frickin tokens
-		} else {
-			temp.mToks += TOKS_PER_TURN
+			temp.sToks += TOKS_PER_TURN;
+			event.sToks = TOKS_PER_TURN;
 		}
 
-		if(temp.deck.length > 0 && temp.hand.length < MAX_HAND_SIZE) { //TODO: write this to history, resolve effects.
-			temp.hand.append(temp.deck.pop())
-		} else if(temp.deck.length == 0) {
-			//TODO: ya boy is in fatigue and we need to add a rule about this, since I forget what we were doing
-		} else if(temp.hand.length >= MAX_HAND_SIZE) {
-			temp.deck.pop()
+		if(temp.mToks >= MAX_TOKS-TOKS_PER_TURN) {
+			var currMToks = temp.mToks;
+			temp.mToks = MAX_TOKS;
+			event.mToks = MAX_TOKS - currMToks;
+		} else {
+			temp.mToks += TOKS_PER_TURN;
+			event.sToks = TOKS_PER_TURN;
 		}
+
+		eventChain.push(event); //Here I'm pushing the event so that when we draw a card this event is already on the event chain.
+
+		drawCard(temp, eventChain);
 
 
 		//	eventHistory.push(new TurnBeginsEvent(this))
@@ -409,19 +483,25 @@ class Game {
 		//	if(element.hasTurnIncrement())
 		//	element.turnIncrement() //TODO: write to history, effects
 		//	}
-		this.updatePlayers()
-		killDead()
+		killDead(eventChain);
 
     }
 
 	/**
-	 * TODO: add events
+	 * Ends a player's turn.
 	 * @param {*} input 
 	 * @param {*} eventChain 
 	 */
     endTurn(input, eventChain) {
+
+		eventChain.push({
+			type: 'end turn',
+			view: 1,
+			player: this.currentPlayer.id
+		});
+
 		turnCounter++;
-		killDead();
+		killDead(eventChain);
 		startTurn();
 	}
 	

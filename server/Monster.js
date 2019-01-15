@@ -10,7 +10,14 @@ class Monster extends Card {
 	  super(type, id, tokenType, rarity, name, cost);
 	  this.power = power;
 	  this.currentPower = power;//power and current power are different
-  }
+	}
+	
+	/**
+	 * I added this to the monster prototype so that we can check to see if any given card is, in fact, a monster.
+	 */
+	get type() {
+		return 'monster';
+	}
 
 }
 
