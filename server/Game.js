@@ -332,41 +332,45 @@ class Game {
 	 * This function should deal with playing a card.
 	 * @param {*} input - a JSON object containing the information required to do this action.
 	 * @param {*} eventChain - the chain of events.
-	 * //TODO: add events
 	 */
     playCard(input, eventChain) {
 		
 		var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
 		if(input.cardLocation > temp.hand.length || input.cardLocation < 0) {
-			return;
+			return; //check to see if the card's actually in their hand
 		}
 
-		var event = {
-			view: 1,
-			type: 'card played',
-			locationInHand: input.toPlay,//TODO: stopped here last time
-		};
 
 		var toPlay = temp.hand[input.toPlay];
 		//TODO: add flex token implementation
 		var tokens = toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks;
 
-			if(!(toPlay.playCost<=tokens) || temp.board.length == MAX_BOARD_SIZE) {
-				return //they don't have enough tokens to play the card.
-			}
-
-		toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks -= toPlay.playCost //this line might just not work, but I don't want to rewrite it.
-
-			temp.hand = temp.hand.splice(input.cardLocation)//this line also might not work, but it's supposed to remove the card at input.cardLocation
-
-			if(toPlay.type == 'monster') {
-				temp.board.splice(input.playLocation, 0, toPlay) //TODO: write to history
-			}
-		if(toPlay.type == 'spell') {
-			//add code here
+		if(!(toPlay.playCost<=tokens) || temp.board.length == MAX_BOARD_SIZE) {
+			return //they don't have enough tokens to play the card.
 		}
 
+		var event = { //now that we're sure the event is going to happen
+			view: 1,
+			type: 'card played',
+			locationInHand: input.toPlay,
+			cost: toPlay.playCost,
+			type: toPlay.tokenType
+		};
 
+		toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks -= toPlay.playCost; //this line might just not work, but I don't want to rewrite it.
+
+		temp.hand = temp.hand.splice(input.cardLocation);//this line also might not work, but it's supposed to remove the card at input.cardLocation
+
+		if(toPlay.type == 'monster') {
+			temp.board.splice(input.playLocation, 0, toPlay); 
+			//TODO: add battlecry effect
+			event.monster = toPlay;
+		}
+
+		if(toPlay.type == 'spell') {
+			//TODO: add code here
+		}
+		eventChain.append(event);
     }
 
 	/**
