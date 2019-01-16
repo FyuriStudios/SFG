@@ -45,19 +45,6 @@ function resizeCanvas() {
     app.renderer.view.style.top = (innerHeight - app.renderer.height)/2 - offset/4;
 }
 
-/**
- * This function should draw the board to the screen. You should call this every time that something graphically changes, e.g. a play
- * is made or the screen size changes.
- *
- * We might want to change this function though, since it's not reasonable to redraw the screen every time that someone moves a card or something.
- * Maybe we should cache the board somehow and just redefine it when the screen changes size.
- */
-function drawBoard(friend) {
-    // draw a rectangle
-    friend.removeChildren();
-    friend.drawRect(++grass, grass, 200, 200); //this stuff doesn't work, we need to fix it
-}
-
 function init() {
     
 //    var socket = io(); //initialize the socket connection
@@ -72,25 +59,28 @@ function init() {
 //    });
 
   //initialize game objects here
+
+    var board;
+
     resizeCanvas();
     var friend = new PIXI.Graphics();
     document.body.appendChild(app.view);
 
-    app.ticker.add(function () {
-        drawBoard(friend);
-        console.log('I like dick')
-    })
+    let loader = PIXI.loader;
 
-    friend.beginFill(0x000000);
-    
-    // set the line style to have a width of 5 and set the color to red
-    friend.lineStyle(5, 0x000000);
-    
-    // draw a rectangle
-    friend.drawRect(grass, grass, 200, 200);
+    loader.add('./assets/numbers/Power-00.png');
 
-    app.stage.addChild(friend);
-    
+    loader.load(function(loader, resources) {
+        board = PIXI.Sprite.fromImage('./assets/numbers/Power-00.png');
+    });
+
+    loader.onComplete.add(function() {
+        app.stage.addChild(board);
+        board.width = innerWidth - offset;
+        board.height = innerHeight - offset;
+        board.x = offset/2;
+        board.y = offset/2;
+    });
 }
 
 

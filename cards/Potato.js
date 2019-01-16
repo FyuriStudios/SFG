@@ -1,4 +1,4 @@
-var Monster = require('../base/Monster')
+var Monster = require('../base/Monster');
 
 class Potato extends Monster {
     
@@ -7,4 +7,4 @@ class Potato extends Monster {
     }
 }
 
-module.exports = Potato
+module.exports = Potato;
