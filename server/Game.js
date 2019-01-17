@@ -62,7 +62,7 @@ face as a result of it.
 	It's exactly the same except they don't get the card ID.
 
 
-4) type: 
+4) type: 'attack' - This event TODO: finish this lol
 
 */
 
@@ -379,15 +379,9 @@ class Game {
 			return;
 		}
 
-		var attacker = currentPlayer.board[input.attackerLoc];
-
-		if(!attacker.validAttack(this, input.targetLoc)) {
-			return;
+		if(currentPlayer.board[input.attackerLoc].attack(otherPlayer, currentPlayer, input.targetLoc, eventChain)) {
+			killDead(eventChain);
 		}
-
-		attacker.attack(this, target, eventChain);
-
-		killDead(eventChain);
     }
 
 	/**
