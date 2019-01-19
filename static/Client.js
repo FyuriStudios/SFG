@@ -5,7 +5,8 @@ const aspectRatio = 9/16;
 const offset = 20;
 
 var grass = 2;
-
+var ScalerX; //used for scaling images to aspect aspectRatio
+var ScalerY;
 //creates a PIXI Application to draw stuff on
 //renderer, ticker, stage aka container is automatically created with app
 //only create this once, the app is mutated in resizeCanvas and only drawn to the screen in func drawboard
@@ -33,16 +34,18 @@ function resizeCanvas() {
 
     //I subtracted 20 so you can now see the outside lines of the board when you're resizing. Open to changes in offset.
     if (innerWidth * aspectRatio  <= innerHeight) {
-        app.renderer.resize(window.innerWidth - offset, window.innerWidth*aspectRatio - offset);
-    } else if (innerWidth * aspectRatio  > innerHeight) {
-        app.renderer.resize(window.innerHeight/aspectRatio - offset, window.innerHeight - offset);
+        app.renderer.resize(window.innerWidth, window.innerWidth*aspectRatio );
+        ScalerX = window.innerWidth;
+        ScalerY = window.innerWidth*aspectRatio;
+    } else if (innerWidth * aspectRatio > innerHeight) {
+        app.renderer.resize(window.innerHeight/aspectRatio, window.innerHeight );
+        ScalerX = window.innerHeight/aspectRatio;
+        ScalerY = window.innerHeight;
     }
 
     //centers the main canvas
     //lmao it took way too long for me to figure out position mutation
     //need to subtract offset/4 to account for the resize offset
-    app.renderer.view.style.left = (innerWidth - app.renderer.width)/2 - offset/4;
-    app.renderer.view.style.top = (innerHeight - app.renderer.height)/2 - offset/4;
 }
 
 function init() {
@@ -62,25 +65,31 @@ function init() {
 
     var board;
 
-    resizeCanvas();
+
+
+    console.log(ScalerX);
+    console.log(ScalerY);
     var friend = new PIXI.Graphics();
     document.body.appendChild(app.view);
 
     let loader = PIXI.loader;
 
-    loader.add('/static/assets/numbers/Power-00.png');
+    loader.add('/static/assets/4k-Board.png');
 
     loader.load(function(loader, resources) {
-        board = PIXI.Sprite.fromImage('/static/assets/numbers/Power-00.png');
+        board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
     });
 
     loader.onComplete.add(function() {
         app.stage.addChild(board);
-        board.width = innerWidth - offset;
-        board.height = innerHeight - offset;
-        board.x = offset/2;
-        board.y = offset/2;
+        board.width = innerWidth ;
+        board.height = innerHeight ;
+        board.x = 0;
+        board.y = 0;
+        board.scale.x = ScalerX/view.width;
+        board.scale.y = ScalerY/view.height;
     });
+        resizeCanvas();
 }
 
 
