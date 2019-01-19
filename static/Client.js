@@ -33,9 +33,9 @@ function resizeCanvas() {
 
     //I subtracted 20 so you can now see the outside lines of the board when you're resizing. Open to changes in offset.
     if (innerWidth * aspectRatio  <= innerHeight) {
-        app.renderer.resize(innerWidth - offset, innerWidth*aspectRatio - offset);
+        app.renderer.resize(window.innerWidth - offset, window.innerWidth*aspectRatio - offset);
     } else if (innerWidth * aspectRatio  > innerHeight) {
-        app.renderer.resize(innerHeight/aspectRatio - offset, innerHeight - offset);
+        app.renderer.resize(window.innerHeight/aspectRatio - offset, window.innerHeight - offset);
     }
 
     //centers the main canvas
