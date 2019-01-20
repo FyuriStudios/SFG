@@ -1,15 +1,14 @@
 //hello marshmallow has taken over
 var game;
-
+var board;
 const aspectRatio = 9/16;
 const offset = 20;
-
+const loader = PIXI.loader;
 var grass = 2;
-var ScalerX; //used for scaling images to aspect aspectRatio
-var ScalerY;
+
 //creates a PIXI Application to draw stuff on
 //renderer, ticker, stage aka container is automatically created with app
-//only create this once, the app is mutated in resizeCanvas and only drawn to the screen in func drawboard
+//only create this once, the app is mutated in drawBoard and only drawn to the screen in func drawboard
 //I'm not sure if the redrawn board is a new node added to the end of the list though. Children pile?? :(
 let app = new PIXI.Application({
     antialias: true,    // default: false
@@ -22,31 +21,36 @@ let app = new PIXI.Application({
  * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
  * to the new dimensions of the screen.
  */
-function resizeCanvas() {
-
-    //makes app rectangle fill bright blue (change transparent to false)
-    // app.renderer.backgroundColor = 0x42a7f4;
-
-    //now obsolete but in case you still want the random rectangle
-    // var canvas = document.getElementById('canvas');
+ function drawBoard() {
 
 
+   var canvas = document.getElementById('canvas');
 
-    //I subtracted 20 so you can now see the outside lines of the board when you're resizing. Open to changes in offset.
-    if (innerWidth * aspectRatio  <= innerHeight) {
-        app.renderer.resize(window.innerWidth, window.innerWidth*aspectRatio );
-        ScalerX = window.innerWidth;
-        ScalerY = window.innerWidth*aspectRatio;
-    } else if (innerWidth * aspectRatio > innerHeight) {
-        app.renderer.resize(window.innerHeight/aspectRatio, window.innerHeight );
-        ScalerX = window.innerHeight/aspectRatio;
-        ScalerY = window.innerHeight;
-    }
+     if (innerWidth * aspectRatio  <= innerHeight) {
+         app.renderer.resize(window.innerWidth, window.innerWidth*aspectRatio);
+         app.stage.width = window.innerWidth;
+         app.stage.height = window.innerWidth*aspectRatio;
+     } else if (innerWidth * aspectRatio > innerHeight) {
+         app.renderer.resize(window.innerHeight/aspectRatio, window.innerHeight);
+         app.stage.width = window.innerHeight/aspectRatio;
+         app.stage.height = window.innerHeight
 
-    //centers the main canvas
-    //lmao it took way too long for me to figure out position mutation
-    //need to subtract offset/4 to account for the resize offset
-}
+     }
+     loader.load(function(loader, resources) {
+         board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
+     });
+     loader.onComplete.add(function() {
+
+         app.stage.addChild(board);
+         board.width = app.stage.width;
+         board.height = app.stage.height;
+         board.x = 0;
+         board.y = 0;
+         board.scale.x = app.stage.width/innerWidth;
+         board.scale.y = app.stage.height/innerHeight;
+       });
+
+ }
 
 function init() {
 
@@ -63,33 +67,12 @@ function init() {
 
   //initialize game objects here
 
-    var board;
+  var Graphics = new PIXI.Graphics();
+  document.body.appendChild(app.view);
 
+  loader.add('/static/assets/4k-Board.png');
 
-
-    console.log(ScalerX);
-    console.log(ScalerY);
-    var friend = new PIXI.Graphics();
-    document.body.appendChild(app.view);
-
-    let loader = PIXI.loader;
-
-    loader.add('/static/assets/4k-Board.png');
-
-    loader.load(function(loader, resources) {
-        board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
-    });
-
-    loader.onComplete.add(function() {
-        app.stage.addChild(board);
-        board.width = innerWidth ;
-        board.height = innerHeight ;
-        board.x = 0;
-        board.y = 0;
-        board.scale.x = ScalerX/view.width;
-        board.scale.y = ScalerY/view.height;
-    });
-        resizeCanvas();
+        drawBoard();
 }
 
 
