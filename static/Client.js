@@ -17,43 +17,6 @@ let app = new PIXI.Application({
     }
 );
 
-/**
- * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
- * to the new dimensions of the screen.
- */
- function drawBoard() {
-
-
-     loader.load(function(loader, resources) {
-         board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
-     });
-     loader.onComplete.add(function() {
-         app.stage.addChild(board);
-         board.width = app.stage.width;
-         board.height = app.stage.height;
-         board.x = 0;
-         board.y = 0;
-         board.scale.x = app.stage.width/innerWidth;
-         board.scale.y = app.stage.height/innerHeight;
-       });
-
- }
- function resizeCanvas() {
-   console.log(app.stage.width);
-   console.log(app.stage.height);
-   if (innerWidth * aspectRatio  <= innerHeight) {
-       app.stage.width = window.innerWidth;
-       app.stage.height = window.innerWidth*aspectRatio;
-       app.renderer.resize(app.stage.width, app.stage.height);
-   } else if (innerWidth * aspectRatio > innerHeight) {
-       app.stage.width = window.innerHeight/aspectRatio;
-       app.stage.height = window.innerHeight;
-       app.renderer.resize(app.stage.width, app.stage.height);
-   }
-   console.log(app.stage.width);
-   console.log(app.stage.height);
-   drawBoard();
- }
 
 function init() {
 
@@ -73,10 +36,67 @@ function init() {
   var Graphics = new PIXI.Graphics();
   document.body.appendChild(app.view);
 
-  loader.add('/static/assets/4k-Board.png');
+  
+        // This is the board stuff that I just copied from the loader functions below. idk if it's redundant (probs) or if you need
+        // the whole setting the stage width height idk anything bro but have fun kitty. -marsh
+
+        // also this commented out line idk man
+//   loader.add('/static/assets/4k-Board.png');
+  board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
+  app.stage.addChild(board);
+
+  app.stage.width = window.innerWidth;
+app.stage.height = window.innerWidth*aspectRatio;
+board.width = app.stage.width;
+board.height = app.stage.height;
+board.x = 0;
+board.y = 0;
+
         resizeCanvas();
 
+    
 }
+/**
+ * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
+ * to the new dimensions of the screen.
+ */
+function drawBoard() {
+
+     loader.load(function(loader, resources) {
+         board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
+     });
+     loader.onComplete.add(function() {
+         app.stage.addChild(board);
+         board.width = app.stage.width;
+         board.height = app.stage.height;
+         board.x = 0;
+         board.y = 0;
+         board.scale.x = app.stage.width/innerWidth;
+         board.scale.y = app.stage.height/innerHeight;
+       });
+
+}
+ 
+function resizeCanvas() {
+   console.log(app.stage.width);
+   console.log(app.stage.height);
+   if (innerWidth * aspectRatio  <= innerHeight) {
+       //oh yeah and I added this space for resizing identification purposes
+    console.log(" ");
+       app.stage.width = window.innerWidth;
+       app.stage.height = window.innerWidth*aspectRatio;
+       app.renderer.resize(app.stage.width, app.stage.height);
+   } else if (innerWidth * aspectRatio > innerHeight) {
+       app.stage.width = window.innerHeight/aspectRatio;
+       app.stage.height = window.innerHeight;
+       app.renderer.resize(app.stage.width, app.stage.height);
+   }
+   console.log(app.stage.width);
+   console.log(app.stage.height);
+   drawBoard();
+}
+ 
+
 
 
 
