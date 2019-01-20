@@ -34,7 +34,7 @@ function init() {
 
     resizeCanvas();
 
-    
+
 }
 
  
@@ -58,7 +58,7 @@ function resizeCanvas() {
     // board.scale.x = app.stage.width/innerWidth;
     // board.scale.y = app.stage.height/innerHeight;
 }
- 
+
 
 
 
