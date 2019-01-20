@@ -4,7 +4,7 @@ var board;
 const aspectRatio = 9/16;
 const offset = 20;
 const loader = PIXI.loader;
-var grass = 2;
+var grass = 2; //The holy variable. Do not delete unless you like burning in the underworld
 
 //creates a PIXI Application to draw stuff on
 //renderer, ticker, stage aka container is automatically created with app
@@ -36,7 +36,7 @@ function init() {
   var Graphics = new PIXI.Graphics();
   document.body.appendChild(app.view);
 
-  
+
         // This is the board stuff that I just copied from the loader functions below. idk if it's redundant (probs) or if you need
         // the whole setting the stage width height idk anything bro but have fun kitty. -marsh
 
@@ -54,7 +54,7 @@ board.y = 0;
 
         resizeCanvas();
 
-    
+
 }
 /**
  * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
@@ -76,7 +76,7 @@ function drawBoard() {
        });
 
 }
- 
+
 function resizeCanvas() {
    console.log(app.stage.width);
    console.log(app.stage.height);
@@ -95,7 +95,7 @@ function resizeCanvas() {
    console.log(app.stage.height);
    drawBoard();
 }
- 
+
 
 
 
