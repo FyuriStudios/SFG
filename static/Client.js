@@ -24,23 +24,10 @@ let app = new PIXI.Application({
  function drawBoard() {
 
 
-   var canvas = document.getElementById('canvas');
-
-     if (innerWidth * aspectRatio  <= innerHeight) {
-         app.renderer.resize(window.innerWidth, window.innerWidth*aspectRatio);
-         app.stage.width = window.innerWidth;
-         app.stage.height = window.innerWidth*aspectRatio;
-     } else if (innerWidth * aspectRatio > innerHeight) {
-         app.renderer.resize(window.innerHeight/aspectRatio, window.innerHeight);
-         app.stage.width = window.innerHeight/aspectRatio;
-         app.stage.height = window.innerHeight
-
-     }
      loader.load(function(loader, resources) {
          board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
      });
      loader.onComplete.add(function() {
-
          app.stage.addChild(board);
          board.width = app.stage.width;
          board.height = app.stage.height;
@@ -50,6 +37,22 @@ let app = new PIXI.Application({
          board.scale.y = app.stage.height/innerHeight;
        });
 
+ }
+ function resizeCanvas() {
+   console.log(app.stage.width);
+   console.log(app.stage.height);
+   if (innerWidth * aspectRatio  <= innerHeight) {
+       app.stage.width = window.innerWidth;
+       app.stage.height = window.innerWidth*aspectRatio;
+       app.renderer.resize(app.stage.width, app.stage.height);
+   } else if (innerWidth * aspectRatio > innerHeight) {
+       app.stage.width = window.innerHeight/aspectRatio;
+       app.stage.height = window.innerHeight;
+       app.renderer.resize(app.stage.width, app.stage.height);
+   }
+   console.log(app.stage.width);
+   console.log(app.stage.height);
+   drawBoard();
  }
 
 function init() {
@@ -71,8 +74,8 @@ function init() {
   document.body.appendChild(app.view);
 
   loader.add('/static/assets/4k-Board.png');
+        resizeCanvas();
 
-        drawBoard();
 }
 
 
