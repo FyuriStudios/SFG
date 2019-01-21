@@ -16,7 +16,36 @@ let app = new PIXI.Application({
     forceCanvas: false //if set to true, prevents selection of WebGL renderer
     }
 );
+//these functions are for dragging and dropping. We'll mess with these later to work in the context of the game
+function onDragStart(event)
+{
+    // store a reference to the data
+    // the reason for this is because of multitouch
+    // we want to track the movement of this particular touch
+    this.data = event.data;
+    this.alpha = 0.5;
+    this.dragging = true;
+}
 
+function onDragEnd()
+{
+    this.alpha = 1;
+
+    this.dragging = false;
+
+    // set the interaction data to null
+    this.data = null;
+}
+
+function onDragMove()
+{
+    if (this.dragging)
+    {
+        var newPosition = this.data.getLocalPosition(this.parent);
+        this.position.x = newPosition.x;
+        this.position.y = newPosition.y;
+    }
+}
 
 function init() {
 
@@ -43,6 +72,7 @@ function init() {
         // also this commented out line idk man
 //   loader.add('/static/assets/4k-Board.png');
   board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
+
   app.stage.addChild(board);
 
   app.stage.width = window.innerWidth;
@@ -56,10 +86,30 @@ board.y = 0;
 
 
 }
-/**
- * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
- * to the new dimensions of the screen.
- */
+
+function addCard(name) {
+ testCard = PIXI.Sprite.fromImage('/static/assets/cards/'+ name +'.png')
+ app.stage.addChild(testCard);
+ testCard.anchor.x = .5;
+ testCard.anchor.y = .5;
+ testCard.scale.x = .25;
+ testCard.scale.y = .25;
+ testCard.interactive = true;
+ testCard.buttonMode = true;
+ //setup events
+  testCard
+  // events for drag start
+    .on('mousedown', onDragStart)
+    .on('touchstart', onDragStart)
+  // events for drag end
+    .on('mouseup', onDragEnd)
+    .on('mouseupoutside', onDragEnd)
+    .on('touchend', onDragEnd)
+    .on('touchendoutside', onDragEnd)
+  // events for drag move
+    .on('mousemove', onDragMove)
+    .on('touchmove', onDragMove);
+ }
 function drawBoard() {
 
      loader.load(function(loader, resources) {
@@ -77,6 +127,10 @@ function drawBoard() {
 
 }
 
+/**
+ * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
+ * to the new dimensions of the screen.
+ */
 function resizeCanvas() {
    console.log(app.stage.width);
    console.log(app.stage.height);
@@ -94,9 +148,8 @@ function resizeCanvas() {
    console.log(app.stage.width);
    console.log(app.stage.height);
    drawBoard();
+   addCard('Darfler');
 }
-
-
 
 
 
