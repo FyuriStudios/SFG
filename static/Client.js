@@ -63,7 +63,8 @@ function init() {
 
   //initialize game objects here
 
-  var Graphics = new PIXI.Graphics();
+
+
   document.body.appendChild(app.view);
 
 
@@ -84,6 +85,7 @@ board.x = 0;
 board.y = 0;
 
         resizeCanvas();
+
 
 }
 
@@ -111,7 +113,10 @@ function addCard(name) {
     .on('touchmove', onDragMove);
  }
 function drawBoard() {
-
+  
+  for (var i = app.stage.children.length - 1; i >= 0; i--) {
+    app.stage.removeChild(app.stage.children[i]);
+  };
      loader.load(function(loader, resources) {
          board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
      });
@@ -126,7 +131,16 @@ function drawBoard() {
        });
 
 }
-
+function drawDeck() {
+  const Deck = new PIXI.Graphics();
+  Deck.beginFill(0x000000);
+  Deck.drawRect(
+    app.stage.width*0.0148462354188759,
+    app.stage.height*0.7758945386,
+    app.stage.width*0.0856531049250535,
+    app.stage.height*0.224105461393597);
+  app.stage.addChild(Deck);
+}
 /**
  * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
  * to the new dimensions of the screen.
@@ -134,6 +148,10 @@ function drawBoard() {
 function resizeCanvas() {
    console.log(app.stage.width);
    console.log(app.stage.height);
+   //removes everything to redraw later
+
+
+
    if (innerWidth * aspectRatio  <= innerHeight) {
        //oh yeah and I added this space for resizing identification purposes
     console.log(" ");
@@ -148,10 +166,12 @@ function resizeCanvas() {
    console.log(app.stage.width);
    console.log(app.stage.height);
    drawBoard();
-
+   drawDeck();
 }
 
+app.ticker.add(()=>{
 
+});
 
 //var socket = io()
 
