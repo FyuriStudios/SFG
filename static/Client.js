@@ -84,7 +84,7 @@ function init() {
   board.x = 0;
   board.y = 0;
 
-  addCard('Darfler');
+
 
   resizeCanvas();
   drawDeck();
