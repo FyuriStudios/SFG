@@ -6,5 +6,5 @@ module.exports = function (id) {
 }
 
 function addPath(name) {
-    return require('../cards/' + name);
+    return require('./cards/' + name);
 }

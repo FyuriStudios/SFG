@@ -70,6 +70,7 @@ face as a result of it.
 var Character = require('./Character');
 var _ = require('lodash');
 var idToCard = require('./IdToCard');
+var constants = require('../sharedConstants/constants');
 
 Array.prototype.extend = function (other_array) {
     /* You should include a test to check whether other_array really is an array */
@@ -82,36 +83,6 @@ Array.prototype.shuffle = function() {
         [this[i], this[j]] = [this[j], this[i]];
     }
 }
-
-/**
- * The maximum number of each kind of tokens.
- */
-const MAX_TOKS = 15;
-
-/**
- * The number of tokens that each player can gain per turn.
- */
-const TOKS_PER_TURN = 3;
-
-/**
- * The maximum number of cards in a player's hand.
- */
-const MAX_HAND_SIZE = 10;
-
-/**
- * The maximum board size.
- */
-const MAX_BOARD_SIZE = 10;
-
-/**
- * The number of cards that a player draws for their starting turn. This number is here so that it's easier to balance.
- */
-const STARTING_CARDS_DRAWN = 5;
-
-/**
- * The damage taken due to fatigue. We haven't actually hashed out a real rule about this, pretty sure
- */
-const FATIGUE_DAMAGE = 20;
 
 class Game {
 
@@ -204,25 +175,26 @@ class Game {
 	   		player1.deck.shuffle();
 			player2.deck.shuffle();
 
-			for(var i = 0; i < STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
+			for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
 				player1.hand.push(player1.deck.pop());
 			}
-			for(var i = 0; i < STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
+			for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
 				player2.hand.push(player1.deck.pop());
 			}
 
 			player1.socket.emit('starting hand', {cards: player1.hand});
 			player2.socket.emit('starting hand', {cards: player2.hand});
 			
+			//I think that this doesn't actually work.
 			function setMulligan(player) {
 					player.socket.on('mulligan', function(input) { //then give them the option to mulligan
 						if(!player.mulliganed) {
 							temp = [];
 
-							for(var i of input.replace) { //iterating through the things that input needs
+							input.replace.forEach((i) => { //iterating through the things that input needs
 								temp.push(player.board[i]);
 								player.board[i] = deck.pop();
-							}
+							});
 							player.deck.extend(temp);
 							player.deck.shuffle();
 							player.mulliganed = true;
@@ -281,7 +253,7 @@ class Game {
 		Here, we're going to check for fatigue and do the fatigues if it seems to be a thing
 		*/
 		if(player.deck.length == 0) {
-			player.takeDamage(FATIGUE_DAMAGE);
+			player.takeDamage(constants.FATIGUE_DAMAGE);
 			event.view = 1;//public
 			event.type = 'fatigue';
 			event.damage = FATIGUE_DAMAGE;
@@ -294,7 +266,7 @@ class Game {
 		else {
 			
 			temp = player.deck.pop();
-			if(player.hand.length == MAX_HAND_SIZE) {
+			if(player.hand.length == constants.MAX_HAND_SIZE) {
 				event.type = 'burn card';
 				event.view = 1;
 				event.player = player.id;
@@ -401,7 +373,7 @@ class Game {
 		//TODO: add flex token implementation
 		var tokens = toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks;
 
-		if(!(toPlay.playCost<=tokens) || temp.board.length == MAX_BOARD_SIZE) {
+		if(!(toPlay.playCost<=tokens) || temp.board.length == constants.MAX_BOARD_SIZE) {
 			return //they don't have enough tokens to play the card.
 		}
 
@@ -443,22 +415,22 @@ class Game {
 		};
 		
 
-		if(currSToks >= MAX_TOKS-TOKS_PER_TURN) {
+		if(temp.sToks >= constants.MAX_TOKS-constants.TOKS_PER_TURN) {
 			var currSToks = temp.sToks;
-			temp.sToks = MAX_TOKS;
-			event.sToks = MAX_TOKS - currSToks;
+			temp.sToks = constants.MAX_TOKS;
+			event.sToks = constants.MAX_TOKS - currSToks;
 		} else {
-			temp.sToks += TOKS_PER_TURN;
-			event.sToks = TOKS_PER_TURN;
+			temp.sToks += constants.TOKS_PER_TURN;
+			event.sToks = constants.TOKS_PER_TURN;
 		}
 
-		if(temp.mToks >= MAX_TOKS-TOKS_PER_TURN) {
+		if(temp.mToks >= constants.MAX_TOKS-constants.TOKS_PER_TURN) {
 			var currMToks = temp.mToks;
-			temp.mToks = MAX_TOKS;
-			event.mToks = MAX_TOKS - currMToks;
+			temp.mToks = constants.MAX_TOKS;
+			event.mToks = constants.MAX_TOKS - currMToks;
 		} else {
-			temp.mToks += TOKS_PER_TURN;
-			event.sToks = TOKS_PER_TURN;
+			temp.mToks += constants.TOKS_PER_TURN;
+			event.sToks = constants.TOKS_PER_TURN;
 		}
 
 		eventChain.push(event); //Here I'm pushing the event so that when we draw a card this event is already on the event chain.

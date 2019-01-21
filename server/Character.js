@@ -1,4 +1,4 @@
-const STARTING_HEALTH = 50
+var constants = require('../sharedConstants/constants');
 
 /** (0.0.1)
  * This class represents a character (hero? whatever.) in the game. It contains the character trait and the health of the character.
@@ -8,7 +8,7 @@ const STARTING_HEALTH = 50
 class Character {
     
     constructor() {
-	this.health = STARTING_HEALTH
+	this.health = constants.STARTING_HEALTH
 	//something else I'm missing here but whatever :/
     }
     
