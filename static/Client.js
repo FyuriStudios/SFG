@@ -118,10 +118,10 @@ function drawDeck() {
   const Deck = new PIXI.Graphics();
   Deck.beginFill(0x000000);
   Deck.drawRect(
-  app.stage.width*0.0148462354188759,
-  app.stage.height*0.7758945386,
-  app.stage.width*0.0856531049250535,
-  app.stage.height*0.224105461393597);
+  app.stage.width*0.0150084779440986,
+  app.stage.height*0.8929855010660981,
+  app.stage.width*0.0995547441364606,
+  app.stage.height*0.2568144989339019);
   app.stage.addChild(Deck);
 }
 /**
