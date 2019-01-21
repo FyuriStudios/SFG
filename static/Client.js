@@ -42,6 +42,7 @@ function onDragMove()
     if (this.dragging)
     {
         var newPosition = this.data.getLocalPosition(this.parent);
+        console.log(this.data.getLocalPosition(this.parent));
         this.position.x = newPosition.x;
         this.position.y = newPosition.y;
     }
@@ -84,11 +85,10 @@ board.y = 0;
 
         resizeCanvas();
 
-
 }
 
 function addCard(name) {
- testCard = PIXI.Sprite.fromImage('/static/assets/cards/'+ name +'.png')
+ let testCard = PIXI.Sprite.fromImage('/static/assets/cards/'+ name +'.png')
  app.stage.addChild(testCard);
  testCard.anchor.x = .5;
  testCard.anchor.y = .5;
@@ -148,7 +148,7 @@ function resizeCanvas() {
    console.log(app.stage.width);
    console.log(app.stage.height);
    drawBoard();
-   addCard('Darfler');
+
 }
 
 
