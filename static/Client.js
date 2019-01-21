@@ -132,7 +132,6 @@ function resizeCanvas() {
    console.log(app.stage.width);
    console.log(app.stage.height);
    //removes everything to redraw later
-
    if (innerWidth * aspectRatio  <= innerHeight) {
        //oh yeah and I added this space for resizing identification purposes
        app.stage.width = innerWidth;
