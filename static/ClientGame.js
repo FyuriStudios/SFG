@@ -3,12 +3,15 @@
  * It also contains the event history needed to do ~fancy~ animations (or it will, TODO: get events working)
  * 
  */
-export class Game { //FIXME: I'm pretty sure this export line doesn't actually work
+export class ClientGame { //FIXME: I'm pretty sure this export line doesn't actually work
     
-    constructor(own, other) {
-	this.ownPlayer = own;
-	this.otherPlayer = other;
-	this.eventHistory = [];
+    constructor(id, hand, socket) {
+		this.player = {
+			id: id, 
+			hand: hand,
+			health: 50
+		};
+
     }
     
     update(events) {
