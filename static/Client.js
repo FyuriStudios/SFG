@@ -4,7 +4,7 @@ var board;
 const aspectRatio = 9/16;
 const offset = 20;
 const loader = PIXI.loader;
-var grass = 2;
+var grass = 420;
 
 //creates a PIXI Application to draw stuff on
 //renderer, ticker, stage aka container is automatically created with app
@@ -16,6 +16,7 @@ let app = new PIXI.Application({
     forceCanvas: false //if set to true, prevents selection of WebGL renderer
     }
 );
+
 //these functions are for dragging and dropping. We'll mess with these later to work in the context of the game
 function onDragStart(event)
 {
@@ -68,29 +69,29 @@ function init() {
   document.body.appendChild(app.view);
 
 
-        // This is the board stuff that I just copied from the loader functions below. idk if it's redundant (probs) or if you need
-        // the whole setting the stage width height idk anything bro but have fun kitty. -marsh
-
-        // also this commented out line idk man
-//   loader.add('/static/assets/4k-Board.png');
+  // This is the board stuff that I just copied from the loader functions below. idk if it's redundant (probs) or if you need
+  // the whole setting the stage width height idk anything bro but have fun kitty. -marsh
+  // also this commented out line idk man
+  // loader.add('/static/assets/4k-Board.png');
   board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
 
   app.stage.addChild(board);
 
   app.stage.width = window.innerWidth;
-app.stage.height = window.innerWidth*aspectRatio;
-board.width = app.stage.width;
-board.height = app.stage.height;
-board.x = 0;
-board.y = 0;
+  app.stage.height = window.innerWidth*aspectRatio;
+  board.width = app.stage.width;
+  board.height = app.stage.height;
+  board.x = 0;
+  board.y = 0;
 
-        resizeCanvas();
+  addCard('Darfler');
 
-
+  resizeCanvas();
+  drawDeck();
 }
 
 function addCard(name) {
- let testCard = PIXI.Sprite.fromImage('/static/assets/cards/'+ name +'.png')
+ let testCard = PIXI.Sprite.fromImage('/static/assets/cards/'+ name +'.png');
  app.stage.addChild(testCard);
  testCard.anchor.x = .5;
  testCard.anchor.y = .5;
@@ -112,33 +113,15 @@ function addCard(name) {
     .on('mousemove', onDragMove)
     .on('touchmove', onDragMove);
  }
-function drawBoard() {
-  
-  for (var i = app.stage.children.length - 1; i >= 0; i--) {
-    app.stage.removeChild(app.stage.children[i]);
-  };
-     loader.load(function(loader, resources) {
-         board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
-     });
-     loader.onComplete.add(function() {
-         app.stage.addChild(board);
-         board.width = app.stage.width;
-         board.height = app.stage.height;
-         board.x = 0;
-         board.y = 0;
-         board.scale.x = app.stage.width/innerWidth;
-         board.scale.y = app.stage.height/innerHeight;
-       });
 
-}
 function drawDeck() {
   const Deck = new PIXI.Graphics();
   Deck.beginFill(0x000000);
   Deck.drawRect(
-    app.stage.width*0.0148462354188759,
-    app.stage.height*0.7758945386,
-    app.stage.width*0.0856531049250535,
-    app.stage.height*0.224105461393597);
+  app.stage.width*0.0148462354188759,
+  app.stage.height*0.7758945386,
+  app.stage.width*0.0856531049250535,
+  app.stage.height*0.224105461393597);
   app.stage.addChild(Deck);
 }
 /**
@@ -150,23 +133,16 @@ function resizeCanvas() {
    console.log(app.stage.height);
    //removes everything to redraw later
 
-
-
    if (innerWidth * aspectRatio  <= innerHeight) {
        //oh yeah and I added this space for resizing identification purposes
-    console.log(" ");
-       app.stage.width = window.innerWidth;
-       app.stage.height = window.innerWidth*aspectRatio;
+       app.stage.width = innerWidth;
+       app.stage.height = innerWidth*aspectRatio;
        app.renderer.resize(app.stage.width, app.stage.height);
    } else if (innerWidth * aspectRatio > innerHeight) {
        app.stage.width = window.innerHeight/aspectRatio;
        app.stage.height = window.innerHeight;
        app.renderer.resize(app.stage.width, app.stage.height);
    }
-   console.log(app.stage.width);
-   console.log(app.stage.height);
-   drawBoard();
-   drawDeck();
 }
 
 app.ticker.add(()=>{
