@@ -113,10 +113,7 @@ function addCard(name) {
     .on('touchmove', onDragMove);
  }
 function drawBoard() {
-  
-  for (var i = app.stage.children.length - 1; i >= 0; i--) {
-    app.stage.removeChild(app.stage.children[i]);
-  };
+
      loader.load(function(loader, resources) {
          board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
      });
@@ -149,9 +146,11 @@ function resizeCanvas() {
    console.log(app.stage.width);
    console.log(app.stage.height);
    //removes everything to redraw later
-
-
-
+   /*
+   for () {
+     app.stage.removeChild(app.stage.children[i]);
+   };
+   */
    if (innerWidth * aspectRatio  <= innerHeight) {
        //oh yeah and I added this space for resizing identification purposes
     console.log(" ");
