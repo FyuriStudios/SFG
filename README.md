@@ -5,7 +5,7 @@ The SFG team consists of a group of friends who love to argue about what makes H
 ## The code
 The frontend code is located [here](./static). The backend code is located [here](./base). Tests are located [here](./tests).
 
-The backend code is meant to be run using NodeJS on a server. It serves up a webpage (which is mostly just an embedded JS script, lol.) ```./static``` contains everything regarding the webpage.
+The backend code is meant to be run using NodeJS on a server. It serves up a webpage (which is mostly just an embedded JS script, lol.) ```/static``` contains everything regarding the webpage.
 
 If you have questions about the backend, go to Hughes. He wrote all of it.
 
