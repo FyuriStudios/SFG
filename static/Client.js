@@ -111,8 +111,8 @@ function init() {
   drawDeck();
 }
 
-function addCard() {
- let testCard = PIXI.Sprite.fromImage('/static/assets/cards/Darfler.png');
+function addCard(cardName) {
+ let testCard = PIXI.Sprite.fromImage('/static/assets/cards/'+cardName+'.png');
  PlayerCards.addChild(testCard);
  //PIXI.sound.play('cardFlip');
  testCard.scale.x = 0.2226781521440417;
@@ -156,7 +156,9 @@ function drawDeck() {
   Deck.alpha = 0.5;
   Deck.interactive = true;
   Deck.buttonMode = true;
-  Deck.on('pointerdown', addCard)
+  Deck.on('pointerdown', event =>{
+    addCard('Darfler');
+  })
 }
 /**
  * This function is called every time that the size of the player's screen changes. It should be used to forcefully redraw the board
