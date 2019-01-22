@@ -151,7 +151,7 @@ function drawDeck() {
   app.stage.width*0.0132,
   app.stage.height*0.775,
   app.stage.width*0.086,
-  app.stage.height*0.256);
+  app.stage.height*0.225);
   ClickEventShapes.addChild(Deck);
   Deck.alpha = 0.5;
   Deck.interactive = true;
