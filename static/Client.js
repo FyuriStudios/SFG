@@ -115,10 +115,10 @@ function addCard(cardName) {
  let testCard = PIXI.Sprite.fromImage('/static/assets/cards/'+cardName+'.png');
  PlayerCards.addChild(testCard);
  //PIXI.sound.play('cardFlip');
- testCard.scale.x = 0.2226781521440417;
- testCard.scale.y = 0.2294209523809524;
- testCard.x = app.stage.width*0.0650084779440986;
- testCard.y = app.stage.height*1.021;
+ testCard.scale.x = (app.stage.width*0.086) / 750;
+ testCard.scale.y = (app.stage.height*0.225) / 1050;
+ testCard.x = app.stage.width*0.0565;
+ testCard.y = app.stage.height*0.885;
  testCard.anchor.x = .5;
  testCard.anchor.y = .5;
  //animation of cards to hand
