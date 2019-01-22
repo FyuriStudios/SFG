@@ -99,7 +99,7 @@ function init() {
   app.stage.addChild(EnemyCards);
 
   app.stage.width = window.innerWidth;
-  app.stage.height = window.innerWidth*aspectRatio;
+  app.stage.height = window.innerHeight;
   board.width = app.stage.width;
   board.height = app.stage.height;
   board.x = 0;
@@ -166,6 +166,7 @@ function resizeCanvas() {
   console.log(app.stage.width);
   console.log(app.stage.height);
    //removes everything to redraw later
+   /*
    if (innerWidth * aspectRatio  <= innerHeight) {
        //oh yeah and I added this space for resizing identification purposes
        app.stage.width = innerWidth;
@@ -180,6 +181,10 @@ function resizeCanvas() {
        app.stage.x = (innerWidth - app.stage.width) / 2;
        app.stage.y = 0;
    }
+   */
+   app.stage.width = innerWidth;
+   app.stage.height = innerHeight;
+   app.renderer.resize(app.stage.width, app.stage.height);
    console.log(app.stage.width);
    console.log(app.stage.height);
 }
