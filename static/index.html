@@ -10,23 +10,11 @@
       		overflow: hidden;
           display: block;
     	}
-      canvas {
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        align-content: center;
-        /* border-style: solid;
-        border-radius: 1px; */
-      }
     </style>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/PreloadJS/1.0.1/preloadjs.js'></script>
-    <!--  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script> -->
-   <script src="/static/Client.js"></script>
+   <script src="/static/Launcher.js"></script>
   </head>
-  <body onload='init()' onresize='resizeCanvas()'>
-    <!-- this is the line that made the random rectangle in the middle idk old canvas? -->
-    <!-- <canvas id='canvas' style='position:absolute;'></canvas> -->
+  <body>
+    <button onclick="newGame('/static/game.html')">PLAY</button>
   </body>
 
 </html>

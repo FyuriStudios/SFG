@@ -10,6 +10,10 @@ var grass = 420;
 //renderer, ticker, stage aka container is automatically created with app
 //only create this once, the app is mutated in drawBoard and only drawn to the screen in func drawboard
 //I'm not sure if the redrawn board is a new node added to the end of the list though. Children pile?? :(
+
+let ClickEventShapes = new PIXI.Container();
+let PlayerCards = new PIXI.Container();
+let EnemyCards = new PIXI.Container();
 let app = new PIXI.Application({
     antialias: true,    // default: false
     transparent: true, // default: false
@@ -17,6 +21,19 @@ let app = new PIXI.Application({
     }
 );
 
+function bringToFront(sprite, parent)
+{
+var sprite = (typeof(sprite) != "undefined") ? sprite.target || sprite : this;var parent = parent || sprite.parent || {"children": false};
+  if (parent.children) {
+    for (var keyIndex in sprite.parent.children) {
+      if (sprite.parent.children[keyIndex] === sprite) {
+        sprite.parent.children.splice(keyIndex, 1);
+        break;
+      }
+    }
+    parent.children.push(sprite);
+  }
+}
 //these functions are for dragging and dropping. We'll mess with these later to work in the context of the game
 function onDragStart(event)
 {
@@ -26,6 +43,7 @@ function onDragStart(event)
     this.data = event.data;
     this.alpha = 0.5;
     this.dragging = true;
+
 }
 
 function onDragEnd()
@@ -46,6 +64,7 @@ function onDragMove()
         console.log(this.data.getLocalPosition(this.parent));
         this.position.x = newPosition.x;
         this.position.y = newPosition.y;
+
     }
 }
 
@@ -64,7 +83,7 @@ function init() {
 
   //initialize game objects here
 
-
+  //PIXI.sound.add(cardFlip, '/static/assets/sounds/cardFlip.{ogg,mp3}');
 
   document.body.appendChild(app.view);
 
@@ -74,8 +93,10 @@ function init() {
   // also this commented out line idk man
   // loader.add('/static/assets/4k-Board.png');
   board = PIXI.Sprite.fromImage('/static/assets/4k-Board.png');
-
   app.stage.addChild(board);
+  app.stage.addChild(ClickEventShapes);
+  app.stage.addChild(PlayerCards);
+  app.stage.addChild(EnemyCards);
 
   app.stage.width = window.innerWidth;
   app.stage.height = window.innerWidth*aspectRatio;
@@ -92,11 +113,18 @@ function init() {
 
 function addCard() {
  let testCard = PIXI.Sprite.fromImage('/static/assets/cards/Darfler.png');
- app.stage.addChild(testCard);
+ PlayerCards.addChild(testCard);
+ //PIXI.sound.play('cardFlip');
+ testCard.scale.x = 0.2226781521440417;
+ testCard.scale.y = 0.2294209523809524;
+ testCard.x = app.stage.width*0.0650084779440986;
+ testCard.y = app.stage.height*1.021;
  testCard.anchor.x = .5;
  testCard.anchor.y = .5;
- testCard.scale.x = .25;
- testCard.scale.y = .25;
+ //animation of cards to hand
+ let cardNum = PlayerCards.children.length;
+ //(app.stage.width*0.4161780383795311) * ((10 - (PlayerCards.children.length - 1)) / 10)
+
  testCard.interactive = true;
  testCard.buttonMode = true;
  //setup events
@@ -111,18 +139,21 @@ function addCard() {
     .on('touchendoutside', onDragEnd)
   // events for drag move
     .on('mousemove', onDragMove)
-    .on('touchmove', onDragMove);
- }
+    .on('touchmove', onDragMove)
+
+
+}
 
 function drawDeck() {
   const Deck = new PIXI.Graphics();
   Deck.beginFill(0x000000);
   Deck.drawRect(
-  app.stage.width*0.0150084779440986,
-  app.stage.height*0.8929855010660981,
-  app.stage.width*0.0995547441364606,
-  app.stage.height*0.2568144989339019);
-  app.stage.addChild(Deck);
+  app.stage.width*0.0132,
+  app.stage.height*0.775,
+  app.stage.width*0.086,
+  app.stage.height*0.256);
+  ClickEventShapes.addChild(Deck);
+  Deck.alpha = 0.5;
   Deck.interactive = true;
   Deck.buttonMode = true;
   Deck.on('pointerdown', addCard)
@@ -132,24 +163,43 @@ function drawDeck() {
  * to the new dimensions of the screen.
  */
 function resizeCanvas() {
-   console.log(app.stage.width);
-   console.log(app.stage.height);
+  console.log(app.stage.width);
+  console.log(app.stage.height);
    //removes everything to redraw later
    if (innerWidth * aspectRatio  <= innerHeight) {
        //oh yeah and I added this space for resizing identification purposes
        app.stage.width = innerWidth;
        app.stage.height = innerWidth*aspectRatio;
        app.renderer.resize(app.stage.width, app.stage.height);
+       app.stage.x = 0;
+       app.stage.y = (innerHeight - app.stage.height) / 2;
    } else if (innerWidth * aspectRatio > innerHeight) {
        app.stage.width = window.innerHeight/aspectRatio;
        app.stage.height = window.innerHeight;
        app.renderer.resize(app.stage.width, app.stage.height);
+       app.stage.x = (innerWidth - app.stage.width) / 2;
+       app.stage.y = 0;
    }
+   console.log(app.stage.width);
+   console.log(app.stage.height);
 }
 
+//this doesn't work. Need help on it
+function animateTo(child, x, y, speed=1) {
+let dx = x - child.x;
+let dy = y - child.y;
+let angle = Math.atan2(dy, dx);
 app.ticker.add(()=>{
-
+let FPSmult = 1/app.ticker.speed;
+let xVelocity = Math.cos(angle) * speed / FPSmult;
+let yVelocity = Math.sin(angle) * speed / FPSmult;
+child.x += xVelocity
+child.y += yVelocity
+if (xVelocity == 0 && yVelocity == 0) {
+  return;
+}
 });
+}
 
 //var socket = io()
 
