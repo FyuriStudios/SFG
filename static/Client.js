@@ -5,7 +5,7 @@ const aspectRatio = 9/16;
 const offset = 20;
 const loader = PIXI.loader;
 var grass = 420;
-
+var queue = [];
 //creates a PIXI Application to draw stuff on
 //renderer, ticker, stage aka container is automatically created with app
 //only create this once, the app is mutated in drawBoard and only drawn to the screen in func drawboard
@@ -67,7 +67,16 @@ function onDragMove()
 
     }
 }
-
+function AnimateReq(child, x2, y2, t){
+  this.child = child;
+  this.x2 = x2;
+  this.y2 = y2;
+  this.t = t;
+}
+function addToQueue(child, x, y, t) {
+  var Request = new AnimateReq(child, x, y, t)
+  queue.push(Request);
+}
 function init() {
 
 //    var socket = io(); //initialize the socket connection
@@ -121,6 +130,7 @@ function addCard(cardName) {
  testCard.y = app.stage.height*0.885;
  testCard.anchor.x = .5;
  testCard.anchor.y = .5;
+ addToQueue(testCard, 0, 0, 1);
  //animation of cards to hand
  let cardNum = PlayerCards.children.length;
  //(app.stage.width*0.4161780383795311) * ((10 - (PlayerCards.children.length - 1)) / 10)
@@ -190,14 +200,31 @@ function resizeCanvas() {
    console.log(app.stage.width);
    console.log(app.stage.height);
 }
-
+/* easter egg. We'll add back in once animation is done
 app.ticker.add(()=>{
   if (grass == 2) {
     console.log('Woah there kiddo, you must be a dev or something..')
     grass = 420;
   }
 });
-
+*/
+app.ticker.add(()=>{
+  let FPS = app.ticker.FPS
+  if (queue.length > 0) {
+    console.log('noice')
+  for (let i = 0; i == queue.length; i++) {
+    if (queue[i].child.x == queue[i].x2 && queue[i].child.y == queue[i].y2) {
+      console.log('oof')
+      queue.splice(i,1);
+    } else {
+      let dx = queue[i].x2 - queue[i].child.x
+      let dy = queue[i].y2 - queue[i].child.y
+      child.x += dx / (FPS*queue[i].t);
+      child.y += dy / (FPS*queue[i].t);
+    }
+  }
+}
+});
 
 //var socket = io()
 
