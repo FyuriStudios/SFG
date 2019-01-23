@@ -192,7 +192,10 @@ function resizeCanvas() {
 }
 
 app.ticker.add(()=>{
-
+  if (grass == 2) {
+    console.log('Woah there kiddo, you must be a dev or something..')
+    grass = 420;
+  }
 });
 
 
