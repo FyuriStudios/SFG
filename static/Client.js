@@ -191,22 +191,10 @@ function resizeCanvas() {
    console.log(app.stage.height);
 }
 
-//this doesn't work. Need help on it
-function animateTo(child, x, y, speed=1) {
-let dx = x - child.x;
-let dy = y - child.y;
-let angle = Math.atan2(dy, dx);
 app.ticker.add(()=>{
-let FPSmult = 1/app.ticker.speed;
-let xVelocity = Math.cos(angle) * speed / FPSmult;
-let yVelocity = Math.sin(angle) * speed / FPSmult;
-child.x += xVelocity
-child.y += yVelocity
-if (xVelocity == 0 && yVelocity == 0) {
-  return;
-}
+
 });
-}
+
 
 //var socket = io()
 
