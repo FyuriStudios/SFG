@@ -4,7 +4,7 @@ var board;
 const aspectRatio = 9/16;
 const offset = 20;
 const loader = PIXI.loader;
-var grass = 420;
+var marijuana = 420;
 var queue = [];
 var cardNum
 //creates a PIXI Application to draw stuff on
@@ -204,14 +204,7 @@ function resizeCanvas() {
    console.log(app.stage.width);
    console.log(app.stage.height);
 }
-/* easter egg. We'll add back in once animation is done
-app.ticker.add(()=>{
-  if (grass == 2) {
-    console.log('Woah there kiddo, you must be a dev or something..')
-    grass = 420;
-  }
-});
-*/
+
 app.ticker.add(()=>{
   let FPS = app.ticker.FPS
   if (queue.length > 0) {

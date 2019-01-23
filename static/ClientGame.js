@@ -1,4 +1,5 @@
 var socket = io();
+var constants = require('../sharedConstants/constants');
 
 
 /**
@@ -6,7 +7,7 @@ var socket = io();
  * It also contains the event history needed to do ~fancy~ animations (or it will, TODO: get events working)
  * 
  */
-export class ClientGame { //FIXME: I'm pretty sure this export line doesn't actually work
+export default class ClientGame { //FIXME: I'm pretty sure this export line doesn't actually work
     
     constructor() {
 		this.setUp = false;
