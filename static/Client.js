@@ -136,7 +136,7 @@ function addCard(cardName) {
 
  //animation of cards to hand
  let cardNum = PlayerCards.children.length;
-addToQueue(PlayerCards.children[cardNum - 1], 0, 0, 1);
+addToQueue(PlayerCards.children[cardNum - 1], 0, 0, 0.1);
  //(app.stage.width*0.4161780383795311) * ((10 - (PlayerCards.children.length - 1)) / 10)
 
  testCard.interactive = true;
@@ -212,12 +212,14 @@ app.ticker.add(()=>{
   for (let i = 0; i < queue.length; i++) {
     let dx = queue[i].x2 - queue[i].x1
     let dy = queue[i].y2 - queue[i].y1
-    if (queue[i].child.x == queue[i].x2 && queue[i].child.y == queue[i].y2) {
+    if (Math.round(queue[i].child.x) == Math.round(queue[i].x2) && Math.round(queue[i].child.y) == Math.round(queue[i].y2)) {
+      queue[i].child.x = queue[i].x2;
+      queue[i].child.y = queue[i].y2;
       queue.splice(i,1);
     } else {
       console.log(dx + ' ' + dy);
-      queue[i].child.x += dx / 60*queue[i].t;
-      queue[i].child.y += dy / 60*queue[i].t;
+      queue[i].child.x += dx / 15*queue[i].t;
+      queue[i].child.y += dy / 15*queue[i].t;
     }
   }
   console.log(queue.length)
