@@ -10,6 +10,7 @@ follow this general format:
 
 {
 	type: string,
+	[eventSpecificVars]: here,
 }
 
 The type specifies what kind of event is denoted; for example 'draw card' if a card was drawn. 
