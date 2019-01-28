@@ -22,19 +22,25 @@ let app = new PIXI.Application({
     }
 );
 
-function bringToFront(sprite, parent)
-{
-var sprite = (typeof(sprite) != "undefined") ? sprite.target || sprite : this;var parent = parent || sprite.parent || {"children": false};
-  if (parent.children) {
-    for (var keyIndex in sprite.parent.children) {
-      if (sprite.parent.children[keyIndex] === sprite) {
-        sprite.parent.children.splice(keyIndex, 1);
-        break;
-      }
-    }
-    parent.children.push(sprite);
-  }
+// function bringToFront(sprite, parent)
+// {
+//   var sprite = (typeof(sprite) != "undefined") ? sprite.target || sprite : this;var parent = parent || sprite.parent || {"children": false};
+//     if (parent.children) {
+//       for (var keyIndex in sprite.parent.children) {
+//         if (sprite.parent.children[keyIndex] === sprite) {
+//           sprite.parent.children.splice(keyIndex, 1);
+//           break;
+//         }
+//     }
+//     parent.children.push(sprite);
+//   }
+// }
+
+function bringToFront(sprite, parent) {
+  parent.removeChild(sprite);
+  parent.addChild(sprite);
 }
+
 //these functions are for dragging and dropping. We'll mess with these later to work in the context of the game
 function onDragStart(event)
 {
