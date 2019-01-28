@@ -8,10 +8,10 @@ var constants = require('../sharedConstants/constants');
  */
 export default class ClientGame { //FIXME: I'm pretty sure this export line doesn't actually work
     
-    constructor() {
+    constructor(ownPlayer, otherPlayer, turnCounter, ) {
 		this.view = new ClientGameDisplay(/* params here */);
+		this.ownPlayer = ownPlayer;
+		this.otherPlayer = otherPlayer;
 	}
 	
 }
-
-
