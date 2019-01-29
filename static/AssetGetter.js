@@ -35,7 +35,7 @@ export function getMonsterAsset(id) {
 }
 
 export function getQuestAsset(id) {
-    let path = '/static/quests' //TODO: this folder doesn't exist yet
+    let path = '../static/quests' //TODO: this folder doesn't exist yet
 }
 
 //TODO: actually export this file so we can use it elsewhere

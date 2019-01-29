@@ -1,3 +1,5 @@
+import ClientGame from "./ClientGame";
+
 /**
  * This file should be the controlling code for the entire frontend. This is because of the
  * event-driven nature of node.js: Events should take precedent over anything else that happens in this game.
@@ -20,8 +22,18 @@
  *  4. This file allows for multiple different graphics handling objects, which is handy since we might want to have a "menu" 
  *      graphics handler or a "deck builder" graphics handler. We can talk about those more later once we've got just the game working.
  */
-var socket = io()
+let socket = io();
+let game;
+var id;
+let hand;
+
 
 function init() {
-    
+    socket.on('player id', function(idNum) {
+        id = idNum;
+    });
+}
+
+function windowResize() {
+
 }
