@@ -28,7 +28,7 @@ export function getCardAsset(id) {
  */
 export function getMonsterAsset(id) {
 
-    let path = '/static/monster_pieces';
+    let path = '../static/monster_pieces/';//maybe this path is broken? I don't know, haven't tried. Something about ../ instead of ./ or something.
 
     if(id == -1)
 	return path + 'Potato.png';
