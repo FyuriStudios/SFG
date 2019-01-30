@@ -1,4 +1,5 @@
 import ClientGameDisplay from './ClientGameDisplay';
+import { isObject } from 'util';
 var constants = require('../sharedConstants/constants');
 
 
@@ -18,6 +19,7 @@ export default class ClientGame { //FIXME: I'm pretty sure this export line does
 	 * 6. enemyCardsHeld - the number of cards held by the enemy player
 	 * 7. ownDeckSize - the number of cards in this player's deck
 	 * 8. enemyDeckSize - the number of cards in the enemy player's deck
+	 * 9. turnCounter - the current turn that the game is on
 	 * 
 	 * @param {number} id the id of this player (either 1 or 2)
 	 * @param {[Card]} hand the hand of this player
@@ -25,6 +27,7 @@ export default class ClientGame { //FIXME: I'm pretty sure this export line does
 	 * @param {number} enemyStartingDeckSize the total size of the other player's deck
 	 */
     constructor(id, hand, ownStartingDeckSize, enemyStartingDeckSize) {
+		this.connection = new IO();
 		this.view = new ClientGameDisplay(/* params here */);
 		this.id = id;
 		this.hand = hand;
@@ -33,6 +36,7 @@ export default class ClientGame { //FIXME: I'm pretty sure this export line does
 		this.enemyCardsHeld = constants.STARTING_CARDS_DRAWN;
 		this.ownDeckSize = ownStartingDeckSize - constants.STARTING_CARDS_DRAWN;
 		this.enemyDeckSize = enemyStartingDeckSize - constants.STARTING_CARDS_DRAWN;
+		this.turnCounter = 0;
 	}
 
 	/**
@@ -46,6 +50,30 @@ export default class ClientGame { //FIXME: I'm pretty sure this export line does
 		if(event.type == 'draw card') {
 			processDrawCardEvent(event); //like dat
 		}
+	}
+
+	/**
+	 * This function should output the next user input through the queue.
+	 * @param {SocketIO} socket 
+	 */
+	outputQueue(socket) {
+
+	}
+
+	/**
+	 * Returns the ID of the current player.
+	 */
+	get currentPlayer() {
+		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? 1:2;
+		//if it's 1,2... 5,6... 9,10... then player 1's turn.
+		//if it's 3,4... 7.8... player 2's turn.
+	}
+
+	/**
+	 * Returns the id of the non-current player.
+	 */
+	get otherPlayer() {
+		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? 2:1;//literally just the opposite of the above method
 	}
 	
 }

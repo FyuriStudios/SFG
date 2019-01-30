@@ -348,11 +348,11 @@ class Game {
      */
     attack(input, eventChain) {
 		
-		if((input.attackerLoc >= currentPlayer.board.length || input.attackerLoc == -1) || input.targetLoc >= currentPlayer.board.length) { //just real quick making sure that the locations are valid
+		if((input.attackerLoc >= this.currentPlayer.board.length || input.attackerLoc == -1) || input.targetLoc >= this.currentPlayer.board.length) { //just real quick making sure that the locations are valid
 			return;
 		}
 
-		if(currentPlayer.board[input.attackerLoc].attack(otherPlayer, currentPlayer, input.targetLoc, eventChain)) {
+		if(this.currentPlayer.board[input.attackerLoc].attack(otherPlayer, this.currentPlayer, input.targetLoc, eventChain)) {
 			killDead(eventChain);
 		}
     }
