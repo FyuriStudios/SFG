@@ -1,4 +1,8 @@
-
+/**
+ * This class exists to deal with the input/output to and from the backend. It should be instantiated only as a object of the ClientGame
+ * class that will be handling the game data and logic. This class is supposed to be an intermediary that makes it more readable in
+ * the ClientGame file to work with network stuff.
+ */
 export default class IO {
 
     constructor() {
@@ -31,7 +35,7 @@ export default class IO {
                 game.outputQueue(socket);
             }
         });
-        
+
         return {hand: hand, id: id};
     }
 
