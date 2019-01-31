@@ -1,21 +1,35 @@
 /**
- * This file holds all of the information required for the frontend to display the game properly.
- * It also contains the event history needed to do fancy animations (or it will, TODO: get events working).
- * It contains an object of the ClientGameDisplay class and an object of the IO class
+ * This file holds all of the information required for the frontend to display the game properly. The ClientGameDisplay class possesses
+ * an object of this class that will hold all of the game information, like card health, graveyard contents, etc. While this class won't
+ * handle any animations or anything, it will hold all of the information and logic needed for the graphics class to display information
+ * to the user.
  */
 
-import ClientGameDisplay from './ClientGameDisplay';
-import IO from './IO';
+/*
+importing constants here, not sure if I'll actually need them but it's always
+worth it just in case.
+*/
 var constants = require('../sharedConstants/constants');
 
-export default class ClientGame { //FIXME: I'm pretty sure this export line doesn't actually work
 
+export default class ClientGame {
+
+	/**
+	 * Constructing this class empty is useful since the display needs to start displaying the game even before the full game has started,
+	 * like during the mulligans phase.
+	 * I'm initializing a "initialized" variable to false just to show that the class doesn't have all of the information it needs
+	 * to be a full grown up ClientGame instance just yet.
+	 */
 	constructor() {
 		this.initialized = false;
 	}
 	
 	/**
-	 * The initializer of the ClientGame class. Initializes the following properties on this class:
+	 * This should be called once the rest of the information is given to the client, like the final contents of the player's deck and
+	 * their player id. A method might need to be added to ClientGameDisplay just to pass through all of this information, but I probably
+	 * can find a workaround so we don't need to clutter.
+	 * 
+	 * Initializes the following properties on this class:
 	 * 1. id - the id number of this player
 	 * 2. hand - the hand of this player
 	 * 3. ownBoard - the board of this player
@@ -31,8 +45,6 @@ export default class ClientGame { //FIXME: I'm pretty sure this export line does
 	 * @param {number} enemyStartingDeckSize the total size of the other player's deck
 	 */
     init(id, hand, ownStartingDeckSize, enemyStartingDeckSize) {
-		this.connection = new IO();
-		this.view = new ClientGameDisplay(/* params here */);
 		this.id = id;
 		this.hand = hand;
 		this.ownBoard = [];
@@ -41,27 +53,20 @@ export default class ClientGame { //FIXME: I'm pretty sure this export line does
 		this.ownDeckSize = ownStartingDeckSize - constants.STARTING_CARDS_DRAWN;
 		this.enemyDeckSize = enemyStartingDeckSize - constants.STARTING_CARDS_DRAWN;
 		this.turnCounter = 0;
+		this.initialized = true;
 	}
 
 	/**
 	 * This is the most important function of the class. It takes in an event and then turns the event into
-	 * a graphical change for the user and updates its own data based on the event's information. The documentation
+	 * a data change for the user and updates its own data based on the event's information. The documentation
 	 * on event formatting is at the top of Game.js. This event processor will probably get broken down into a bunch of methods
 	 * so that it's easier to read.
-	 * @param {*} event the event to be processed
+	 * @param {Event} event the event to be processed
 	 */
 	processEvent(event) {
 		if(event.type == 'draw card') {
 			processDrawCardEvent(event); //like dat
 		}
-	}
-
-	/**
-	 * This function should output the next user input through the queue.
-	 * @param {SocketIO} socket 
-	 */
-	outputQueue(socket) {
-
 	}
 
 	/**
