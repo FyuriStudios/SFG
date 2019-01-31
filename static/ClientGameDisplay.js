@@ -72,7 +72,8 @@ export default class ClientGameDisplay {
     }
 
     /**
-     * This function exists just in case, I'm not sure we even need it at all. All it should do is completely reset the 
+     * This function exists just in case, I'm not sure we even need it at all. All it should do is completely reset the screen based on
+     * the information that exists in this.game.
      */
     resetDisplay() {
 
