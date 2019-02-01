@@ -68,12 +68,12 @@ export default class ClientGameDisplay {
      * @param {*} input  
      */
     userInput(input) {
-
+        this.inputCallback(input); //right now I'm simply passing along the input.
     }
 
     /**
      * This function exists just in case, I'm not sure we even need it at all. All it should do is completely reset the screen based on
-     * the information that exists in this.game.
+     * the information that exists in this game.
      */
     resetDisplay() {
 

@@ -16,7 +16,7 @@ follow this general format:
 The type specifies what kind of event is denoted; for example 'draw card' if a card was drawn. 
 Here's a complete list and set of descriptions for all of the various event types (list is a work in progress):
 
-1) type: 'fatigue' - This event occurs when a player draws a card but doesn't have a card in their deck to draw. They take damage to their
+1. type: 'fatigue' - This event occurs when a player draws a card but doesn't have a card in their deck to draw. They take damage to their
 face as a result of it.
 	Follows this format:
 	
@@ -29,7 +29,7 @@ face as a result of it.
 		* player: {int} - This is the ID of the player that took the damage, either 1 or 2.
 
 
-2) type: 'burn card' - This event occurs when a player draws a card but their hand is full and they burn the card. We're thinking about
+2. type: 'burn card' - This event occurs when a player draws a card but their hand is full and they burn the card. We're thinking about
    changing this rule but it's how I'm going to leave it for now because it's easier to implement.
 	It follows this format:
 
@@ -43,7 +43,7 @@ face as a result of it.
 		  just in case it matters.
 
 
-3) type: 'draw card' - This event occurs when a player draws a card. This is special because the player who drew the card receives
+3. type: 'draw card' - This event occurs when a player draws a card. This is special because the player who drew the card receives
    information about the card that they drew but the other player only gets to know that they drew a card.
 	For the current player, it follows this format:
 
@@ -63,7 +63,7 @@ face as a result of it.
 	It's exactly the same except they don't get the card ID.
 
 
-4) type: 'attack' - This event TODO: finish this lol
+4. type: 'attack' - This event TODO: finish this lol
 
 */
 
@@ -84,7 +84,6 @@ Array.prototype.shuffle = function() {
         [this[i], this[j]] = [this[j], this[i]];
     }
 }
-
 class Game {
 
 	/**
