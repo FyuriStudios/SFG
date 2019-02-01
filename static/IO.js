@@ -1,31 +1,14 @@
 /**
- * This class exists to deal with the input/output to and from the backend. It's the controlling class for everything that happens on
- * the frontend, because all events are filtered through this class, as suggested by the name of the file. This class possesses the
- * display class, which has the game class; therefore, per each game running on any client machine, this is the controlling class that
- * does entirely under-the-hood logic.
+ * This class exists to deal with the input/output to and from the backend. It should be instantiated only as a object of the ClientGame
+ * class that will be handling the game data and logic. This class is supposed to be an intermediary that makes it more readable in
+ * the ClientGame file to work with network stuff.
  */
-import ClientGameDisplay from "./ClientGameDisplay";
-var constants = require('../sharedConstants/constants');
-
 export default class IO {
 
-    /**
-     * Constructs the game, but doesn't set up the connection for the game, see setupConnection for that
-     * @param {number} width the width of the screen to be constructed
-     * @param {number} height the height of the screen to be constructed
-     */
-    constructor(width, height) {
+    constructor() {
         this.socket = io();
-        this.view = new ClientGameDisplay(width, height, function(userInput) {
-            socket.emit('input', userInput); //this simply passes on the input directly to the server, TODO: change this?
-        })
     }
 
-    /**
-     * This method actually creates all of the proper connection functions to the main server. It sets up a bunch of callbacks and
-     * defines all of the behavior that this game takes in terms of connection. Call this function when you're ready for connections,
-     * maybe once all assets have been loaded or something.
-     */
     setupConnection() {
         
         var id;
@@ -44,11 +27,16 @@ export default class IO {
             hand = input.cards;
         }); //after all of this, the game has started
 
+        game = new ClientGame(id, hand, 10 /*TODO: add a way to get sent back your deck size*/, 10);
+
         socket.on('events', function(event) {
-            view.processEvent(event);
+            game.processEvent(event);
+            if(game.currentPlayer == game.id) {
+                game.outputQueue(socket);
+            }
         });
 
-        view.game.init(id, hand, constants.MIN_DECK_SIZE, constants.MIN_DECK_SIZE);//TODO: actually get the deck sizes
+        return {hand: hand, id: id};
     }
 
 }
