@@ -1,15 +1,13 @@
 /**
- * This class exists to deal with the input/output to and from the backend. It should be instantiated only as a object of the ClientGame
- * class that will be handling the game data and logic. This class is supposed to be an intermediary that makes it more readable in
- * the ClientGame file to work with network stuff.
+ * This file exists to deal with the input/output to and from the backend. It should be the controlling file of the frontend.
  */
-export default class IO {
+    import GameView from './GameView';
+    
+    GameView.setupDisplay();   
 
-    constructor() {
-        this.socket = io();
-    }
-
-    setupConnection() {
+    let socket = io();
+    
+    function setupConnection() {
         
         var id;
         var hand;
@@ -36,7 +34,7 @@ export default class IO {
             }
         });
 
-        return {hand: hand, id: id};
+        
     }
 
 }
