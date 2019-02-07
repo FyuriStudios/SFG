@@ -1,4 +1,5 @@
 import ClientGame from './ClientGame';
+import AnimationQueue from './AnimationQueue'
 /*
  * Just a few constants that are useful to have around.
  */
@@ -40,25 +41,6 @@ function bringToFront(sprite, parent) {
     parent.addChild(sprite);
 }
 
-class ClickInterface {
-
-    constructor() {
-        this.clickInformation = null;
-        this.isDragging = false;
-    }
-
-    onDragStart(clickInformation) {
-        this.clickInformation = clickInformation;
-    }
-
-    onDragMove(clickInformation) {
-        if(isDragging) {
-            return clickInformation.getLocalPosition(app);
-        }
-    }
-
-}
-
 let clickHandler = new ClickInterface();
 
 function setupDisplay() {
@@ -80,6 +62,7 @@ function setupDisplay() {
     background.y = 0;
 }
 
-function animateSprite(sprite, to) {
-    
-}
+let animator = new AnimationQueue(game);
+
+
+
