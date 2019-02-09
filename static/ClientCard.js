@@ -6,25 +6,6 @@ Stuff that this file might be missing:
 import AssetGetter from './AssetGetter';
 
 /**
- * This is the outward facing function of the file. It takes in a card object from the backend and adds all of its information plus
- * more information that might be useful to have on the frontend into one big Card object, like a Sprite for the card, then returns it.
- * @param {Card} backendCard 
- */
-export function from(backendCard) {
-    if(backendCard.type == 'monster') {
-        return new Monster(backendCard);
-    }
-    
-    else if(backendCard.type == 'spell') {
-        return new Spell(backendCard);
-    }
-
-    else {
-        throw('invalid monster type');
-    }
-}
-
-/**
  * Defines a generic card. This class shouldn't be constructed directly.
  */
 class Card {
@@ -59,5 +40,24 @@ class Monster extends Card {
 class Spell extends Card {
     constructor(backendCard) {
         super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.cost, backendCard.power, backendCard.hasDefender);
+    }
+}
+
+/**
+ * This is the outward facing function of the file. It takes in a card object from the backend and adds all of its information plus
+ * more information that might be useful to have on the frontend into one big Card object, like a Sprite for the card, then returns it.
+ * @param {Card} backendCard 
+ */
+export function from(backendCard) {
+    if(backendCard.type == 'monster') {
+        return new Monster(backendCard);
+    }
+    
+    else if(backendCard.type == 'spell') {
+        return new Spell(backendCard);
+    }
+
+    else {
+        throw('invalid monster type');
     }
 }
