@@ -10,7 +10,7 @@ import AssetGetter from './AssetGetter';
  * more information that might be useful to have on the frontend into one big Card object, like a Sprite for the card, then returns it.
  * @param {Card} backendCard 
  */
-export default function from(backendCard) {
+export function from(backendCard) {
     if(backendCard.type == 'monster') {
         return new Monster(backendCard);
     }
