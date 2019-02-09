@@ -35,19 +35,18 @@ The fewer high level globabl variables we're throwing around, the better. All of
 merged together into one big object.
 */
 let displayElements = {
+
+    app: new PIXI.Application({
+        antialias: true,
+        transparent: true,
+        forceCanvas: false
+    }),
+
     clickEventShapes: new PIXI.Container(),
     playerCards: new PIXI.Container,
     enemyCards: new PIXI.Container,
+    animator = new AnimationQueue(game)
 };
-
-/*
- * Initialize the PIXI application as "app"
- */
-let app = new PIXI.Application({
-    antialias: true,
-    transparent: true,
-    forceCanvas: false
-});
 
 /**
  * Moves a sprite to the front of a container.
@@ -62,6 +61,9 @@ function bringToFront(sprite, parent) {
 }
 
 function setupDisplay() {
+    let app = displayElements.app;//quick alias
+
+
     document.body.appendChild(app.view);
 
     let background = Sprite.fromImage('/static/assets/4k-Board.png');
@@ -80,8 +82,6 @@ function setupDisplay() {
     background.y = 0;
 }
 
-let animator = new AnimationQueue(game);
-
 /**
  * This function should accept an event object from the backend, generally passed through IO.
  * It might be useful to move this off to another file, since it's anticipated that there will
@@ -89,7 +89,9 @@ let animator = new AnimationQueue(game);
  * @param {Event} event the event to be processed
  */
 function processEvent(event) {
-    if(event.type == )
+    if(event.type == 'draw card') {
+        throw('implement please\n -Hughes')
+    }
 }
 
 
