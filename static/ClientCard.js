@@ -1,6 +1,16 @@
+/*
+Stuff that this file might be missing:
+- text for cards, like their effect text and such
+- the abilities of cards
+*/
 import AssetGetter from './AssetGetter';
 
-export default function initializeCard(backendCard) {
+/**
+ * This is the outward facing function of the file. It takes in a card object from the backend and adds all of its information plus
+ * more information that might be useful to have on the frontend into one big Card object, like a Sprite for the card, then returns it.
+ * @param {Card} backendCard 
+ */
+export default function from(backendCard) {
     if(backendCard.type == 'monster') {
         return new Monster(backendCard);
     }
@@ -14,6 +24,9 @@ export default function initializeCard(backendCard) {
     }
 }
 
+/**
+ * Defines a generic card. This class shouldn't be constructed directly.
+ */
 class Card {
     constructor(type, id, tokenType, rarity, name, cost) {
     	this.type = type;
@@ -27,6 +40,9 @@ class Card {
     }
 }
 
+/**
+ * Defines a generic monster.
+ */
 class Monster extends Card {
     constructor(backendCard) {
         super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.cost, backendCard.power, backendCard.hasDefender);
@@ -37,6 +53,9 @@ class Monster extends Card {
     }
 }
 
+/**
+ * Defines a generic spell.
+ */
 class Spell extends Card {
     constructor(backendCard) {
         super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.cost, backendCard.power, backendCard.hasDefender);
