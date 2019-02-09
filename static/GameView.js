@@ -14,8 +14,12 @@ A few useful things to note about this file:
 5) Ask me (Hughes) for more clarification if you need it, I'm still working on comments for this file as of 2/9/19.
 */
 
+/*
+imports
+*/
 import ClientGame from './ClientGame';
-import AnimationQueue from './AnimationQueue'
+import AnimationQueue from './AnimationQueue';
+
 /*
  * Just a few constants that are useful to have around.
  */
@@ -27,16 +31,15 @@ const aspectRatio = 9/16;
 let Loader = PIXI.loader;
 let Sprite = PIXI.Sprite;
 
+/*
+globals
+*/
 let grass = 420;
 let game = new ClientGame();
-
-/*
-The fewer high level globabl variables we're throwing around, the better. All of the display elements here have been
-merged together into one big object.
-*/
+var outputFunc;
 let displayElements = {
 
-    app: new PIXI.Application({
+    app: new PIXI.Application({//"app" is now part of the displayElements object
         antialias: true,
         transparent: true,
         forceCanvas: false
@@ -51,7 +54,7 @@ let displayElements = {
 /**
  * Moves a sprite to the front of a container.
  * There's probably a better way to do this but I'm leaving
- * it as is for now.
+ * it as is for now. (I'm also completely unsure if this works)
  * @param {PIXI.Sprite} sprite 
  * @param {PIXI.Container} parent 
  */
@@ -61,8 +64,7 @@ function bringToFront(sprite, parent) {
 }
 
 function setupDisplay() {
-    let app = displayElements.app;//quick alias
-
+    let app = displayElements.app;//alias to app only for this function
 
     document.body.appendChild(app.view);
 
@@ -93,6 +95,33 @@ function processEvent(event) {
         throw('implement please\n -Hughes')
     }
 }
+
+/**
+ * Calling this function allows whatever class calls this to give a function that will be called whenever this class
+ * decides that the user has given input that should be sent to the server. This is so that this file doesn't have to deal with networking.
+ */
+function setupOutput(func) {
+    outputFunc = func;
+}
+
+/**
+ * Call this function locally with output information whenever you want to send user input to the server.
+ * @param {output} output the output to the server
+ */
+function outputEvent(output) {
+    if(outputFunc != null) {
+        outputFunc(output);
+    }
+}
+
+/*
+This is a comprehensive list of all of the functions of this class that can be called from other files.
+*/
+export {
+    setupDisplay,
+    processEvent,
+    setupOutput
+};
 
 
 
