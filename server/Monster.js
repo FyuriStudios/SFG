@@ -14,14 +14,6 @@ class Monster extends Card {
 	  this.hasDefender = hasDefender;
 	  this.isStatic = false;
 	}
-	
-	/**
-	 * I added this to the monster prototype so that we can check to see if any given card is, in fact, a monster.
-	 * This isn't something that needs to be serialized so this will remain a virtual property.
-	 */
-	get type() {
-		return 'monster';
-	}
 
 	/**
 	 * This function should be used when you want to attack something with a monster. You call this function of this monster and
