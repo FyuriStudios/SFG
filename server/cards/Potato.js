@@ -1,4 +1,4 @@
-var Monster = require('../base/Monster');
+var Monster = require('../Monster');
 
 class Potato extends Monster {
     

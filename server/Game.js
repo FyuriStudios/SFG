@@ -65,6 +65,15 @@ face as a result of it.
 
 4) type: 'attack' - This event TODO: finish this lol
 
+5) type: 'heal' - signifies healing. DIFFERENT FROM BOOST/DAMAGE
+	{
+		type: 'heal',
+		player: int,
+		targetSide: int,
+		target: int (index on board),
+		amount: int
+	}
+
 */
 
 //require everything that we need, probably this list will expand as we go
@@ -107,7 +116,7 @@ class Game {
 			setDeck: false, //the player has not input their deck yet
 			mulliganed: false, //the player has not mulliganed yet
 			id: 1, //the player's id is player 1
-			character: new Character(),//TODO: change this to a real character
+			health: constants.STARTING_HEALTH,//TODO: change this to a real character
 			socket: socket1, //a reference to their socket connection
 			board: [], //there's nothing on their board
 			hand: [], //they don't have a hand yet
@@ -120,7 +129,7 @@ class Game {
 			setDeck: false,
 			mulliganed: false,
 			id: 2,
-			character: new Character(),//TODO: change this to a real character
+			health: constants.STARTING_HEALTH,//TODO: change this to a real character
 			socket: socket2,
 			board: [],
 			hand: [],
