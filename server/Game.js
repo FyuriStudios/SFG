@@ -13,13 +13,13 @@ follow this general format:
 	[eventSpecificVars]: here,
 }
 
-The type specifies what kind of event is denoted; for example 'draw card' if a card was drawn. 
+The type specifies what kind of event is denoted; for example 'draw card' if a card was drawn.
 Here's a complete list and set of descriptions for all of the various event types (list is a work in progress):
 
 1) type: 'fatigue' - This event occurs when a player draws a card but doesn't have a card in their deck to draw. They take damage to their
 face as a result of it.
 	Follows this format:
-	
+
 	{
 		type: 'fatigue',
 		damage: {int},
@@ -133,14 +133,14 @@ class Game {
 	/**
      * Starts the game. Call this function when you're ready for the entire game to start.
      * This function is separate from the initializer, just in case. Like, maybe we want to let both players ready up?
-	 * 
+	 *
      * This function lets the players set their decks and TODO: let the players choose characters, then gives them a mulligan opportunity.
 	 * After that, it sets up the game input required so that the players can start. This function repeatedly calls itself so that
 	 * the players can ready up all of their stuff.
      * @author Hughes
      */
     start() {
-		
+
 		//first, we're going to handle the case where both players haven't mulliganed or set their decks.
 		if(!(player1.setDeck && player2.setDeck) && !(player1.mulliganed && player2.mulliganed)) {
 			//TODO: add a default deck
@@ -163,7 +163,7 @@ class Game {
 					}
 				});
 			}
-			
+
 			deckConstruction(player1);//we're going to run this function for each player. This design pattern has been abused a lot by me (Hughes).
 			deckConstruction(player2);
 
@@ -173,7 +173,7 @@ class Game {
 		*/
 		} else if((player1.setDeck && player2.setDeck) && !(player1.mulliganed && player2.mulliganed)) {
 
-	   		player1.deck.shuffle();
+	   	player1.deck.shuffle();
 			player2.deck.shuffle();
 
 			for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
@@ -185,7 +185,7 @@ class Game {
 
 			player1.socket.emit('starting hand', {cards: player1.hand});
 			player2.socket.emit('starting hand', {cards: player2.hand});
-			
+
 			//I think that this doesn't actually work.
 			function setMulligan(player) {
 					player.socket.on('mulligan', function(input) { //then give them the option to mulligan
@@ -239,7 +239,7 @@ class Game {
 			setupGameInput(player2);
 		}
     }
-    
+
     /**
      * Draws a card off of the player's deck. Makes sure that they actually have cards to take off of their deck or they take damage.
 	 * This function also deals internally with the pain in the booty bit where you have to make events.
@@ -259,13 +259,13 @@ class Game {
 			event.type = 'fatigue';
 			event.damage = FATIGUE_DAMAGE;
 			event.player = player.id;
-		} 
-		
+		}
+
 		/*
 		Otherwise, either a card gets burned or drawn
 		*/
 		else {
-			
+
 			temp = player.deck.pop();
 			if(player.hand.length == constants.MAX_HAND_SIZE) {
 				event.type = 'burn card';
@@ -273,7 +273,7 @@ class Game {
 				event.player = player.id;
 				event.card = temp;
 				player.graveyard.push(temp);
-			} 
+			}
 			else {
 				player.hand.push(temp);
 				event.type = 'draw card';
@@ -285,7 +285,7 @@ class Game {
 		}
 
 		eventChain.current.push(event);
-		
+
 	}
 
     /**
@@ -326,7 +326,7 @@ class Game {
 				if(player.board[i].currentPower <= 0) {
 					event.dead.append({id: player.board[i].id, position: i, player: player.id});
 					deadDudes.append[player.board[i]];
-				
+
 				}
 			}
 			player.graveyard.extend(deadDudes);
@@ -341,13 +341,13 @@ class Game {
     /**
      * The helper function to deal with attacks. Use this when a player asks to attack.
      * This function should also deal with invalid attacks.
-	 * 
+	 *
 	 * @param {*} input - the input from the player detailing what's gonna happen with the attack.
 	 * @param {*} eventChain - the chain of events that this function should append to.
 	 *
      */
     attack(input, eventChain) {
-		
+
 		if((input.attackerLoc >= this.currentPlayer.board.length || input.attackerLoc == -1) || input.targetLoc >= this.currentPlayer.board.length) { //just real quick making sure that the locations are valid
 			return;
 		}
@@ -363,7 +363,7 @@ class Game {
 	 * @param {*} eventChain - the chain of events.
 	 */
     playCard(input, eventChain) {
-		
+
 		var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
 		if(input.cardLocation > temp.hand.length || input.cardLocation < 0) {
 			return; //check to see if the card's actually in their hand
@@ -396,14 +396,14 @@ class Game {
 
 		if(toPlay.type == 'monster') {
 			event.monster = toPlay;
-			temp.board.splice(input.playLocation, 0, toPlay); 
+			temp.board.splice(input.playLocation, 0, toPlay);
 			//TODO: add battlecry effect
 		}
 
 		if(toPlay.type == 'spell') {
 			//TODO: add code here
 		}
-		
+
     }
 
     startTurn(eventChain) {
@@ -414,7 +414,7 @@ class Game {
 			view: 1,
 			player: temp.id
 		};
-		
+
 
 		if(temp.sToks >= constants.MAX_TOKS-constants.TOKS_PER_TURN) {
 			var currSToks = temp.sToks;
@@ -456,8 +456,8 @@ class Game {
 
 	/**
 	 * Ends a player's turn.
-	 * @param {*} input 
-	 * @param {*} eventChain 
+	 * @param {*} input
+	 * @param {*} eventChain
 	 */
     endTurn(input, eventChain) {
 
@@ -471,7 +471,7 @@ class Game {
 		killDead(eventChain);
 		startTurn();
 	}
-	
+
 	get currentPlayer() {
 		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player1:this.player2
 			//if it's 1,2... 5,6... 9,10... then player 1's turn.
