@@ -1,0 +1,9 @@
+let constants = {
+    MAX_TOKS : 15,
+    TOKS_PER_TURN : 3,
+    MAX_HAND_SIZE : 10,
+    MAX_BOARD_SIZE : 10,
+    STARTING_CARDS_DRAWN : 5,
+    FATIGUE_DAMAGE : 20,
+    STARTING_HEALTH : 50
+};

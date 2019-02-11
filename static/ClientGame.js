@@ -5,14 +5,7 @@
  * to the user.
  */
 
-/*
-importing constants here, not sure if I'll actually need them but it's always
-worth it just in case.
-*/
-var constants = require('../sharedConstants/constants');
-
-
-export default class ClientGame {
+class ClientGame {
 
 	/**
 	 * Constructing this class empty is useful since the display needs to start displaying the game even before the full game has started,

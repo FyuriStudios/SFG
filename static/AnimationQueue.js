@@ -1,4 +1,4 @@
-export default class AnimationQueue {
+class AnimationQueue {
     
     /**
      * Constructs an animation queue.
@@ -6,15 +6,21 @@ export default class AnimationQueue {
      */
     constructor(app) {
         this.queue = [];
+    }
+
+    /**
+     * The queue doesn't animate until this function is called.
+     */
+    startAnimating() {
         app.ticker.add(function(delta) {
-            for(var i of queue) {
-                i.sprite.x += i.xDistance*delta;
-                i.sprite.y += i.yDistance*delta;
-            }
+            this.queue.forEach(function(request){
+                request.sprite.x += i.xDistance*delta;
+                request.sprite.y += i.yDistance*delta;
+            });
             this.queue = this.queue.filter(function(value) {
                 return !(Math.abs(to.x-value.sprite.x) <= i.xDistance*delta);
-            })
-        })
+            });
+        });
     }
 
     /**

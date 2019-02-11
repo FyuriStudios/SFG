@@ -15,12 +15,6 @@ A few useful things to note about this file:
 */
 
 /*
-imports
-*/
-import ClientGame from './ClientGame';
-import AnimationQueue from './AnimationQueue';
-
-/*
  * Just a few constants that are useful to have around.
  */
 const aspectRatio = 9/16;
@@ -47,9 +41,10 @@ let displayElements = {
 
     clickEventShapes: new PIXI.Container(),
     playerCards: new PIXI.Container,
-    enemyCards: new PIXI.Container,
-    animator = new AnimationQueue(game)
+    enemyCards: new PIXI.Container
 };
+
+displayElements.animator = new AnimationQueue(displayElements.app)
 
 /**
  * Moves a sprite to the front of a container.
@@ -64,24 +59,30 @@ function bringToFront(sprite, parent) {
 }
 
 function setupDisplay() {
-    let app = displayElements.app;//alias to app only for this function
+    let app = displayElements.app; //quick alias
 
     document.body.appendChild(app.view);
 
     let background = Sprite.fromImage('/static/assets/4k-Board.png');
 
-    app.stage.addChild();
-    app.stage.addChild(clickEventShapes);
-    app.stage.addChild(playerCards);
-    app.stage.addChild(enemyCards);
+    app.stage.addChild(background);
+
+    app.stage.addChild(displayElements.clickEventShapes);
+    app.stage.addChild(displayElements.playerCards);
+    app.stage.addChild(displayElements.enemyCards);
 
     app.stage.width = innerWidth;//p sure this works
     app.stage.height = innerHeight;
 
     background.width = app.stage.width;
     background.height = app.stage.height;
+
     background.x = 0;
     background.y = 0;
+
+    bringToFront(background, app.view);
+
+    app.renderer.resize(app.stage.width, app.stage.height);
 }
 
 /**
@@ -114,14 +115,6 @@ function outputEvent(output) {
     }
 }
 
-/*
-This is a comprehensive list of all of the functions of this class that can be called from other files.
-*/
-export {
-    setupDisplay,
-    processEvent,
-    setupOutput
-};
 
 
 
