@@ -16,12 +16,12 @@ class ClientGame {
 	constructor() {
 		this.initialized = false;
 	}
-	
+
 	/**
 	 * This should be called once the rest of the information is given to the client, like the final contents of the player's deck and
 	 * their player id. A method might need to be added to ClientGameDisplay just to pass through all of this information, but I probably
 	 * can find a workaround so we don't need to clutter.
-	 * 
+	 *
 	 * Initializes the following properties on this class:
 	 * 1. id - the id number of this player
 	 * 2. hand - the hand of this player
@@ -31,7 +31,7 @@ class ClientGame {
 	 * 6. ownDeckSize - the number of cards in this player's deck
 	 * 7. enemyDeckSize - the number of cards in the enemy player's deck
 	 * 8. turnCounter - the current turn that the game is on
-	 * 
+	 *
 	 * @param {number} id the id of this player (either 1 or 2)
 	 * @param {[Card]} hand the hand of this player
 	 * @param {number} ownStartingDeckSize the total size of this player's deck
@@ -77,5 +77,5 @@ class ClientGame {
 	get otherPlayer() {
 		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? 2:1;//literally just the opposite of the above method
 	}
-	
+
 }

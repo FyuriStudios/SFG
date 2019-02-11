@@ -7,6 +7,17 @@ var Card = require('./Card');
  */
 class Monster extends Card {
 
+	/**
+	 * 
+	 * @param {*} type 
+	 * @param {*} id 
+	 * @param {*} tokenType 
+	 * @param {*} rarity 
+	 * @param {*} name 
+	 * @param {*} cost 
+	 * @param {*} power 
+	 * @param {*} hasDefender 
+	 */
   	constructor(type, id, tokenType, rarity, name, cost, power, hasDefender) {
 	  super(type, id, tokenType, rarity, name, cost);
 	  this.power = power;

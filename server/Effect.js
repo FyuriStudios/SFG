@@ -1,6 +1,6 @@
 class Effect {
     
-    selfAttack(game) {
+    selfAttack(input, game, eventChain) {
         return
     }
 
@@ -8,7 +8,7 @@ class Effect {
         return false
     }
 
-    enemyAttack(game) {
+    enemyAttack(game, eventChain) {
         return
     }
     
@@ -16,7 +16,7 @@ class Effect {
         return false
     }
 
-    selfDeath(game) {
+    selfDeath(input, game, eventChain) {
         return
     }
 
@@ -24,7 +24,7 @@ class Effect {
         return false
     }
 
-    turnIncrement() {
+    turnIncrement(input, game, eventChain) {
         return
     }
 
@@ -32,7 +32,7 @@ class Effect {
         return false
     }
 
-    cardPlayed() {
+    cardPlayed(input, game, eventChain) {
         return
     }
 
@@ -40,7 +40,7 @@ class Effect {
         return false
     }
 
-    questFulfilled() {
+    questFulfilled(input, game, eventChain) {
         return
     }
 

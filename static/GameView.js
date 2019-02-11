@@ -50,8 +50,8 @@ displayElements.animator = new AnimationQueue(displayElements.app)
  * Moves a sprite to the front of a container.
  * There's probably a better way to do this but I'm leaving
  * it as is for now. (I'm also completely unsure if this works)
- * @param {PIXI.Sprite} sprite 
- * @param {PIXI.Container} parent 
+ * @param {PIXI.Sprite} sprite
+ * @param {PIXI.Container} parent
  */
 function bringToFront(sprite, parent) {
     parent.removeChild(sprite);
@@ -93,7 +93,8 @@ function setupDisplay() {
  */
 function processEvent(event) {
     if(event.type == 'draw card') {
-        throw('implement please\n -Hughes')
+    PIXI.Sprite.fromImage('/static/assets/cards/'+cardName+'.png')
+        //throw('implement please\n -Hughes')
     }
 }
 
@@ -114,7 +115,4 @@ function outputEvent(output) {
         outputFunc(output);
     }
 }
-
-
-
 
