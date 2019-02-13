@@ -105,7 +105,15 @@ function setupDisplay() {
     //app.stage.height = innerHeight;
 
 }
+function resizeDisplay() {
+  let app = displayElements.app;
+  app.stage.width = innerWidth;
+  app.stage.height = innerHeight;
 
+  app.renderer.resize(innerWidth, innerHeight);
+
+  document.body.appendChild(app.view);
+}
 /**
  * This function should accept an event object from the backend, generally passed through IO.
  * It might be useful to move this off to another file, since it's anticipated that there will
@@ -136,7 +144,3 @@ function outputEvent(output) {
         outputFunc(output);
     }
 }
-displayElements.app.ticker.add(()=>{
-  console.log(displayElements.app.stage.width);
-  console.log(displayElements.app.stage.height);
-});
