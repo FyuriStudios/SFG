@@ -1,9 +1,8 @@
 /**
  * This file exists to deal with the input/output to and from the backend. It should be the controlling file of the frontend.
  */
-    import GameView from './GameView';
     
-    GameView.setupDisplay();   
+    setupDisplay();   
 
     let socket = io();
     
@@ -25,10 +24,14 @@
             hand = input.cards;
         }); //after all of this, the game has started
 
-        game = new ClientGame(id, hand, 10 /*TODO: add a way to get sent back your deck size*/, 10);
+        hand = hand.map((card) => {
+            return card.type == 'monster' ? new Monster(card): new Spell(card);
+        })
+
+        game.init(id, hand, 30, 30);
 
         socket.on('events', function(event) {
-            game.processEvent(event);
+            processEvent(event);
             if(game.currentPlayer == game.id) {
                 game.outputQueue(socket);
             }

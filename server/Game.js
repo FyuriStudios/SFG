@@ -140,15 +140,15 @@ class Game {
     }
 
 	/**
-     * Starts the game. Call this function when you're ready for the entire game to start.
-     * This function is separate from the initializer, just in case. Like, maybe we want to let both players ready up?
+   * Starts the game. Call this function when you're ready for the entire game to start.
+   * This function is separate from the initializer, just in case. Like, maybe we want to let both players ready up?
 	 *
-     * This function lets the players set their decks and TODO: let the players choose characters, then gives them a mulligan opportunity.
-	 * After that, it sets up the game input required so that the players can start. This function repeatedly calls itself so that
+   * This function lets the players set their decks and TODO: let the players choose characters, then gives them a mulligan opportunity.
+   * After that, it sets up the game input required so that the players can start. This function repeatedly calls itself so that
 	 * the players can ready up all of their stuff.
-     * @author Hughes
-     */
-    start() {
+   * @author Hughes
+   */
+  start() {
 
 		//first, we're going to handle the case where both players haven't mulliganed or set their decks.
 		if(!(player1.setDeck && player2.setDeck) && !(player1.mulliganed && player2.mulliganed)) {
