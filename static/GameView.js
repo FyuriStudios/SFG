@@ -59,30 +59,48 @@ function bringToFront(sprite, parent) {
 }
 
 function setupDisplay() {
+
     let app = displayElements.app; //quick alias
+
+    app.stage.width = innerWidth;
+    app.stage.height = innerHeight;
+
+    app.renderer.resize(innerWidth, innerHeight);
 
     document.body.appendChild(app.view);
 
-    let background = Sprite.fromImage('/static/assets/4k-Board.png');
+    let textures = {};
 
-    app.stage.addChild(background);
+    Loader.add('background', '/static/assets/4k-Board.png');
 
-    app.stage.addChild(displayElements.clickEventShapes);
-    app.stage.addChild(displayElements.playerCards);
-    app.stage.addChild(displayElements.enemyCards);
+    Loader.load((loader, resources) => {
+        textures.background = resources.background.texture;
+    });
 
-    app.stage.width = innerWidth;//p sure this works
-    app.stage.height = innerHeight;
+    Loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
+    Loader.onError.add(() => {}); // called once per errored file
+    Loader.onLoad.add(() => {}); // called once per loaded file
+    Loader.onComplete.add(() => {
+        let background = new PIXI.TilingSprite(textures.background);
+        background.width = background.texture.width;
+        background.height = background.texture.height;
 
-    background.width = app.stage.width;
-    background.height = app.stage.height;
+        background.scale.x = background.width/innerWidth;
+        background.scale.y = background.height/innerHeight;
+        background.anchor.x = 0;
+        background.anchor.y = 0;
+        background.x = 0;
+        background.y = 0;
+        app.stage.addChild(background);
+    });
 
-    background.x = 0;
-    background.y = 0;
+    // app.stage.addChild(displayElements.clickEventShapes);
+    // app.stage.addChild(displayElements.playerCards);
+    // app.stage.addChild(displayElements.enemyCards);
 
-    bringToFront(background, app.view);
+    //app.stage.width = innerWidth;//p sure this works
+    //app.stage.height = innerHeight;
 
-    app.renderer.resize(app.stage.width, app.stage.height);
 }
 
 /**
