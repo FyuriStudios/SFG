@@ -61,13 +61,15 @@ function bringToFront(sprite, parent) {
 function setupDisplay() {
 
     let app = displayElements.app; //quick alias
+    setTimeout(()=>{
+      app.stage.width = innerWidth;
+      app.stage.height = innerHeight;
 
-    app.stage.width = innerWidth;
-    app.stage.height = innerHeight;
+      app.renderer.resize(innerWidth, innerHeight);
 
-    app.renderer.resize(innerWidth, innerHeight);
+      document.body.appendChild(app.view);
 
-    document.body.appendChild(app.view);
+    },50);
 
     let textures = {};
 
@@ -133,4 +135,7 @@ function outputEvent(output) {
         outputFunc(output);
     }
 }
-
+displayElements.app.ticker.add(()=>{
+  console.log(displayElements.app.stage.width);
+  console.log(displayElements.app.stage.height);
+});
