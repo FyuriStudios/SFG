@@ -61,6 +61,7 @@ function bringToFront(sprite, parent) {
 function setupDisplay() {
 
     let app = displayElements.app; //quick alias
+    //it takes around 50 milliseconds for innerWidth and innerHeight to update, so I added a SetTimeout to compensate -Sean
     setTimeout(()=>{
       app.stage.width = innerWidth;
       app.stage.height = innerHeight;
