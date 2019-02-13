@@ -84,14 +84,10 @@ function setupDisplay() {
     Loader.onError.add(() => {}); // called once per errored file
     Loader.onLoad.add(() => {}); // called once per loaded file
     Loader.onComplete.add(() => {
-        let background = new PIXI.TilingSprite(textures.background);
-        background.width = background.texture.width;
-        background.height = background.texture.height;
-
-        background.scale.x = background.width/innerWidth;
-        background.scale.y = background.height/innerHeight;
-        background.anchor.x = 0;
-        background.anchor.y = 0;
+        let background = new PIXI.Sprite(textures.background);
+        background.width = innerWidth;
+        background.height = innerHeight;
+    
         background.x = 0;
         background.y = 0;
         app.stage.addChild(background);
@@ -105,6 +101,7 @@ function setupDisplay() {
     //app.stage.height = innerHeight;
 
 }
+
 function resizeDisplay() {
   let app = displayElements.app;
   app.stage.width = innerWidth;
@@ -114,6 +111,7 @@ function resizeDisplay() {
 
   document.body.appendChild(app.view);
 }
+
 /**
  * This function should accept an event object from the backend, generally passed through IO.
  * It might be useful to move this off to another file, since it's anticipated that there will
