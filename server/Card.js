@@ -7,6 +7,7 @@ var Effect = require('./Effect')
 class Card extends Effect{
 
     constructor(type, id, tokenType, rarity, name, cost) {
+		super();
     	this.type = type;
     	this.id = id;
     	this.tokenType = tokenType;

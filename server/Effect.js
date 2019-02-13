@@ -1,53 +1,81 @@
 class Effect {
+
+    constructor() {
+        this.hasSelfAttack = false;
+        this.hasEnemyAttack = false;
+        this.hasSelfDeath = false;
+        this.hasTurnIncrement = false;
+        this.hasCardPlayed = false;
+        this.hasQuestFulfilled = false;
+
+        this.selfAttackList = [];
+        this.enemyAttackList = [];
+        this.selfDeathList = [];
+        this.turnIncrementList = [];
+        this.cardPlayedList = [];
+        this.questFulfilledList = [];
+    }
     
     selfAttack(input, game, eventChain) {
-        return
+        this.selfAttackList.forEach(function(i) {
+            i.func(input, game, attackChain);
+        });
     }
 
-    get hasSelfAttack() {
-        return false
+    addSelfAttack(func) {
+        this.selfAttackList.push(func);
     }
 
     enemyAttack(game, eventChain) {
-        return
+        this.selfAttackList.forEach(function(i) {
+            i.func(game, attackChain);
+        })
     }
-    
-    get hasEnemyAttack() {
-        return false
+
+    addEnemyAttack(func) {
+        this.enemyAttackList.push(func);
     }
 
     selfDeath(input, game, eventChain) {
-        return
+        this.selfDeathList.forEach(function(i) {
+            i.func(input, game, attackChain);
+        });
     }
 
-    get hasSelfDeath() {
-        return false
+    addSelfDeath(func) {
+        this.selfDeathList.push(func);
     }
 
     turnIncrement(input, game, eventChain) {
-        return
+        this.turnIncrementList.forEach(function(i) {
+            i.func(input, game, attackChain);
+        });
     }
 
-    get hasTurnIncrement() {
-        return false
+    addTurnIncrement(func) {
+        this.turnIncrementList.push(func);
     }
 
     cardPlayed(input, game, eventChain) {
-        return
+        this.cardPlayedList.forEach(function(i) {
+            i.func(input, game, attackChain);
+        });
     }
 
-    get hasCardPlayed() {
-        return false
+    addCardPlayed(func) {
+        this.cardPlayedList.push(func);
     }
 
     questFulfilled(input, game, eventChain) {
-        return
+        this.questFulfilledList.forEach(function(i) {
+            i.func(input, game, attackChain);
+        });
     }
 
-    get hasQuestFulfilled() {
-        return false
+    addQuestFullfilled(func) {
+        this.questFulfilled.push(func);
     }
 
 }
 
-module.exports = Effect
+module.exports = Effect;
