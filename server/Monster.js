@@ -18,11 +18,12 @@ class Monster extends Card {
 	 * @param {*} power 
 	 * @param {*} hasDefender 
 	 */
-  	constructor(type, id, tokenType, rarity, name, cost, power, hasDefender) {
+  	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false) {
 	  super(type, id, tokenType, rarity, name, cost);
 	  this.power = power;
 	  this.currentPower = power;//power and current power are different
 	  this.hasDefender = hasDefender;
+	  this.monsterClass = monsterClass;
 	  this.isStatic = false;
 	}
 
