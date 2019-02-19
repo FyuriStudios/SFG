@@ -59,30 +59,57 @@ function bringToFront(sprite, parent) {
 }
 
 function setupDisplay() {
+
     let app = displayElements.app; //quick alias
+    //it takes around 50 milliseconds for innerWidth and innerHeight to update, so I added a SetTimeout to compensate -Sean
+    setTimeout(()=>{
+      app.stage.width = innerWidth;
+      app.stage.height = innerHeight;
 
-    document.body.appendChild(app.view);
+      app.renderer.resize(innerWidth, innerHeight);
 
-    let background = Sprite.fromImage('/static/assets/4k-Board.png');
+      document.body.appendChild(app.view);
 
-    app.stage.addChild(background);
+    },50);
 
-    app.stage.addChild(displayElements.clickEventShapes);
-    app.stage.addChild(displayElements.playerCards);
-    app.stage.addChild(displayElements.enemyCards);
+    let textures = {};
 
-    app.stage.width = innerWidth;//p sure this works
-    app.stage.height = innerHeight;
+    Loader.add('background', '/static/assets/4k-Board.png');
 
-    background.width = app.stage.width;
-    background.height = app.stage.height;
+    Loader.load((loader, resources) => {
+        textures.background = resources.background.texture;
+    });
 
-    background.x = 0;
-    background.y = 0;
+    Loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
+    Loader.onError.add(() => {}); // called once per errored file
+    Loader.onLoad.add(() => {}); // called once per loaded file
+    Loader.onComplete.add(() => {
+        let background = new PIXI.Sprite(textures.background);
+        background.width = innerWidth;
+        background.height = innerHeight;
+    
+        background.x = 0;
+        background.y = 0;
+        app.stage.addChild(background);
+    });
 
-    bringToFront(background, app.view);
+    // app.stage.addChild(displayElements.clickEventShapes);
+    // app.stage.addChild(displayElements.playerCards);
+    // app.stage.addChild(displayElements.enemyCards);
 
-    app.renderer.resize(app.stage.width, app.stage.height);
+    //app.stage.width = innerWidth;//p sure this works
+    //app.stage.height = innerHeight;
+
+}
+
+function resizeDisplay() {
+  let app = displayElements.app;
+  app.stage.width = innerWidth;
+  app.stage.height = innerHeight;
+
+  app.renderer.resize(innerWidth, innerHeight);
+
+  document.body.appendChild(app.view);
 }
 
 /**
@@ -115,4 +142,3 @@ function outputEvent(output) {
         outputFunc(output);
     }
 }
-
