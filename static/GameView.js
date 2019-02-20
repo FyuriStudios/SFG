@@ -129,7 +129,7 @@ function processEvent(event) {
     card.anchor.x = .5;
     card.anchor.y = .5;
     displayElements.playerCards.addChild(card);
-    displayElements.animator.addRequest(card, {x:0, y:0});
+    displayElements.animator.addRequest(card, {x:0, y:0}, 5);
     displayElements.animator.startAnimating();
         //throw('implement please\n -Hughes')
     }

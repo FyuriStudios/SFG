@@ -20,7 +20,8 @@ class AnimationQueue {
                 request.sprite.y += request.yDistance*delta;
             });
             this.queue = this.queue.filter((value)=>{
-                return !(Math.abs(value.to.x-value.sprite.x) <= value.xDistance*delta);
+                return !(Math.round(value.sprite.x) == Math.round(value.to.x) && Math.round(value.sprite.y) == Math.round(value.to.y));
+                //(Math.round(value.sprite.x) == Math.round(value.to.x) && Math.round(value.sprite.y) == Math.round(value.to.y))
             });
         });
     }
