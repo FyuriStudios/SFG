@@ -40,8 +40,9 @@ let displayElements = {
     }),
 
     clickEventShapes: new PIXI.Container(),
-    playerCards: new PIXI.Container,
-    enemyCards: new PIXI.Container
+    playerCards: new PIXI.Container(),
+    enemyCards: new PIXI.Container(),
+    background: new PIXI.Container()
 };
 
 displayElements.animator = new AnimationQueue(displayElements.app)
@@ -87,15 +88,16 @@ function setupDisplay() {
         let background = new PIXI.Sprite(textures.background);
         background.width = innerWidth;
         background.height = innerHeight;
-    
+
         background.x = 0;
         background.y = 0;
-        app.stage.addChild(background);
-    });
+        displayElements.background.addChild(background);
 
-    // app.stage.addChild(displayElements.clickEventShapes);
-    // app.stage.addChild(displayElements.playerCards);
-    // app.stage.addChild(displayElements.enemyCards);
+    });
+    app.stage.addChild(displayElements.background);
+    app.stage.addChild(displayElements.clickEventShapes);
+    app.stage.addChild(displayElements.playerCards);
+    app.stage.addChild(displayElements.enemyCards);
 
     //app.stage.width = innerWidth;//p sure this works
     //app.stage.height = innerHeight;
@@ -119,8 +121,16 @@ function resizeDisplay() {
  * @param {Event} event the event to be processed
  */
 function processEvent(event) {
+    let app = displayElements.app; //quick alias
     if(event.type == 'draw card') {
-    PIXI.Sprite.fromImage('/static/assets/cards/'+cardName+'.png')
+    let card = PIXI.Sprite.fromImage('/static/assets/cards/Darfler.png'); //we need to get idToCard to work. the image will eventually be idToCard(event.card.id)
+    card.scale.x = (app.stage.width*0.086) / 750;
+    card.scale.y = (app.stage.height*0.225) / 1050;
+    card.x = app.stage.width*0.0565;
+    card.y = app.stage.height*0.885;
+    card.anchor.x = .5;
+    card.anchor.y = .5;
+    displayElements.playerCards.addChild(card);
         //throw('implement please\n -Hughes')
     }
 }

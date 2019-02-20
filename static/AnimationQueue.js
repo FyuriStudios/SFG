@@ -1,5 +1,5 @@
 class AnimationQueue {
-    
+
     /**
      * Constructs an animation queue.
      * @param {PIXI.Application} app a reference to the pixi application
@@ -14,8 +14,10 @@ class AnimationQueue {
     startAnimating() {
         app.ticker.add(function(delta) {
             this.queue.forEach(function(request){
+                if (typeof request.to !== 'undefined') {
                 request.sprite.x += i.xDistance*delta;
                 request.sprite.y += i.yDistance*delta;
+              }
             });
             this.queue = this.queue.filter(function(value) {
                 return !(Math.abs(to.x-value.sprite.x) <= i.xDistance*delta);
@@ -24,8 +26,8 @@ class AnimationQueue {
     }
 
     /**
-     * Adds an animation to the queue.
-     * @param {PIXI.Sprite} sprite 
+     * Adds an movement animation to the queue.
+     * @param {PIXI.Sprite} sprite
      * @param {Any} to the location to animate to
      * @param {number} vel the velocity to animate the sprite at, optional
      * @returns void
@@ -45,5 +47,16 @@ class AnimationQueue {
         });
     }
 
+    /**
+     * Adds a size animation to the queue.
+     * @param {PIXI.Sprite} sprite
+     * @param {Any} targetSize the target size multiplier (i.e. 2 would be twice as big)
+     * @param {number} vel the velocity to animate the sprite at, optional
+     * @returns void
+     */
+    addSizeRequest(sprite, targetSize, vel = 1) {
+      let dsx =
+      let dsy =
+    }
 
 }
