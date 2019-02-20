@@ -51,10 +51,11 @@ class AnimationQueue {
      * @param {Any} targetSize the target size multiplier (i.e. 2 would be twice as big)
      * @param {number} vel the velocity to animate the sprite at, optional
      * @returns void
-     */
+
+
     addSizeRequest(sprite, targetSize, vel = 1) {
       let dsx =
       let dsy =
     }
-
+    */
 }

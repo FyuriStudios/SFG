@@ -24,7 +24,6 @@ const aspectRatio = 9/16;
  */
 let Loader = PIXI.loader;
 let Sprite = PIXI.Sprite;
-
 /*
 globals
 */
@@ -42,10 +41,9 @@ let displayElements = {
     clickEventShapes: new PIXI.Container(),
     playerCards: new PIXI.Container(),
     enemyCards: new PIXI.Container(),
-    background: new PIXI.Container()
+    background: new PIXI.Container(),
 };
-
-displayElements.animator = new AnimationQueue(displayElements.app)
+displayElements.animator = new AnimationQueue(displayElements.app);
 
 /**
  * Moves a sprite to the front of a container.
@@ -131,7 +129,7 @@ function processEvent(event) {
     card.anchor.x = .5;
     card.anchor.y = .5;
     displayElements.playerCards.addChild(card);
-    addRequest(card, {x:0, y:0});
+    displayElements.animator.addRequest(card, {x:0, y:0});
         //throw('implement please\n -Hughes')
     }
 }
