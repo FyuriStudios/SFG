@@ -131,6 +131,7 @@ function processEvent(event) {
     card.anchor.x = .5;
     card.anchor.y = .5;
     displayElements.playerCards.addChild(card);
+    addRequest(card, {x:0, y:0});
         //throw('implement please\n -Hughes')
     }
 }

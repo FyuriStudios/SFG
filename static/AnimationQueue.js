@@ -14,10 +14,8 @@ class AnimationQueue {
     startAnimating() {
         app.ticker.add(function(delta) {
             this.queue.forEach(function(request){
-                if (typeof request.to !== 'undefined') {
                 request.sprite.x += i.xDistance*delta;
                 request.sprite.y += i.yDistance*delta;
-              }
             });
             this.queue = this.queue.filter(function(value) {
                 return !(Math.abs(to.x-value.sprite.x) <= i.xDistance*delta);
