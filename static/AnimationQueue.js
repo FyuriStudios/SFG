@@ -32,8 +32,8 @@ class AnimationQueue {
                 let frameDistance = Math.sqrt(framedx*framedx + framedy*framedy);
 
                 if(targetDistance <= frameDistance) {
-                      value.sprite.x = value.target.x;
-                      value.sprite.y = value.target.y;
+                      value.sprite.x = value.to.x;
+                      value.sprite.y = value.to.y;
                       return false;
                     }
                 return true;
