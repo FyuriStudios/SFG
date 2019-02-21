@@ -19,10 +19,26 @@ class AnimationQueue {
                 request.sprite.x += request.xDistance*delta;
                 request.sprite.y += request.yDistance*delta;
             });
+            if (this.queue.length > 0) {
             this.queue = this.queue.filter((value)=>{
-                return !(Math.round(value.sprite.x) == Math.round(value.to.x) && Math.round(value.sprite.y) == Math.round(value.to.y));
+                //return !(Math.round(value.sprite.x) == Math.round(value.to.x) && Math.round(value.sprite.y) == Math.round(value.to.y));
                 //(Math.round(value.sprite.x) == Math.round(value.to.x) && Math.round(value.sprite.y) == Math.round(value.to.y))
+                let targetdx = value.to.x-value.sprite.x;
+                let targetdy = value.to.y-value.sprite.y;
+                let targetDistance = Math.sqrt(targetdx*targetdx+targetdy*targetdy);
+
+                let framedx = value.xDistance * delta;
+                let framedy = value.yDistance * delta;
+                let frameDistance = Math.sqrt(framedx*framedx + framedy*framedy);
+
+                if(targetDistance <= frameDistance) {
+                      value.sprite.x = value.target.x;
+                      value.sprite.y = value.target.y;
+                      return false;
+                    }
+                return true;
             });
+          }
         });
     }
 
