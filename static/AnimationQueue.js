@@ -14,10 +14,8 @@ class AnimationQueue {
      */
     startAnimating() {
         //PIXI's standard ticker
+        var nmq = [];
         this.app.ticker.add((delta)=>{
-            if (typeof nmq == 'undefined') {
-              var nmq = [];
-            }
             if (nmq.length > 0) {
               console.log('runs this');
               this.queue = this.queue.concat(nmq);
