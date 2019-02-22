@@ -13,6 +13,7 @@ class AnimationQueue {
      * The queue doesn't animate until this function is called.
      */
     startAnimating() {
+        //PIXI's standard ticker
         this.app.ticker.add((delta)=>{
 
             this.queue.forEach((request)=>{
@@ -20,10 +21,8 @@ class AnimationQueue {
                 request.sprite.x += request.xDistance*delta;
                 request.sprite.y += request.yDistance*delta;
             });
-            if (this.queue.length > 0) {
+            //filters out complete requests from the queue.
             this.queue = this.queue.filter((value)=>{
-                //return !(Math.round(value.sprite.x) == Math.round(value.to.x) && Math.round(value.sprite.y) == Math.round(value.to.y));
-                //(Math.round(value.sprite.x) == Math.round(value.to.x) && Math.round(value.sprite.y) == Math.round(value.to.y))
                 let targetdx = value.to.x-value.sprite.x;
                 let targetdy = value.to.y-value.sprite.y;
                 let targetDistance = Math.sqrt(targetdx*targetdx+targetdy*targetdy);
@@ -39,7 +38,6 @@ class AnimationQueue {
                     }
                 return true;
             });
-          }
         });
     }
 
@@ -56,7 +54,7 @@ class AnimationQueue {
 
         //find the total distance travelled
         let totalDistance = Math.sqrt(dx*dx + dy*dy);
-
+        //pushes request object in queue array
         this.queue.push({
             sprite: sprite,
             xDistance: dx/totalDistance * vel,
