@@ -132,6 +132,10 @@ function processEvent(event) {
     displayElements.playerCards.addChild(card);
     displayElements.animator.addRequest(card, {x:0, y:0}, 5);
     displayElements.animator.addRequest(card, {x:500, y:450}, 5);
+    setTimeout(()=>{
+      displayElements.animator.cancelRequest(card);
+    },100);
+
     }
 }
 

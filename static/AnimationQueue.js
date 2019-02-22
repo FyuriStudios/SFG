@@ -16,10 +16,8 @@ class AnimationQueue {
         //PIXI's standard ticker
         var nmq = [];
         this.app.ticker.add((delta)=>{
-            if (nmq.length > 0) {
-              this.queue = this.queue.concat(nmq);
-              nmq = [];
-            }
+            nmq.forEach(element => this.queue.push(element));
+            nmq = [];
             this.queue.forEach((request)=>{
                 request.sprite.x += request.xDistance*delta;
                 request.sprite.y += request.yDistance*delta;
@@ -62,6 +60,31 @@ class AnimationQueue {
         });
     }
 
+    cancelRequest(sprite){
+      for (let i = 0; i <= this.queue.length; i++) {
+        if (this.queue[i].sprite !== undefined) {
+        if (this.queue[i].sprite == sprite) {
+          this.queue.splice(i, 1);
+          if (sprite.mq !== undefined && sprite.mq.length > 0) {
+            let push = sprite.mq[0];
+            let dx = push.to.x - sprite.x;
+            let dy = push.to.y - sprite.y;
+
+            //find the total distance travelled
+            let totalDistance = Math.sqrt(dx*dx + dy*dy);
+            this.queue.push({
+                sprite: sprite,
+                xDistance: dx/totalDistance * push.vel,
+                yDistance: dy/totalDistance * push.vel,
+                to: push.to,
+            });
+            sprite.mq.shift();
+            sprite.inQueue = true;
+        }
+      }
+    }
+    }
+  }
     /**
      * Adds an movement animation to the queue.
      * @param {PIXI.Sprite} sprite
