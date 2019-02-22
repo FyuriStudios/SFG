@@ -15,9 +15,7 @@ class AnimationQueue {
     startAnimating() {
         //PIXI's standard ticker
         this.app.ticker.add((delta)=>{
-
             this.queue.forEach((request)=>{
-                console.log(request.xDistance + ' ' + request.yDistance);
                 request.sprite.x += request.xDistance*delta;
                 request.sprite.y += request.yDistance*delta;
             });
@@ -35,7 +33,25 @@ class AnimationQueue {
                       value.sprite.x = value.to.x;
                       value.sprite.y = value.to.y;
                       value.sprite.inQueue = false;
+                      if (value.sprite.mq !== undefined && value.sprite.mq.length > 0) {
+                        let dx = value.sprite.mq[0].to.x - value.sprite.x;
+                        let dy = value.sprite.mq[0].to.y - value.sprite.y;
+
+                        //find the total distance travelled
+                        let totalDistance = Math.sqrt(dx*dx + dy*dy);
+                        AnimationQueue.queue.push({
+                            sprite: value.sprite,
+                            xDistance: dx/totalDistance * value.sprite.mq[0].vel,
+                            yDistance: dy/totalDistance * value.sprite.mq[0].vel,
+                            to: value.sprite.mq[0].to,
+                        });
+                        value.sprite.mq.shift();
+                        console.log(value.sprite.mq);
+                        value.sprite.inQueue = true;
+                        return false;
+                      } else {
                       return false;
+                    }
                     }
                 return true;
             });
