@@ -34,6 +34,7 @@ class AnimationQueue {
                 if(targetDistance <= frameDistance) {
                       value.sprite.x = value.to.x;
                       value.sprite.y = value.to.y;
+                      value.sprite.inQueue = false;
                       return false;
                     }
                 return true;
@@ -55,12 +56,30 @@ class AnimationQueue {
         //find the total distance travelled
         let totalDistance = Math.sqrt(dx*dx + dy*dy);
         //pushes request object in queue array
-        this.queue.push({
-            sprite: sprite,
-            xDistance: dx/totalDistance * vel,
-            yDistance: dy/totalDistance * vel,
-            to: to,
-        });
+        if (sprite.inQueue !== true) {
+          sprite.inQueue = true;
+          this.queue.push({
+              sprite: sprite,
+              xDistance: dx/totalDistance * vel,
+              yDistance: dy/totalDistance * vel,
+              to: to,
+          });
+        } else if (sprite.mq == undefined) {
+          sprite.mq = [];
+          sprite.mq.push({
+              sprite: sprite,
+              xDistance: dx/totalDistance * vel,
+              yDistance: dy/totalDistance * vel,
+              to: to,
+          });
+        } else {
+          sprite.mq.push({
+              sprite: sprite,
+              xDistance: dx/totalDistance * vel,
+              yDistance: dy/totalDistance * vel,
+              to: to,
+          });
+        }
     }
 
     /**
