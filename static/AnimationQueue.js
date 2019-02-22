@@ -17,7 +17,6 @@ class AnimationQueue {
         var nmq = [];
         this.app.ticker.add((delta)=>{
             if (nmq.length > 0) {
-              console.log('runs this');
               this.queue = this.queue.concat(nmq);
               nmq = [];
             }
@@ -52,7 +51,6 @@ class AnimationQueue {
                             yDistance: dy/totalDistance * push.vel,
                             to: push.to,
                         });
-                        console.log(nmq);
                         value.sprite.mq.shift();
                         value.sprite.inQueue = true;
 
