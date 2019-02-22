@@ -99,6 +99,7 @@ function setupDisplay() {
 
     //app.stage.width = innerWidth;//p sure this works
     //app.stage.height = innerHeight;
+    displayElements.animator.startAnimating();
 
 }
 
@@ -130,7 +131,7 @@ function processEvent(event) {
     card.anchor.y = .5;
     displayElements.playerCards.addChild(card);
     displayElements.animator.addRequest(card, {x:0, y:0}, 5);
-    displayElements.animator.startAnimating();
+
         //throw('implement please\n -Hughes')
     }
 }

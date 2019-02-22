@@ -14,8 +14,9 @@ class AnimationQueue {
      */
     startAnimating() {
         this.app.ticker.add((delta)=>{
-            console.log(this.queue);
+
             this.queue.forEach((request)=>{
+                console.log(request.xDistance + ' ' + request.yDistance);
                 request.sprite.x += request.xDistance*delta;
                 request.sprite.y += request.yDistance*delta;
             });
