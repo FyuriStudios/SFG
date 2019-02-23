@@ -61,7 +61,7 @@ class AnimationQueue {
     }
 
     cancelRequest(sprite){
-      for (let i = 0; i <= this.queue.length; i++) {
+      for (let i = 0; i < this.queue.length; i++) {
         if (this.queue[i].sprite !== undefined) {
         if (this.queue[i].sprite == sprite) {
           this.queue.splice(i, 1);
