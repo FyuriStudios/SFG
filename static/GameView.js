@@ -130,11 +130,12 @@ function processEvent(event) {
     card.anchor.x = .5;
     card.anchor.y = .5;
     displayElements.playerCards.addChild(card);
-    displayElements.animator.addRequest(card, {x:0, y:0}, 5); 
-    displayElements.animator.addRequest(card, {x:500, y:450}, 5);
+    displayElements.animator.addMoveRequest(card, {x:0, y:0}, 5);
+    displayElements.animator.addMoveRequest(card, {x:500, y:450}, 5);
+    displayElements.animator.addSizeRequest(card, {x:2,y:2})
     setTimeout(()=>{
-      displayElements.animator.cancelRequest(card);
-    },100);
+      displayElements.animator.cancelMoveRequest(card);
+    },1000);
 
     }
 }
