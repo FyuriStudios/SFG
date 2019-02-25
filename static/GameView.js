@@ -132,7 +132,7 @@ function processEvent(event) {
     displayElements.playerCards.addChild(card);
     displayElements.animator.addMoveRequest(card, {x:0, y:0}, 5);
     displayElements.animator.addMoveRequest(card, {x:500, y:450}, 5);
-    displayElements.animator.addSizeRequest(card, {x:2,y:2})
+    displayElements.animator.addSizeRequest(card, {x:2,y:2}, 60)
     setTimeout(()=>{
       displayElements.animator.cancelMoveRequest(card);
     },1000);

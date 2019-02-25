@@ -15,6 +15,7 @@ class AnimationQueue {
      */
     startAnimating() {
         //PIXI's standard ticker
+        //nmq and nsq are how we get around scope errors.
         var nmq = [];
         var nsq = [];
         this.app.ticker.add((delta)=>{
@@ -27,8 +28,10 @@ class AnimationQueue {
                 request.sprite.y += request.yDistance*delta;
             });
             this.SizeQueue.forEach((request)=>{
-                request.sprite.x += request.xsDistance*delta;
-                request.sprite.y += request.ysDistance*delta;
+
+                request.sprite.scale.x += (request.to.x / request.init.x)/(request.ticks*(60/delta));
+                request.sprite.scale.y += (request.to.y / request.init.y)/(request.ticks*(60/delta));
+                request.ticksDone++;
             });
             //filters out complete requests from the MoveQueue.
             this.MoveQueue = this.MoveQueue.filter((value)=>{
@@ -56,6 +59,7 @@ class AnimationQueue {
                             xDistance: dx/totalDistance * push.vel,
                             yDistance: dy/totalDistance * push.vel,
                             to: push.to,
+                            vel: push.vel
                         });
                         value.sprite.mq.shift();
                         value.sprite.inMoveQueue = true;
@@ -66,33 +70,23 @@ class AnimationQueue {
                 return true;
             });
             this.SizeQueue = this.SizeQueue.filter((value)=>{
-                let targetdx = (value.to.x * value.sprite.scale.x) - value.sprite.scale.x;
-                let targetdy = (value.to.y * value.sprite.scale.y) - value.sprite.scale.y;
-                let targetsDistance = Math.sqrt(targetdx*targetdx+targetdy*targetdy);
-
-                let framedx = value.xsDistance * delta;
-                let framedy = value.ysDistance * delta;
-                let framesDistance = Math.sqrt(framedx*framedx + framedy*framedy);
-
-                if(targetsDistance <= framesDistance) {
+                if(value.ticksDone > value.ticks) {
+                      console.log('hey');
                       value.sprite.scale.x = value.to.x * value.startx;
                       value.sprite.scale.y = value.to.y * value.starty;
                       value.sprite.inSizeQueue = false;
                       if (typeof value.sprite.sq !== 'undefined' && value.sprite.sq.length > 0) {
                         let push = value.sprite.sq[0];
-                        let dsx = (push.to.x * push.sprite.scale.x) - push.sprite.scale.x;
-                        let dsy = (push.to.y * push.sprite.scale.y) - push.sprite.scale.y;
-                        let tsd = Math.sqrt(dsx*dsx + dsy*dsy);
+                        let initsx = push.sprite.scale.x;
+                        let initsy = push.sprite.scale.y;
 
                         //find the total sDistance travelled
                         nsq.push({
-                          sprite: sprite,
-                          xsDistance: dsx/tsd * vel,
-                          ysDistance: dsy/tsd * vel,
-                          startx: push.sprite.scale.x,
-                          starty: push.sprite.scale.y,
+                          sprite: push.sprite,
+                          init: {x:initsx,y:initsy},
                           to: push.to,
-                          vel: push.vel
+                          ticks: push.ticks,
+                          ticksDone: 0
                         });
                         value.sprite.sq.shift();
                         value.sprite.inSizeQueue = true;
@@ -122,6 +116,7 @@ class AnimationQueue {
                 xDistance: dx/totalDistance * push.vel,
                 yDistance: dy/totalDistance * push.vel,
                 to: push.to,
+                vel: push.vel
             });
             sprite.mq.shift();
             sprite.inMoveQueue = true;
@@ -172,41 +167,35 @@ class AnimationQueue {
           });
         }
     }
-    addSizeRequest(sprite, to, vel = 1) {
-      let dsx = (to.x * sprite.scale.x) - sprite.scale.x;
-      let dsy = (to.y * sprite.scale.y) - sprite.scale.y;
-      let tsd = Math.sqrt(dsx*dsx + dsy*dsy);
+    addSizeRequest(sprite, to, ticks = 60) {
+      let initsx = sprite.scale.x;
+      let initsy = sprite.scale.y;
+
       if (sprite.inSizeQueue !== true) {
         sprite.inSizeQueue = true;
         this.SizeQueue.push({
           sprite: sprite,
-          xsDistance: dsx/tsd * vel,
-          ysDistance: dsy/tsd * vel,
-          startx: sprite.scale.x,
-          starty: sprite.scale.y,
+          init: {x:initsx,y:initsy},
           to: to,
-          vel: vel
+          ticks: ticks,
+          ticksDone: 0
         })
       } else if (sprite.sq == undefined) {
         sprite.sq = [];
         sprite.sq.push({
           sprite: sprite,
-          xsDistance: dsx/tsd * vel,
-          ysDistance: dsy/tsd * vel,
-          startx: sprite.scale.x,
-          starty: sprite.scale.y,
+          init: {x:initsx,y:initsy},
           to: to,
-          vel: vel
+          ticks: ticks,
+          ticksDone: 0
         });
       } else {
         sprite.sq.push({
           sprite: sprite,
-          xsDistance: dsx/tsd * vel,
-          ysDistance: dsy/tsd * vel,
-          startx: sprite.scale.x,
-          starty: sprite.scale.y,
+          init: {x:initsx,y:initsy},
           to: to,
-          vel: vel
+          ticks: ticks,
+          ticksDone: 0
         });
       }
 
