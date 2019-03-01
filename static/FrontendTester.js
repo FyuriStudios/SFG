@@ -6,8 +6,6 @@ let test = function() {
     });
 
     GameView.processEvent({
-        type: 'draw card', 
-        player: 1,
-
+        type: 'draw card' 
     });
 };
