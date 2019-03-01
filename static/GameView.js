@@ -14,131 +14,144 @@ A few useful things to note about this file:
 5) Ask me (Hughes) for more clarification if you need it, I'm still working on comments for this file as of 2/9/19.
 */
 
-/*
- * Just a few constants that are useful to have around.
- */
-const aspectRatio = 9/16;
-
-/*
- * aliases
- */
-let Loader = PIXI.loader;
-let Sprite = PIXI.Sprite;
-
-/*
-globals
-*/
-let grass = 420;
-let game = new ClientGame();
-var outputFunc;
-let displayElements = {
-
-    app: new PIXI.Application({//"app" is now part of the displayElements object
-        antialias: true,
-        transparent: true,
-        forceCanvas: false
-    }),
-
-    clickEventShapes: new PIXI.Container(),
-    playerCards: new PIXI.Container,
-    enemyCards: new PIXI.Container
-};
-
-displayElements.animator = new AnimationQueue(displayElements.app)
-
 /**
- * Moves a sprite to the front of a container.
- * There's probably a better way to do this but I'm leaving
- * it as is for now. (I'm also completely unsure if this works)
- * @param {PIXI.Sprite} sprite
- * @param {PIXI.Container} parent
+ * GameView has now become effectively a module. This should make the code much more readable and idiomatic.
  */
-function bringToFront(sprite, parent) {
-    parent.removeChild(sprite);
-    parent.addChild(sprite);
-}
+let GameView = (function() {
 
-function setupDisplay() {
+    /*
+    * Just a few constants that are useful to have around.
+    */
+    const aspectRatio = 9/16;
 
-    let app = displayElements.app; //quick alias
-    //it takes around 50 milliseconds for innerWidth and innerHeight to update, so I added a SetTimeout to compensate -Sean
-    setTimeout(()=>{
-      app.stage.width = innerWidth;
-      app.stage.height = innerHeight;
+    /*
+    * aliases
+    */
+    let Loader = PIXI.loader;
+    let Sprite = PIXI.Sprite;
 
-      app.renderer.resize(innerWidth, innerHeight);
+    /*
+    globals
+    */
+    let grass = 420;
+    let game = new ClientGame();
+    var outputFunc;
+    let displayElements = {
 
-      document.body.appendChild(app.view);
+        app: new PIXI.Application({//"app" is now part of the displayElements object
+            antialias: true,
+            transparent: true,
+            forceCanvas: false
+        }),
 
-    },50);
+        clickEventShapes: new PIXI.Container(),
+        playerCards: new PIXI.Container,
+        enemyCards: new PIXI.Container
+    };
 
-    let textures = {};
+    displayElements.animator = new AnimationQueue(displayElements.app)
 
-    Loader.add('background', '/static/assets/4k-Board.png');
+    return {
 
-    Loader.load((loader, resources) => {
-        textures.background = resources.background.texture;
-    });
+        /**
+        * Moves a sprite to the front of a container.
+        * There's probably a better way to do this but I'm leaving
+        * it as is for now. (I'm also completely unsure if this works)
+        * @param {PIXI.Sprite} sprite
+        * @param {PIXI.Container} parent
+        */
+        bringToFront: function(sprite, parent) {
+            parent.removeChild(sprite);
+            parent.addChild(sprite);
+        },
 
-    Loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
-    Loader.onError.add(() => {}); // called once per errored file
-    Loader.onLoad.add(() => {}); // called once per loaded file
-    Loader.onComplete.add(() => {
-        let background = new PIXI.Sprite(textures.background);
-        background.width = innerWidth;
-        background.height = innerHeight;
+        /**
+         * Sets up the game's display.
+         */
+        setupDisplay: function() {
+
+            let app = displayElements.app; //quick alias
+            //it takes around 50 milliseconds for innerWidth and innerHeight to update, so I added a SetTimeout to compensate -Sean
+            setTimeout(()=>{
+            app.stage.width = innerWidth;
+            app.stage.height = innerHeight;
     
-        background.x = 0;
-        background.y = 0;
-        app.stage.addChild(background);
-    });
+            app.renderer.resize(innerWidth, innerHeight);
+    
+            document.body.appendChild(app.view);
+    
+            },50);
+    
+            let textures = {};
+    
+            Loader.add('background', '/static/assets/4k-Board.png');
+    
+            Loader.load((loader, resources) => {
+                textures.background = resources.background.texture;
+            });
+    
+            Loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
+            Loader.onError.add(() => {}); // called once per errored file
+            Loader.onLoad.add(() => {}); // called once per loaded file
+            Loader.onComplete.add(() => {
+                let background = new PIXI.Sprite(textures.background);
+                background.width = innerWidth;
+                background.height = innerHeight;
+            
+                background.x = 0;
+                background.y = 0;
+                app.stage.addChild(background);
+            });
+    
+            // app.stage.addChild(displayElements.clickEventShapes);
+            // app.stage.addChild(displayElements.playerCards);
+            // app.stage.addChild(displayElements.enemyCards);
+    
+            //app.stage.width = innerWidth;//p sure this works
+            //app.stage.height = innerHeight;
+    
+        },
+    
+        resizeDisplay: function() {
+            let app = displayElements.app;
+            app.stage.width = innerWidth;
+            app.stage.height = innerHeight;
+        
+            app.renderer.resize(innerWidth, innerHeight);
+        
+            document.body.appendChild(app.view);
+        },
 
-    // app.stage.addChild(displayElements.clickEventShapes);
-    // app.stage.addChild(displayElements.playerCards);
-    // app.stage.addChild(displayElements.enemyCards);
+        /**
+         * This function should accept an event object from the backend, generally passed through IO.
+         * It might be useful to move this off to another file, since it's anticipated that there will
+         * be a ton of event types in the future, but for now this is okay.
+         * @param {Event} event the event to be processed
+         */
+        processEvent: function(event) {
+            if(event.type == 'draw card') {
+                throw('implement please\n -Hughes')
+            }
+        },
 
-    //app.stage.width = innerWidth;//p sure this works
-    //app.stage.height = innerHeight;
+        /**
+         * Calling this function allows whatever class calls this to give a function that will be called whenever this class
+         * decides that the user has given input that should be sent to the server. This is so that this file doesn't have to deal with networking.
+         */
+        setupOutput: function (func) {
+            outputFunc = func;
+        }, 
 
-}
+        /**
+         * Call this function locally with output information whenever you want to send user input to the server.
+         * @param {output} output the output to the server
+         */
+        outputEvent: function (output) {
+            if(outputFunc != null) {
+                outputFunc(output);
+            }
+        }
 
-function resizeDisplay() {
-  let app = displayElements.app;
-  app.stage.width = innerWidth;
-  app.stage.height = innerHeight;
-
-  app.renderer.resize(innerWidth, innerHeight);
-
-  document.body.appendChild(app.view);
-}
-
-/**
- * This function should accept an event object from the backend, generally passed through IO.
- * It might be useful to move this off to another file, since it's anticipated that there will
- * be a ton of event types in the future, but for now this is okay.
- * @param {Event} event the event to be processed
- */
-function processEvent(event) {
-    if(event.type == 'draw card') {
-    PIXI.Sprite.fromImage('/static/assets/cards/'+cardName+'.png')
-        //throw('implement please\n -Hughes')
     }
-}
 
-/**
- * Calling this function allows whatever class calls this to give a function that will be called whenever this class
- * decides that the user has given input that should be sent to the server. This is so that this file doesn't have to deal with networking.
- */
-function setupOutput(func) {
-    outputFunc = func;
-}
-
-/**
- * Call this function locally with output information whenever you want to send user input to the server.
- * @param {output} output the output to the server
- */
-function outputEvent(output) {
-    if(outputFunc != null) {
-        outputFunc(output);
-    }
-}
+})();
