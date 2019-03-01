@@ -74,6 +74,15 @@ face as a result of it.
 		amount: int
 	}
 
+6) type: 'humiliate' - humiliation.
+
+	{
+		type: 'humiliate',
+		player: int,
+		targetSide: int,
+		target: int
+	}
+
 */
 
 //require everything that we need, probably this list will expand as we go

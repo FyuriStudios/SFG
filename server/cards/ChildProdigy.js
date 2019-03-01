@@ -3,7 +3,7 @@ var Monster = require('../Monster');
 class ChildProdigy extends Monster{
 
     constructor() {
-        super('monster', 1, 'monster', 'uncommon', 'Child Prodigy', 6, 7, true);
+        super('monster', 1, 'monster', 'uncommon', 'Child Prodigy', 6, 7, 'goon', true);
     }
 
     /*

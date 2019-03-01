@@ -3,7 +3,7 @@ Stuff that this file might be missing:
 - text for cards, like their effect text and such
 - the abilities of cards
 */
-import AssetGetter from './AssetGetter';
+import AssetGetter from './AssetGetter'; //doesn't work at the moment.
 
 /**
  * Defines a generic card. This class shouldn't be constructed directly.

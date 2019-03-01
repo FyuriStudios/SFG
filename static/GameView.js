@@ -129,8 +129,22 @@ let GameView = (function() {
          * @param {Event} event the event to be processed
          */
         processEvent: function(event) {
+            let app = displayElements.app; //quick alias
             if(event.type == 'draw card') {
-                throw('implement please\n -Hughes')
+                let card = PIXI.Sprite.fromImage('/static/assets/cards/Darfler.png'); //we need to get idToCard to work. the image will eventually be idToCard(event.card.id)
+                card.scale.x = (app.stage.width*0.086) / 750;
+                card.scale.y = (app.stage.height*0.225) / 1050;
+                card.x = app.stage.width*0.0565;
+                card.y = app.stage.height*0.885;
+                card.anchor.x = .5;
+                card.anchor.y = .5;
+                displayElements.playerCards.addChild(card);
+                displayElements.animator.addMoveRequest(card, {x:0, y:0}, 5);
+                displayElements.animator.addMoveRequest(card, {x:500, y:450}, 5);
+                displayElements.animator.addSizeRequest(card, {x:2,y:2}, 60)
+                setTimeout(()=>{
+                    displayElements.animator.cancelMoveRequest(card);
+                },1000);
             }
         },
 

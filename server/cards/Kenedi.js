@@ -4,7 +4,7 @@ var constants = require('../../sharedConstants/constants');
 class Kenedi extends Monster {
     
     constructor() {
-        super('monster', 2, 'monster', 'legendary', 8, 2);
+        super('monster', 2, 'monster', 'legendary', 'Kenedi', 8, 2, 'advisor');
         this.hasCardPlayed = true;
 
         this.addCardPlayed({
