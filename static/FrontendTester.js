@@ -1,11 +1,13 @@
-GameView.setupDisplay();
+let test = function() {
+    GameView.setupDisplay();
 
-GameView.setupOutput(function(output) {
-    
-});
+    GameView.setupOutput(function(output) {
+        console.log(output);
+    });
 
-GameView.processEvent({
-    type: 'draw card', 
-    player: 1,
+    GameView.processEvent({
+        type: 'draw card', 
+        player: 1,
 
-})
+    });
+};
