@@ -49,7 +49,28 @@ let GameView = (function() {
         enemyCards: new PIXI.Container()
     };
 
-    displayElements.animator = new AnimationQueue(displayElements.app)
+    displayElements.animator = new AnimationQueue(displayElements.app);
+
+    /**
+     * This function moves all cards in your hand over so that another card can be added to their hand.
+     * I'm not going to handle a hand limit here just because the backend is expected to handle that.
+     * @returns the position to move the new card to
+     */
+    function addCardToHand() {
+        
+    }
+
+    /**
+     * This function clears a space in the player's hand so that another card can be added to it.
+     * @param {number} index the index of the card to be removed, the expectation is that this card has already been
+     * animated away
+     * @returns void
+     */
+    function removeCardFromHand(index) {
+
+    }
+
+
 
     return {
 

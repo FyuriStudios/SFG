@@ -21,7 +21,7 @@ ClientCard = (function() {
             this.name = name;
             this.cost = cost;
             this.currentCost = cost;//current cost and absolute cost are different
-            this.sprite = PIXI.Sprite.from(AssetGetter.getCardAsset(id));
+            this.image = PIXI.Sprite(IDToSprite(backendCard.id));
         }
 
     }
