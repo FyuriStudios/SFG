@@ -4,8 +4,7 @@ let test = function() {
     GameView.setupOutput(function(output) {
         console.log(output);
     });
-
-    GameView.processEvent({
-        type: 'draw card' 
-    });
+    
+    setTimeout(() => {GameView.processEvent({type: 'draw card'});}, 1000)
+    
 };

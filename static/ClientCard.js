@@ -48,7 +48,7 @@ ClientCard = (function() {
     }
 
     return {
-            /**
+        /**
          * This is the outward facing function of the file. It takes in a card object from the backend and adds all of its information plus
          * more information that might be useful to have on the frontend into one big Card object, like a Sprite for the card, then returns it.
          * @param {Card} backendCard

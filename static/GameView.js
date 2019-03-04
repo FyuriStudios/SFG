@@ -45,8 +45,8 @@ let GameView = (function() {
         }),
 
         clickEventShapes: new PIXI.Container(),
-        playerCards: new PIXI.Container,
-        enemyCards: new PIXI.Container
+        playerCards: new PIXI.Container(),
+        enemyCards: new PIXI.Container()
     };
 
     displayElements.animator = new AnimationQueue(displayElements.app)
@@ -66,35 +66,40 @@ let GameView = (function() {
         },
 
         /**
-         * Sets up the game's display.
+         * Sets up the display for the GameView.
          */
         setupDisplay: function() {
 
             let app = displayElements.app; //quick alias
+
+            app.stage.addChild(displayElements.clickEventShapes);
+            app.stage.addChild(displayElements.playerCards);
+            app.stage.addChild(displayElements.enemyCards);
+
             //it takes around 50 milliseconds for innerWidth and innerHeight to update, so I added a SetTimeout to compensate -Sean
             setTimeout(()=>{
-            app.stage.width = innerWidth;
-            app.stage.height = innerHeight;
-    
-            app.renderer.resize(innerWidth, innerHeight);
-    
-            document.body.appendChild(app.view);
-    
+                app.stage.width = innerWidth;
+                app.stage.height = innerHeight;
+        
+                app.renderer.resize(innerWidth, innerHeight);
+        
+                document.body.appendChild(app.view);
             },50);
     
-            let textures = {};
+            displayElements.textures = {};
     
-            Loader.add('background', '/static/assets/4k-Board.png');
+            Loader.add('background', '/static/assets/4k-Board.png').add('darfler', '/static/assets/cards/Darfler.png');
     
             Loader.load((loader, resources) => {
-                textures.background = resources.background.texture;
+                displayElements.textures.background = resources.background.texture;
+                displayElements.textures.darfler = resources.darfler.texture;
             });
     
             Loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             Loader.onError.add(() => {}); // called once per errored file
-            Loader.onLoad.add(() => {}); // called once per loaded file
+            Loader.onLoad.add(() => {console.log('Loaded.')}); // called once per loaded file
             Loader.onComplete.add(() => {
-                let background = new PIXI.Sprite(textures.background);
+                let background = new PIXI.Sprite(displayElements.textures.background);
                 background.width = innerWidth;
                 background.height = innerHeight;
             
@@ -102,14 +107,10 @@ let GameView = (function() {
                 background.y = 0;
                 app.stage.addChild(background);
             });
+
+            displayElements.animator.startAnimating();
     
-            // app.stage.addChild(displayElements.clickEventShapes);
-            // app.stage.addChild(displayElements.playerCards);
-            // app.stage.addChild(displayElements.enemyCards);
-    
-            //app.stage.width = innerWidth;//p sure this works
-            //app.stage.height = innerHeight;
-    
+            this.resizeDisplay();
         },
     
         resizeDisplay: function() {
@@ -131,20 +132,17 @@ let GameView = (function() {
         processEvent: function(event) {
             let app = displayElements.app; //quick alias
             if(event.type == 'draw card') {
-                let card = PIXI.Sprite.fromImage('/static/assets/cards/Darfler.png'); //we need to get idToCard to work. the image will eventually be idToCard(event.card.id)
-                card.scale.x = (app.stage.width*0.086) / 750;
-                card.scale.y = (app.stage.height*0.225) / 1050;
+                let card = new PIXI.Sprite(displayElements.textures.darfler);
+                card.width = app.stage.width * .086;
+                card.height = app.stage.height * .225;
                 card.x = app.stage.width*0.0565;
                 card.y = app.stage.height*0.885;
                 card.anchor.x = .5;
                 card.anchor.y = .5;
-                displayElements.playerCards.addChild(card);
+                app.stage.addChild(card);
                 displayElements.animator.addMoveRequest(card, {x:0, y:0}, 5);
                 displayElements.animator.addMoveRequest(card, {x:500, y:450}, 5);
-                displayElements.animator.addSizeRequest(card, {x:2,y:2}, 60)
-                setTimeout(()=>{
-                    displayElements.animator.cancelMoveRequest(card);
-                },1000);
+                //displayElements.animator.addSizeRequest(card, {x:2,y:2}, 60);
             }
         },
 
