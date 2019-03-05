@@ -21,7 +21,9 @@ ClientCard = (function() {
             this.name = name;
             this.cost = cost;
             this.currentCost = cost;//current cost and absolute cost are different
-            this.image = PIXI.Sprite(IDToSprite(backendCard.id));
+            this.sprite = IDToImage.fromID(id);
+            this.sprite.anchor.x = .5;
+            this.sprite.anchor.y = .5;
         }
 
     }
@@ -65,6 +67,21 @@ ClientCard = (function() {
             else {
                 throw('invalid monster type');
             }
+        },
+
+        test: function() {
+            return new Monster(
+                {
+                    type: 'monster',
+                    id: -1,
+                    tokenType: 'monster',
+                    rarity: 'common',
+                    name: 'Test Card',
+                    cost: 3,
+                    power: 3,
+                    hasDefender: false,
+                    isStatic: false
+                });
         }
     };
 })();
