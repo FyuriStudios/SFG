@@ -39,33 +39,33 @@ let GameView = (function() {
     game.init(1, [], 10, 10);
 
     var outputFunc;
-    let displayElements = {
+    
 
-        app: new PIXI.Application({//"app" is now part of the displayElements object
+    let app = new PIXI.Application({//"app" is now part of the displayElements object
             antialias: true,
             transparent: true,
             forceCanvas: false
-        }),
+    });
 
-        clickEventShapes: new PIXI.Container(),
-        playerCards: new PIXI.Container(),
-        enemyCards: new PIXI.Container()
-    };
+    let clickEventShapes = new PIXI.Container();
+    let playerCards = new PIXI.Container();
+    let enemyCards = new PIXI.Container();
+    
 
-    displayElements.animator = new AnimationQueue(displayElements.app);
+    animator = new AnimationQueue(app);
 
     /**
      * Resizes a card for its normal size (not being hovered over).
      * @param {Card} card 
      */
     function smallSizeCardSprite(card) {
-        card.width = displayElements.app.stage.width * .086;
-        card.height = displayElements.app.stage.height * .225;
+        card.width = app.stage.width * .086;
+        card.height = app.stage.height * .225;
     }
 
     function hoverSizeCardSprite(card) {
-        card.width = displayElements.app.stage.width * .172;
-        card.height = displayElements.app.stage.height * .450;
+        card.width = app.stage.width * .172;
+        card.height = app.stage.height * .450;
     }
 
     function generateCard(x, y) {
@@ -74,18 +74,43 @@ let GameView = (function() {
 
         smallSizeCardSprite(card.sprite);
 
-        card.sprite.x = x;
-        card.sprite.y = y;
+        let spriteContainer = new PIXI.Container();
+        spriteContainer.width = card.sprite.width;
+        spriteContainer.height = card.sprite.height;
 
-        displayElements.app.stage.addChild(card.sprite);
+        spriteContainer.x = x;
+        spriteContainer.y = y;
+
+        spriteContainer.interactive = true;
+        spriteContainer.interactiveChildren = true;
+
+        spriteContainer.sortableChildren = true;
 
         card.sprite.interactive = true;
+
+        let costText = new PIXI.Text(card.cost, {fontFamily: 'Helvetica', fontSize: 24, fill: 0x000000, align: 'center'});
+
+        costText.interactive = true;
+
+        costText.anchor.x = .5;
+        costText.anchor.y = .5;
+
+        costText.x = spriteContainer.width * .25;
+        costText.y = spriteContainer.height * .4;
+
+        spriteContainer.addChild(card.sprite);
+
+        spriteContainer.addChild(costText);
+
+        card.sprite = spriteContainer;
+
+        app.stage.addChild(spriteContainer);
 
         card.sprite.on('mouseover', function(eventObj) {
             if(this.inMoveQueue)
                 return;
             
-            this.y -= .113*displayElements.app.stage.height;
+            this.y -= .113*app.stage.height;
             
             hoverSizeCardSprite(this);
 
@@ -93,10 +118,10 @@ let GameView = (function() {
 
             game.hand.forEach(function(card) {
                 if(card.sprite.x > temp.x) {
-                    card.sprite.x += displayElements.app.stage.width * .086;
+                    card.sprite.x += app.stage.width * .086;
                 }
                 else if(card.sprite.x < temp.x) {
-                    card.sprite.x -= displayElements.app.stage.width * .086;
+                    card.sprite.x -= app.stage.width * .086;
                 }
             })
         });
@@ -105,7 +130,7 @@ let GameView = (function() {
             if(this.inMoveQueue)
                 return;
 
-            this.y += .113*displayElements.app.stage.height;
+            this.y += .113*app.stage.height;
 
             smallSizeCardSprite(this);
 
@@ -113,9 +138,9 @@ let GameView = (function() {
 
             game.hand.forEach(function(card) {
                 if(card.sprite.x > temp.x)
-                    card.sprite.x -= displayElements.app.stage.width * .086;
+                    card.sprite.x -= app.stage.width * .086;
                 else if(card.sprite.x < temp.x)
-                    card.sprite.x += displayElements.app.stage.width * .086;
+                    card.sprite.x += app.stage.width * .086;
             });
         });
 
@@ -133,12 +158,11 @@ let GameView = (function() {
      */
     function fixOwnHandSpacing() {
         let cards = game.hand;
-        let animator = displayElements.animator; //aliases so I don't have to write the same lines of code a bunch of times
 
-        let leftBound = .1135 * displayElements.app.stage.width; //the left boundary of the player's hand
-        let rightBound = .4385 * displayElements.app.stage.width;
+        let leftBound = .1135 * app.stage.width; //the left boundary of the player's hand
+        let rightBound = .4385 * app.stage.width;
 
-        let upperBound = .8320 * displayElements.app.stage.height;
+        let upperBound = .8320 * app.stage.height;
 
         let cardSpacingDivisor = (rightBound - leftBound) / (cards.length + 1); //here just figuring out the correct spacing between cards.
 
@@ -174,8 +198,6 @@ let GameView = (function() {
                 console.log('y: ' + event.clientY);
             })
 
-            let app = displayElements.app; //quick alias
-
             //it takes around 50 milliseconds for innerWidth and innerHeight to update, so I added a SetTimeout to compensate -Sean
             setTimeout(()=>{
                 app.stage.width = innerWidth;
@@ -186,20 +208,20 @@ let GameView = (function() {
                 document.body.appendChild(app.view);
             },50);
     
-            displayElements.textures = {};
+            textures = {};
     
             Loader.add('background', '/static/assets/4k-Board.png').add('darfler', '/static/assets/cards/Darfler.png');
     
             Loader.load((loader, resources) => {
-                displayElements.textures.background = resources.background.texture;
-                displayElements.textures.darfler = resources.darfler.texture;
+                textures.background = resources.background.texture;
+                textures.darfler = resources.darfler.texture;
             });
     
             Loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             Loader.onError.add(() => {}); // called once per errored file
             Loader.onLoad.add(() => {console.log('Loaded.')}); // called once per loaded file
             Loader.onComplete.add(() => {
-                let background = new PIXI.Sprite(displayElements.textures.background);
+                let background = new PIXI.Sprite(textures.background);
                 background.width = innerWidth;
                 background.height = innerHeight;
             
@@ -208,18 +230,17 @@ let GameView = (function() {
                 app.stage.addChild(background);
             });
 
-            app.stage.addChild(displayElements.clickEventShapes);
-            app.stage.addChild(displayElements.playerCards);
-            app.stage.addChild(displayElements.enemyCards);
+            app.stage.addChild(clickEventShapes);
+            app.stage.addChild(playerCards);
+            app.stage.addChild(enemyCards);
 
 
-            displayElements.animator.startAnimating();
+            animator.startAnimating();
     
             this.resizeDisplay();
         },
     
         resizeDisplay: function() {
-            let app = displayElements.app;
             app.stage.width = innerWidth;
             app.stage.height = innerHeight;
         
@@ -235,16 +256,15 @@ let GameView = (function() {
          * @param {Event} event the event to be processed
          */
         processEvent: function(event) {
-            let app = displayElements.app; //quick alias
             if(event.type == 'draw card') {
 
                 let card = generateCard(app.stage.width*0.0565, app.stage.height*0.885);
                 game.hand.push(card);
 
-                displayElements.app.stage.addChild(card.sprite);
-                displayElements.animator.addMoveRequest(card.sprite, {x: innerWidth/2, y: innerHeight/2}, 5);
+                app.stage.addChild(card.sprite);
+                animator.addMoveRequest(card.sprite, {x: innerWidth/2, y: innerHeight/2}, 5);
                 fixOwnHandSpacing();
-                //displayElements.animator.addSizeRequest(card, {x:2,y:2}, 60);
+                //animator.addSizeRequest(card, {x:2,y:2}, 60);
             }
             if(event.type == 'throw away card') {
                 let temp = game.hand.pop();
