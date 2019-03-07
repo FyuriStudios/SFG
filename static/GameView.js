@@ -88,21 +88,11 @@ let GameView = (function() {
 
         card.sprite.interactive = true;
 
-        let costText = new PIXI.Text(card.cost, {fontFamily: 'Helvetica', fontSize: 24, fill: 0x000000, align: 'center'});
-
-        costText.interactive = true;
-
-        costText.anchor.x = .5;
-        costText.anchor.y = .5;
-
-        costText.x = spriteContainer.width * .25;
-        costText.y = spriteContainer.height * .4;
-
         spriteContainer.addChild(card.sprite);
 
-        spriteContainer.addChild(costText);
-
         card.sprite = spriteContainer;
+
+        card.updateCostText();
 
         app.stage.addChild(spriteContainer);
 

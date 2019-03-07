@@ -26,6 +26,20 @@ ClientCard = (function() {
             this.sprite.anchor.y = .5;
         }
 
+        updateCostText() {
+            this.costText = new PIXI.Text(this.cost, {fontFamily: 'Helvetica', fontSize: 100, fill: 0x000000, align: 'center'});
+            this.costText.interactive = true;
+
+            this.costText.anchor.x = .5;
+            this.costText.anchor.y = .5;
+            this.costText.width = this.sprite.width * .1;
+            this.costText.height = this.sprite.height * .13;
+            this.costText.x += this.sprite.width * .32;
+            this.costText.y -= this.sprite.height * .435;
+
+            this.sprite.addChild(this.costText);
+        }
+
     }
     /**
      * Defines a generic monster.
