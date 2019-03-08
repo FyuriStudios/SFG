@@ -27,15 +27,15 @@ ClientCard = (function() {
         }
 
         updateCostText() {
-            this.costText = new PIXI.Text(this.cost, {fontFamily: 'Helvetica', fontSize: 100, fill: 0x000000, align: 'center'});
+            this.costText = new PIXI.Text(this.cost, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
             this.costText.interactive = true;
 
             this.costText.anchor.x = .5;
             this.costText.anchor.y = .5;
-            this.costText.width = this.sprite.width * .1;
-            this.costText.height = this.sprite.height * .13;
-            this.costText.x += this.sprite.width * .32;
-            this.costText.y -= this.sprite.height * .435;
+            this.costText.width = this.sprite.width * .09;
+            this.costText.height = this.sprite.height * .12;
+            this.costText.x -= this.sprite.width * .415;
+            this.costText.y -= this.sprite.height * .425;
 
             this.sprite.addChild(this.costText);
         }

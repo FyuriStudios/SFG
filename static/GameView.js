@@ -54,6 +54,44 @@ let GameView = (function() {
 
     animator = new AnimationQueue(app);
 
+    let mouseOverCard = function(eventObj) {
+        if(this.inMoveQueue)
+            return;
+        
+        //this.y -= .113*app.stage.height;
+
+        animator.addMoveRequest(this, {x: this.x, y: this.y - .113*app.stage.height}, 10);
+        
+        hoverSizeCardSprite(this);
+
+        let temp = this;
+
+        game.hand.forEach(function(card) {
+            if(card.sprite.x > temp.x)
+                animator.addMoveRequest(card.sprite, {x: card.sprite.x + app.stage.width * .086, y: card.sprite.y}, 15);
+            else if(card.sprite.x < temp.x)
+                animator.addMoveRequest(card.sprite, {x: card.sprite.x - app.stage.width * .086, y: card.sprite.y}, 15);
+        });
+    }
+
+    let mouseOutCard = function(eventObj) {
+        if(this.inMoveQueue)
+            return;
+
+        animator.addMoveRequest(this, {x: this.x, y: this.y + .113*app.stage.height}, 10);
+
+        smallSizeCardSprite(this);
+
+        let temp = this;
+
+        game.hand.forEach(function(card) {
+            if(card.sprite.x > temp.x)
+                animator.addMoveRequest(card.sprite, {x: card.sprite.x - app.stage.width * .086, y: card.sprite.y}, 15);
+            else if(card.sprite.x < temp.x)
+                animator.addMoveRequest(card.sprite, {x: card.sprite.x + app.stage.width * .086, y: card.sprite.y}, 15);
+        });
+    }
+
     /**
      * Resizes a card for its normal size (not being hovered over).
      * @param {Card} card 
@@ -61,6 +99,8 @@ let GameView = (function() {
     function smallSizeCardSprite(card) {
         card.width = app.stage.width * .086;
         card.height = app.stage.height * .225;
+        console.log('app height:' + app.stage.height);
+        console.log('card height:' + card.height);
     }
 
     function hoverSizeCardSprite(card) {
@@ -96,43 +136,9 @@ let GameView = (function() {
 
         app.stage.addChild(spriteContainer);
 
-        card.sprite.on('mouseover', function(eventObj) {
-            if(this.inMoveQueue)
-                return;
-            
-            this.y -= .113*app.stage.height;
-            
-            hoverSizeCardSprite(this);
+        card.sprite.on('mouseover', mouseOverCard);
 
-            let temp = this;
-
-            game.hand.forEach(function(card) {
-                if(card.sprite.x > temp.x) {
-                    card.sprite.x += app.stage.width * .086;
-                }
-                else if(card.sprite.x < temp.x) {
-                    card.sprite.x -= app.stage.width * .086;
-                }
-            })
-        });
-
-        card.sprite.on('mouseout', function(eventObj) {
-            if(this.inMoveQueue)
-                return;
-
-            this.y += .113*app.stage.height;
-
-            smallSizeCardSprite(this);
-
-            let temp = this;
-
-            game.hand.forEach(function(card) {
-                if(card.sprite.x > temp.x)
-                    card.sprite.x -= app.stage.width * .086;
-                else if(card.sprite.x < temp.x)
-                    card.sprite.x += app.stage.width * .086;
-            });
-        });
+        card.sprite.on('mouseout', mouseOutCard);
 
         return card;
     }
