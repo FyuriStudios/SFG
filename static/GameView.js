@@ -92,6 +92,62 @@ let GameView = (function() {
         });
     }
 
+    /*
+    I reused a bunch of the code from the PIXI.JS demo. Sue me.
+    */
+    let onDragStart = function(eventObj) {
+
+        this.originalPos = {
+            x: this.x,
+            y: this.y
+        };
+
+        this.dragData = eventObj.data;
+        this.dragging = true;
+    }
+
+    let onDragMove = function() {
+
+        if(this.dragging) {
+            let pos = this.dragData.getLocalPosition(this.parent);
+            this.x = pos.x;
+            this.y = pos.y;
+        }
+    }
+
+    let onDragEnd = function(eventObj) {
+
+        this.dragging = false;
+        this.dragData = null;
+
+        this.x = this.originalPos.x;
+        this.y = this.originalPos.y;
+
+        let fieldBounds = {
+            x: .147 * app.stage.width,
+            y: .306 * app.stage.height,
+            width: .706 * app.stage.width,
+            height: .355 * app.stage.height
+        };
+
+        if (this.x < fieldBounds.x + fieldBounds.width && 
+            this.x + this.width > fieldBounds.x && 
+            this.y > fieldBounds.y + fieldBounds.height && 
+            this.y + this.height < fieldBounds.y) 
+        {
+            console.log('intersection');
+            let handLoc;
+            game.hand.forEach(element, index => element.sprite == this? handLoc = index: null);
+            let playType = card.type == 'monster'?'play monster':'play spell'
+            outputFunc({
+                type: playType, 
+                card: card,
+                handLoc: handLoc
+            });
+
+        }
+    }
+
     /**
      * Resizes a card for its normal size (not being hovered over).
      * @param {Card} card 
@@ -99,8 +155,6 @@ let GameView = (function() {
     function smallSizeCardSprite(card) {
         card.width = app.stage.width * .086;
         card.height = app.stage.height * .225;
-        console.log('app height:' + app.stage.height);
-        console.log('card height:' + card.height);
     }
 
     function hoverSizeCardSprite(card) {
@@ -139,6 +193,14 @@ let GameView = (function() {
         card.sprite.on('mouseover', mouseOverCard);
 
         card.sprite.on('mouseout', mouseOutCard);
+
+        card.sprite.on('pointerdown', onDragStart);
+
+        card.sprite.on('pointerup', onDragEnd);
+
+        card.sprite.on('pointerupoutside', onDragEnd);
+        
+        card.sprite.on('pointermove', onDragMove);
 
         return card;
     }
