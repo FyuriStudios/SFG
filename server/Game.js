@@ -359,20 +359,21 @@ class Game {
     /**
      * The helper function to deal with attacks. Use this when a player asks to attack.
      * This function should also deal with invalid attacks.
-	 *
-	 * @param {*} input - the input from the player detailing what's gonna happen with the attack.
-	 * @param {*} eventChain - the chain of events that this function should append to.
-	 *
+		 *
+		 * @param {*} input - the input from the player detailing what's gonna happen with the attack.
+		 * @param {*} eventChain - the chain of events that this function should append to.
+		 *
      */
     attack(input, eventChain) {
 
-		if((input.attackerLoc >= this.currentPlayer.board.length || input.attackerLoc == -1) || input.targetLoc >= this.currentPlayer.board.length) { //just real quick making sure that the locations are valid
-			return;
-		}
+			if((input.attackerLoc >= this.currentPlayer.board.length || input.attackerLoc == -1) || input.targetLoc >= this.currentPlayer.board.length) { //just real quick making sure that the locations are valid
+				return;
+			}
 
-		if(this.currentPlayer.board[input.attackerLoc].attack(otherPlayer, this.currentPlayer, input.targetLoc, eventChain)) {
-			killDead(eventChain);
-		}
+			if(this.currentPlayer.board[input.attackerLoc].attack(otherPlayer, this.currentPlayer, input.targetLoc, eventChain)) {
+				killDead(eventChain);
+			}
+
     }
 
 	/**
@@ -380,7 +381,7 @@ class Game {
 	 * @param {*} input - a JSON object containing the information required to do this action.
 	 * @param {*} eventChain - the chain of events.
 	 */
-    playCard(input, eventChain) {
+  playCard(input, eventChain) {
 
 		var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
 		if(input.cardLocation > temp.hand.length || input.cardLocation < 0) {
@@ -398,7 +399,7 @@ class Game {
 
 		var event = { //now that we're sure the event is going to happen
 			view: 1,
-			type: 'card played',
+			type: 'play card',
 			locationInHand: input.toPlay,
 			cost: toPlay.playCost,
 			tokenType: toPlay.tokenType,
@@ -422,7 +423,7 @@ class Game {
 			//TODO: add code here
 		}
 
-    }
+  }
 
     startTurn(eventChain) {
 

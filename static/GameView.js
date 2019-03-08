@@ -49,7 +49,7 @@ let GameView = (function() {
 
     let clickEventShapes = new PIXI.Container();
     let playerCards = new PIXI.Container();
-    let enemyCards = new PIXI.Container();
+    let enemyHandSprites = [];
     
 
     animator = new AnimationQueue(app);
@@ -165,6 +165,12 @@ let GameView = (function() {
         card.height = app.stage.height * .450;
     }
 
+    /**
+     * Generates the sprite container for a card. This function currently only will generate a test card,
+     * but the intent is for it to do more in the future.
+     * @param {number} x 
+     * @param {number} y 
+     */
     function generateCard(x, y) {
         
         let card = ClientCard.test();
@@ -235,6 +241,10 @@ let GameView = (function() {
         });
     }
 
+    function drawEnemyHand() {
+
+    }
+
     return {
 
         /**
@@ -271,11 +281,11 @@ let GameView = (function() {
     
             textures = {};
     
-            Loader.add('background', '/static/assets/4k-Board.png').add('darfler', '/static/assets/cards/Darfler.png');
+            Loader.add('background', '/static/assets/4k-Board.png').add('cardBack', '/static/assets/cardBack.png');
     
             Loader.load((loader, resources) => {
                 textures.background = resources.background.texture;
-                textures.darfler = resources.darfler.texture;
+                textures.cardBack = resources.cardBack.texture;
             });
     
             Loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
@@ -319,18 +329,18 @@ let GameView = (function() {
         processEvent: function(event) {
             if(event.type == 'draw card') {
 
-                let card = generateCard(app.stage.width*0.0565, app.stage.height*0.885);
-                game.hand.push(card);
+                if(event.player == game.id) {
+                    let card = generateCard(app.stage.width*0.0565, app.stage.height*0.885);
+                    game.hand.push(card);
 
-                app.stage.addChild(card.sprite);
-                animator.addMoveRequest(card.sprite, {x: innerWidth/2, y: innerHeight/2}, 5);
-                fixOwnHandSpacing();
-                //animator.addSizeRequest(card, {x:2,y:2}, 60);
-            }
-            if(event.type == 'throw away card') {
-                let temp = game.hand.pop();
-                temp.sprite.destroy();
-                fixOwnHandSpacing();
+                    app.stage.addChild(card.sprite);
+                    animator.addMoveRequest(card.sprite, {x: innerWidth/2, y: innerHeight/2}, 5); //TODO: add card id handling
+                    fixOwnHandSpacing();
+                } else {
+                    let card = cardBack
+                }
+
+                
             }
         },
 
