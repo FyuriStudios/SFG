@@ -97,6 +97,9 @@ let GameView = (function() {
     */
     let onDragStart = function(eventObj) {
 
+        if(this.inMoveQueue)
+            return;
+
         this.originalPos = {
             x: this.x,
             y: this.y
@@ -120,9 +123,6 @@ let GameView = (function() {
         this.dragging = false;
         this.dragData = null;
 
-        this.x = this.originalPos.x;
-        this.y = this.originalPos.y;
-
         let fieldBounds = {
             x: .147 * app.stage.width,
             y: .306 * app.stage.height,
@@ -130,22 +130,25 @@ let GameView = (function() {
             height: .355 * app.stage.height
         };
 
-        if (this.x < fieldBounds.x + fieldBounds.width && 
-            this.x + this.width > fieldBounds.x && 
-            this.y > fieldBounds.y + fieldBounds.height && 
-            this.y + this.height < fieldBounds.y) 
+        if (!(this.x > fieldBounds.x + fieldBounds.width || 
+            this.x + this.width < fieldBounds.x || 
+            this.y > fieldBounds.y + fieldBounds.height || 
+            this.y + this.height < fieldBounds.y)) 
         {
             console.log('intersection');
             let handLoc;
-            game.hand.forEach(element, index => element.sprite == this? handLoc = index: null);
-            let playType = card.type == 'monster'?'play monster':'play spell'
+            game.hand.forEach((element, index) => element.sprite == this? handLoc = index: null);
+            let playType = game.hand[handLoc].type == 'monster'?'play monster':'play spell';
             outputFunc({
                 type: playType, 
-                card: card,
+                card: game.hand[handLoc],
                 handLoc: handLoc
             });
 
         }
+
+        this.x = this.originalPos.x;
+        this.y = this.originalPos.y;
     }
 
     /**
