@@ -54,7 +54,7 @@ let GameView = (function() {
 
     animator = new AnimationQueue(app);
 
-    let mouseOverCard = function(eventObj) {
+    let mouseOverCardInHand = function(eventObj) {
         if(this.inMoveQueue)
             return;
         
@@ -62,7 +62,7 @@ let GameView = (function() {
 
         animator.addMoveRequest(this, {x: this.x, y: this.y - .113*app.stage.height}, 10);
         
-        hoverSizeCardSprite(this);
+        hoverSizeCardInHandSprite(this);
 
         let temp = this;
 
@@ -74,13 +74,13 @@ let GameView = (function() {
         });
     }
 
-    let mouseOutCard = function(eventObj) {
+    let mouseOutCardInHand = function(eventObj) {
         if(this.inMoveQueue)
             return;
 
         animator.addMoveRequest(this, {x: this.x, y: this.y + .113*app.stage.height}, 10);
 
-        smallSizeCardSprite(this);
+        smallSizeCardInHandSprite(this);
 
         let temp = this;
 
@@ -95,7 +95,7 @@ let GameView = (function() {
     /*
     I reused a bunch of the code from the PIXI.JS demo. Sue me.
     */
-    let onDragStart = function(eventObj) {
+    let onDragFromHandStart = function(eventObj) {
 
         if(this.inMoveQueue)
             return;
@@ -109,7 +109,7 @@ let GameView = (function() {
         this.dragging = true;
     }
 
-    let onDragMove = function() {
+    let onDragFromHandMove = function() {
 
         if(this.dragging) {
             let pos = this.dragData.getLocalPosition(this.parent);
@@ -118,7 +118,7 @@ let GameView = (function() {
         }
     }
 
-    let onDragEnd = function(eventObj) {
+    let onDragFromHandEnd = function(eventObj) {
 
         this.dragging = false;
         this.dragData = null;
@@ -141,7 +141,7 @@ let GameView = (function() {
             let playType = game.hand[handLoc].type == 'monster'?'play monster':'play spell';
             outputFunc({
                 type: playType, 
-                card: game.hand[handLoc],
+                card: game.hand[handLoc], //this needs cleaning up. The frontend isn't necessarily recieving exactly this.
                 handLoc: handLoc
             });
 
@@ -155,12 +155,12 @@ let GameView = (function() {
      * Resizes a card for its normal size (not being hovered over).
      * @param {Card} card 
      */
-    function smallSizeCardSprite(card) {
+    function smallSizeCardInHandSprite(card) {
         card.width = app.stage.width * .086;
         card.height = app.stage.height * .225;
     }
 
-    function hoverSizeCardSprite(card) {
+    function hoverSizeCardInHandSprite(card) {
         card.width = app.stage.width * .172;
         card.height = app.stage.height * .450;
     }
@@ -169,7 +169,7 @@ let GameView = (function() {
         
         let card = ClientCard.test();
 
-        smallSizeCardSprite(card.sprite);
+        smallSizeCardInHandSprite(card.sprite);
 
         let spriteContainer = new PIXI.Container();
         spriteContainer.width = card.sprite.width;
@@ -193,17 +193,17 @@ let GameView = (function() {
 
         app.stage.addChild(spriteContainer);
 
-        card.sprite.on('mouseover', mouseOverCard);
+        card.sprite.on('mouseover', mouseOverCardInHand);
 
-        card.sprite.on('mouseout', mouseOutCard);
+        card.sprite.on('mouseout', mouseOutCardInHand);
 
-        card.sprite.on('pointerdown', onDragStart);
+        card.sprite.on('pointerdown', onDragFromHandStart);
 
-        card.sprite.on('pointerup', onDragEnd);
+        card.sprite.on('pointerup', onDragFromHandEnd);
 
-        card.sprite.on('pointerupoutside', onDragEnd);
+        card.sprite.on('pointerupoutside', onDragFromHandEnd);
         
-        card.sprite.on('pointermove', onDragMove);
+        card.sprite.on('pointermove', onDragFromHandMove);
 
         return card;
     }
