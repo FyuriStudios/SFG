@@ -19,40 +19,41 @@ A few useful things to note about this file:
  */
 let GameView = (function() {
 
-    /*
-    * Just a few constants that are useful to have around.
-    */
-    const aspectRatio = 9/16;
-
-    /*
-    * aliases
-    */
-    let Loader = PIXI.loader;
-    let Sprite = PIXI.Sprite;
 
     /*
     globals
     */
     let grass = 420;
     let game = new ClientGame();
+    let textures = {};
 
+    /*
+    Test initializing the game. I'll change this later but need this for now just in case.
+    */
     game.init(1, [], 10, 10);
 
+    /*
+    This is the function that player output should be sent through. This file isn't going to handle networking.
+    */
     var outputFunc;
     
-
-    let app = new PIXI.Application({//"app" is now part of the displayElements object
+    let app = new PIXI.Application({
             antialias: true,
             transparent: true,
             forceCanvas: false
     });
 
-    let clickEventShapes = new PIXI.Container();
-    let playerCards = new PIXI.Container();
+    /*
+    A list of the enemy's card sprites. This is useful for when I need direct references to them in terms of their location and such.
+    */
     let enemyHandSprites = [];
-    
 
     animator = new AnimationQueue(app);
+
+    /*
+    All variables should be put above. Below this are the public and private functions of this module, so enter at your own risk.
+    A lot of these aren't commented right now either.
+    */
 
     let mouseOverCardInHand = function(eventObj) {
         if(this.inMoveQueue)
@@ -279,19 +280,17 @@ let GameView = (function() {
                 document.body.appendChild(app.view);
             },50);
     
-            textures = {};
+            PIXI.Loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardBack.png');
     
-            Loader.add('background', '/static/assets/4k-Board.png').add('cardBack', '/static/assets/cardBack.png');
-    
-            Loader.load((loader, resources) => {
+            PIXI.Loader.load((loader, resources) => {
                 textures.background = resources.background.texture;
                 textures.cardBack = resources.cardBack.texture;
             });
     
-            Loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
-            Loader.onError.add(() => {}); // called once per errored file
-            Loader.onLoad.add(() => {console.log('Loaded.')}); // called once per loaded file
-            Loader.onComplete.add(() => {
+            PIXI.Loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
+            PIXI.Loader.onError.add(() => {}); // called once per errored file
+            PIXI.Loader.onLoad.add(() => {console.log('Loaded.')}); // called once per loaded file
+            PIXI.Loader.onComplete.add(() => {
                 let background = new PIXI.Sprite(textures.background);
                 background.width = innerWidth;
                 background.height = innerHeight;
@@ -301,10 +300,20 @@ let GameView = (function() {
                 app.stage.addChild(background);
             });
 
-            app.stage.addChild(clickEventShapes);
-            app.stage.addChild(playerCards);
-            app.stage.addChild(enemyCards);
+            let ownDeck = new PIXI.Sprite(textures.cardBack);//TODO: add on hover card count
+            app.stage.addChild(ownDeck);
+            ownDeck.x = .0146 * app.stage.width;
+            ownDeck.y = .0026 * app.stage.height;
+            ownDeck.height = .754 * app.stage.height;
+            ownDeck.width = .0827 * app.stage.width;
 
+
+            let enemyDeck = new PIXI.Sprite(textures.cardBack);
+            app.stage.addChild(enemyDeck);
+            enemyDeck.x = .0146 * app.stage.width;
+            enemyDeck.y = .0026 & app.stage.height;
+            enemyDeck.height = .211 * app.stage.height;
+            enemyDeck.width = .0827 * app.stage.width;
 
             animator.startAnimating();
     
