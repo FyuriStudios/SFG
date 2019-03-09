@@ -28,11 +28,6 @@ let GameView = (function() {
     let textures = {};
 
     /*
-    Test initializing the game. I'll change this later but need this for now just in case.
-    */
-    game.init(1, [], 10, 10);
-
-    /*
     This is the function that player output should be sent through. This file isn't going to handle networking.
     */
     var outputFunc;
@@ -265,6 +260,11 @@ let GameView = (function() {
          */
         setupDisplay: function() {
 
+            /*
+            Test initializing the game. I'll change this later but need this for now just in case.
+            */
+            game.init(1, [], 10, 10);
+
             document.body.addEventListener('mousedown', function(event) {
                 console.log('x: ' + event.clientX);
                 console.log('y: ' + event.clientY);
@@ -280,17 +280,19 @@ let GameView = (function() {
                 document.body.appendChild(app.view);
             },50);
     
-            PIXI.Loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardBack.png');
+            let loader = PIXI.loader;
+
+            loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardBack.png');
     
-            PIXI.Loader.load((loader, resources) => {
+            loader.load((loader, resources) => {
                 textures.background = resources.background.texture;
                 textures.cardBack = resources.cardBack.texture;
             });
     
-            PIXI.Loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
-            PIXI.Loader.onError.add(() => {}); // called once per errored file
-            PIXI.Loader.onLoad.add(() => {console.log('Loaded.')}); // called once per loaded file
-            PIXI.Loader.onComplete.add(() => {
+            loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
+            loader.onError.add(() => {}); // called once per errored file
+            loader.onLoad.add(() => {console.log('Loaded.')}); // called once per loaded file
+            loader.onComplete.add(() => {
                 let background = new PIXI.Sprite(textures.background);
                 background.width = innerWidth;
                 background.height = innerHeight;
@@ -298,22 +300,28 @@ let GameView = (function() {
                 background.x = 0;
                 background.y = 0;
                 app.stage.addChild(background);
+
+                // let ownDeck = new PIXI.Sprite(textures.cardBack);//TODO: add on hover card count
+                // app.stage.addChild(ownDeck);
+                // ownDeck.x = .0146 * app.stage.width;
+                // ownDeck.y = .754 * app.stage.height;
+                // ownDeck.height = .211 * app.stage.height;
+                // ownDeck.width = .0827 * app.stage.width;
+
+
+                let enemyDeck = new PIXI.Sprite(textures.cardBack);
+                app.stage.addChild(enemyDeck);
+                enemyDeck.x = .0146 * app.stage.width;
+                enemyDeck.y = .005 * app.stage.height;
+                enemyDeck.height = .137 * app.stage.height;
+                enemyDeck.width = .0850 * app.stage.width;
+                
             });
 
-            let ownDeck = new PIXI.Sprite(textures.cardBack);//TODO: add on hover card count
-            app.stage.addChild(ownDeck);
-            ownDeck.x = .0146 * app.stage.width;
-            ownDeck.y = .0026 * app.stage.height;
-            ownDeck.height = .754 * app.stage.height;
-            ownDeck.width = .0827 * app.stage.width;
+            
 
 
-            let enemyDeck = new PIXI.Sprite(textures.cardBack);
-            app.stage.addChild(enemyDeck);
-            enemyDeck.x = .0146 * app.stage.width;
-            enemyDeck.y = .0026 & app.stage.height;
-            enemyDeck.height = .211 * app.stage.height;
-            enemyDeck.width = .0827 * app.stage.width;
+            
 
             animator.startAnimating();
     
@@ -346,7 +354,7 @@ let GameView = (function() {
                     animator.addMoveRequest(card.sprite, {x: innerWidth/2, y: innerHeight/2}, 5); //TODO: add card id handling
                     fixOwnHandSpacing();
                 } else {
-                    let card = cardBack
+                    //let card = cardBack
                 }
 
                 

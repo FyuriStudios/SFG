@@ -5,6 +5,6 @@ let test = function() {
         console.log(output);
     });
     
-    setTimeout(() => {GameView.processEvent({type: 'draw card'});}, 1000)
+    setTimeout(() => {GameView.processEvent({type: 'draw card', player: 1});}, 1000)
     
 };
