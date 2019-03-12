@@ -31,7 +31,7 @@ let GameView = (function() {
     This is the function that player output should be sent through. This file isn't going to handle networking.
     */
     var outputFunc;
-    
+
     let app = new PIXI.Application({
             antialias: true,
             transparent: true,
@@ -53,11 +53,11 @@ let GameView = (function() {
     let mouseOverCardInHand = function(eventObj) {
         if(this.inMoveQueue)
             return;
-        
+
         //this.y -= .113*app.stage.height;
 
         animator.addMoveRequest(this, {x: this.x, y: this.y - .113*app.stage.height}, 10);
-        
+
         hoverSizeCardInHandSprite(this);
 
         let temp = this;
@@ -126,17 +126,17 @@ let GameView = (function() {
             height: .355 * app.stage.height
         };
 
-        if (!(this.x > fieldBounds.x + fieldBounds.width || 
-            this.x + this.width < fieldBounds.x || 
-            this.y > fieldBounds.y + fieldBounds.height || 
-            this.y + this.height < fieldBounds.y)) 
+        if (!(this.x > fieldBounds.x + fieldBounds.width ||
+            this.x + this.width < fieldBounds.x ||
+            this.y > fieldBounds.y + fieldBounds.height ||
+            this.y + this.height < fieldBounds.y))
         {
             console.log('intersection');
             let handLoc;
             game.hand.forEach((element, index) => element.sprite == this? handLoc = index: null);
             let playType = game.hand[handLoc].type == 'monster'?'play monster':'play spell';
             outputFunc({
-                type: playType, 
+                type: playType,
                 card: game.hand[handLoc], //this needs cleaning up. The frontend isn't necessarily recieving exactly this.
                 handLoc: handLoc
             });
@@ -149,7 +149,7 @@ let GameView = (function() {
 
     /**
      * Resizes a card for its normal size (not being hovered over).
-     * @param {Card} card 
+     * @param {Card} card
      */
     function smallSizeCardInHandSprite(card) {
         card.width = app.stage.width * .086;
@@ -164,11 +164,11 @@ let GameView = (function() {
     /**
      * Generates the sprite container for a card. This function currently only will generate a test card,
      * but the intent is for it to do more in the future.
-     * @param {number} x 
-     * @param {number} y 
+     * @param {number} x
+     * @param {number} y
      */
     function generateCard(x, y) {
-        
+
         let card = ClientCard.test();
 
         smallSizeCardInHandSprite(card.sprite);
@@ -204,7 +204,7 @@ let GameView = (function() {
         card.sprite.on('pointerup', onDragFromHandEnd);
 
         card.sprite.on('pointerupoutside', onDragFromHandEnd);
-        
+
         card.sprite.on('pointermove', onDragFromHandMove);
 
         return card;
@@ -213,10 +213,10 @@ let GameView = (function() {
     /**
      * This function moves all cards in your hand over so that another card can be added to their hand.
      * I'm not going to handle a hand limit here just because the backend is expected to handle that.
-     * 
+     *
      * The card should have already been added to the hand array at this point, so it's okay imo for this function to not
      * have a reference to the added card.
-     * 
+     *
      * @returns the position to move the new card to
      */
     function fixOwnHandSpacing() {
@@ -274,21 +274,21 @@ let GameView = (function() {
             setTimeout(()=>{
                 app.stage.width = innerWidth;
                 app.stage.height = innerHeight;
-        
+
                 app.renderer.resize(innerWidth, innerHeight);
-        
+
                 document.body.appendChild(app.view);
             },50);
-    
+
             let loader = PIXI.loader;
 
-            loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardBack.png');
-    
+            loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardback.png');
+
             loader.load((loader, resources) => {
                 textures.background = resources.background.texture;
                 textures.cardBack = resources.cardBack.texture;
             });
-    
+
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
             loader.onLoad.add(() => {console.log('Loaded.')}); // called once per loaded file
@@ -296,7 +296,7 @@ let GameView = (function() {
                 let background = new PIXI.Sprite(textures.background);
                 background.width = innerWidth;
                 background.height = innerHeight;
-            
+
                 background.x = 0;
                 background.y = 0;
                 app.stage.addChild(background);
@@ -316,6 +316,7 @@ let GameView = (function() {
                 enemyDeck.height = .137 * app.stage.height;
                 enemyDeck.width = .0850 * app.stage.width;
 
+<<<<<<< HEAD
                 enemyDeck.on('mouseover', () => {
                 }); //TODO: add these deck on hover functions
 
@@ -326,24 +327,26 @@ let GameView = (function() {
                 ownDeck.height = .095 * app.stage.height;
                 ownDeck.width = .0850 * app.stage.width;
                 
+=======
+>>>>>>> f7a695da9ca65389ba95da4bc24c0670c1fe3ca2
             });
 
-            
 
 
-            
+
+
 
             animator.startAnimating();
-    
+
             this.resizeDisplay();
         },
-    
+
         resizeDisplay: function() {
             app.stage.width = innerWidth;
             app.stage.height = innerHeight;
-        
+
             app.renderer.resize(innerWidth, innerHeight);
-        
+
             document.body.appendChild(app.view);
         },
 
@@ -367,7 +370,7 @@ let GameView = (function() {
                     //let card = cardBack
                 }
 
-                
+
             }
         },
 
@@ -377,7 +380,7 @@ let GameView = (function() {
          */
         setupOutput: function (func) {
             outputFunc = func;
-        }, 
+        },
 
         /**
          * Call this function locally with output information whenever you want to send user input to the server.
