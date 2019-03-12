@@ -315,6 +315,16 @@ let GameView = (function() {
                 enemyDeck.y = .005 * app.stage.height;
                 enemyDeck.height = .137 * app.stage.height;
                 enemyDeck.width = .0850 * app.stage.width;
+
+                enemyDeck.on('mouseover', () => {
+                }); //TODO: add these deck on hover functions
+
+                let ownDeck = new PIXI.Sprite(textures.cardBack);
+                app.stage.addChild(ownDeck);
+                ownDeck.x = .0146 * app.stage.width;
+                ownDeck.y = .496 * app.stage.height;
+                ownDeck.height = .095 * app.stage.height;
+                ownDeck.width = .0850 * app.stage.width;
                 
             });
 
