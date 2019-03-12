@@ -316,7 +316,6 @@ let GameView = (function() {
                 enemyDeck.height = .137 * app.stage.height;
                 enemyDeck.width = .0850 * app.stage.width;
 
-<<<<<<< HEAD
                 enemyDeck.on('mouseover', () => {
                 }); //TODO: add these deck on hover functions
 
@@ -327,8 +326,6 @@ let GameView = (function() {
                 ownDeck.height = .095 * app.stage.height;
                 ownDeck.width = .0850 * app.stage.width;
                 
-=======
->>>>>>> f7a695da9ca65389ba95da4bc24c0670c1fe3ca2
             });
 
 
