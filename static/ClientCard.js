@@ -40,6 +40,11 @@ ClientCard = (function() {
             this.sprite.addChild(this.costText);
         }
 
+        displayPopup() {
+            let popup = new PIXI.Container();
+            
+        }
+
     }
     /**
      * Defines a generic monster.
