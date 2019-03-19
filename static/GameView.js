@@ -564,20 +564,57 @@ let GameView = (function() {
                 ownDeck.width = .0850 * app.stage.width;
                 app.stage.addChild(ownDeck);
 
+                
                 /*
-                Below this is some commented out code meant to run when the deck gets moused over that displays the number of cards in
-                the player's deck. I haven't finished it yet, though.
+                The below code adds deck size popups. It probably needs to be tweaked a little bit, but it works for now so I'm not
+                going to bother commenting it because I don't really want to even worry about this for a while.
                 */
+                enemyDeck.interactive = true;
+                enemyDeck.on('mouseover', () => {
 
-                // enemyDeck.on('mouseover', () => {
+                    let popup = new PIXI.Container();
+                    popup.x = enemyDeck.x + enemyDeck.width + app.stage.width * .03;
+                    popup.y = enemyDeck.y + enemyDeck.height/2;
 
-                //     let popup = new PIXI.Container();
-                //     popup.x = enemyDeck.x + enemyDeck.width + app.stage.width * .01;
-                //     popup.y = enemyDeck.y;
+                    let text = new PIXI.Text(game.enemyDeckSize + ' cards in deck', {fontFamily: 'Helvetica', fontSize: 100, fill: 0x000fff, align: 'center'});
+                    text.width = app.stage.height * .1;
+                    text.height = app.stage.width * .017;
+                    text.anchor.x = .5;
+                    text.anchor.y = .5;
+                    popup.addChild(text);
 
-                //     let text = new PIXI.Text(game.enemyDeckSize + 'cards in deck', {fontFamily: 'Helvetica', fontSize: 100, fill: 0x000000, align: 'center'});
-                //     popup.add(text);
-                // }); 
+                    enemyDeck.popup = popup;
+
+                    app.stage.addChild(popup);
+                }); 
+
+                enemyDeck.on('mouseout', () => {
+                    app.stage.removeChild(enemyDeck.popup);
+                    enemyDeck.popup = undefined;
+                }); 
+
+                ownDeck.interactive = true;
+                ownDeck.on('mouseover', () => {
+                    let popup = new PIXI.Container();
+                    popup.x = ownDeck.x + ownDeck.width + app.stage.width * .03;
+                    popup.y = ownDeck.y + ownDeck.height/2;
+
+                    let text = new PIXI.Text(game.ownDeckSize + ' cards in deck', {fontFamily: 'Helvetica', fontSize: 100, fill: 0x000fff, align: 'center'});
+                    text.width = app.stage.height * .1;
+                    text.height = app.stage.width * .017;
+                    text.anchor.x = .5;
+                    text.anchor.y = .5;
+                    popup.addChild(text);
+
+                    ownDeck.popup = popup;
+
+                    app.stage.addChild(popup);
+                });
+
+                ownDeck.on('mouseout', () => {
+                    app.stage.removeChild(ownDeck.popup);
+                    ownDeck.popup = undefined;
+                });
                 
             });
 
