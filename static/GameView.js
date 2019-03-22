@@ -89,6 +89,11 @@ let GameView = (function() {
      */
     let mouseOverCardInHand = function(eventObj) {
 
+        let card;
+        game.hand.forEach(e => e.sprite == this ? card = e:null);
+
+        app.stage.addChild(card.displayPopup(app.stage.width/2, app.stage.height/2));
+
         /*
         First, we check to see if the card is being animated. We'll just act like the card never got moused over in the first place
         if this is the case by returning from the function immediately.

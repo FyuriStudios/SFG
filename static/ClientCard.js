@@ -27,6 +27,7 @@ ClientCard = (function() {
         }
 
         updateCostText() {
+            this.sprite.removeChild(this.costText);
             this.costText = new PIXI.Text(this.cost, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
             this.costText.interactive = true;
 
@@ -40,9 +41,41 @@ ClientCard = (function() {
             this.sprite.addChild(this.costText);
         }
 
-        displayPopup() {
+        displayPopup(x, y) {
             let popup = new PIXI.Container();
             
+            let cardName = new PIXI.Text(this.name, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
+
+            let text = IDToText(this.id);
+            let cardText = new PIXI.Text(text, {fontFamily: 'Helvetica', fontSize: 1500/text.length, fill: 0x000000, wordWrap: true});
+
+            let rect = new PIXI.Graphics();
+            rect.beginFill(0xadd8e6, 0.5);
+            rect.drawRoundedRect(0, 0, innerWidth * 0.08, innerHeight * 0.2, 6); //TODO: make sure these numbers are a-ok
+            rect.endFill();
+
+            cardName.anchor.x = cardText.anchor.x = 0.5;
+            cardName.anchor.y = cardText.anchor.y = 0.5;
+
+            cardName.width = rect.width;
+            cardName.height = rect.height * 0.1;
+
+            cardText.width = rect.width;
+
+            popup.addChild(rect);
+            popup.addChild(cardName);
+            popup.addChild(cardText);
+
+            cardName.x = rect.x + cardName.width/2;
+            cardName.y = rect.y + cardName.height/2;
+
+            cardText.x = rect.x + cardText.width/2;
+            cardText.y = cardName.y + cardName.height/2 + cardText.height/2;
+
+            popup.x = x;
+            popup.y = y;
+
+            return popup;
         }
 
     }
@@ -51,7 +84,7 @@ ClientCard = (function() {
      */
     class Monster extends Card {
         constructor(backendCard) {
-            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.cost, backendCard.power, backendCard.hasDefender);
+            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost);
             this.power = backendCard.power;
             this.currentPower = this.power;
             this.hasDefender = backendCard.hasDefender;
