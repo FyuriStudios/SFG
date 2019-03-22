@@ -16,6 +16,14 @@ https://stackoverflow.com/questions/22734188/javascript-module-pattern-with-anon
 Look below for a more detailed explanation of everything that's going on.
 */
 
+/**
+ * This is a list of the globally loaded textures that might be useful to just kind of have loaded, like the card backs and the
+ * background. This makes it so that we can reuse commonly used textures instead of having to reload the textures every time we
+ * want to use them.
+ */
+ let textures = {};
+
+
 let GameView = (function() {
 
     /*
@@ -28,13 +36,6 @@ let GameView = (function() {
      * See ClientGame.js for more details.
      */
     let game = new ClientGame();
-
-    /**
-     * This is a list of the globally loaded textures that might be useful to just kind of have loaded, like the card backs and the
-     * background. This makes it so that we can reuse commonly used textures instead of having to reload the textures every time we
-     * want to use them.
-     */
-    let textures = {};
 
     /**
      * This is the function that all output will be sent through. For example, when a player plays a card, this file will call this
@@ -513,7 +514,7 @@ let GameView = (function() {
             free to add more later on, although you'll have to make sure to add a line to loader.load adding your texture to the textures
             object.
             */
-            loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardback.png');
+            loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardback.png').add('popup', '/static/assets/Brick_Border.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -522,6 +523,7 @@ let GameView = (function() {
             loader.load((loader, resources) => {
                 textures.background = resources.background.texture;
                 textures.cardBack = resources.cardBack.texture;
+                textures.popup = resources.popup.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file

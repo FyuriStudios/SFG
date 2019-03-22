@@ -43,34 +43,22 @@ ClientCard = (function() {
 
         displayPopup(x, y) {
             let popup = new PIXI.Container();
-            
-            let cardName = new PIXI.Text(this.name, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
 
             let text = IDToText(this.id);
             let cardText = new PIXI.Text(text, {fontFamily: 'Helvetica', fontSize: 1500/text.length, fill: 0x000000, wordWrap: true});
 
-            let rect = new PIXI.Graphics();
-            rect.beginFill(0xadd8e6, 0.5);
-            rect.drawRoundedRect(0, 0, innerWidth * 0.08, innerHeight * 0.2, 6); //TODO: make sure these numbers are a-ok
-            rect.endFill();
+            let frame = new PIXI.Sprite(textures.popup);
+            frame.width = innerWidth * .15;
+            frame.height = innerHeight * .25;
 
-            cardName.anchor.x = cardText.anchor.x = 0.5;
-            cardName.anchor.y = cardText.anchor.y = 0.5;
+            cardText.width = frame.width * .8;
 
-            cardName.width = rect.width;
-            cardName.height = rect.height * 0.1;
-
-            cardText.width = rect.width;
-
-            popup.addChild(rect);
-            popup.addChild(cardName);
+            popup.addChild(frame);
             popup.addChild(cardText);
 
-            cardName.x = rect.x + cardName.width/2;
-            cardName.y = rect.y + cardName.height/2;
-
-            cardText.x = rect.x + cardText.width/2;
-            cardText.y = cardName.y + cardName.height/2 + cardText.height/2;
+            cardText.x = frame.x + frame.width * .1;
+            cardText.y = frame.y + frame.height * .1;
+           
 
             popup.x = x;
             popup.y = y;
