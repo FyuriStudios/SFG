@@ -678,14 +678,10 @@ let GameView = (function() {
                     /*
                     Generate a new card and put it into the player's hand.
                     */
-                    let card = generateCard(app.stage.width*0.0565, app.stage.height*0.885);
-                    game.hand.push(card);
 
-                    /*
-                    Animates the card into the middle of the screen. Probably unnecessary and worth removing. If you even read this deep
-                    in the code, I actually challenge you to delete the below line.
-                    */
-                    animator.addMoveRequest(card.sprite, {x: innerWidth/2, y: innerHeight/2}, 5); //TODO: add card id handling
+                    let card = generateCard(app.stage.width*0.0565, app.stage.height*0.885);
+                    
+                    game.hand.push(card);
 
                     /*
                     Animate the card into the player's hand.
@@ -693,10 +689,14 @@ let GameView = (function() {
                     fixOwnHandSpacing();
 
                 } else {
-                    /*
-                    In this else statement we need to figure out how to deal with enemy player card drawing.
-                    */
+                   
+                    let card = new PIXI.Sprite(textures.cardBack);//TODO: do more with this.
+
                 }
+            }
+
+            if(event.type == 'play card') {
+
             }
         },
 

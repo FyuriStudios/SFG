@@ -45,11 +45,11 @@ ClientCard = (function() {
             let popup = new PIXI.Container();
 
             let text = IDToText(this.id);
-            let cardText = new PIXI.Text(text, {fontFamily: 'Helvetica', fontSize: 1500/text.length, fill: 0x000000, wordWrap: true});
+            let cardText = new PIXI.Text(text, {fontFamily: 'Helvetica', fontSize: 1200/text.length, fill: 0x000000, wordWrap: true});
 
             let frame = new PIXI.Sprite(textures.popup);
-            frame.width = innerWidth * .15;
-            frame.height = innerHeight * .25;
+            frame.width = innerWidth * .1;
+            frame.height = innerHeight * .15;
 
             cardText.width = frame.width * .8;
 
@@ -59,7 +59,6 @@ ClientCard = (function() {
             cardText.x = frame.x + frame.width * .1;
             cardText.y = frame.y + frame.height * .1;
            
-
             popup.x = x;
             popup.y = y;
 
