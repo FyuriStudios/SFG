@@ -453,7 +453,7 @@ let GameView = (function() {
         let leftBound = .1135 * app.stage.width;
         let rightBound = .4385 * app.stage.width;
 
-        let upperBound = 0; //TODO: figure out what this number actually is
+        let upperBound = .1 * app.stage.height; //TODO: figure out what this number actually is
 
         let cardSpacingDivisor = (rightBound - leftBound) / (cards.length + 1);
 
