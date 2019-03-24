@@ -54,16 +54,16 @@ let GameView = (function() {
             forceCanvas: false //these are just some options that we applied in the constructor. See PIXI documentation for more details.
     });
 
-    /*
-    Somewhere in here, I had plans to figure out how to display enemy cards but I couldn't figure out where to store the sprite variables.
-    Probably they should go under the game variable.
-    */
+    /**
+     * This is the array of enemy card sprites that will be displayed when the game has 
+     */
+    let enemyCardsInHand = [];
 
     /**
      * This is a custom animation object that allows us to make things smoothly move around the stage. See AnimationQueue.js for more
      * details.
      */
-    animator = new AnimationQueue(app);
+    let animator = new AnimationQueue(app);
 
     /*
     Above this is the space for declaring module scope variables (variables that can be accessed by any of the functions below and 
@@ -89,11 +89,6 @@ let GameView = (function() {
      * @param {any} eventObj the object passed in by the mouse event. Look in PIXI documentation for more on what this variable is.
      */
     let mouseOverCardInHand = function(eventObj) {
-
-        let card;
-        game.hand.forEach(e => e.sprite == this ? card = e:null);
-
-        app.stage.addChild(card.displayPopup(app.stage.width/2, app.stage.height/2));
 
         /*
         First, we check to see if the card is being animated. We'll just act like the card never got moused over in the first place
@@ -454,6 +449,22 @@ let GameView = (function() {
         });
     }
 
+    function fixEnemyHandSpacing() {
+        let leftBound = .1135 * app.stage.width;
+        let rightBound = .4385 * app.stage.width;
+
+        let upperBound = 0; //TODO: figure out what this number actually is
+
+        let cardSpacingDivisor = (rightBound - leftBound) / (cards.length + 1);
+
+        enemyCardsInHand.forEach(function(card, index) {
+            let x = leftBound + cardSpacingDivisor * (index+1);
+            let y = upperBound;
+
+            animator.addMoveRequest(card.sprite, {x: x, y: y}, 5);
+        });
+    }
+
     /**
      * This function hasn't been defined yet. At some point the idea is to make it add a card to the enemy's hand.
      * There should also be a discardEnemyCard function, but that comes later.
@@ -691,6 +702,16 @@ let GameView = (function() {
                 } else {
                    
                     let card = new PIXI.Sprite(textures.cardBack);//TODO: do more with this.
+
+                    smallSizeCardInHandSprite(card);
+
+                    app.stage.addChild(card);
+
+                    card.anchor.x = .5;
+                    card.anchor.y = .5;
+                    
+                    card.x = app.stage.width * .0146;
+                    card.y = app.stage.height * .1;
 
                 }
             }
