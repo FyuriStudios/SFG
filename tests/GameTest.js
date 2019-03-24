@@ -1,7 +1,7 @@
 var Game = require('../base/Game')
 var Card = require('../base/Card')
 var Potato = require('../cards/Potato')
-//test
+
 //currentPlayer() this test is broken, TODO: fix it
 //cardErrors()
 killDead()
