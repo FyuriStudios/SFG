@@ -89,6 +89,14 @@ let GameView = (function() {
      */
     let mouseOverCardInHand = function(eventObj) {
 
+        if(this.animatingDown) {
+            this.animatingDown = false;
+            animator.cancelMoveRequest(this);
+            fixOwnHandSpacing();
+            hoverSizeCardInHandSprite(this);
+            return;
+        }
+
         /*
         First, we check to see if the card is being animated. We'll just act like the card never got moused over in the first place
         if this is the case by returning from the function immediately.
@@ -98,7 +106,7 @@ let GameView = (function() {
         sprite object when it gets added to the animation queue. If the card has never been animated before, the inMoveQueue will be
         unefined so this if statement will evaluate to false and the function will continue on.
         */
-        if(this.inMoveQueue)
+        else if(this.inMoveQueue)
             return;
 
         /*
@@ -106,7 +114,8 @@ let GameView = (function() {
         bigger as well and prevents the bottom of the card from being clipped by the edge of the screen. Also, it looks awesome.
         See AnimationQueue.js for more details on animation requests.
         */
-        animator.addMoveRequest(this, {x: this.x, y: this.y - .113*app.stage.height}, 10);
+        animator.addMoveRequest(this, {x: this.x, y: .8320 * app.stage.height - .113*app.stage.height}, 10);
+        this.animatingUp = true;
 
         /*
         Calls another function that makes the card slightly bigger.
@@ -139,14 +148,21 @@ let GameView = (function() {
      * @param {any} eventObj 
      */
     let mouseOutCardInHand = function(eventObj) {
-        if(this.inMoveQueue)
+        if(this.animatingUp) {
+            this.animatingUp = false;
+            animator.cancelMoveRequest(this);
+            fixOwnHandSpacing();
+            smallSizeCardInHandSprite(this);
+            return;
+        }
+        else if(this.inMoveQueue)
             return;
 
-        animator.addMoveRequest(this, {x: this.x, y: this.y + .113*app.stage.height}, 10);
-
-        smallSizeCardInHandSprite(this);
+        animator.addMoveRequest(this, {x: this.x, y: .8320 * app.stage.height}, 10);
+        this.animatingDown = true;//desperate times call for desperate measures
 
         let temp = this;
+        smallSizeCardInHandSprite(this);
 
         game.hand.forEach(function(card) {
             if(card.sprite.x > temp.x)
@@ -444,7 +460,7 @@ let GameView = (function() {
             let x = leftBound + cardSpacingDivisor * (index+1);
             let y = upperBound;
 
-            animator.addMoveRequest(card.sprite, {x: x, y: y}, 5);
+            animator.addMoveRequest(card.sprite, {x: x, y: y}, 15);
         });
     }
 
@@ -678,7 +694,7 @@ let GameView = (function() {
                     Animates the card into the middle of the screen. Probably unnecessary and worth removing. If you even read this deep
                     in the code, I actually challenge you to delete the below line.
                     */
-                    animator.addMoveRequest(card.sprite, {x: innerWidth/2, y: innerHeight/2}, 5); //TODO: add card id handling
+                    animator.addMoveRequest(card.sprite, {x: app.stage.width * .2, y: .8320 * app.stage.height}, 5); //TODO: add card id handling
 
                     /*
                     Animate the card into the player's hand.

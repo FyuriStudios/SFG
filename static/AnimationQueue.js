@@ -28,7 +28,6 @@ class AnimationQueue {
                 request.sprite.y += request.yDistance*delta;
             });
             this.SizeQueue.forEach((request)=>{
-
                 request.sprite.scale.x += (request.to.x / request.init.x)/(request.ticks*(60/delta));
                 request.sprite.scale.y += (request.to.y / request.init.y)/(request.ticks*(60/delta));
                 request.ticksDone++;
@@ -71,7 +70,6 @@ class AnimationQueue {
             });
             this.SizeQueue = this.SizeQueue.filter((value)=>{
                 if(value.ticksDone > value.ticks) {
-                      console.log('hey');
                       value.sprite.scale.x = value.to.x * value.startx;
                       value.sprite.scale.y = value.to.y * value.starty;
                       value.sprite.inSizeQueue = false;
@@ -102,28 +100,13 @@ class AnimationQueue {
     cancelMoveRequest(sprite){
       for (let i = 0; i < this.MoveQueue.length; i++) {
         if (this.MoveQueue[i].sprite !== undefined) {
-        if (this.MoveQueue[i].sprite == sprite) {
-          this.MoveQueue.splice(i, 1);
-          if (sprite.mq !== undefined && sprite.mq.length > 0) {
-            let push = sprite.mq[0];
-            let dx = push.to.x - sprite.x;
-            let dy = push.to.y - sprite.y;
-
-            //find the total distance travelled
-            let totalDistance = Math.sqrt(dx*dx + dy*dy);
-            this.MoveQueue.push({
-                sprite: sprite,
-                xDistance: dx/totalDistance * push.vel,
-                yDistance: dy/totalDistance * push.vel,
-                to: push.to,
-                vel: push.vel
-            });
-            sprite.mq.shift();
-            sprite.inMoveQueue = true;
+          if (this.MoveQueue[i].sprite == sprite) {
+            this.MoveQueue.splice(i, 1);
+          }
         }
       }
-    }
-    }
+      sprite.mq = undefined;
+      sprite.inMoveQueue = false;
   }
     /**
      * Adds an movement animation to the MoveQueue.
