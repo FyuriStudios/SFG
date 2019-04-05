@@ -27,6 +27,7 @@ ClientCard = (function() {
         }
 
         updateCostText() {
+            this.sprite.removeChild(this.costText);
             this.costText = new PIXI.Text(this.cost, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
             this.costText.interactive = true;
 
@@ -40,9 +41,28 @@ ClientCard = (function() {
             this.sprite.addChild(this.costText);
         }
 
-        displayPopup() {
+        displayPopup(x, y) {
             let popup = new PIXI.Container();
-            
+
+            let text = IDToText(this.id);
+            let cardText = new PIXI.Text(text, {fontFamily: 'Helvetica', fontSize: 1200/text.length, fill: 0x000000, wordWrap: true});
+
+            let frame = new PIXI.Sprite(textures.popup);
+            frame.width = innerWidth * .1;
+            frame.height = innerHeight * .15;
+
+            cardText.width = frame.width * .8;
+
+            popup.addChild(frame);
+            popup.addChild(cardText);
+
+            cardText.x = frame.x + frame.width * .1;
+            cardText.y = frame.y + frame.height * .1;
+           
+            popup.x = x;
+            popup.y = y;
+
+            return popup;
         }
 
     }
@@ -51,7 +71,7 @@ ClientCard = (function() {
      */
     class Monster extends Card {
         constructor(backendCard) {
-            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.cost, backendCard.power, backendCard.hasDefender);
+            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost);
             this.power = backendCard.power;
             this.currentPower = this.power;
             this.hasDefender = backendCard.hasDefender;

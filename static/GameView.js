@@ -16,6 +16,14 @@ https://stackoverflow.com/questions/22734188/javascript-module-pattern-with-anon
 Look below for a more detailed explanation of everything that's going on.
 */
 
+/**
+ * This is a list of the globally loaded textures that might be useful to just kind of have loaded, like the card backs and the
+ * background. This makes it so that we can reuse commonly used textures instead of having to reload the textures every time we
+ * want to use them.
+ */
+ let textures = {};
+
+
 let GameView = (function() {
 
     /*
@@ -28,13 +36,6 @@ let GameView = (function() {
      * See ClientGame.js for more details.
      */
     let game = new ClientGame();
-
-    /**
-     * This is a list of the globally loaded textures that might be useful to just kind of have loaded, like the card backs and the
-     * background. This makes it so that we can reuse commonly used textures instead of having to reload the textures every time we
-     * want to use them.
-     */
-    let textures = {};
 
     /**
      * This is the function that all output will be sent through. For example, when a player plays a card, this file will call this
@@ -53,16 +54,16 @@ let GameView = (function() {
             forceCanvas: false //these are just some options that we applied in the constructor. See PIXI documentation for more details.
     });
 
-    /*
-    Somewhere in here, I had plans to figure out how to display enemy cards but I couldn't figure out where to store the sprite variables.
-    Probably they should go under the game variable.
-    */
+    /**
+     * This is the array of enemy card sprites that will be displayed when the game has 
+     */
+    let enemyCardsInHand = [];
 
     /**
      * This is a custom animation object that allows us to make things smoothly move around the stage. See AnimationQueue.js for more
      * details.
      */
-    animator = new AnimationQueue(app);
+    let animator = new AnimationQueue(app);
 
     /*
     Above this is the space for declaring module scope variables (variables that can be accessed by any of the functions below and 
@@ -464,6 +465,22 @@ let GameView = (function() {
         });
     }
 
+    function fixEnemyHandSpacing() {
+        let leftBound = .1135 * app.stage.width;
+        let rightBound = .4385 * app.stage.width;
+
+        let upperBound = .1 * app.stage.height; //TODO: figure out what this number actually is
+
+        let cardSpacingDivisor = (rightBound - leftBound) / (cards.length + 1);
+
+        enemyCardsInHand.forEach(function(card, index) {
+            let x = leftBound + cardSpacingDivisor * (index+1);
+            let y = upperBound;
+
+            animator.addMoveRequest(card.sprite, {x: x, y: y}, 5);
+        });
+    }
+
     /**
      * This function hasn't been defined yet. At some point the idea is to make it add a card to the enemy's hand.
      * There should also be a discardEnemyCard function, but that comes later.
@@ -524,7 +541,7 @@ let GameView = (function() {
             free to add more later on, although you'll have to make sure to add a line to loader.load adding your texture to the textures
             object.
             */
-            loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardback.png');
+            loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardback.png').add('popup', '/static/assets/Brick_Border.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -533,6 +550,7 @@ let GameView = (function() {
             loader.load((loader, resources) => {
                 textures.background = resources.background.texture;
                 textures.cardBack = resources.cardBack.texture;
+                textures.popup = resources.popup.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
@@ -687,25 +705,44 @@ let GameView = (function() {
                     /*
                     Generate a new card and put it into the player's hand.
                     */
+
                     let card = generateCard(app.stage.width*0.0565, app.stage.height*0.885);
+                    
                     game.hand.push(card);
 
                     /*
+<<<<<<< HEAD
                     Animates the card into the middle of the screen. Probably unnecessary and worth removing. If you even read this deep
                     in the code, I actually challenge you to delete the below line.
                     */
                     animator.addMoveRequest(card.sprite, {x: app.stage.width * .2, y: .8320 * app.stage.height}, 5); //TODO: add card id handling
 
                     /*
+=======
+>>>>>>> c42ee09edc8d3e2242a213e95087226d7272ccbe
                     Animate the card into the player's hand.
                     */
                     fixOwnHandSpacing();
 
                 } else {
-                    /*
-                    In this else statement we need to figure out how to deal with enemy player card drawing.
-                    */
+                   
+                    let card = new PIXI.Sprite(textures.cardBack);//TODO: do more with this.
+
+                    smallSizeCardInHandSprite(card);
+
+                    app.stage.addChild(card);
+
+                    card.anchor.x = .5;
+                    card.anchor.y = .5;
+                    
+                    card.x = app.stage.width * .0146;
+                    card.y = app.stage.height * .1;
+
                 }
+            }
+
+            if(event.type == 'play card') {
+
             }
         },
 
