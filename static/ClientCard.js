@@ -41,28 +41,38 @@ ClientCard = (function() {
             this.sprite.addChild(this.costText);
         }
 
-        displayPopup(x, y) {
+        displayPopup() {
             let popup = new PIXI.Container();
 
-            let text = IDToText(this.id);
-            let cardText = new PIXI.Text(text, {fontFamily: 'Helvetica', fontSize: 1200/text.length, fill: 0x000000, wordWrap: true});
+            let image = PIXI.Sprite.fromImage('/static/assets/cards/test_hover.png');
+            let cost = new PIXI.Text(this.cost, 
+                {
+                    fontFamily: 'Helvetica', 
+                    dropShadow: true, 
+                    dropShadowColor: 0xffffff, 
+                    fontSize: 100, 
+                    fill: 0x000000, 
+                    align: 'center'
+                });
+            
+            popup.addChild(image);
+            popup.addChild(cost);
 
-            let frame = new PIXI.Sprite(textures.popup);
-            frame.width = innerWidth * .1;
-            frame.height = innerHeight * .15;
+            cost.anchor.x = cost.anchor.y = .5;
+            cost.width = popup.width * .09;
+            cost.height = popup.height * .12;
 
-            cardText.width = frame.width * .8;
+            cost.x -= popup.width * .09;
+            cost.y -= popup.height * .425;
 
-            popup.addChild(frame);
-            popup.addChild(cardText);
+            popup.width = this.sprite.width * 2;
+            popup.height = this.sprite.height * 2;
 
-            cardText.x = frame.x + frame.width * .1;
-            cardText.y = frame.y + frame.height * .1;
-           
-            popup.x = x;
-            popup.y = y;
+            popup.x = this.sprite.x - popup.width/2;
+            popup.y = this.sprite.y - popup.height/2;
 
-            return popup;
+            this.popup = popup;
+
         }
 
     }
