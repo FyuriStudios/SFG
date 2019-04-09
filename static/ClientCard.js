@@ -41,10 +41,13 @@ ClientCard = (function() {
             this.sprite.addChild(this.costText);
         }
 
-        displayPopup() {
+        displayPopup() { 
             let popup = new PIXI.Container();
 
             let image = PIXI.Sprite.fromImage('/static/assets/cards/test_hover.png');
+            image.width = this.sprite.width * 2;
+            image.height = this.sprite.height * 2;
+
             let cost = new PIXI.Text(this.cost, 
                 {
                     fontFamily: 'Helvetica', 
@@ -62,14 +65,14 @@ ClientCard = (function() {
             cost.width = popup.width * .09;
             cost.height = popup.height * .12;
 
-            cost.x -= popup.width * .09;
-            cost.y -= popup.height * .425;
+            cost.x = popup.width * .12;
+            cost.y = popup.height * .087;
 
             popup.width = this.sprite.width * 2;
             popup.height = this.sprite.height * 2;
 
             popup.x = this.sprite.x - popup.width/2;
-            popup.y = this.sprite.y - popup.height/2;
+            popup.y = this.sprite.y - popup.height/1.5;
 
             this.popup = popup;
 

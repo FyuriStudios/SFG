@@ -81,73 +81,20 @@ let GameView = (function() {
     /**
      * This is the mouseOverCard event function for when you mouse over one of your own cards. It's supposed to do the following:
      *  - Make the card bigger
-     *  - Move the other cards in your hand to the side to make space for the hovered card
-     *  - Display the card tooltip (unimplemented!)
+     *  - Display the card tooltip
      * 
-     * There are a few weird bugs that happen when you mouse over cards really fast, but they're probably easy to fix.
      * 
      * @param {any} eventObj the object passed in by the mouse event. Look in PIXI documentation for more on what this variable is.
      */
     let mouseOverCardInHand = function(eventObj) {
 
-        // if(this.animatingDown) {
-        //     this.animatingDown = false;
-        //     animator.cancelMoveRequest(this);
-        //     fixOwnHandSpacing();
-        //     hoverSizeCardInHandSprite(this);
-        //     return;
-        // }
-
-        // /*
-        // First, we check to see if the card is being animated. We'll just act like the card never got moused over in the first place
-        // if this is the case by returning from the function immediately.
-
-        // The "this" syntax works because adding a mouse event to the card actually defines it as a property of the sprite object.
-        // That allows us to reference the card's sprite via "this". inMoveQueue is another property that gets defined as a property of a
-        // sprite object when it gets added to the animation queue. If the card has never been animated before, the inMoveQueue will be
-        // unefined so this if statement will evaluate to false and the function will continue on.
-        // */
-        // else if(this.inMoveQueue)
-        //     return;
-
-        // /*
-        // Next, we add an animation to the card to animate it upwards slightly. This compensates for the fact that the card is going to get
-        // bigger as well and prevents the bottom of the card from being clipped by the edge of the screen. Also, it looks awesome.
-        // See AnimationQueue.js for more details on animation requests.
-        // */
-        // animator.addMoveRequest(this, {x: this.x, y: .8320 * app.stage.height - .113*app.stage.height}, 10);
-        // this.animatingUp = true;
-
-        // /*
-        // Calls another function that makes the card slightly bigger.
-        // */
-        // hoverSizeCardInHandSprite(this);
-
-        // /*
-        // We need a temporary reference to the card because the function below doesn't know what "this" is. If we put "this" in a variable
-        // tho, it can be referenced by that function.
-        // */
-        // let temp = this;
-
-        // /*
-        // This function moves the cards that are to the left of this card slightly to the left and the cards that are to the right of this
-        // card slightly to the right. Assuming that the card tooltip shows up on the right side of a card, we might want to move the
-        // cards to the right further than the cards to the left to make extra room for the tooltip.
-        // */
-        // game.hand.forEach(function(card) {
-        //     if(card.sprite.x > temp.x)
-        //         animator.addMoveRequest(card.sprite, {x: card.sprite.x + app.stage.width * .086, y: card.sprite.y}, 15);
-        //     else if(card.sprite.x < temp.x)
-        //         animator.addMoveRequest(card.sprite, {x: card.sprite.x - app.stage.width * .086, y: card.sprite.y}, 15);
-        // });
+        if(this.inMoveQueue)
+            return;
 
         let temp;
         game.hand.forEach((val) => (val.sprite.x == this.x && val.sprite.y == this.y)?temp=val:null);
 
         temp.displayPopup();
-
-        temp.popup.x = temp.sprite.x - temp.popup.width/2;
-        temp.popup.y = temp.sprite.y - temp.popup.height/2;
 
         app.stage.addChild(temp.popup);
 
@@ -160,28 +107,6 @@ let GameView = (function() {
      * @param {any} eventObj 
      */
     let mouseOutCardInHand = function(eventObj) {
-        // if(this.animatingUp) {
-        //     this.animatingUp = false;
-        //     animator.cancelMoveRequest(this);
-        //     fixOwnHandSpacing();
-        //     smallSizeCardInHandSprite(this);
-        //     return;
-        // }
-        // else if(this.inMoveQueue)
-        //     return;
-
-        // animator.addMoveRequest(this, {x: this.x, y: .8320 * app.stage.height}, 10);
-        // this.animatingDown = true;//desperate times call for desperate measures
-
-        // let temp = this;
-        // smallSizeCardInHandSprite(this);
-
-        // game.hand.forEach(function(card) {
-        //     if(card.sprite.x > temp.x)
-        //         animator.addMoveRequest(card.sprite, {x: card.sprite.x - app.stage.width * .086, y: card.sprite.y}, 15);
-        //     else if(card.sprite.x < temp.x)
-        //         animator.addMoveRequest(card.sprite, {x: card.sprite.x + app.stage.width * .086, y: card.sprite.y}, 15);
-        // });
 
         let temp = this;
         game.hand.forEach((val) => val.sprite == temp?temp=val:null);
