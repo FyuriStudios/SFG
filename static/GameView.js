@@ -349,7 +349,7 @@ let GameView = (function() {
         Calls a property of the ClientCard class that adds a cost to the card. This should also be called when the cost of a card
         is modified because it will actually change the cost graphically to reflect that.
         */
-        card.updateCostText();
+        card.updateText();
 
         /*
         We add this sprite container to the view now that it's been all constructed and everything.
@@ -408,7 +408,7 @@ let GameView = (function() {
             let x = leftBound + cardSpacingDivisor * (index+1);
             let y = upperBound;
 
-            animator.addMoveRequest(card.sprite, {x: x, y: y}, 15);
+            animator.addMoveRequest(card.sprite, {x: x, y: y}, 5);
         });
     }
 

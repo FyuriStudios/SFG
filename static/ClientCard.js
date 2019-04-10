@@ -26,7 +26,7 @@ ClientCard = (function() {
             this.sprite.anchor.y = .5;
         }
 
-        updateCostText() {
+        updateText() {
             this.sprite.removeChild(this.costText);
             this.costText = new PIXI.Text(this.cost, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
             this.costText.interactive = true;
@@ -89,6 +89,46 @@ ClientCard = (function() {
             this.currentPower = this.power;
             this.hasDefender = backendCard.hasDefender;
             this.isStatic = backendCard.isStatic;
+        }
+
+        updateText() {
+            super.updateText();
+            this.sprite.removeChild(this.powerText);
+            this.powerText = new PIXI.Text(this.power, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
+            this.powerText.interactive = true;
+
+            this.powerText.anchor.x = .5;
+            this.powerText.anchor.y = .5;
+            this.powerText.width = this.sprite.width * .09;
+            this.powerText.height = this.sprite.height * .12;
+            this.powerText.x += this.sprite.width * .415;
+            this.powerText.y -= this.sprite.height * .425;
+
+            this.sprite.addChild(this.powerText);
+
+        }
+
+        displayPopup() {
+            super.displayPopup();
+
+            let power = new PIXI.Text(this.power, 
+                {
+                    fontFamily: 'Helvetica', 
+                    dropShadow: true, 
+                    dropShadowColor: 0xffffff, 
+                    fontSize: 100, 
+                    fill: 0x000000, 
+                    align: 'center'
+                });
+
+            power.anchor.x = power.anchor.y = .5;
+            power.width = this.popup.width * .09;
+            power.height = this.popup.height * .12;
+
+            power.x = this.popup.width * .88;
+            power.y = this.popup.height * .083;
+
+            this.popup.addChild(power);
         }
     }
 
