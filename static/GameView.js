@@ -252,15 +252,6 @@ let GameView = (function() {
     }
 
     /**
-     * Resizes a card to its hover size (currently 2 times the size of the small card.)
-     * @param {Card} card 
-     */
-    function hoverSizeCardInHandSprite(card) {
-        card.width = app.stage.width * .172;
-        card.height = app.stage.height * .450;
-    }
-
-    /**
      * Generates the sprite container for a card. This function currently only will generate a test card,
      * but the intent is for it to do more in the future.
      * 
@@ -418,13 +409,13 @@ let GameView = (function() {
 
         let upperBound = .1 * app.stage.height; //TODO: figure out what this number actually is
 
-        let cardSpacingDivisor = (rightBound - leftBound) / (cards.length + 1);
+        let cardSpacingDivisor = (rightBound - leftBound) / (enemyCardsInHand.length + 1);
 
         enemyCardsInHand.forEach(function(card, index) {
             let x = leftBound + cardSpacingDivisor * (index+1);
             let y = upperBound;
 
-            animator.addMoveRequest(card.sprite, {x: x, y: y}, 5);
+            animator.addMoveRequest(card, {x: x, y: y}, 5);
         });
     }
 
@@ -672,15 +663,21 @@ let GameView = (function() {
                    
                     let card = new PIXI.Sprite(textures.cardBack);//TODO: do more with this.
 
-                    smallSizeCardInHandSprite(card);
-
-                    app.stage.addChild(card);
-
                     card.anchor.x = .5;
                     card.anchor.y = .5;
                     
                     card.x = app.stage.width * .0146;
                     card.y = app.stage.height * .1;
+
+                    enemyCardsInHand.push(card);
+
+                    smallSizeCardInHandSprite(card);
+
+                    app.stage.addChild(card);
+
+                    animator.addMoveRequest(card, {x: app.stage.width * .2, y: .1 * app.stage.height}, 5);
+
+                    fixEnemyHandSpacing();
 
                 }
             }
