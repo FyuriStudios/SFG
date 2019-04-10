@@ -88,7 +88,7 @@ let GameView = (function() {
      */
     let mouseOverCardInHand = function(eventObj) {
 
-        if(this.inMoveQueue)
+        if(this.inMoveQueue || this.dragging)
             return;
 
         let temp;
@@ -121,6 +121,11 @@ let GameView = (function() {
      * @param {any} eventObj 
      */
     let onDragFromHandStart = function(eventObj) {
+
+        let temp = this;
+        game.hand.forEach((val) => val.sprite == temp?temp=val:null); //turn off the popup
+        app.stage.removeChild(temp.popup);
+        temp.popup = undefined;
 
         /*
         If you try to drag a card while it's animating somewhere, literally everything breaks so we just disallow dragging during animation.
@@ -691,9 +696,7 @@ let GameView = (function() {
          * @param {*} func the function to be called with output
          */
         setupOutput: function (func) {
-            if(outputFunc != null) {
-                outputFunc = func;
-            }
+            outputFunc = func;
         },
 
     }
