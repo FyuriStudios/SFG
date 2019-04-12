@@ -21,9 +21,7 @@ ClientCard = (function() {
             this.name = name;
             this.cost = cost;
             this.currentCost = cost;//current cost and absolute cost are different
-            this.sprite = IDToImage.fromID(id);
-            this.sprite.anchor.x = .5;
-            this.sprite.anchor.y = .5;
+            this.generateImages();
         }
 
         updateText() {
@@ -78,11 +76,41 @@ ClientCard = (function() {
 
         }
 
+        generateImages() {
+
+            let backgroundImage = IDToImage.fromID(this.id);
+            backgroundImage.anchor.x = backgroundImage.anchor.y = .5;
+
+            backgroundImage.width = 10;
+            backgroundImage.height = 10;
+
+            let spriteContainer = new PIXI.Container();
+
+            spriteContainer.width = backgroundImage.width;
+            spriteContainer.height = backgroundImage.height;
+        
+            spriteContainer.interactive = true;
+            spriteContainer.interactiveChildren = true;
+            spriteContainer.sortableChildren = true;
+
+            backgroundImage.interactive = true;
+
+            /*
+            Add the card's sprite to this new container.
+            */
+            spriteContainer.addChild(backgroundImage);
+
+            this.sprite = spriteContainer;
+            this.updateText();
+
+        }
+
     }
     /**
      * Defines a generic monster.
      */
     class Monster extends Card {
+
         constructor(backendCard) {
             super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost);
             this.power = backendCard.power;

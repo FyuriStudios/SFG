@@ -273,84 +273,13 @@ let GameView = (function() {
      */
     function generateCard(x, y) {
 
-        /*
-        Just generate a test card. That's all this function does at the moment.
-        ClientCard.test (check ClientCard.js for more) generates a card with some default values and art just for testing.
-        */
         let card = ClientCard.test();
 
-        /*
-        Make the card small.
-        */
         smallSizeCardInHandSprite(card.sprite);
 
-        /*
-        PIXI.Container acts a lot like a sprite (you can resize it and click on it and everything) except it doesn't display anything
-        other than its children. In this case the container is used to hold the graphics of the card but also the cost and power of 
-        the card. We actually change the card.sprite property to a container by doing this, so that's worth considering.
-        */
-        let spriteContainer = new PIXI.Container();
+        card.sprite.x = x;
+        card.sprite.y = y;
 
-        /*
-        We set the size of the container to the size of the original card sprite to avoid breaking anything.
-        */
-        spriteContainer.width = card.sprite.width;
-        spriteContainer.height = card.sprite.height;
-
-        /*
-        Set the location of the container to the spot specified in the parameters.
-        */
-        spriteContainer.x = x;
-        spriteContainer.y = y;
-
-        /*
-        These two lines make the container sensitive to click events.
-        */
-        spriteContainer.interactive = true;
-        spriteContainer.interactiveChildren = true;
-
-        /*
-        This just makes it so that children of this container get sorted so that the ones added later go to the front
-        of the container and display over the others.
-        */
-        spriteContainer.sortableChildren = true;
-
-        /*
-        This also makes the card's image interactive. If we don't do this, then only the number will be interactive which means that the
-        card will be pretty much impossible to deal with.
-        */
-        card.sprite.interactive = true;
-
-        /*
-        Add the card's sprite to this new container.
-        */
-        spriteContainer.addChild(card.sprite);
-
-        /*
-        This is probably the most disgusting line of code I've ever written but basically I'm just overwriting the card's sprite
-        property and replacing it with this new fancy container thing. It totally works tho, and when I tried to fix it to something
-        a little cleaner everything broke. So just leave it, and whenever you create a new card you should make sure to change the
-        card's sprite to a container.
-
-        -Hughes
-        */
-        card.sprite = spriteContainer;
-
-        /*
-        Calls a property of the ClientCard class that adds a cost to the card. This should also be called when the cost of a card
-        is modified because it will actually change the cost graphically to reflect that.
-        */
-        card.updateText();
-
-        /*
-        We add this sprite container to the view now that it's been all constructed and everything.
-        */
-        app.stage.addChild(spriteContainer);
-
-        /*
-        Look above for more information on what these functions do, since they're defined above (line 200-ish). Basically just defining
-        that these functions get called on mouse over, mouse out, pointer down, etc.
-        */
         card.sprite.on('mouseover', mouseOverCardInHand);
 
         card.sprite.on('mouseout', mouseOutCardInHand);
@@ -363,9 +292,8 @@ let GameView = (function() {
 
         card.sprite.on('pointermove', onDragFromHandMove);
 
-        /*
-        Then we return a reference to the card so that it can be further manipulated.
-        */
+        app.stage.addChild(card.sprite);
+
         return card;
     }
 
