@@ -21,7 +21,6 @@ ClientCard = (function() {
             this.name = name;
             this.cost = cost;
             this.currentCost = cost;//current cost and absolute cost are different
-            this.generateImages();
         }
 
         updateText() {
@@ -117,12 +116,16 @@ ClientCard = (function() {
             this.currentPower = this.power;
             this.hasDefender = backendCard.hasDefender;
             this.isStatic = backendCard.isStatic;
+
+            this.generateImages();
         }
 
         updateText() {
             super.updateText();
             this.sprite.removeChild(this.powerText);
-            this.powerText = new PIXI.Text(this.power, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
+
+            let powerText = new PIXI.Text(this.currentPower, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
+            this.powerText = powerText;
             this.powerText.interactive = true;
 
             this.powerText.anchor.x = .5;
@@ -133,13 +136,13 @@ ClientCard = (function() {
             this.powerText.y -= this.sprite.height * .425;
 
             this.sprite.addChild(this.powerText);
-
+            
         }
 
         displayPopup() {
             super.displayPopup();
 
-            let power = new PIXI.Text(this.power, 
+            let power = new PIXI.Text(this.currentPower, 
                 {
                     fontFamily: 'Helvetica', 
                     dropShadow: true, 
