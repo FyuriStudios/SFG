@@ -347,6 +347,54 @@ let GameView = (function() {
         });
     }
 
+    function fixTokens() {
+
+        if(!(game.ownMonsterTokenText != undefined && game.ownMonsterTokens + '' == game.ownMonsterTokenText.text)) {
+            app.stage.removeChild(game.ownMonsterTokenText);
+            game.ownMonsterTokenText = new PIXI.Text(game.ownMonsterTokens, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'black', strokeThickness: 8, align: 'center'});
+            game.ownMonsterTokenText.anchor.x = game.ownMonsterTokenText.y = .5;
+            game.ownMonsterTokenText.x = app.stage.width * .6255;
+            game.ownMonsterTokenText.y = app.stage.height * .839;
+            game.ownMonsterTokenText.width = app.stage.width * (game.ownMonsterTokenText.text.length == 1? .04 : .06);
+            game.ownMonsterTokenText.height = app.stage.height * .12;
+            app.stage.addChild(game.ownMonsterTokenText);
+        }
+
+        if(!(game.ownSpellTokenText != undefined && game.ownSpellTokens + '' == game.ownSpellTokenText.text)) {
+            app.stage.removeChild(game.ownSpellTokenText);
+            game.ownSpellTokenText = new PIXI.Text(game.ownSpellTokens, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'black', strokeThickness: 8, align: 'center'});
+            game.ownSpellTokenText.anchor.x = game.ownSpellTokenText.y = .5;
+            game.ownSpellTokenText.x = app.stage.width * .776;
+            game.ownSpellTokenText.y = app.stage.height * .839;
+            game.ownSpellTokenText.width = app.stage.width * (game.ownSpellTokenText.text.length == 1? .04 : .06);
+            game.ownSpellTokenText.height = app.stage.height * .12;
+            app.stage.addChild(game.ownSpellTokenText);
+        }
+
+        if(!(game.enemyMonsterTokenText != undefined && game.enemyMonsterTokens + '' == game.enemyMonsterTokenText.text)) {
+            app.stage.removeChild(game.enemyMonsterTokenText);
+            game.enemyMonsterTokenText = new PIXI.Text(game.enemyMonsterTokens, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'black', strokeThickness: 8, align: 'center'});
+            game.enemyMonsterTokenText.anchor.x = game.enemyMonsterTokenText.y = .5;
+            game.enemyMonsterTokenText.x = app.stage.width * .6255;
+            game.enemyMonsterTokenText.y = app.stage.height * .031;
+            game.enemyMonsterTokenText.width = app.stage.width * (game.enemyMonsterTokenText.text.length == 1? .04 : .06);
+            game.enemyMonsterTokenText.height = app.stage.height * .12;
+            app.stage.addChild(game.enemyMonsterTokenText);
+        }
+
+        if(!(game.enemySpellTokenText != undefined && game.enemySpellTokens + '' == game.enemySpellTokenText.text)) {
+            app.stage.removeChild(game.enemySpellTokenText);
+            game.enemySpellTokenText = new PIXI.Text(game.enemySpellTokens, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'black', strokeThickness: 8, align: 'center'});
+            game.enemySpellTokenText.anchor.x = game.enemySpellTokenText.y = .5;
+            game.enemySpellTokenText.x = app.stage.width * .776;
+            game.enemySpellTokenText.y = app.stage.height * .031;
+            game.enemySpellTokenText.width = app.stage.width * (game.enemySpellTokenText.text.length == 1? .04 : .06);
+            game.enemySpellTokenText.height = app.stage.height * .12;
+            app.stage.addChild(game.enemySpellTokenText);
+        }
+
+    }
+
     /**
      * This function hasn't been defined yet. At some point the idea is to make it add a card to the enemy's hand.
      * There should also be a discardEnemyCard function, but that comes later.
@@ -407,7 +455,7 @@ let GameView = (function() {
             free to add more later on, although you'll have to make sure to add a line to loader.load adding your texture to the textures
             object.
             */
-            loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardback.png').add('popup', '/static/assets/Brick_Border.png');
+            loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardback.png').add('popup', '/static/assets/Brick_Border.png').add('tokenFrame', '/static/assets/tokenFrame.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -417,6 +465,7 @@ let GameView = (function() {
                 textures.background = resources.background.texture;
                 textures.cardBack = resources.cardBack.texture;
                 textures.popup = resources.popup.texture;
+                textures.tokenFrame = resources.tokenFrame.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
@@ -463,6 +512,20 @@ let GameView = (function() {
                 ownDeck.height = .212 * app.stage.height;
                 ownDeck.width = .0850 * app.stage.width;
                 app.stage.addChild(ownDeck);
+
+                let friendlyTokenFrame = new PIXI.Sprite(textures.tokenFrame);
+                friendlyTokenFrame.x = .585 * app.stage.width;
+                friendlyTokenFrame.y = .83 * app.stage.height;
+                friendlyTokenFrame.width = .23 * app.stage.width;
+                friendlyTokenFrame.height = .15 * app.stage.height;
+                app.stage.addChild(friendlyTokenFrame);
+
+                let enemyTokenFrame = new PIXI.Sprite(textures.tokenFrame);
+                enemyTokenFrame.x = .585 * app.stage.width;
+                enemyTokenFrame.y = .02 * app.stage.height;
+                enemyTokenFrame.width = .23 * app.stage.width;
+                enemyTokenFrame.height = .15 * app.stage.height;
+                app.stage.addChild(enemyTokenFrame);
 
                 
                 /*
@@ -515,6 +578,7 @@ let GameView = (function() {
                     app.stage.removeChild(ownDeck.popup);
                     ownDeck.popup = undefined;
                 });
+                fixTokens();
                 
             });
 

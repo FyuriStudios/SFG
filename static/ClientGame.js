@@ -47,6 +47,10 @@ class ClientGame {
 		this.enemyDeckSize = enemyStartingDeckSize - constants.STARTING_CARDS_DRAWN;
 		this.turnCounter = 0;
 		this.initialized = true;
+		this.ownMonsterTokens = 0;
+		this.ownSpellTokens = 0;
+		this.enemyMonsterTokens = 0;
+		this.enemySpellTokens = 0;
 	}
 
 	/**
