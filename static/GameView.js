@@ -347,6 +347,9 @@ let GameView = (function() {
         });
     }
 
+    /*
+    TODO: make this less gross :(
+    */
     function fixTokens() {
 
         if(!(game.ownMonsterTokenText != undefined && game.ownMonsterTokens + '' == game.ownMonsterTokenText.text)) {
