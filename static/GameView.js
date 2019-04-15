@@ -65,6 +65,11 @@ let GameView = (function() {
      */
     let animator = new AnimationQueue(app);
 
+    let endTurnButton = {
+        button: null,//This is gross. Fix it if I have the time.
+        filter: new PIXI.filters.ColorMatrixFilter()
+    }
+
     /*
     Above this is the space for declaring module scope variables (variables that can be accessed by any of the functions below and 
     modified.)
@@ -398,14 +403,6 @@ let GameView = (function() {
 
     }
 
-    /**
-     * This function hasn't been defined yet. At some point the idea is to make it add a card to the enemy's hand.
-     * There should also be a discardEnemyCard function, but that comes later.
-     */
-    function drawEnemyHand() {
-
-    }
-
     /*
     This "return" statement is just one big JSON object. It contains all of the functions that should be able to be called externally.
     These functions generally provide a "safe" way to interact with the data inside this module, so that graphics are only handled here 
@@ -458,7 +455,11 @@ let GameView = (function() {
             free to add more later on, although you'll have to make sure to add a line to loader.load adding your texture to the textures
             object.
             */
-            loader.add('background', '/static/assets/game-board.png').add('cardBack', '/static/assets/cardback.png').add('popup', '/static/assets/Brick_Border.png').add('tokenFrame', '/static/assets/tokenFrame.png');
+            loader.add('background', '/static/assets/game-board.png')
+                .add('cardBack', '/static/assets/cardback.png')
+                .add('popup', '/static/assets/Brick_Border.png')
+                .add('tokenFrame', '/static/assets/tokenFrame.png')
+                .add('endButton', '/static/assets/TheWorstThingEver.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -469,6 +470,7 @@ let GameView = (function() {
                 textures.cardBack = resources.cardBack.texture;
                 textures.popup = resources.popup.texture;
                 textures.tokenFrame = resources.tokenFrame.texture;
+                textures.endButton = resources.endButton.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
@@ -480,6 +482,8 @@ let GameView = (function() {
 
             All it does pretty much is add images that are guaranteed to be there at the beginning of the game (e.g. background) to the
             stage. It may do more in the future but that's it for the time being.
+
+            TODO: reduce the size of this function. Maybe we should be loading textures elsewhere and this should just run when setupView is called?
             */
             loader.onComplete.add(() => {
 
@@ -492,6 +496,28 @@ let GameView = (function() {
                 background.x = 0;
                 background.y = 0;
                 app.stage.addChild(background);
+
+                endTurnButton.button = new PIXI.Sprite(textures.endButton);
+                endTurnButton.button.interactive = true;
+                endTurnButton.button.filters = [endTurnButton.filter];
+                endTurnButton.filter.desaturate();
+                
+                endTurnButton.button.x = app.stage.width * .89;
+                endTurnButton.button.y = app.stage.height * .455;
+                endTurnButton.button.width = app.stage.width * .103;
+                endTurnButton.button.height = app.stage.height * .09;
+                
+                app.stage.addChild(endTurnButton.button);
+
+
+                endTurnButton.button.on('mousedown', () => {
+                    endTurnButton.button.alpha = 0.7;
+                });
+
+                endTurnButton.button.on('mouseup', () => {
+                    outputFunc({type: 'endTurn'});
+                    endTurnButton.button.alpha = 1;
+                });
 
                 /*
                 Add the enemy's deck image to the stage. We add the sprite at the very end because if we add the sprite before resizing
@@ -677,9 +703,35 @@ let GameView = (function() {
                 }
             }
 
-            if(event.type == 'play card') {
+            else if(event.type == 'play card') {
 
             }
+
+            else if(event.type == 'end turn') {
+                game.turnCounter++;
+
+                if((game.turnCounter%4 == 1 || game.turnCounter%4 == 2 && game.id == 1) || (game.turnCounter%4 == 3 || game.turnCounter%4 == 0 && game.id == 2)) {
+                    endTurnButton.filter.saturate(1, false);
+                }
+
+                else {
+                    endTurnButton.desaturate();
+                }
+            }
+
+            else if(event.type == 'start turn') {
+                game.turnCounter++;
+
+                if((game.turnCounter%4 == 1 || game.turnCounter%4 == 2 && game.id == 1) || (game.turnCounter%4 == 3 || game.turnCounter%4 == 0 && game.id == 2)) {
+                    endTurnButton.filter.saturate(1, false);
+                }
+
+                else {
+                    endTurnButton.desaturate();
+                }
+            }
+            
+           
         },
 
         /**
