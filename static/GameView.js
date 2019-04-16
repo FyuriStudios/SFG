@@ -175,6 +175,42 @@ let GameView = (function() {
             let pos = this.dragData.getLocalPosition(this.parent);
             this.x = pos.x;
             this.y = pos.y;
+
+            let fieldBounds = {
+                x: .147 * app.stage.width,
+                y: .306 * app.stage.height,
+                width: .706 * app.stage.width,
+                height: .355 * app.stage.height
+            };
+    
+            /*
+            This if statement checks to see if the card is intersecting with the field rectangle. Look up "check for rectangle intersection"
+            on StackOverflow if you're curious about what this does.
+            */
+            if (!(this.x > fieldBounds.x + fieldBounds.width ||
+                this.x + this.width < fieldBounds.x ||
+                this.y > fieldBounds.y + fieldBounds.height ||
+                this.y + this.height < fieldBounds.y))
+            {
+                this.alpha = 0;
+                let temp = this;
+                game.hand.forEach((val) => val.sprite == temp?temp=val:null);
+
+                temp.monsterContainer.x = this.x -this.width/2;
+                temp.monsterContainer.y = this.y -this.height/2;
+                temp.monsterContainer.width = this.width * 1.1;
+                temp.monsterContainer.height = this.height * .9;
+                app.stage.addChild(temp.monsterContainer);
+                
+            }
+            else {
+                let temp = this;
+                game.hand.forEach((val) => val.sprite == temp?temp=val:null);
+
+                app.stage.removeChild(temp.monsterContainer);
+                this.alpha = 1;
+            }
+
         }
     }
 
@@ -184,6 +220,11 @@ let GameView = (function() {
      * @param {any} eventObj 
      */
     let onDragFromHandEnd = function(eventObj) {
+        let temp = this;
+        game.hand.forEach((val) => val.sprite == temp?temp=val:null);
+
+        app.stage.removeChild(temp.monsterContainer);
+        this.alpha = 1;
 
         /*
         Unset the fields from earlier because we aren't using them anymore.

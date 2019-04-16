@@ -118,6 +118,7 @@ ClientCard = (function() {
             this.isStatic = backendCard.isStatic;
 
             this.generateImages();
+            this.displayMonster();
         }
 
         updateText() {
@@ -164,7 +165,9 @@ ClientCard = (function() {
         displayMonster() {
             let monsterContainer = new PIXI.Container();
             let sprite = IDToImage.monsterFromID(this.id);
-            
+
+            monsterContainer.addChild(sprite);
+            this.monsterContainer = monsterContainer;
 
         }
 

@@ -17,8 +17,9 @@ IDToImage = (function () {
         },
 
         monsterFromID: function(id) {
-            console.log('this function kinda works');
-            return PIXI.Sprite.from('/static/assets/monster_pieces/Board-Pierce-Microchip.png');
+            if(id == -1) {
+                return PIXI.Sprite.from('/static/assets/monster_pieces/Board-Piece-HickoryBlueBear.png');
+            }
         }
     }
 
