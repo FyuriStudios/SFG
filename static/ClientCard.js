@@ -136,7 +136,6 @@ ClientCard = (function() {
             this.powerText.y -= this.sprite.height * .425;
 
             this.sprite.addChild(this.powerText);
-            
         }
 
         displayPopup() {
@@ -161,6 +160,14 @@ ClientCard = (function() {
 
             this.popup.addChild(power);
         }
+
+        displayMonster() {
+            let monsterContainer = new PIXI.Container();
+            let sprite = IDToImage.monsterFromID(this.id);
+            
+
+        }
+
     }
 
     /**
