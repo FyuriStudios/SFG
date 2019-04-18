@@ -83,6 +83,9 @@ face as a result of it.
 		target: int
 	}
 
+	7) type: 'play card'
+	
+
 */
 
 //require everything that we need, probably this list will expand as we go

@@ -444,6 +444,18 @@ let GameView = (function() {
 
     }
 
+    function fixOwnBoardSpacing() {
+        let cardSpacingDivisor = app.stage.width * 0.1;
+
+        game.hand.forEach((value, index) => {
+            let offsetDirection = (index > game.hand/2)? 1:-1;
+            let xDestination = (Math.floor(index - game.hand.length) - 1) * cardSpacingDivisor + app.stage.width/2;//I think that this line of code kinda works.
+            let yDestination = app.stage.height * 0.55;
+
+            animator.addMoveRequest(value, {x: xDestination, y: yDestination}, 10);
+        });
+    }
+
     /*
     This "return" statement is just one big JSON object. It contains all of the functions that should be able to be called externally.
     These functions generally provide a "safe" way to interact with the data inside this module, so that graphics are only handled here 
@@ -745,6 +757,14 @@ let GameView = (function() {
             }
 
             else if(event.type == 'play card') {
+
+                if(event.player == game.id) {
+                    let card = game.hand.splice(event.handLoc, 1)[0];//remove the card at the relevant location in the player's hand
+                    game.ownBoard.splice(event.playLoc, 0, card);//insert the card at the correct location in the player's board
+                    fixOwnBoardSpacing();
+                } else {
+
+                }
 
             }
 
