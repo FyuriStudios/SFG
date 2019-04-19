@@ -15,8 +15,7 @@ let test = function() {
         GameView.processEvent({type: 'draw card', player: 1});
         GameView.processEvent({type: 'draw card', player: 2});
 
-        GameView.processEvent({type: 'start turn'});
-        GameView.processEvent({type: 'end turn'});
+        GameView.processEvent({type: 'play card', player: 1, handLoc: 0, playLoc: 0});
     }, 1000);
     
 };

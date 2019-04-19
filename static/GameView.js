@@ -447,12 +447,15 @@ let GameView = (function() {
     function fixOwnBoardSpacing() {
         let cardSpacingDivisor = app.stage.width * 0.1;
 
-        game.hand.forEach((value, index) => {
-            let offsetDirection = (index > game.hand/2)? 1:-1;
+        game.ownBoard.forEach((value, index) => {
+            value.monsterContainer.width = .9 * value.sprite.width;
+            value.monsterContainer.height = 1.1 * value.sprite.height;
+            value.monsterContainer.x = value.sprite.x + value.monsterContainer.width/2; //Not quite right. Fix.
+            value.monsterContainer.y = value.sprite.y + value.monsterContainer.height/2;
             let xDestination = (Math.floor(index - game.hand.length) - 1) * cardSpacingDivisor + app.stage.width/2;//I think that this line of code kinda works.
             let yDestination = app.stage.height * 0.55;
 
-            animator.addMoveRequest(value, {x: xDestination, y: yDestination}, 10);
+            animator.addMoveRequest(value.monsterContainer, {x: xDestination, y: yDestination}, 10);
         });
     }
 
@@ -761,6 +764,8 @@ let GameView = (function() {
                 if(event.player == game.id) {
                     let card = game.hand.splice(event.handLoc, 1)[0];//remove the card at the relevant location in the player's hand
                     game.ownBoard.splice(event.playLoc, 0, card);//insert the card at the correct location in the player's board
+                    app.stage.removeChild(card.sprite);
+                    app.stage.addChild(card.monsterContainer);
                     fixOwnBoardSpacing();
                 } else {
 
