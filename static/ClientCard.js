@@ -171,6 +171,22 @@ ClientCard = (function() {
 
         }
 
+        boardForm() {
+            let width = this.sprite.width;
+            let height = this.sprite.height;
+            let x = this.sprite.x;
+            let y = this.sprite.y;
+
+            this.sprite.removeChildren();
+            let monster = IDToImage.monsterFromID(this.id);
+            monster.anchor.x = monster.anchor.y = .5;
+            this.sprite.addChild(monster);
+            this.sprite.width = width;
+            this.sprite.height = height;
+            this.sprite.x = x;
+            this.sprite.y = y;
+        }
+
     }
 
     /**

@@ -99,9 +99,10 @@ let GameView = (function() {
         let temp;
         game.hand.forEach((val) => (val.sprite.x == this.x && val.sprite.y == this.y)?temp=val:null);
 
-        temp.displayPopup();
-
-        app.stage.addChild(temp.popup);
+        if(temp != undefined) {
+            temp.displayPopup();
+            app.stage.addChild(temp.popup);
+        }
 
     }
 
@@ -450,12 +451,12 @@ let GameView = (function() {
         game.ownBoard.forEach((value, index) => {
             value.monsterContainer.width = .9 * value.sprite.width;
             value.monsterContainer.height = 1.1 * value.sprite.height;
-            value.monsterContainer.x = value.sprite.x + value.monsterContainer.width/2; //Not quite right. Fix.
-            value.monsterContainer.y = value.sprite.y + value.monsterContainer.height/2;
-            let xDestination = (Math.floor(index - game.hand.length) - 1) * cardSpacingDivisor + app.stage.width/2;//I think that this line of code kinda works.
-            let yDestination = app.stage.height * 0.55;
+            value.monsterContainer.x = 200;
+            value.monsterContainer.y = 200;
+            // let xDestination = (Math.floor(index - game.hand.length) - 1) * cardSpacingDivisor + app.stage.width/2;//I think that this line of code kinda works.
+            // let yDestination = app.stage.height * 0.55;
 
-            animator.addMoveRequest(value.monsterContainer, {x: xDestination, y: yDestination}, 10);
+            // animator.addMoveRequest(value.monsterContainer, {x: xDestination, y: yDestination}, 10);
         });
     }
 
@@ -764,9 +765,7 @@ let GameView = (function() {
                 if(event.player == game.id) {
                     let card = game.hand.splice(event.handLoc, 1)[0];//remove the card at the relevant location in the player's hand
                     game.ownBoard.splice(event.playLoc, 0, card);//insert the card at the correct location in the player's board
-                    app.stage.removeChild(card.sprite);
-                    app.stage.addChild(card.monsterContainer);
-                    fixOwnBoardSpacing();
+                    card.boardForm();  
                 } else {
 
                 }
