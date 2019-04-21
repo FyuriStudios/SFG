@@ -512,11 +512,12 @@ let GameView = (function() {
             free to add more later on, although you'll have to make sure to add a line to loader.load adding your texture to the textures
             object.
             */
-            loader.add('background', '/static/assets/game-board.png')
+            loader.add('background', '/static/assets/full_board.png')
                 .add('cardBack', '/static/assets/cardback.png')
-                .add('popup', '/static/assets/Brick_Border.png')
-                .add('tokenFrame', '/static/assets/tokenFrame.png')
-                .add('endButton', '/static/assets/TheWorstThingEver.png');
+                .add('deck', '/static/assets/deck.png')
+                .add('endButton', '/static/assets/End_Turn_Button.png')
+                .add('endButtonHover', '/static/assets/End_Turn_Button_Hover.png')
+                .add('tokenFrame', '/static/assets/tokenFrame.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -524,10 +525,11 @@ let GameView = (function() {
             */
             loader.load((loader, resources) => {
                 textures.background = resources.background.texture;
+                textures.deck = resources.deck.texture;
                 textures.cardBack = resources.cardBack.texture;
-                textures.popup = resources.popup.texture;
-                textures.tokenFrame = resources.tokenFrame.texture;
                 textures.endButton = resources.endButton.texture;
+                textures.endButtonHover = resources.endButtonHover.texture;
+                textures.tokenFrame = resources.tokenFrame.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
@@ -559,13 +561,12 @@ let GameView = (function() {
                 endTurnButton.button.filters = [endTurnButton.filter];
                 endTurnButton.filter.desaturate();
                 
-                endTurnButton.button.x = app.stage.width * .89;
+                endTurnButton.button.x = app.stage.width * .005;
                 endTurnButton.button.y = app.stage.height * .455;
                 endTurnButton.button.width = app.stage.width * .103;
                 endTurnButton.button.height = app.stage.height * .09;
                 
                 app.stage.addChild(endTurnButton.button);
-
 
                 endTurnButton.button.on('mousedown', () => {
                     endTurnButton.button.alpha = 0.7;
@@ -582,7 +583,7 @@ let GameView = (function() {
                 The weird decimal x y and height locations etc were calculated by hand, there's no particular rhyme or reason to what
                 they are numerically.
                 */
-                let enemyDeck = new PIXI.Sprite(textures.cardBack);
+                let enemyDeck = new PIXI.Sprite(textures.deck);
                 enemyDeck.x = .0146 * app.stage.width;
                 enemyDeck.y = .01 * app.stage.height;
                 enemyDeck.height = .212 * app.stage.height; 
@@ -592,7 +593,7 @@ let GameView = (function() {
                 /*
                 Add the player's deck image to the stage. Pretty much same as above.
                 */
-                let ownDeck = new PIXI.Sprite(textures.cardBack);
+                let ownDeck = new PIXI.Sprite(textures.deck);
                 ownDeck.x = .0146 * app.stage.width;
                 ownDeck.y = .775 * app.stage.height;
                 ownDeck.height = .212 * app.stage.height;
