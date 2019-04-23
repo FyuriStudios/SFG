@@ -181,8 +181,8 @@ ClientCard = (function() {
             let monster = IDToImage.monsterFromID(this.id);
             monster.anchor.x = monster.anchor.y = .5;
             this.sprite.addChild(monster);
-            this.sprite.width = width;
-            this.sprite.height = height;
+            this.sprite.width = width * .9;
+            this.sprite.height = height * .68;
             this.sprite.x = x;
             this.sprite.y = y;
         }
