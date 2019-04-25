@@ -4,7 +4,7 @@
   "description": "The main project for the SFG project, written in NodeJS.",
   "main": "Server.js",
   "scripts": {
-    "test": "node server/test.js"
+    "test": "node server/Test.js"
   },
   "repository": {
     "type": "git",
