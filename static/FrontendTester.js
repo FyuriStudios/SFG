@@ -13,11 +13,28 @@ let test = function() {
     
     setTimeout(() => {
         GameView.processEvent({type: 'draw card', player: 1});
+        GameView.processEvent({type: 'draw card', player: 1});
+            
         GameView.processEvent({type: 'draw card', player: 2});
     }, 1000);
 
     setTimeout(() => {
+        GameView.processEvent({type: 'draw card', player: 1});
         GameView.processEvent({type: 'play card', player: 1, handLoc: 0, playLoc: 0});
     }, 3000);
+
+    setTimeout(() => {
+        GameView.processEvent({type: 'draw card', player: 1});
+        GameView.processEvent({type: 'play card', player: 1, handLoc: 0, playLoc: 0});
+    }, 4000);
+
+    setTimeout(() => {
+        GameView.processEvent({type: 'draw card', player: 1});
+        GameView.processEvent({type: 'play card', player: 1, handLoc: 0, playLoc: 0});
+    }, 6000);
+
+    setTimeout(() => {
+        GameView.processEvent({type: 'play card', player: 1, handLoc: 0, playLoc: 0});
+    }, 7000);
     
 };

@@ -14,7 +14,8 @@ class ClientGame {
 	 * to be a full grown up ClientGame instance just yet.
 	 */
 	constructor() {
-		this.initialized = false;
+        this.initialized = false;
+        this.MAX_CARDS = 10;
 	}
 
 	/**

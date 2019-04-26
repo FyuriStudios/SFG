@@ -59,12 +59,6 @@ let GameView = (function() {
      */
     let enemyCardsInHand = [];
 
-    /**
-     * This is a custom animation object that allows us to make things smoothly move around the stage. See AnimationQueue.js for more
-     * details.
-     */
-    let animator = new AnimationQueue(app);
-
     let endTurnButton = {
         button: null,//This is gross. Fix it if I have the time.
         filter: new PIXI.filters.ColorMatrixFilter()
@@ -108,7 +102,7 @@ let GameView = (function() {
 
     /**
      * This is the opposite of the above function: It gets called when the mouse comes off of the card.
-     * It pretty much just does literally the opposite of the above function, animating everything back to the size and position of
+     * It pretty much just does literally the opposite of the above function, everything back to the size and position of
      * where it was previously. Seriously, just look above if you want to figure out what this does.
      * @param {any} eventObj 
      */
@@ -165,6 +159,12 @@ let GameView = (function() {
      */
     let onDragFromHandMove = function() {
 
+        if(this.index != undefined) {
+            game.ownBoard.splice(index, 1);
+            this.index = undefined;
+            fixOwnBoardSpacing();
+        }
+
         /*
         We have to make sure that the card is actually being dragged so that we don't drag cards that haven't been selected for dragging
         already.
@@ -201,7 +201,28 @@ let GameView = (function() {
                 temp.monsterContainer.y = this.y -this.height/2;
                 temp.monsterContainer.width = this.width * 1.1;
                 temp.monsterContainer.height = this.height * .9;
-                app.stage.addChild(temp.monsterContainer);
+                app.stage.addChild(temp.monsterContainer); //this works because PIXI knows when a guy is already on the board.
+
+                if(game.ownBoard.length < game.MAX_CARDS) {
+
+                    let spotForCard;
+                    game.ownBoard.forEach((card, index) => {
+
+                        //if it's to the left of the first card, then that's where the card go my guy
+                        if((index == 0 && temp.monsterContainer.x < card.sprite.x) || 
+                            (index == game.ownBoard.length - 1 && temp.monsterContainer.x >= card.sprite.x) ||
+                            (temp.monsterContainer.x >= game.hand[index-1] && temp.monsterContainer.x < card.sprite.x)) {
+                            spotForCard = index;
+                        }
+                        
+                    });
+
+                    game.ownBoard.splice(spotForCard, 0, temp);
+
+                    temp.sprite.locationInBoard = spotForCard;
+
+                    fixOwnBoardSpacing();
+                }
                 
             }
             else {
@@ -223,6 +244,12 @@ let GameView = (function() {
     let onDragFromHandEnd = function(eventObj) {
         let temp = this;
         game.hand.forEach((val) => val.sprite == temp?temp=val:null);
+
+        if(this.index != undefined) {
+            game.ownBoard.splice(index, 1);
+            this.index = undefined;
+            fixOwnBoardSpacing();
+        }
 
         app.stage.removeChild(temp.monsterContainer);
         this.alpha = 1;
@@ -374,7 +401,7 @@ let GameView = (function() {
             let x = leftBound + cardSpacingDivisor * (index+1);
             let y = upperBound;
 
-            animator.addMoveRequest(card.sprite, {x: x, y: y}, 5);
+            AnimationQueue.addMoveRequest(card.sprite, {x: x, y: y}, 5);
         });
     }
 
@@ -390,7 +417,7 @@ let GameView = (function() {
             let x = leftBound + cardSpacingDivisor * (index+1);
             let y = upperBound;
 
-            animator.addMoveRequest(card, {x: x, y: y}, 5);
+            AnimationQueue.addMoveRequest(card, {x: x, y: y}, 5);
         });
     }
 
@@ -446,14 +473,19 @@ let GameView = (function() {
     }
 
     function fixOwnBoardSpacing() {
-        let cardSpacingDivisor = app.stage.width * 0.1;
+        let space = .1 * app.stage.width;
+        let leftBound = app.stage.width/2 - (space * game.ownBoard.length/2);
 
         game.ownBoard.forEach((value, index) => {
-            console.log('yes');
-            let xDestination = (Math.floor(index - game.hand.length) /*- 1*/) * cardSpacingDivisor + app.stage.width/2;//I think that this line of code kinda works.
+
+            if(value.sprite.dragging) {
+                return;
+            }
+
+            let xDestination = leftBound + (space * (index + 0.5));
             let yDestination = app.stage.height * 0.6;
 
-            animator.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
+            AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
         });
     }
 
@@ -666,10 +698,7 @@ let GameView = (function() {
                 
             });
 
-            /*
-            Get the animation object running. See the AnimationQueue object for more details.
-            */
-            animator.startAnimating();
+            AnimationQueue.startAnimating(app);
 
         },
 
@@ -728,7 +757,7 @@ let GameView = (function() {
                     Animates the card into the middle of the screen. Probably unnecessary and worth removing. If you even read this deep
                     in the code, I actually challenge you to delete the below line.
                     */
-                    animator.addMoveRequest(card.sprite, {x: app.stage.width * .2, y: .8320 * app.stage.height}, 5); //TODO: add card id handling
+                    // AnimationQueue.addMoveRequest(card.sprite, {x: app.stage.width * .2, y: .8320 * app.stage.height}, 5); //TODO: add card id handling
 
                     /*
                     Animate the card into the player's hand.
@@ -751,7 +780,7 @@ let GameView = (function() {
 
                     app.stage.addChild(card);
 
-                    animator.addMoveRequest(card, {x: app.stage.width * .2, y: .1 * app.stage.height}, 5);
+                    // AnimationQueue.addMoveRequest(card, {x: app.stage.width * .2, y: .1 * app.stage.height}, 5);
 
                     fixEnemyHandSpacing();
 
