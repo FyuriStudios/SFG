@@ -185,7 +185,7 @@ ClientCard = (function() {
             this.sprite.addChild(monster);
             
             this.sprite.width = width * .9;
-            this.sprite.height = height * .68;
+            this.sprite.height = height * .7;
             this.sprite.x = x;
             this.sprite.y = y;
 

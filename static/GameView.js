@@ -322,7 +322,7 @@ let GameView = (function() {
      */
     function smallSizeCardInHandSprite(card) {
         card.width = app.stage.width * .086;
-        card.height = app.stage.height * .225;
+        card.height = app.stage.height * .21;
     }
 
     /**
