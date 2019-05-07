@@ -539,6 +539,23 @@ let GameView = (function() {
     let mouseOutEnemyCardOnBoard = function() {
         mouseOutCardOnBoard(game.enemyBoard, this);
     }
+
+    function onMouseDragCardOnBoardStart() {
+        this.originalPos = {x: this.x, y: this.y};
+
+    }
+
+    function onMouseDragCardOnBoardMove(eventObj) {
+        let pos = this.dragData.getLocalPosition(this.parent);
+        let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
+
+    }
+
+    function onMouseDragCardOnBoardEnd() {
+
+    }
+
+
     /*
     This "return" statement is just one big JSON object. It contains all of the functions that should be able to be called externally.
     These functions generally provide a "safe" way to interact with the data inside this module, so that graphics are only handled here 
@@ -596,7 +613,9 @@ let GameView = (function() {
                 .add('deck', '/static/assets/deck.png')
                 .add('endButton', '/static/assets/End_Turn_Button.png')
                 .add('endButtonHover', '/static/assets/End_Turn_Button_Hover.png')
-                .add('tokenFrame', '/static/assets/tokenFrame.png');
+                .add('tokenFrame', '/static/assets/tokenFrame.png')
+                .add('arrowHead', '/static/assets/arrow_head.png')
+                .add('arrowBody', '/static/assets/arrow_body.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -609,6 +628,8 @@ let GameView = (function() {
                 textures.endButton = resources.endButton.texture;
                 textures.endButtonHover = resources.endButtonHover.texture;
                 textures.tokenFrame = resources.tokenFrame.texture;
+                textures.arrowHead = resources.arrowHead.texture;
+                textures.arrowBody = resources.arrowBody.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
