@@ -501,6 +501,44 @@ let GameView = (function() {
         });
     }
 
+    function mouseOverCardOnBoard(boardArray, sprite) {
+        
+        if(sprite.inMoveQueue || sprite.dragging) {
+            return;
+        }
+
+        let index;
+        boardArray.forEach((value, ind) => {
+            value.sprite == sprite?index = ind:null;
+        });
+
+        boardArray[index].displayPopup();
+        app.stage.addChild(boardArray[index].popup);
+        boardArray[index].popup.height *= 1.1;
+        boardArray[index].popup.x = app.stage.width * .834;
+        boardArray[index].popup.y = app.stage.height/2 - boardArray[index].popup.height/2;
+    }
+
+    function mouseOutCardOnBoard(boardArray, sprite) {
+
+        let temp;
+        boardArray.forEach(value => value.sprite == sprite?temp = value:null);
+
+        app.stage.removeChild(temp.popup);
+    }
+
+    let mouseOverOwnCardOnBoard = function() {
+        mouseOverCardOnBoard(game.ownBoard, this);
+    }
+    let mouseOverEnemyCardOnBoard = function() {
+        mouseOverCardOnBoard(game.enemyBoard, this);
+    }
+    let mouseOutOwnCardOnBoard = function() {
+        mouseOutCardOnBoard(game.ownBoard, this);
+    }
+    let mouseOutEnemyCardOnBoard = function() {
+        mouseOutCardOnBoard(game.enemyBoard, this);
+    }
     /*
     This "return" statement is just one big JSON object. It contains all of the functions that should be able to be called externally.
     These functions generally provide a "safe" way to interact with the data inside this module, so that graphics are only handled here 
@@ -766,12 +804,6 @@ let GameView = (function() {
                     game.hand.push(card);
 
                     /*
-                    Animates the card into the middle of the screen. Probably unnecessary and worth removing. If you even read this deep
-                    in the code, I actually challenge you to delete the below line.
-                    */
-                    // AnimationQueue.addMoveRequest(card.sprite, {x: app.stage.width * .2, y: .8320 * app.stage.height}, 5); //TODO: add card id handling
-
-                    /*
                     Animate the card into the player's hand.
                     */
                     fixOwnHandSpacing();
@@ -801,11 +833,29 @@ let GameView = (function() {
 
             else if(event.type == 'play card') {
 
-                if(event.player == game.id) {
+                if(event.player == game.id) { //TODO: account for spells later.
+
                     let card = game.hand.splice(event.handLoc, 1)[0];//remove the card at the relevant location in the player's hand
                     game.ownBoard.splice(event.playLoc, 0, card);//insert the card at the correct location in the player's board
                     card.boardForm();
-                    fixOwnBoardSpacing();  
+                    fixOwnBoardSpacing();
+
+                    card.sprite.off('mouseover', mouseOverCardInHand);
+
+                    card.sprite.off('mouseout', mouseOutCardInHand);
+
+                    card.sprite.off('pointerdown', onDragFromHandStart);
+
+                    card.sprite.off('pointerup', onDragFromHandEnd);
+
+                    card.sprite.off('pointerupoutside', onDragFromHandEnd); //removing mouse events. Then we'll re-add custom events.
+
+                    card.sprite.off('pointermove', onDragFromHandMove);
+
+                    card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
+                    card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
+
+
                 } else {
 
                 }
