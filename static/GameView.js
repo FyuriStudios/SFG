@@ -159,12 +159,6 @@ let GameView = (function() {
      */
     let onDragFromHandMove = function() {
 
-        if(this.index != undefined) {
-            game.ownBoard.splice(index, 1);
-            this.index = undefined;
-            fixOwnBoardSpacing();
-        }
-
         /*
         We have to make sure that the card is actually being dragged so that we don't drag cards that haven't been selected for dragging
         already.
@@ -194,8 +188,8 @@ let GameView = (function() {
                 this.y + this.height < fieldBounds.y))
             {
                 this.alpha = 0;
-                let temp = this;
-                game.hand.forEach((val) => val.sprite == temp?temp=val:null);
+                let temp;
+                game.hand.forEach((val) => val.sprite == this?temp=val:null);
 
                 temp.monsterContainer.x = this.x -this.width/2;
                 temp.monsterContainer.y = this.y -this.height/2;
@@ -208,29 +202,35 @@ let GameView = (function() {
                     let spotForCard;
                     game.ownBoard.forEach((card, index) => {
 
-                        //if it's to the left of the first card, then that's where the card go my guy
-                        if((index == 0 && temp.monsterContainer.x < card.sprite.x) || 
-                            (index == game.ownBoard.length - 1 && temp.monsterContainer.x >= card.sprite.x) ||
-                            (temp.monsterContainer.x >= game.hand[index-1] && temp.monsterContainer.x < card.sprite.x)) {
+                        if(index == 0 && temp.monsterContainer.x < (card.sprite.xLoc - card.sprite.width/2)) {
+                            spotForCard = index;
+                        }
+                        else if(index > 0 && temp.monsterContainer.x < (card.sprite.xLoc - card.sprite.width/2) && temp.monsterContainer.x > (game.ownBoard[index-1].sprite.xLoc - game.ownBoard[index-1].sprite.width/2)) {
                             spotForCard = index;
                         }
                         
                     });
 
-                    game.ownBoard.splice(spotForCard, 0, temp);
+                    if(spotForCard == undefined) {
+                        spotForCard = game.ownBoard.length;
+                    }
 
-                    temp.sprite.locationInBoard = spotForCard;
+                    this.spotForCard = spotForCard; //store it as a property of this object just so that it's easier to deal with, gross
 
-                    fixOwnBoardSpacing();
+                    slideCards(spotForCard);
+            
                 }
                 
             }
+
             else {
-                let temp = this;
-                game.hand.forEach((val) => val.sprite == temp?temp=val:null);
+                let temp;
+                game.hand.forEach((val) => val.sprite == this?temp=val:null);
 
                 app.stage.removeChild(temp.monsterContainer);
                 this.alpha = 1;
+
+                slideCards();
             }
 
         }
@@ -242,14 +242,11 @@ let GameView = (function() {
      * @param {any} eventObj 
      */
     let onDragFromHandEnd = function(eventObj) {
+
+        slideCards();
+
         let temp = this;
         game.hand.forEach((val) => val.sprite == temp?temp=val:null);
-
-        if(this.index != undefined) {
-            game.ownBoard.splice(index, 1);
-            this.index = undefined;
-            fixOwnBoardSpacing();
-        }
 
         app.stage.removeChild(temp.monsterContainer);
         this.alpha = 1;
@@ -297,6 +294,8 @@ let GameView = (function() {
             */
             let playType = game.hand[handLoc].type == 'monster'?'play monster':'play spell';
 
+            this.spotForCard = undefined;
+
             /*
             Call outputFunc with an event. Events from the backend to the frontend are similar to events going in the other direction,
             although I haven't documented frontend -> backend events yet.
@@ -304,7 +303,8 @@ let GameView = (function() {
             outputFunc({
                 type: playType,
                 card: game.hand[handLoc], //this needs cleaning up. The frontend isn't necessarily recieving exactly this.
-                handLoc: handLoc
+                handLoc: handLoc,
+                playLoc: this.spotForCard
             });
 
         }
@@ -478,14 +478,26 @@ let GameView = (function() {
 
         game.ownBoard.forEach((value, index) => {
 
-            if(value.sprite.dragging) {
-                return;
-            }
-
             let xDestination = leftBound + (space * (index + 0.5));
+
             let yDestination = app.stage.height * 0.6;
 
             AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
+            value.sprite.xLoc = xDestination;
+        });
+    }
+
+    function slideCards(loc = -1) {
+        game.ownBoard.forEach((value, index) => {
+            if(loc == -1) {
+                AnimationQueue.addMoveRequest(value.sprite, {x: value.sprite.xLoc, y: value.sprite.y}, 10);
+            }
+            else if(loc <= index) {
+                AnimationQueue.addMoveRequest(value.sprite, {x: value.sprite.xLoc + app.stage.width * .05, y: value.sprite.y}, 10);
+            }
+            else {
+                AnimationQueue.addMoveRequest(value.sprite, {x: value.sprite.xLoc - app.stage.width * .05, y: value.sprite.y}, 10);
+            }
         });
     }
 

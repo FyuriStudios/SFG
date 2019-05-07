@@ -63,6 +63,9 @@ return {
     * @returns void
     */
     addMoveRequest: function (sprite, to, vel = 1, onComplete = null) {
+        if(to.x == sprite.x && to.y == sprite.y)
+            return true;
+            
         let dx = to.x - sprite.x;
         let dy = to.y - sprite.y;
 

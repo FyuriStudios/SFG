@@ -180,11 +180,36 @@ ClientCard = (function() {
             this.sprite.removeChildren();
             let monster = IDToImage.monsterFromID(this.id);
             monster.anchor.x = monster.anchor.y = .5;
+            monster.width = width * .9;
+            monster.height = height * .68;
             this.sprite.addChild(monster);
+            
             this.sprite.width = width * .9;
             this.sprite.height = height * .68;
             this.sprite.x = x;
             this.sprite.y = y;
+
+            this.updatePower();
+        }
+
+        updatePower() {
+
+            let power = new PIXI.Text(this.currentPower, 
+                {
+                    fontFamily: 'Helvetica', 
+                    dropShadow: true, 
+                    dropShadowColor: 0xffffff, 
+                    fontSize: 100, 
+                    fill: 0xb51c27, 
+                    align: 'center'
+            });
+
+            power.anchor.x = power.anchor.y = .5;
+            this.sprite.addChild(power);
+            power.y = this.sprite.height * .42;
+            power.width = this.sprite.width * .3;
+            power.height = this.sprite.height * .3;
+
         }
 
     }
