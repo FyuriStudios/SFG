@@ -198,10 +198,11 @@ ClientCard = (function() {
                 {
                     fontFamily: 'Helvetica', 
                     dropShadow: true, 
-                    dropShadowColor: 0xffffff, 
+                    dropShadowColor: 0x000000, 
                     fontSize: 100, 
-                    fill: 0xb51c27, 
-                    align: 'center'
+                    fill: 0xffffff, 
+                    align: 'center',
+                    dropShadowDistance: 10,
             });
 
             power.anchor.x = power.anchor.y = .5;
