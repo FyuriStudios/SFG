@@ -153,11 +153,11 @@ ClientCard = (function() {
                 });
 
             power.anchor.x = power.anchor.y = .5;
-            power.width = this.popup.width * .09;
-            power.height = this.popup.height * .12;
+            power.width = this.popup.width * .11;
+            power.height = this.popup.height * .145;
 
-            power.x = this.popup.width * .88;
-            power.y = this.popup.height * .083;
+            power.x = this.popup.width * .87;
+            power.y = this.popup.height * .089;
 
             this.popup.addChild(power);
         }
