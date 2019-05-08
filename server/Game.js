@@ -201,7 +201,7 @@ class Game {
 				player1.hand.push(player1.deck.pop());
 			}
 			for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
-				player2.hand.push(player1.deck.pop());
+				player2.hand.push(player2.deck.pop());
 			}
 
 			player1.socket.emit('starting hand', {cards: player1.hand});
