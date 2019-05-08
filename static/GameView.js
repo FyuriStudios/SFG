@@ -29,7 +29,7 @@ let GameView = (function() {
     /*
     Don't touch. The last person who touched it got killed brutally.
     */
-    let grass = 420; //memes
+    let grass = 420;
 
     /**
      * Creating a ClientGame object. This object will hold all of the game state information, like cards in hand and such.
@@ -67,6 +67,12 @@ let GameView = (function() {
     let arrow = null;
 
     let arrowDragging = false;
+
+    let ownDeckHover = false;
+
+    let enemyDeckHover = false;
+
+    let graveyardDisplay = new PIXI.Container();
 
     /*
     Above this is the space for declaring module scope variables (variables that can be accessed by any of the functions below and 
@@ -570,6 +576,54 @@ let GameView = (function() {
         });
     }
 
+    function onMouseOverOwnGraveyard() {
+        if(!arrowDragging) {
+            ownDeckHover = true;
+            onGraveyardScroll(null, null);
+        }
+    }
+
+    function onMouseOverEnemyGraveyard() {
+        if(!arrowDragging) {
+            enemyDeckHover = true;
+            onGraveyardScroll(null, null);
+        }
+    }
+
+    function onMouseOffOwnGraveyard() {
+        ownDeckHover = false;
+        app.stage.removeChild(graveyardDisplay);
+        graveyardDisplay.scrollCount = 0;
+        graveyardDisplay.removeChildren();
+    }
+
+    function onMouseOffEnemyGraveyard() {
+        enemyDeckHover = false;
+        app.stage.removeChild(graveyardDisplay);
+        graveyardDisplay.scrollCount = 0;
+        graveyardDisplay.removeChildren();
+    }
+
+    function onGraveyardScroll(element, event) {
+        let graveyard;
+        if(ownDeckHover)
+            graveyard = game.ownGraveyard;
+        else if(enemyDeckHover)
+            graveyard = game.enemyGraveyard;
+
+        if(graveyardDisplay.scrollCount == undefined)
+            graveyardDisplay.scrollCount = 0;
+        else
+            graveyardDisplay.scrollCount += event.deltaY > 0? 1: -1;
+
+        graveyard.forEach((value, index) => {
+            graveyardDisplay.addChild(value.sprite);
+            AnimationQueue.addMoveRequest(value.sprite, {x: app.stage.width * .1, y: (index - graveyardDisplay.scrollCount) * app.stage.height * .2}, 6);
+        });
+
+        app.stage.addChild(graveyardDisplay);
+    }
+
 
     /*
     This "return" statement is just one big JSON object. It contains all of the functions that should be able to be called externally.
@@ -597,7 +651,7 @@ let GameView = (function() {
             document.body.addEventListener('mousedown', function(event) {
                 console.log('x: ' + event.clientX);
                 console.log('y: ' + event.clientY);
-            })
+            });
 
             /*
             Don't touch this. Everything breaks if you do.
@@ -630,7 +684,8 @@ let GameView = (function() {
                 .add('endButtonHover', '/static/assets/End_Turn_Button_Hover.png')
                 .add('tokenFrame', '/static/assets/tokenFrame.png')
                 .add('arrowHead', '/static/assets/arrow_head.png')
-                .add('arrowBody', '/static/assets/arrow_body.png');
+                .add('arrowBody', '/static/assets/arrow_body.png')
+                .add('graveyardIcon', '/static/assets/graveyardIcon.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -645,6 +700,7 @@ let GameView = (function() {
                 textures.tokenFrame = resources.tokenFrame.texture;
                 textures.arrowHead = resources.arrowHead.texture;
                 textures.arrowBody = resources.arrowBody.texture;
+                textures.graveyardIcon = resources.graveyardIcon.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
@@ -783,6 +839,28 @@ let GameView = (function() {
                 fixTokens();
 
                 arrow = new PIXI.Sprite(textures.arrowHead);
+
+                let ownGraveyardIcon = new PIXI.Sprite(textures.graveyardIcon);
+                ownGraveyardIcon.width = app.stage.width * .1;
+                ownGraveyardIcon.height = app.stage.height * .11;
+                ownGraveyardIcon.x = app.stage.width * .0097;
+                ownGraveyardIcon.y = app.stage.height * .523;
+                app.stage.addChild(ownGraveyardIcon);
+
+                let enemyGraveyardIcon = new PIXI.Sprite(textures.graveyardIcon);
+                enemyGraveyardIcon.width = app.stage.width * .1;
+                enemyGraveyardIcon.height = app.stage.height * .11;
+                enemyGraveyardIcon.x = app.stage.width * .0097;
+                enemyGraveyardIcon.y = app.stage.height * .35;
+                app.stage.addChild(enemyGraveyardIcon);
+
+                document.body.addEventListener('wheel', onGraveyardScroll);
+
+                ownGraveyardIcon.on('mouseover', onMouseOffOwnGraveyard);
+                ownGraveyardIcon.on('mouseout', onMouseOffOwnGraveyard);
+
+                enemyGraveyardIcon.on('mouseover', onMouseOverEnemyGraveyard);
+                enemyGraveyardIcon.on('mouseout', onMouseOffEnemyGraveyard);
                 
             });
 
