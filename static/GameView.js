@@ -491,6 +491,21 @@ let GameView = (function() {
         });
     }
 
+    function fixEnemyBoardSpacing() {
+        let space = .1 * app.stage.width;
+        let leftBound = app.stage.width/2 - (space * game.ownBoard.length/2);
+
+        game.enemyBoard.forEach((value, index) => {
+
+            let xDestination = leftBound + (space * (index + 0.5));
+
+            let yDestination = app.stage.height * 0.3;
+
+            AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
+            value.sprite.xLoc = xDestination;
+        });
+    }
+
     function slideCards(loc = -1) {
         game.ownBoard.forEach((value, index) => {
             if(loc == -1) {
@@ -912,6 +927,17 @@ let GameView = (function() {
                     card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
 
                 } else {
+
+                    game.hand.splice(event.handLoc, 1);
+
+                    let enemyCard = ClientCard.from(event.card);
+                    game.enemyBoard.splice(event.playLoc, 0, enemyCard);
+                    app.stage.addChild(enemyCard);
+                    enemyCard.boardForm();
+                    fixEnemyBoardSpacing();
+
+                    enemyCard.on('mouseover', mouseOverEnemyCardOnBoard);
+                    enemyCard.on('mouseout', mouseOutEnemyCardOnBoard);
 
                 }
 
