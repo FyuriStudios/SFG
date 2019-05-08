@@ -42,7 +42,9 @@ class ClientGame {
 		this.id = id;
 		this.hand = hand;
 		this.ownBoard = [];
-		this.enemyBoard = [];
+        this.enemyBoard = [];
+        this.ownGraveyard = [];
+        this.enemyGraveyard = [];
 		this.enemyCardsHeld = constants.STARTING_CARDS_DRAWN;
 		this.ownDeckSize = ownStartingDeckSize - constants.STARTING_CARDS_DRAWN;
 		this.enemyDeckSize = enemyStartingDeckSize - constants.STARTING_CARDS_DRAWN;
