@@ -64,6 +64,8 @@ let GameView = (function() {
         filter: new PIXI.filters.ColorMatrixFilter()
     }
 
+    let arrow = null;
+
     /*
     Above this is the space for declaring module scope variables (variables that can be accessed by any of the functions below and 
     modified.)
@@ -542,17 +544,38 @@ let GameView = (function() {
 
     function onMouseDragCardOnBoardStart() {
         this.originalPos = {x: this.x, y: this.y};
+        this.dragging = true;
+        this.alpha = 0.6;
+        console.log('yep');
 
     }
 
     function onMouseDragCardOnBoardMove(eventObj) {
-        let pos = this.dragData.getLocalPosition(this.parent);
-        let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
+
+        if(this.dragging) {
+            console.log('yeah');
+            let pos = this.dragData.getLocalPosition(this.parent);
+            let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
+
+            arrow.width = .1 * app.stage.width;
+            arrow.height = .15 * app.stage.height;
+
+            arrow.anchor.x = arrow.anchor.y = .5;
+            arrow.x = pos.x;
+            arrow.y = pos.y;
+
+            arrow.rotation = angle;
+
+            app.stage.addChild(arrow);
+        }
 
     }
 
     function onMouseDragCardOnBoardEnd() {
-
+        this.alpha = 1;
+        this.originalPos = undefined;
+        this.dragging = false;
+        app.stage.removeChild(arrow);
     }
 
 
@@ -766,6 +789,8 @@ let GameView = (function() {
                     ownDeck.popup = undefined;
                 });
                 fixTokens();
+
+                arrow = new PIXI.Sprite(textures.arrowHead);
                 
             });
 
@@ -861,6 +886,12 @@ let GameView = (function() {
                     card.boardForm();
                     fixOwnBoardSpacing();
 
+                    card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
+                    card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
+                    card.sprite.on('pointerDown', onMouseDragCardOnBoardStart);
+                    card.sprite.on('pointerUp', onMouseDragCardOnBoardEnd);
+                    card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
+
                     card.sprite.off('mouseover', mouseOverCardInHand);
 
                     card.sprite.off('mouseout', mouseOutCardInHand);
@@ -873,8 +904,7 @@ let GameView = (function() {
 
                     card.sprite.off('pointermove', onDragFromHandMove);
 
-                    card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
-                    card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
+                    
 
 
                 } else {
