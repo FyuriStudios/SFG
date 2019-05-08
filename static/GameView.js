@@ -854,17 +854,19 @@ let GameView = (function() {
                 arrow = new PIXI.Sprite(textures.arrowHead);
 
                 let ownGraveyardIcon = new PIXI.Sprite(textures.graveyardIcon);
-                ownGraveyardIcon.width = app.stage.width * .1;
+                ownGraveyardIcon.width = app.stage.width * .08;
                 ownGraveyardIcon.height = app.stage.height * .11;
-                ownGraveyardIcon.x = app.stage.width * .0097;
-                ownGraveyardIcon.y = app.stage.height * .523;
+                ownGraveyardIcon.x = app.stage.width * .014;
+                ownGraveyardIcon.y = app.stage.height * .55;
                 app.stage.addChild(ownGraveyardIcon);
 
                 let enemyGraveyardIcon = new PIXI.Sprite(textures.graveyardIcon);
-                enemyGraveyardIcon.width = app.stage.width * .1;
+                enemyGraveyardIcon.width = app.stage.width * .08;
                 enemyGraveyardIcon.height = app.stage.height * .11;
-                enemyGraveyardIcon.x = app.stage.width * .0097;
-                enemyGraveyardIcon.y = app.stage.height * .35;
+                enemyGraveyardIcon.x = app.stage.width * .014 + enemyGraveyardIcon.width/2;
+                enemyGraveyardIcon.y = app.stage.height * .39;
+                enemyGraveyardIcon.anchor.x = enemyGraveyardIcon.anchor.y = 0.5;
+                enemyGraveyardIcon.rotation = 3.142;
                 app.stage.addChild(enemyGraveyardIcon);
 
                 document.body.addEventListener('wheel', onGraveyardScroll);
