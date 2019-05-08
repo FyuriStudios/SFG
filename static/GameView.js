@@ -591,12 +591,30 @@ let GameView = (function() {
     }
 
     function onMouseDragCardOnBoardEnd() {
+
+        let pos = this.dragData.getLocalPosition(this.parent);
+
         this.alpha = 1;
         this.originalPos = undefined;
         this.dragging = false;
         this.dragData = undefined;
         arrowDragging = false;
         app.stage.removeChild(arrow);
+
+        let attackerLoc;
+        game.ownBoard.forEach((value, index) => value.sprite == this? attackerLoc = index:null);
+
+        game.enemyBoard.forEach((value, index) => {
+            if(value.sprite.x - value.sprite.width/2 <= pos.x && value.sprite.x + value.sprite.width/2 >= pos.x && 
+                value.sprite.y - value.sprite.height/2 <= pos.y && value.sprite.y + value.sprite.height/2 >= pos.y) {
+                outputFunc({
+                    type: 'attack',
+                    player: game.id,
+                    target: index,
+                    attacker: attackerLoc,
+                });
+            }
+        });
     }
 
 
@@ -857,10 +875,7 @@ let GameView = (function() {
             about events and their parameters and such (under construction).
             */
             if(event.type == 'draw card') {
-                /*
-                Check to make sure that it's actually this player that's drawing the card. We haven't handled the enemy player drawing
-                card animation or any of that yet.
-                */
+                
                 if(event.player == game.id) {
                     /*
                     Generate a new card and put it into the player's hand.
