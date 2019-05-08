@@ -1079,6 +1079,20 @@ let GameView = (function() {
 
                 }
             }
+
+            else if(event.type == 'kill dead') {
+                if(event.player == game.id) {
+                    let dead = game.ownBoard.splice(event.target, 1)[0];
+                    game.ownGraveyard.unshift(dead);
+                    AnimationQueue.addMoveRequest(dead.sprite, {x: app.stage.width * .05, y: app.stage.height * .6}, 20,  () => app.stage.removeChild(dead.sprite));
+                }
+                else {
+                    let dead = game.enemyBoard.splice(event.target, 1)[0];
+                    game.enemyGraveyard.unshift(dead);
+                    AnimationQueue.addMoveRequest(dead.sprite, {x: app.stage.width * .05, y: app.stage.height * .35}, 20, () => app.stage.removeChild(dead.sprite));
+                }
+
+            }
             
            
         },

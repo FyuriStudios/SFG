@@ -126,5 +126,9 @@ let test = function() {
     setTimeout(() => {
         GameView.processEvent({type: 'attack', player: 1, attacker: 0, target: 0});
     }, 11000);
+
+    setTimeout(() => {
+        GameView.processEvent({type: 'kill dead', player: 2, target: 0});
+    }, 13000); 
     
 };
