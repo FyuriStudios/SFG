@@ -194,6 +194,8 @@ ClientCard = (function() {
 
         updatePower() {
 
+            this.sprite.removeChild(this.currentPowerSprite);
+
             let power = new PIXI.Text(this.currentPower, 
                 {
                     fontFamily: 'Helvetica', 
@@ -204,6 +206,8 @@ ClientCard = (function() {
                     align: 'center',
                     dropShadowDistance: 10,
             });
+
+            this.currentPowerSprite = power;
 
             power.anchor.x = power.anchor.y = .5;
             this.sprite.addChild(power);

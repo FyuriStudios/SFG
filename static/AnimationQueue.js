@@ -2,6 +2,7 @@ let AnimationQueue = (function() {
 
     let app;
     let moveQueue = [];
+    let completions = [];
 
 return {
 
@@ -28,8 +29,9 @@ return {
                     value.sprite.inMoveQueue = false;
 
                     if(value.onComplete != null) {
-                        onComplete();
+                        completions.push(value.onComplete);
                     }
+
                     return false;
                 }
                 
@@ -42,6 +44,9 @@ return {
                 return false;
 
             });
+
+            completions.forEach(callBack => callBack());
+            completions = [];
 
         });
     },
@@ -65,7 +70,7 @@ return {
     addMoveRequest: function (sprite, to, vel = 1, onComplete = null) {
         if(to.x == sprite.x && to.y == sprite.y)
             return true;
-            
+
         let dx = to.x - sprite.x;
         let dy = to.y - sprite.y;
 
