@@ -66,6 +66,8 @@ let GameView = (function() {
 
     let arrow = null;
 
+    let arrowDragging = false;
+
     /*
     Above this is the space for declaring module scope variables (variables that can be accessed by any of the functions below and 
     modified.)
@@ -89,7 +91,7 @@ let GameView = (function() {
      */
     let mouseOverCardInHand = function(eventObj) {
 
-        if(this.inMoveQueue || this.dragging)
+        if(this.inMoveQueue || this.dragging || arrowDragging)
             return;
 
         let temp;
@@ -132,7 +134,7 @@ let GameView = (function() {
         /*
         If you try to drag a card while it's animating somewhere, literally everything breaks so we just disallow dragging during animation.
         */
-        if(this.inMoveQueue)
+        if(this.inMoveQueue || arrowDragging)
             return;
 
         /*
@@ -165,7 +167,7 @@ let GameView = (function() {
         We have to make sure that the card is actually being dragged so that we don't drag cards that haven't been selected for dragging
         already.
         */
-        if(this.dragging) {
+        if(this.dragging && !arrowDragging) {
             /*
             We update the position of the card to the position of the cursor.
             */
@@ -505,7 +507,7 @@ let GameView = (function() {
 
     function mouseOverCardOnBoard(boardArray, sprite) {
         
-        if(sprite.inMoveQueue || sprite.dragging) {
+        if(sprite.inMoveQueue || sprite.dragging || arrowDragging) {
             return;
         }
 
@@ -542,17 +544,19 @@ let GameView = (function() {
         mouseOutCardOnBoard(game.enemyBoard, this);
     }
 
-    function onMouseDragCardOnBoardStart() {
+    function onMouseDragCardOnBoardStart(eventObj) {
         this.originalPos = {x: this.x, y: this.y};
         this.dragging = true;
+        arrowDragging = true;
         this.alpha = 0.6;
+        this.dragData = eventObj.data;
         console.log('yep');
 
     }
 
     function onMouseDragCardOnBoardMove(eventObj) {
 
-        if(this.dragging) {
+        if(this.dragging && arrowDragging) {
             console.log('yeah');
             let pos = this.dragData.getLocalPosition(this.parent);
             let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
@@ -564,7 +568,7 @@ let GameView = (function() {
             arrow.x = pos.x;
             arrow.y = pos.y;
 
-            arrow.rotation = angle;
+            arrow.rotation = 3.14 - angle;
 
             app.stage.addChild(arrow);
         }
@@ -575,6 +579,8 @@ let GameView = (function() {
         this.alpha = 1;
         this.originalPos = undefined;
         this.dragging = false;
+        this.dragData = undefined;
+        arrowDragging = false;
         app.stage.removeChild(arrow);
     }
 
@@ -886,12 +892,6 @@ let GameView = (function() {
                     card.boardForm();
                     fixOwnBoardSpacing();
 
-                    card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
-                    card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
-                    card.sprite.on('pointerDown', onMouseDragCardOnBoardStart);
-                    card.sprite.on('pointerUp', onMouseDragCardOnBoardEnd);
-                    card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
-
                     card.sprite.off('mouseover', mouseOverCardInHand);
 
                     card.sprite.off('mouseout', mouseOutCardInHand);
@@ -904,8 +904,12 @@ let GameView = (function() {
 
                     card.sprite.off('pointermove', onDragFromHandMove);
 
-                    
-
+                    card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
+                    card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
+                    card.sprite.on('pointerdown', onMouseDragCardOnBoardStart);
+                    card.sprite.on('pointerup', onMouseDragCardOnBoardEnd);
+                    card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
+                    card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
 
                 } else {
 
