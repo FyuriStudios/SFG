@@ -51,7 +51,7 @@ let test = function() {
             rarity: 'common',
             name: 'Test Card',
             cost: 3,
-            power: 3,
+            power: 4,
             hasDefender: false,
             isStatic: false
         }});
@@ -83,6 +83,7 @@ let test = function() {
             hasDefender: false,
             isStatic: false
         }});
+        GameView.processEvent({type: 'draw card', player: 2});
     }, 5000);
 
     setTimeout(() => {
@@ -117,6 +118,17 @@ let test = function() {
 
     setTimeout(() => {
         GameView.processEvent({type: 'play card', player: 1, handLoc: 0, playLoc: 0});
+        GameView.processEvent({type: 'play card', player: 2, handLoc: 0, playLoc: 0, card: {
+            type: 'monster',
+            id: -1,
+            tokenType: 'monster',
+            rarity: 'common',
+            name: 'Test Card',
+            cost: 3,
+            power: 3,
+            hasDefender: false,
+            isStatic: false
+        }});
     }, 9000);
 
     setTimeout(() => {
@@ -130,5 +142,13 @@ let test = function() {
     setTimeout(() => {
         GameView.processEvent({type: 'kill dead', player: 2, target: 0});
     }, 13000); 
+
+    setTimeout(() => {
+        GameView.processEvent({type: 'kill dead', player: 2, target: 0});
+    }, 14000);
+
+    setTimeout(() => {
+        GameView.processEvent({type: 'kill dead', player: 2, target: 0});
+    }, 15000);
     
 };

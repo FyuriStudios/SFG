@@ -68,9 +68,9 @@ let GameView = (function() {
 
     let arrowDragging = false;
 
-    let ownDeckHover = false;
+    let ownGraveyardHover = false;
 
-    let enemyDeckHover = false;
+    let enemyGraveyardHover = false;
 
     let graveyardDisplay = new PIXI.Container();
 
@@ -503,7 +503,8 @@ let GameView = (function() {
         let temp;
         boardArray.forEach(value => value.sprite == sprite?temp = value:null);
 
-        app.stage.removeChild(temp.popup);
+        if(temp.popup!=undefined)
+            app.stage.removeChild(temp.popup);
     }
 
     let mouseOverOwnCardOnBoard = function() {
@@ -579,12 +580,17 @@ let GameView = (function() {
     function onMouseOverOwnGraveyard() {
         if(!arrowDragging) {
             this.alpha = 0.5;
-            ownDeckHover = true;
+            ownGraveyardHover = true;
             app.stage.addChild(graveyardDisplay);
             graveyardDisplay.scrollCount = 0;
             game.ownGraveyard.forEach((value, index) => {
-                graveyardDisplay.addChild(value.sprite);
-                value.sprite.y = (index) * app.stage.height * .2;
+                value.displayPopup();
+                value.popup.width = value.popup.width * .6;
+                value.popup.height = value.popup.height * .6;
+                value.popup.x = app.stage.width * .1;
+                value.popup.y = index * app.stage.height * .22 + app.stage.height * .01;
+                if(value.popup.y > 0 && value.popup.y + value.popup.height < app.stage.height)
+                    graveyardDisplay.addChild(value.popup);
             });
         }
     }
@@ -592,19 +598,24 @@ let GameView = (function() {
     function onMouseOverEnemyGraveyard() {
         if(!arrowDragging) {
             this.alpha = 0.5;
-            enemyDeckHover = true;
+            enemyGraveyardHover = true;
             app.stage.addChild(graveyardDisplay);
             graveyardDisplay.scrollCount = 0;
             game.enemyGraveyard.forEach((value, index) => {
-                graveyardDisplay.addChild(value.sprite);
-                value.sprite.y = (index) * app.stage.height * .2;
+                value.displayPopup();
+                value.popup.width = value.popup.width * .6;
+                value.popup.height = value.popup.height * .6;
+                value.popup.x = app.stage.width * .1;
+                value.popup.y = index * app.stage.height * .22 + app.stage.height * .01;
+                if(value.popup.y > 0 && value.popup.y + value.popup.height < app.stage.height)
+                    graveyardDisplay.addChild(value.popup);
             });
         }
     }
 
     function onMouseOffOwnGraveyard() {
         this.alpha = 1;
-        ownDeckHover = false;
+        ownGraveyardHover = false;
         app.stage.removeChild(graveyardDisplay);
         graveyardDisplay.scrollCount = 0;
         graveyardDisplay.removeChildren();
@@ -612,30 +623,30 @@ let GameView = (function() {
 
     function onMouseOffEnemyGraveyard() {
         this.alpha = 1;
-        enemyDeckHover = false;
+        enemyGraveyardHover = false;
         app.stage.removeChild(graveyardDisplay);
         graveyardDisplay.scrollCount = 0;
         graveyardDisplay.removeChildren();
     }
 
-    function onGraveyardScroll(element, event) {
+    function onGraveyardScroll(event) {
         let graveyard;
 
-        if(ownDeckHover)
+        if(ownGraveyardHover)
             graveyard = game.ownGraveyard;
-        else if(enemyDeckHover)
+        else if(enemyGraveyardHover)
             graveyard = game.enemyGraveyard;
         else
             return;
 
-        graveyardDisplay.scrollCount += event.deltaY > 0? 1: -1;
-
-        graveyard.forEach((value, index) => {
-            graveyardDisplay.addChild(value.sprite);
-            AnimationQueue.addMoveRequest(value.sprite, {x: app.stage.width * .1, y: (index - graveyardDisplay.scrollCount) * app.stage.height * .2}, 6);
+        graveyard.forEach(value => {
+            value.popup.y += event.deltaY * app.stage.height*0.00093;
+            if(value.popup.y < 0 || value.popup.y + value.popup.height > app.stage.height)
+                graveyardDisplay.removeChild(value.popup);
+            else 
+                graveyardDisplay.addChild(value.popup);
         });
 
-        app.stage.addChild(graveyardDisplay);
     }
 
 
@@ -854,16 +865,16 @@ let GameView = (function() {
                 arrow = new PIXI.Sprite(textures.arrowHead);
 
                 let ownGraveyardIcon = new PIXI.Sprite(textures.graveyardIcon);
-                ownGraveyardIcon.width = app.stage.width * .08;
+                ownGraveyardIcon.width = app.stage.width * .07;
                 ownGraveyardIcon.height = app.stage.height * .11;
-                ownGraveyardIcon.x = app.stage.width * .014;
+                ownGraveyardIcon.x = app.stage.width * .02;
                 ownGraveyardIcon.y = app.stage.height * .55;
                 app.stage.addChild(ownGraveyardIcon);
 
                 let enemyGraveyardIcon = new PIXI.Sprite(textures.graveyardIcon);
-                enemyGraveyardIcon.width = app.stage.width * .08;
+                enemyGraveyardIcon.width = app.stage.width * .07;
                 enemyGraveyardIcon.height = app.stage.height * .11;
-                enemyGraveyardIcon.x = app.stage.width * .014 + enemyGraveyardIcon.width/2;
+                enemyGraveyardIcon.x = app.stage.width * .02 + enemyGraveyardIcon.width/2;
                 enemyGraveyardIcon.y = app.stage.height * .39;
                 enemyGraveyardIcon.anchor.x = enemyGraveyardIcon.anchor.y = 0.5;
                 enemyGraveyardIcon.rotation = 3.142;
