@@ -561,8 +561,8 @@ let GameView = (function() {
             let pos = this.dragData.getLocalPosition(this.parent);
             let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
 
-            arrow.width = .1 * app.stage.width;
-            arrow.height = .15 * app.stage.height;
+            arrow.width = .07 * app.stage.width;
+            arrow.height = .105 * app.stage.height;
 
             arrow.anchor.x = arrow.anchor.y = .5;
             arrow.x = pos.x;
