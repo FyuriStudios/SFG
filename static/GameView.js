@@ -29,7 +29,7 @@ let GameView = (function() {
     /*
     Don't touch. The last person who touched it got killed brutally.
     */
-    let grass = 420;
+    let grass = 420; //memes
 
     /**
      * Creating a ClientGame object. This object will hold all of the game state information, like cards in hand and such.
