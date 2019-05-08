@@ -499,7 +499,7 @@ let GameView = (function() {
 
             let xDestination = leftBound + (space * (index + 0.5));
 
-            let yDestination = app.stage.height * 0.3;
+            let yDestination = app.stage.height * 0.32;
 
             AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
             value.sprite.xLoc = xDestination;
@@ -928,16 +928,22 @@ let GameView = (function() {
 
                 } else {
 
-                    game.hand.splice(event.handLoc, 1);
+                    let targetPlay = game.hand.splice(event.handLoc, 1)[0];
 
-                    let enemyCard = ClientCard.from(event.card);
+                    app.stage.removeChild(targetPlay);
+
+                    let enemyCard = ClientCard.test();
                     game.enemyBoard.splice(event.playLoc, 0, enemyCard);
-                    app.stage.addChild(enemyCard);
+                    smallSizeCardInHandSprite(enemyCard.sprite);
+                    enemyCard.x = targetPlay.x + enemyCard.width;
+                    enemyCard.y = targetPlay.y + enemyCard.height;
+
+                    app.stage.addChild(enemyCard.sprite);
                     enemyCard.boardForm();
                     fixEnemyBoardSpacing();
 
-                    enemyCard.on('mouseover', mouseOverEnemyCardOnBoard);
-                    enemyCard.on('mouseout', mouseOutEnemyCardOnBoard);
+                    enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
+                    enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
 
                 }
 

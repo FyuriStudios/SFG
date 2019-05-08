@@ -35,6 +35,7 @@ let test = function() {
 
     setTimeout(() => {
         GameView.processEvent({type: 'play card', player: 1, handLoc: 0, playLoc: 0});
+        GameView.processEvent({type: 'play card', player: 2, handLoc: 0, playLoc: 0});
     }, 7000);
 
     setTimeout(() => {
