@@ -498,7 +498,8 @@ let GameView = (function() {
     }
 
     function mouseOutCardOnBoard(boardArray, sprite) {
-
+        if(sprite.inMoveQueue)
+            return;
         let temp;
         boardArray.forEach(value => value.sprite == sprite?temp = value:null);
 
@@ -524,7 +525,6 @@ let GameView = (function() {
         arrowDragging = true;
         this.alpha = 0.6;
         this.dragData = eventObj.data;
-        console.log('yep');
 
     }
 
@@ -578,19 +578,32 @@ let GameView = (function() {
 
     function onMouseOverOwnGraveyard() {
         if(!arrowDragging) {
+            this.alpha = 0.5;
             ownDeckHover = true;
-            onGraveyardScroll(null, null);
+            app.stage.addChild(graveyardDisplay);
+            graveyardDisplay.scrollCount = 0;
+            game.ownGraveyard.forEach((value, index) => {
+                graveyardDisplay.addChild(value.sprite);
+                value.sprite.y = (index) * app.stage.height * .2;
+            });
         }
     }
 
     function onMouseOverEnemyGraveyard() {
         if(!arrowDragging) {
+            this.alpha = 0.5;
             enemyDeckHover = true;
-            onGraveyardScroll(null, null);
+            app.stage.addChild(graveyardDisplay);
+            graveyardDisplay.scrollCount = 0;
+            game.enemyGraveyard.forEach((value, index) => {
+                graveyardDisplay.addChild(value.sprite);
+                value.sprite.y = (index) * app.stage.height * .2;
+            });
         }
     }
 
     function onMouseOffOwnGraveyard() {
+        this.alpha = 1;
         ownDeckHover = false;
         app.stage.removeChild(graveyardDisplay);
         graveyardDisplay.scrollCount = 0;
@@ -598,6 +611,7 @@ let GameView = (function() {
     }
 
     function onMouseOffEnemyGraveyard() {
+        this.alpha = 1;
         enemyDeckHover = false;
         app.stage.removeChild(graveyardDisplay);
         graveyardDisplay.scrollCount = 0;
@@ -606,15 +620,15 @@ let GameView = (function() {
 
     function onGraveyardScroll(element, event) {
         let graveyard;
+
         if(ownDeckHover)
             graveyard = game.ownGraveyard;
         else if(enemyDeckHover)
             graveyard = game.enemyGraveyard;
-
-        if(graveyardDisplay.scrollCount == undefined)
-            graveyardDisplay.scrollCount = 0;
         else
-            graveyardDisplay.scrollCount += event.deltaY > 0? 1: -1;
+            return;
+
+        graveyardDisplay.scrollCount += event.deltaY > 0? 1: -1;
 
         graveyard.forEach((value, index) => {
             graveyardDisplay.addChild(value.sprite);
@@ -656,7 +670,6 @@ let GameView = (function() {
             /*
             Don't touch this. Everything breaks if you do.
             */
-            //it takes around 50 milliseconds for innerWidth and innerHeight to update, so I added a SetTimeout to compensate -Sean
             setTimeout(()=>{
                 app.stage.width = innerWidth;
                 app.stage.height = innerHeight;
@@ -856,9 +869,11 @@ let GameView = (function() {
 
                 document.body.addEventListener('wheel', onGraveyardScroll);
 
-                ownGraveyardIcon.on('mouseover', onMouseOffOwnGraveyard);
+                ownGraveyardIcon.interactive = true;
+                ownGraveyardIcon.on('mouseover', onMouseOverOwnGraveyard);
                 ownGraveyardIcon.on('mouseout', onMouseOffOwnGraveyard);
 
+                enemyGraveyardIcon.interactive = true;
                 enemyGraveyardIcon.on('mouseover', onMouseOverEnemyGraveyard);
                 enemyGraveyardIcon.on('mouseout', onMouseOffEnemyGraveyard);
                 
@@ -1083,11 +1098,13 @@ let GameView = (function() {
             else if(event.type == 'kill dead') {
                 if(event.player == game.id) {
                     let dead = game.ownBoard.splice(event.target, 1)[0];
+                    fixOwnBoardSpacing();
                     game.ownGraveyard.unshift(dead);
                     AnimationQueue.addMoveRequest(dead.sprite, {x: app.stage.width * .05, y: app.stage.height * .6}, 20,  () => app.stage.removeChild(dead.sprite));
                 }
                 else {
                     let dead = game.enemyBoard.splice(event.target, 1)[0];
+                    fixEnemyBoardSpacing();
                     game.enemyGraveyard.unshift(dead);
                     AnimationQueue.addMoveRequest(dead.sprite, {x: app.stage.width * .05, y: app.stage.height * .35}, 20, () => app.stage.removeChild(dead.sprite));
                 }

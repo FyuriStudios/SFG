@@ -142,7 +142,7 @@ ClientCard = (function() {
         displayPopup() {
             super.displayPopup();
 
-            let power = new PIXI.Text(this.currentPower, 
+            let power = new PIXI.Text(this.power, 
                 {
                     fontFamily: 'Helvetica', 
                     dropShadow: true, 
