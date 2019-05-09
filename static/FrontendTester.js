@@ -133,9 +133,7 @@ let test = function() {
     
             GameView.processEvent({type: 'kill dead', player: 2, target: 0});
     
-            GameView.processEvent({type: 'kill dead', player: 2, target: 0});
-
-            GameView.processEvent({type: 'kill dead', player: 1, target: 0});
+            GameView.processEvent({type: 'attack', player: 2, target: -1});
     }, 1000);
     
 };

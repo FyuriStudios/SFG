@@ -869,8 +869,10 @@ let GameView = (function() {
                     let yDestination = .189 * app.stage.height;
                     let attacker = game.ownBoard[event.attacker];
 
-                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13);
+                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13, () => {game.ownHealth -= attacker.currentPower;fixHealths()});
                     fixOwnBoardSpacing(event.attacker, () => {nextInEventQueue()});
+                    game.enemyHealth -= attacker.currentPower;
+                    fixHealths();
                     return;
                 }
                 else {
@@ -878,8 +880,9 @@ let GameView = (function() {
                     let yDestination = .834 * app.stage.height;
                     let attacker = game.enemyBoard[event.attacker];
 
-                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13);
+                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13, () => {game.ownHealth -= attacker.currentPower;fixHealths()});
                     fixEnemyBoardSpacing(event.attacker, () => {nextInEventQueue()});
+                    
                     return;
                 }
 
