@@ -316,7 +316,6 @@ let GameView = (function() {
             */
             outputFunc({
                 type: playType,
-                card: game.hand[handLoc], //this needs cleaning up. The frontend isn't necessarily recieving exactly this.
                 handLoc: handLoc,
                 playLoc: this.spotForCard
             });

@@ -25,6 +25,7 @@ __dirname is a global variable that is just the current directory that this file
 '/static' is appended to it to point to the [current]/static directory.
 */
 app.use('/static', express.static(path.join(__dirname, '../static')));
+
 /*
 This runs while the server is running and gives the root file every time that someone connects to the server. By default, when connecting to a server your computer will ask for the
 root directory of the server ('/'). This will respond by giving back the path to the index.html file, which is the file that gets loaded by default on connection from

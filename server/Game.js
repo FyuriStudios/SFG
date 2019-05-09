@@ -92,10 +92,9 @@ face as a result of it.
 var Character = require('./Character');
 var _ = require('lodash');
 var idToCard = require('./IdToCard');
-var constants = require('../sharedConstants/constants');
+var constants = require('../constants/constants');
 
 Array.prototype.extend = function (other_array) {
-    /* You should include a test to check whether other_array really is an array */
     other_array.forEach(function(v) {this.push(v)}, this);
 }
 
@@ -117,7 +116,6 @@ class Game {
     constructor(socket1, socket2) {
 
 		this.turnCounter = 0; //start the turn counter at zero since the game hasn't started yet
-		this.eventHistory = []; //there are no events that have been written yet
 
 		/*
 		Here, I'm creating non-prototypical objects for player1 and player2. They don't need any functions, just some variables.
@@ -126,7 +124,6 @@ class Game {
 		*/
 		this.player1 = {
 			setDeck: false, //the player has not input their deck yet
-			mulliganed: false, //the player has not mulliganed yet
 			id: 1, //the player's id is player 1
 			health: constants.STARTING_HEALTH,//TODO: change this to a real character
 			socket: socket1, //a reference to their socket connection
@@ -139,7 +136,6 @@ class Game {
 
 		this.player2 = { //see above for details on the variables
 			setDeck: false,
-			mulliganed: false,
 			id: 2,
 			health: constants.STARTING_HEALTH,//TODO: change this to a real character
 			socket: socket2,
@@ -151,19 +147,20 @@ class Game {
 		};
     }
 
-	/**
-   * Starts the game. Call this function when you're ready for the entire game to start.
-   * This function is separate from the initializer, just in case. Like, maybe we want to let both players ready up?
-	 *
-   * This function lets the players set their decks and TODO: let the players choose characters, then gives them a mulligan opportunity.
-   * After that, it sets up the game input required so that the players can start. This function repeatedly calls itself so that
-	 * the players can ready up all of their stuff.
-   * @author Hughes
-   */
-  start() {
+    /**
+    * Starts the game. Call this function when you're ready for the entire game to start.
+    * This function is separate from the initializer, just in case. Like, maybe we want to let both players ready up?
+    *
+    * This function lets the players set their decks and (TODO) let the players choose characters.
+    * After that, it sets up the game input required so that the players can start. This function repeatedly calls itself so that
+    * the players can ready up all of their stuff.
+    * @author Hughes
+    */
+    start() {
 
-		//first, we're going to handle the case where both players haven't mulliganed or set their decks.
-		if(!(player1.setDeck && player2.setDeck) && !(player1.mulliganed && player2.mulliganed)) {
+		//first, we're going to handle the case where both players haven't set their decks.
+		if(!(player1.setDeck && player2.setDeck)) {
+
 			//TODO: add a default deck
 			player1.socket.emit('player id', player1.id); //Send both players their IDs just in case they need them.
 			player2.socket.emit('player id', player2.id);
@@ -176,10 +173,8 @@ class Game {
 				player.socket.on('deck', function(input) {
 					//TODO: deck verification and stuff!
 					if(!player.setDeck) {
-						for(var i = 0; i<10; i++)
-							player.deck.push(idToCard(-1)); //just constructs a potato list for the deck, TODO: make this a real function that does real stuff!
+						input.forEach(value => player.deck.push(idToCard(value))); //TODO: Make this a real deck
 						player.setDeck = true;
-
 						this.start();//call itself to check to see if we can progress to the next step
 					}
 				});
@@ -187,78 +182,79 @@ class Game {
 
 			deckConstruction(player1);//we're going to run this function for each player. This design pattern has been abused a lot by me (Hughes).
 			deckConstruction(player2);
+        } 
 
-		/*
-		When a player sets their deck, this function gets called again. When both players have set their decks, this function will be called.
-		This part of the function is almost identical pattern-wise to the part above.
-		*/
-		} else if((player1.setDeck && player2.setDeck) && !(player1.mulliganed && player2.mulliganed)) {
+        else if(player1.setDeck && player2.setDeck) {
 
-	   	player1.deck.shuffle();
-			player2.deck.shuffle();
+            player1.deck.shuffle();
+            player2.deck.shuffle();
 
-			for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
-				player1.hand.push(player1.deck.pop());
-			}
-			for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
-				player2.hand.push(player2.deck.pop());
-			}
+            for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
+                
+                let drawnCard = player1.deck.pop();
 
-			player1.socket.emit('starting hand', {cards: player1.hand});
-			player2.socket.emit('starting hand', {cards: player2.hand});
+                player1.socket.emit('event', {
+                    type: 'draw card',
+                    player: 1,
+                    card: drawnCard
+                });
 
-			//I think that this doesn't actually work.
-			function setMulligan(player) {
-					player.socket.on('mulligan', function(input) { //then give them the option to mulligan
-						if(!player.mulliganed) {
-							temp = [];
+                player2.socket.emit('event', {
+                    type: 'draw card',
+                    player: 1
+                });
 
-							input.replace.forEach((i) => { //iterating through the things that input needs
-								temp.push(player.board[i]);
-								player.board[i] = deck.pop();
-							});
-							player.deck.extend(temp);
-							player.deck.shuffle();
-							player.mulliganed = true;
-							player.socket.emit('hand', {cards: player.hand});
-						}
-					});
-			}
-			setMulligan(player1);
-			setMulligan(player2);
+                player1.hand.unshift(drawnCard);
+            }
 
-			start();
+            for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
+                
+                let drawnCard = player2.deck.pop();
 
-		} else if(player1.mulliganed && player2.mulliganed) {
+                player2.socket.emit('event', {
+                    type: 'draw card',
+                    player: 2,
+                    card: drawnCard
+                });
 
-			function setupGameInput(player) {
+                player1.socket.emit('event', {
+                    type: 'draw card',
+                    player: 2
+                });
 
-				function emitEvents(eventChain) {
-					function sanitizeEventChain(eventChain, player) {
-						//TODO: finish this
-					}
-				}
-				player.socket.on('end turn', function(input) {
-					eventChain = [];
-					this.endTurn(eventChain);
-					emitEvents(eventChain);
-				});
+                player2.hand.unshift(drawnCard);
+            }
 
-				player.socket.on('attack', function(input) {
-					eventChain = [];
-					this.attack(input, eventChain);
-					emitEvents(eventChain);
-				});
 
-				player.socket.on('play card', function(input) {
-					eventChain = [];
-					this.playCard(input, eventChain);
-					emitEvents(eventChain);
-				});
-			}
-			setupGameInput(player1);
-			setupGameInput(player2);
+            player1.socket.on('event', input => {
+                this.processEvent(player1, input);
+            });
+
+            player2.socket.on('event', input => {
+                this.processEvent(player2, input);
+            });
+
 		}
+    }
+
+    processEvent(player, input) {
+
+        if(player != this.currentPlayer)
+            return;
+
+        let eventChain = [];
+
+        switch(input.type) {
+            case 'attack':
+                this.attack(input, eventChain);
+                break;
+            case 'play card':
+                this.playCard(input, eventChain);
+                break;
+            case 'end turn':
+                this.endTurn(input, eventChain);
+                break;
+        }
     }
 
     /**
@@ -316,7 +312,7 @@ class Game {
      */
     killDead(eventChain) {
 
-		if(this.player1.character.health == 0){
+        if(this.player1.character.health == 0) {
 			player1.socket.emit('game over', 1);
 			player2.socket.emit('game over', 1);
 			player1.socket.disconnect();
@@ -335,28 +331,31 @@ class Game {
 		if(!shouldDoEvent) //this code is disgusting but I don't want to make an empty event.
 			return;
 
-		var event = {type: 'dead', view: 1, dead: []};
+        let dead = [];
 
-		/*
-		Here, I've extended the array prototype to allow for a function called "extend" that appends an array to another one.
-		We're using this to add all dead monsters to the graveyard.
-		*/
 		function removeDead(player) {
-			var deadDudes = [];
-			for(var i = player.board.length-1; i >= 0; i--) {
+            let deadGuys = [];
+            for(var i = player.board.length-1; i >= 0; i--) {
 				if(player.board[i].currentPower <= 0) {
-					event.dead.append({id: player.board[i].id, position: i, player: player.id});
-					deadDudes.append[player.board[i]];
-
+                    deadGuys.append[player.board[i]];
+                    dead.append({index: i, player: player.id});
 				}
 			}
-			player.graveyard.extend(deadDudes);
-		}
+			player.graveyard.extend(dead);
+        }
 
 		removeDead(this.currentPlayer);
-		removeDead(this.otherPlayer);
-
-		eventChain.push(event);
+        removeDead(this.otherPlayer);
+        
+        dead.forEach(value => {
+            let event = {
+                type: 'kill dead',
+                view: 1,
+                player: value.id,
+                target: value.index
+            };
+            eventChain.push(event);
+        });
     }
 
     /**
@@ -376,7 +375,6 @@ class Game {
 			if(this.currentPlayer.board[input.attackerLoc].attack(otherPlayer, this.currentPlayer, input.targetLoc, eventChain)) {
 				killDead(eventChain);
 			}
-
     }
 
 	/**
@@ -384,9 +382,10 @@ class Game {
 	 * @param {*} input - a JSON object containing the information required to do this action.
 	 * @param {*} eventChain - the chain of events.
 	 */
-  playCard(input, eventChain) {
+    playCard(input, eventChain) {
 
-		var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
+        var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
+        
 		if(input.cardLocation > temp.hand.length || input.cardLocation < 0) {
 			return; //check to see if the card's actually in their hand
 		}
@@ -397,20 +396,23 @@ class Game {
 		var tokens = toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks;
 
 		if(!(toPlay.playCost<=tokens) || temp.board.length == constants.MAX_BOARD_SIZE) {
-			return //they don't have enough tokens to play the card.
+			return; //they don't have enough tokens to play the card.
 		}
 
 		var event = { //now that we're sure the event is going to happen
 			view: 1,
 			type: 'play card',
-			locationInHand: input.toPlay,
+            handLoc: input.handLoc,
+            playLoc: input.playLoc,
 			cost: toPlay.playCost,
 			tokenType: toPlay.tokenType,
-			cardType: toPlay.type,
 			player: temp.id
 		};
 
-		toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks -= toPlay.playCost; //this line might just not work, but I don't want to rewrite it.
+        if(toPlay.tokenType == 'monster')
+            temp.mToks -= toPlay.playCost; //this line might just not work, but I don't want to rewrite it.
+        else
+            temp.sToks -= toPlay.playCost;
 
 		temp.hand = temp.hand.splice(input.cardLocation);//this line also might not work, but it's supposed to remove the card at input.cardLocation
 
@@ -426,7 +428,7 @@ class Game {
 			//TODO: add code here
 		}
 
-  }
+    }
 
     startTurn(eventChain) {
 
@@ -436,7 +438,6 @@ class Game {
 			view: 1,
 			player: temp.id
 		};
-
 
 		if(temp.sToks >= constants.MAX_TOKS-constants.TOKS_PER_TURN) {
 			var currSToks = temp.sToks;
@@ -460,18 +461,13 @@ class Game {
 
 		drawCard(temp, eventChain);
 
-
-		//	eventHistory.push(new TurnBeginsEvent(this))
-		turnCounter++ //TODO: effects, history
+		turnCounter++;
 		for(dude in temp.board) {
 			if(!dude.defender) {
 			dude.canAttack = true
 			}
 		}
-		//	for(element in effects){
-		//	if(element.hasTurnIncrement())
-		//	element.turnIncrement() //TODO: write to history, effects
-		//	}
+		
 		killDead(eventChain);
 
     }
@@ -482,6 +478,9 @@ class Game {
 	 * @param {*} eventChain
 	 */
     endTurn(input, eventChain) {
+
+        if(input.id != this.currentPlayer)
+            return;
 
 		eventChain.push({
 			type: 'end turn',

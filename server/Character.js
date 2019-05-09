@@ -1,4 +1,4 @@
-var constants = require('../sharedConstants/constants');
+var constants = require('../constants/constants');
 
 /** (0.0.1)
  * This class represents a character (hero? whatever.) in the game. It contains the character trait and the health of the character.
