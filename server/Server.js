@@ -56,14 +56,12 @@ and we'll use that to create an instance of our Game.
 */
 io.on('connection', function(playerSocket) {
 
-    console.log('Connected!');
+    console.log(freePlayers.length + 'Connected!');
 
     freePlayers.push(playerSocket);
-    console.log(freePlayers);
-
 });
 
-setTimeout(() => {
+setInterval(() => {
     if(freePlayers.length >= 2) {
         let player1 = freePlayers.pop();
         let player2 = freePlayers.pop();
