@@ -1,36 +1,33 @@
 <html>
-  <head>
-    <title>Launch Screen</title>
-    <style>
-    	html, body {
-      		width: 100%;
-      		height: 100%;
-      		margin: 0px;
-      		border: 0;
-      		overflow: hidden;
-          display: block;
-    	}
-      #playButton, #resolution {
-        align-content: center;
-      }
-    </style>
-   <script src="/static/Launcher.js"></script>
-  </head>
-  <body>
-    <div align='center'>
-    <!-- <select id="resolution" title="Resolution">
-        <option value="1024">1024×576</option>
-        <option value="1152">1152×648</option>
-        <option value="1280">1280×720</option>
-        <option value="1366">1366×768</option>
-        <option value="1600">1600×900</option>
-        <option value="1920">1920×1080</option>
-        <option value="2560">2560×1440</option>
-        <option value="3840">3840×2160</option>
-    </select>
-    <br> -->
-    <button onclick="newGame('/static/game.html')" id="playButton"><b>Play</b></button>
+
+<head>
+  <title>Launch Screen</title>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+      border: 0;
+      overflow: hidden;
+      display: block;
+    }
+
+    #playButton,
+    #resolution {
+      align-content: center;
+    }
+  </style>
+  <script src="/static/Launcher.js"></script>
+</head>
+
+<body>
+  <div align='center'>
+    <button onclick="newGame('/static/game.html')" id="playButton">
+      <video width="100%" height="" autoplay>
+        <source src="static/assets/launchAnimation.mp4" type="video/mp4">
+      </video></button>
   </div>
-  </body>
+</body>
 
 </html>
