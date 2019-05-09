@@ -56,6 +56,8 @@ and we'll use that to create an instance of our Game.
 */
 io.on('connection', function(playerSocket) {
 
+    console.log('Connected!');
+
     freePlayers.push(playerSocket);
 
 });
