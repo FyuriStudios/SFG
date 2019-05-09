@@ -76,6 +76,8 @@ let GameView = (function() {
 
     let eventQueue = [];
 
+    let processingEvent = false;
+
     /*
     Above this is the space for declaring module scope variables (variables that can be accessed by any of the functions below and 
     modified.)
@@ -342,7 +344,7 @@ let GameView = (function() {
      * hand. For example, when a player draws a card you can add it to their hand array and then call this function.
      * It might be useful to parameterize this a bit more than it is at the moment, but for now I think that this is totally fine.
      */
-    function fixOwnHandSpacing(completion = undefined) {
+    function fixOwnHandSpacing(completion = null) {
         /*
         quick alias to game.hand to save the characters bc I don't like typing (jk, I'm here writing this comment)
         */
@@ -367,15 +369,17 @@ let GameView = (function() {
             let x = leftBound + cardSpacingDivisor * (index+1);
             let y = upperBound;
 
-            AnimationQueue.addMoveRequest(card.sprite, {x: x, y: y}, 6);
+            if(index == 0 && completion != null) {
+                AnimationQueue.addMoveRequest(card.sprite, {x: x, y: y}, 6, completion);
+            }
+            else {
+                AnimationQueue.addMoveRequest(card.sprite, {x: x, y: y}, 6);
+            }
         });
 
-        //This is disgusting. But I couldn't find a better way to do it. :(
-        if(completion != undefined)
-            setTimeout(() => completion(), 1100);
     }
 
-    function fixEnemyHandSpacing(completion = undefined) {
+    function fixEnemyHandSpacing(completion = null) {
         let leftBound = .1135 * app.stage.width;
         let rightBound = .4385 * app.stage.width;
 
@@ -387,11 +391,11 @@ let GameView = (function() {
             let x = leftBound + cardSpacingDivisor * (index+1);
             let y = upperBound;
 
-            AnimationQueue.addMoveRequest(card, {x: x, y: y}, 5);
+            if(index == 0 && completion != null)
+                AnimationQueue.addMoveRequest(card, {x: x, y: y}, 6, () => completion());
+            else
+                AnimationQueue.addMoveRequest(card, {x: x, y: y}, 6);
         });
-
-        if(completion != undefined)
-            setTimeout(() => completion(), 1100); //Also gross.
     }
 
     /*
@@ -445,7 +449,7 @@ let GameView = (function() {
 
     }
 
-    function fixOwnBoardSpacing(completion = undefined) {
+    function fixOwnBoardSpacing(farLoc = undefined, completion = undefined) {
         let space = .1 * app.stage.width;
         let leftBound = app.stage.width/2 - (space * game.ownBoard.length/2);
 
@@ -455,15 +459,15 @@ let GameView = (function() {
 
             let yDestination = app.stage.height * 0.6;
 
-            AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
+            if(farLoc != undefined && index == farLoc && completion != undefined)
+                AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10, () => completion());
+            else
+                AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
             value.sprite.xLoc = xDestination;
         });
-
-        if(completion != undefined)
-            setTimeout(() => completion(), 1100);
     }
 
-    function fixEnemyBoardSpacing(completion = undefined) {
+    function fixEnemyBoardSpacing(farLoc = undefined, completion = undefined) {
         let space = .1 * app.stage.width;
         let leftBound = app.stage.width/2 - (space * game.enemyBoard.length/2);
 
@@ -473,11 +477,11 @@ let GameView = (function() {
 
             let yDestination = app.stage.height * 0.37;
 
-            AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
+            if(farLoc != undefined && index == farLoc && completion != undefined)
+                AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10, () => completion());
+            else
+                AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
         });
-
-        if(completion != undefined)
-            setTimeout(() => completion(), 1100);
     }
 
     function slideCards(loc = -1) {
@@ -666,8 +670,13 @@ let GameView = (function() {
 
     function nextInEventQueue() {
 
-        if(eventQueue.length == 0)
+        if(eventQueue.length == 0) {
+            processingEvent = false;
             return;
+        }
+        else {
+            processingEvent = true;
+        }
 
         let event = eventQueue.shift();
 
@@ -694,7 +703,7 @@ let GameView = (function() {
 
                 app.stage.addChild(card.sprite);
                 
-                game.hand.push(card);
+                game.hand.unshift(card);
 
                 /*
                 Animate the card into the player's hand.
@@ -711,7 +720,7 @@ let GameView = (function() {
                 card.x = app.stage.width * .0146;
                 card.y = app.stage.height * .1;
 
-                enemyCardsInHand.push(card);
+                enemyCardsInHand.unshift(card);
 
                 smallSizeCardInHandSprite(card);
 
@@ -749,7 +758,7 @@ let GameView = (function() {
                 card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
                 card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
 
-                fixOwnBoardSpacing(() => nextInEventQueue());
+                fixOwnBoardSpacing(event.playLoc, () => nextInEventQueue());
 
             } else {
 
@@ -768,7 +777,7 @@ let GameView = (function() {
                 enemyCard.sprite.y = targetPlay.y;
                 enemyCard.boardForm();
 
-                fixEnemyBoardSpacing(() => nextInEventQueue());
+                fixEnemyBoardSpacing(event.playLoc, () => nextInEventQueue());
 
                 enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
                 enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
@@ -815,7 +824,7 @@ let GameView = (function() {
                 attacker = game.ownBoard[event.attacker];
                 target = game.enemyBoard[event.target];
             }
-            
+
             else {
                 attacker = game.enemyBoard[event.attacker];
                 target = game.ownBoard[event.target];
@@ -848,7 +857,7 @@ let GameView = (function() {
                     AnimationQueue.addMoveRequest(target.sprite, {x: target.sprite.x + (dx * tempAPower * app.stage.width * .01), y: target.sprite.y - (dy * tempAPower * app.stage.width * .01)}, 15, () => {
                         setTimeout(() => {
                             fixOwnBoardSpacing();
-                            fixEnemyBoardSpacing(() => nextInEventQueue());
+                            fixEnemyBoardSpacing(event.player == game.id? event.target:event.attacker, () => nextInEventQueue());
                         }, 200);
                     });
 
@@ -1153,7 +1162,7 @@ let GameView = (function() {
          */
         processEvent: function(event) {
             eventQueue.push(event);
-            if(eventQueue.length == 1)
+            if(!processingEvent)    
                 nextInEventQueue();
         },
 
