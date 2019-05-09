@@ -91,7 +91,7 @@ face as a result of it.
 //require everything that we need, probably this list will expand as we go
 var Character = require('./Character');
 var _ = require('lodash');
-var idToCard = require('./IdToCard');
+var idToCard = require('./IDToCard');
 var constants = require('../constants/constants');
 
 Array.prototype.extend = function (other_array) {
@@ -185,7 +185,7 @@ class Game {
         } 
 
         else if(player1.setDeck && player2.setDeck) {
-            
+
             let deckSizes = {
                 player1DeckSize: player1.deck.length,
                 player2DeckSize: player2.deck.length,

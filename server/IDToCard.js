@@ -1,8 +1,6 @@
 module.exports = function (id) {
     if(id == -1)
-	return new addPath('Potato')();
-    if(id == -2)
-	return new addPath('CarrotRain')();
+        return new addPath('test');
 }
 
 function addPath(name) {
