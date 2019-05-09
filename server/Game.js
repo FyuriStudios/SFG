@@ -159,11 +159,11 @@ class Game {
     start() {
 
 		//first, we're going to handle the case where both players haven't set their decks.
-		if(!(player1.setDeck && player2.setDeck)) {
+		if(!(this.player1.setDeck && this.player2.setDeck)) {
 
 			//TODO: add a default deck
-			player1.socket.emit('player id', player1.id); //Send both players their IDs just in case they need them.
-			player2.socket.emit('player id', player2.id);
+			this.player1.socket.emit('player id', this.player1.id); //Send both players their IDs just in case they need them.
+			this.player2.socket.emit('player id', this.player2.id);
 
 			/*
 			Here, I'm making a function that constructs the deck for each player. It sets up a callback that asks for a deck input,
@@ -180,66 +180,66 @@ class Game {
 				});
 			}
 
-			deckConstruction(player1);//we're going to run this function for each player. This design pattern has been abused a lot by me (Hughes).
-			deckConstruction(player2);
+			deckConstruction(this.player1);//we're going to run this function for each player. This design pattern has been abused a lot by me (Hughes).
+			deckConstruction(this.player2);
         } 
 
-        else if(player1.setDeck && player2.setDeck) {
+        else if(this.player1.setDeck && this.player2.setDeck) {
 
             let deckSizes = {
-                player1DeckSize: player1.deck.length,
-                player2DeckSize: player2.deck.length,
+                player1DeckSize: this.player1.deck.length,
+                player2DeckSize: this.player2.deck.length,
             }
 
-            player1.socket.emit('deck sizes', deckSizes);
-            player2.socket.emit('deck sizes', deckSizes);
+            this.player1.socket.emit('deck sizes', deckSizes);
+            this.player2.socket.emit('deck sizes', deckSizes);
 
-            player1.deck.shuffle();
-            player2.deck.shuffle();
+            this.player1.deck.shuffle();
+            this.player2.deck.shuffle();
 
             for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
                 
-                let drawnCard = player1.deck.pop();
+                let drawnCard = this.player1.deck.pop();
 
-                player1.socket.emit('event', {
+                this.player1.socket.emit('event', {
                     type: 'draw card',
                     player: 1,
                     card: drawnCard
                 });
 
-                player2.socket.emit('event', {
+                this.player2.socket.emit('event', {
                     type: 'draw card',
                     player: 1
                 });
 
-                player1.hand.unshift(drawnCard);
+                this.player1.hand.unshift(drawnCard);
             }
 
             for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
                 
-                let drawnCard = player2.deck.pop();
+                let drawnCard = this.player2.deck.pop();
 
-                player2.socket.emit('event', {
+                this.player2.socket.emit('event', {
                     type: 'draw card',
                     player: 2,
                     card: drawnCard
                 });
 
-                player1.socket.emit('event', {
+                this.player1.socket.emit('event', {
                     type: 'draw card',
                     player: 2
                 });
 
-                player2.hand.unshift(drawnCard);
+                this.player2.hand.unshift(drawnCard);
             }
 
 
-            player1.socket.on('event', input => {
-                this.processEvent(player1, input);
+            this.player1.socket.on('event', input => {
+                this.processEvent(this.player1, input);
             });
 
-            player2.socket.on('event', input => {
-                this.processEvent(player2, input);
+            this.player2.socket.on('event', input => {
+                this.processEvent(this.player2, input);
             });
 
 		}
@@ -267,23 +267,23 @@ class Game {
         eventChain.forEach(value => {
             console.log(eventChain);
             if(value.view == 1) {
-                player1.socket.emit('event', value);
+                this.player1.socket.emit('event', value);
             }
             else if(value.view == 2) {
                 if(value.player == 1) {
-                    player1.socket.emit('event', value);
-                    player2.socket.emit('event', {type: value.type, player: value.player});
+                    this.player1.socket.emit('event', value);
+                    this.player2.socket.emit('event', {type: value.type, player: value.player});
                 }
                 else {
-                    player2.socekt.emit('event', value);
-                    player1.socket.emit('event', {type: value.type, player: value.player});
+                    this.player2.socekt.emit('event', value);
+                    this.player1.socket.emit('event', {type: value.type, player: value.player});
                 }
             }
             else {
                 if(value.player == 1)
-                    player1.socket.emit('event', value);
+                    this.player1.socket.emit('event', value);
                 else
-                    player2.socket.emit('event', value);
+                    this.player2.socket.emit('event', value);
             }
         });
     }
@@ -344,20 +344,20 @@ class Game {
     killDead(eventChain) {
 
         if(this.player1.character.health == 0) {
-			player1.socket.emit('game over', 1);
-			player2.socket.emit('game over', 1);
-			player1.socket.disconnect();
-			player2.socket.disconnect();
+			this.player1.socket.emit('game over', 1);
+			this.player2.socket.emit('game over', 1);
+			this.player1.socket.disconnect();
+			this.player2.socket.disconnect();
 		} else if(this.player2.character.health == 0) {//check for game over first.
-			player1.socket.emit('game over', 2);
-			player2.socket.emit('game over', 2);
-			player1.socket.disconnect();
-			player2.socket.disconnect();
+			this.player1.socket.emit('game over', 2);
+			this.player2.socket.emit('game over', 2);
+			this.player1.socket.disconnect();
+			this.player2.socket.disconnect();
 		}
 
 		shouldDoEvent = false;
-		player1.board.forEach((dude) => {if(dude.currentPower <= 0) {shouldDoEvent = true;}});
-		player2.board.forEach((dude) => {if(dude.currentPower <= 0) {shouldDoEvent = true;}});
+		this.player1.board.forEach((dude) => {if(dude.currentPower <= 0) {shouldDoEvent = true;}});
+		this.player2.board.forEach((dude) => {if(dude.currentPower <= 0) {shouldDoEvent = true;}});
 
 		if(!shouldDoEvent) //this code is disgusting but I don't want to make an empty event.
 			return;
@@ -525,13 +525,13 @@ class Game {
 	}
 
 	get currentPlayer() {
-		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player1:this.player2
+		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player1:this.player2;
 			//if it's 1,2... 5,6... 9,10... then player 1's turn.
 			//if it's 3,4... 7.8... player 2's turn.
     }										//these functions simply return the current player and other player. Call them like instance variables.
 
     get otherPlayer() {
-		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player2:this.player1
+		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? this.player2:this.player1;
 			//Just the opposite of currentPlayer.
     }
 
