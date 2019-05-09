@@ -35,13 +35,12 @@ class ClientGame {
 	 * 8. turnCounter - the current turn that the game is on
 	 *
 	 * @param {number} id the id of this player (either 1 or 2)
-	 * @param {[Card]} hand the hand of this player
 	 * @param {number} ownStartingDeckSize the total size of this player's deck
 	 * @param {number} enemyStartingDeckSize the total size of the other player's deck
 	 */
-    init(id, hand, ownStartingDeckSize, enemyStartingDeckSize) {
+    init(id, ownStartingDeckSize, enemyStartingDeckSize) {
 		this.id = id;
-		this.hand = hand;
+		this.hand = [];
 		this.ownBoard = [];
         this.enemyBoard = [];
         this.ownGraveyard = [];

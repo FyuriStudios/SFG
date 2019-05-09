@@ -972,13 +972,13 @@ let GameView = (function() {
          * This function sets up all relevant graphics objects and listeners and data and what have you to make this module all ready
          * to display the game. Call this externally when you're ready to display everything.
          */
-        setupDisplay: function() {
+        setupDisplay: function(id, ownStartingDeckSize, enemyStartingDeckSize) {
 
             /*
             This is just a test initialization of the game data. It will get better initialized later but for now this is here just
             so that the data can be used in testing.
             */
-            game.init(1, [], 10, 10);
+            game.init(id, ownStartingDeckSize, enemyStartingDeckSize);
 
             /*
             This is also a testing construct. Every time the pointer is pressed, this prints the pointer location. I've been using this

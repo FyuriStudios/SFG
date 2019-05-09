@@ -185,6 +185,14 @@ class Game {
         } 
 
         else if(player1.setDeck && player2.setDeck) {
+            
+            let deckSizes = {
+                player1DeckSize: player1.deck.length,
+                player2DeckSize: player2.deck.length,
+            }
+
+            player1.socket.emit('deck sizes', deckSizes);
+            player2.socket.emit('deck sizes', deckSizes);
 
             player1.deck.shuffle();
             player2.deck.shuffle();
@@ -255,6 +263,29 @@ class Game {
                 this.endTurn(input, eventChain);
                 break;
         }
+
+        eventChain.forEach(value => {
+            console.log(eventChain);
+            if(value.view == 1) {
+                player1.socket.emit('event', value);
+            }
+            else if(value.view == 2) {
+                if(value.player == 1) {
+                    player1.socket.emit('event', value);
+                    player2.socket.emit('event', {type: value.type, player: value.player});
+                }
+                else {
+                    player2.socekt.emit('event', value);
+                    player1.socket.emit('event', {type: value.type, player: value.player});
+                }
+            }
+            else {
+                if(value.player == 1)
+                    player1.socket.emit('event', value);
+                else
+                    player2.socket.emit('event', value);
+            }
+        });
     }
 
     /**
