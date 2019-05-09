@@ -59,6 +59,7 @@ io.on('connection', function(playerSocket) {
     console.log('Connected!');
 
     freePlayers.push(playerSocket);
+    console.log(freePlayers);
 
 });
 
