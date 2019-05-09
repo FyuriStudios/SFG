@@ -735,6 +735,12 @@ let GameView = (function() {
 
             if(event.player == game.id) { //TODO: account for spells later.
 
+                if(event.tokenType == 'monster')
+                    game.ownMonsterTokens -= event.cost;
+                else
+                    game.ownSpellTokens -= event.cost;
+                fixTokens();
+
                 let card = game.hand.splice(event.handLoc, 1)[0];//remove the card at the relevant location in the player's hand
                 game.ownBoard.splice(event.playLoc, 0, card);//insert the card at the correct location in the player's board
                 card.boardForm();
@@ -761,6 +767,12 @@ let GameView = (function() {
                 fixOwnBoardSpacing(event.playLoc, () => nextInEventQueue());
 
             } else {
+
+                if(event.tokenType == 'monster')
+                    game.enemyMonsterTokens -= event.cost;
+                else
+                    game.enemySpellTokens -= event.cost;
+                fixTokens();
 
                 let targetPlay = enemyCardsInHand.splice(event.handLoc, 1)[0];
 
@@ -790,9 +802,8 @@ let GameView = (function() {
             game.turnCounter++;
 
             if((game.turnCounter%4 == 1 || game.turnCounter%4 == 2 && game.id == 1) || (game.turnCounter%4 == 3 || game.turnCounter%4 == 0 && game.id == 2)) {
-                endTurnButton.filter.saturate(1, false);
+            //fix this
             }
-
             else {
                 endTurnButton.desaturate();
             }
@@ -805,10 +816,14 @@ let GameView = (function() {
 
             if((game.turnCounter%4 == 1 || game.turnCounter%4 == 2 && game.id == 1) || (game.turnCounter%4 == 3 || game.turnCounter%4 == 0 && game.id == 2)) {
                 endTurnButton.filter.saturate(1, false);
+                game.ownMonsterTokens += 3;
+                game.ownSpellTokens +=3;
+                fixTokens();
             }
-
             else {
-                endTurnButton.desaturate();
+                game.enemyMonsterTokens += 3;
+                game.enemySpellTokens +=3;
+                fixTokens();
             }
 
             nextInEventQueue();
@@ -995,6 +1010,14 @@ let GameView = (function() {
                 endTurnButton.button.height = app.stage.height * .09;
                 
                 app.stage.addChild(endTurnButton.button);
+
+                endTurnButton.button.on('mouseover', () => {
+                    endTurnButton.button.texture = textures.endButtonHover;
+                });
+
+                endTurnButton.button.on('mouseout', () => {
+                    endTurnButton.button.texture = textures.endButton;
+                })
 
                 endTurnButton.button.on('mousedown', () => {
                     endTurnButton.button.alpha = 0.7;
