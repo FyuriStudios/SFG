@@ -74,6 +74,8 @@ let GameView = (function() {
 
     let graveyardDisplay = new PIXI.Container();
 
+    let eventQueue = [];
+
     /*
     Above this is the space for declaring module scope variables (variables that can be accessed by any of the functions below and 
     modified.)
@@ -340,7 +342,7 @@ let GameView = (function() {
      * hand. For example, when a player draws a card you can add it to their hand array and then call this function.
      * It might be useful to parameterize this a bit more than it is at the moment, but for now I think that this is totally fine.
      */
-    function fixOwnHandSpacing() {
+    function fixOwnHandSpacing(completion = undefined) {
         /*
         quick alias to game.hand to save the characters bc I don't like typing (jk, I'm here writing this comment)
         */
@@ -365,11 +367,15 @@ let GameView = (function() {
             let x = leftBound + cardSpacingDivisor * (index+1);
             let y = upperBound;
 
-            AnimationQueue.addMoveRequest(card.sprite, {x: x, y: y}, 5);
+            AnimationQueue.addMoveRequest(card.sprite, {x: x, y: y}, 6);
         });
+
+        //This is disgusting. But I couldn't find a better way to do it. :(
+        if(completion != undefined)
+            setTimeout(() => completion(), 1100);
     }
 
-    function fixEnemyHandSpacing() {
+    function fixEnemyHandSpacing(completion = undefined) {
         let leftBound = .1135 * app.stage.width;
         let rightBound = .4385 * app.stage.width;
 
@@ -383,6 +389,9 @@ let GameView = (function() {
 
             AnimationQueue.addMoveRequest(card, {x: x, y: y}, 5);
         });
+
+        if(completion != undefined)
+            setTimeout(() => completion(), 1100); //Also gross.
     }
 
     /*
@@ -436,7 +445,7 @@ let GameView = (function() {
 
     }
 
-    function fixOwnBoardSpacing() {
+    function fixOwnBoardSpacing(completion = undefined) {
         let space = .1 * app.stage.width;
         let leftBound = app.stage.width/2 - (space * game.ownBoard.length/2);
 
@@ -449,9 +458,12 @@ let GameView = (function() {
             AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
             value.sprite.xLoc = xDestination;
         });
+
+        if(completion != undefined)
+            setTimeout(() => completion(), 1100);
     }
 
-    function fixEnemyBoardSpacing() {
+    function fixEnemyBoardSpacing(completion = undefined) {
         let space = .1 * app.stage.width;
         let leftBound = app.stage.width/2 - (space * game.enemyBoard.length/2);
 
@@ -463,6 +475,9 @@ let GameView = (function() {
 
             AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
         });
+
+        if(completion != undefined)
+            setTimeout(() => completion(), 1100);
     }
 
     function slideCards(loc = -1) {
@@ -640,12 +655,221 @@ let GameView = (function() {
             return;
 
         graveyard.forEach(value => {
-            value.popup.y += event.deltaY * app.stage.height*0.00093;
+            value.popup.y += event.deltaY * app.stage.height*0.0465;
             if(value.popup.y < 0 || value.popup.y + value.popup.height > app.stage.height)
                 graveyardDisplay.removeChild(value.popup);
             else 
                 graveyardDisplay.addChild(value.popup);
         });
+
+    }
+
+    function nextInEventQueue() {
+
+        if(eventQueue.length == 0)
+            return;
+
+        let event = eventQueue.shift();
+
+        if(event.type == 'draw card') {
+                
+            if(event.player == game.id) {
+                
+                /*
+                Generate a new card and put it into the player's hand.
+                */
+                let card = ClientCard.from(event.card);
+
+                smallSizeCardInHandSprite(card.sprite);
+
+                card.sprite.x = app.stage.width*0.0565;
+                card.sprite.y = app.stage.height*0.885;
+
+                card.sprite.on('mouseover', mouseOverCardInHand);
+                card.sprite.on('mouseout', mouseOutCardInHand);
+                card.sprite.on('pointerdown', onDragFromHandStart);
+                card.sprite.on('pointerup', onDragFromHandEnd);
+                card.sprite.on('pointerupoutside', onDragFromHandEnd);
+                card.sprite.on('pointermove', onDragFromHandMove);
+
+                app.stage.addChild(card.sprite);
+                
+                game.hand.push(card);
+
+                /*
+                Animate the card into the player's hand.
+                */
+                fixOwnHandSpacing(() => nextInEventQueue());
+
+            } else {
+               
+                let card = new PIXI.Sprite(textures.cardBack);
+
+                card.anchor.x = .5;
+                card.anchor.y = .5;
+                
+                card.x = app.stage.width * .0146;
+                card.y = app.stage.height * .1;
+
+                enemyCardsInHand.push(card);
+
+                smallSizeCardInHandSprite(card);
+
+                app.stage.addChild(card);
+
+                fixEnemyHandSpacing(() => nextInEventQueue());
+
+            }
+        }
+
+        else if(event.type == 'play card') {
+
+            if(event.player == game.id) { //TODO: account for spells later.
+
+                let card = game.hand.splice(event.handLoc, 1)[0];//remove the card at the relevant location in the player's hand
+                game.ownBoard.splice(event.playLoc, 0, card);//insert the card at the correct location in the player's board
+                card.boardForm();
+
+                card.sprite.off('mouseover', mouseOverCardInHand);
+
+                card.sprite.off('mouseout', mouseOutCardInHand);
+
+                card.sprite.off('pointerdown', onDragFromHandStart);
+
+                card.sprite.off('pointerup', onDragFromHandEnd);
+
+                card.sprite.off('pointerupoutside', onDragFromHandEnd); //removing mouse events. Then we'll re-add custom events.
+
+                card.sprite.off('pointermove', onDragFromHandMove);
+
+                card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
+                card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
+                card.sprite.on('pointerdown', onMouseDragCardOnBoardStart);
+                card.sprite.on('pointerup', onMouseDragCardOnBoardEnd);
+                card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
+                card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
+
+                fixOwnBoardSpacing(() => nextInEventQueue());
+
+            } else {
+
+                let targetPlay = enemyCardsInHand.splice(event.handLoc, 1)[0];
+
+                app.stage.removeChild(targetPlay);
+
+                let enemyCard = ClientCard.from(event.card);
+
+                game.enemyBoard.splice(event.playLoc, 0, enemyCard);
+                smallSizeCardInHandSprite(enemyCard.sprite);
+
+                app.stage.addChild(enemyCard.sprite);
+
+                enemyCard.sprite.x = targetPlay.x + enemyCard.sprite.width/2;
+                enemyCard.sprite.y = targetPlay.y;
+                enemyCard.boardForm();
+
+                fixEnemyBoardSpacing(() => nextInEventQueue());
+
+                enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
+                enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
+
+            }
+
+        }
+
+        else if(event.type == 'end turn') {
+            game.turnCounter++;
+
+            if((game.turnCounter%4 == 1 || game.turnCounter%4 == 2 && game.id == 1) || (game.turnCounter%4 == 3 || game.turnCounter%4 == 0 && game.id == 2)) {
+                endTurnButton.filter.saturate(1, false);
+            }
+
+            else {
+                endTurnButton.desaturate();
+            }
+
+            nextInEventQueue();
+        }
+
+        else if(event.type == 'start turn') {
+            game.turnCounter++;
+
+            if((game.turnCounter%4 == 1 || game.turnCounter%4 == 2 && game.id == 1) || (game.turnCounter%4 == 3 || game.turnCounter%4 == 0 && game.id == 2)) {
+                endTurnButton.filter.saturate(1, false);
+            }
+
+            else {
+                endTurnButton.desaturate();
+            }
+
+            nextInEventQueue();
+        }
+
+        else if (event.type == 'attack') {
+
+            let attacker;
+            let target;
+
+            if(event.player == game.id) {
+
+                attacker = game.ownBoard[event.attacker];
+                target = game.enemyBoard[event.target];
+            }
+            
+            else {
+                attacker = game.enemyBoard[event.attacker];
+                target = game.ownBoard[event.target];
+            }
+
+            let dx = target.sprite.x - attacker.sprite.x;
+                let dy = attacker.sprite.y - target.sprite.y;
+
+                let dist = Math.sqrt(dx * dx + dy * dy);
+
+                dx = dx/dist;
+                dy = dy/dist;
+
+                AnimationQueue.addMoveRequest(attacker.sprite, {x: target.sprite.x, y: target.sprite.y}, 13, () => {
+                    let tempAPower = attacker.currentPower;
+                    let tempTPower = target.currentPower;
+                    attacker.currentPower -= tempTPower;
+                    target.currentPower -= tempAPower;
+
+                    if(attacker.currentPower < 0)
+                        attacker.currentPower = 0;
+                    if(target.currentPower < 0)
+                        target.currentPower = 0;
+
+                    attacker.updatePower();
+                    target.updatePower();
+
+                    AnimationQueue.addMoveRequest(attacker.sprite, {x: attacker.sprite.x - (dx * tempTPower * app.stage.width * .01), y: attacker.sprite.y + (dy * tempTPower * app.stage.width * .01)}, 15);
+                    
+                    AnimationQueue.addMoveRequest(target.sprite, {x: target.sprite.x + (dx * tempAPower * app.stage.width * .01), y: target.sprite.y - (dy * tempAPower * app.stage.width * .01)}, 15, () => {
+                        setTimeout(() => {
+                            fixOwnBoardSpacing();
+                            fixEnemyBoardSpacing(() => nextInEventQueue());
+                        }, 200);
+                    });
+
+                });
+        }
+
+        else if(event.type == 'kill dead') {
+            if(event.player == game.id) {
+                let dead = game.ownBoard.splice(event.target, 1)[0];
+                fixOwnBoardSpacing();
+                game.ownGraveyard.unshift(dead);
+                AnimationQueue.addMoveRequest(dead.sprite, {x: app.stage.width * .05, y: app.stage.height * .6}, 20,  () => {app.stage.removeChild(dead.sprite); nextInEventQueue();});
+            }
+            else {
+                let dead = game.enemyBoard.splice(event.target, 1)[0];
+                fixEnemyBoardSpacing();
+                game.enemyGraveyard.unshift(dead);
+                AnimationQueue.addMoveRequest(dead.sprite, {x: app.stage.width * .05, y: app.stage.height * .35}, 20, () => {app.stage.removeChild(dead.sprite); nextInEventQueue();});
+            }
+
+        }
 
     }
 
@@ -928,203 +1152,9 @@ let GameView = (function() {
          * @param {Event} event the event to be processed
          */
         processEvent: function(event) {
-
-            /*
-            Currently, drawing cards is the only event type that's supported. Look at the header of backend/game.js for more information
-            about events and their parameters and such (under construction).
-            */
-            if(event.type == 'draw card') {
-                
-                if(event.player == game.id) {
-                    
-                    /*
-                    Generate a new card and put it into the player's hand.
-                    */
-                    let card = ClientCard.from(event.card);
-
-                    smallSizeCardInHandSprite(card.sprite);
-
-                    card.sprite.x = app.stage.width*0.0565;
-                    card.sprite.y = app.stage.height*0.885;
-
-                    card.sprite.on('mouseover', mouseOverCardInHand);
-                    card.sprite.on('mouseout', mouseOutCardInHand);
-                    card.sprite.on('pointerdown', onDragFromHandStart);
-                    card.sprite.on('pointerup', onDragFromHandEnd);
-                    card.sprite.on('pointerupoutside', onDragFromHandEnd);
-                    card.sprite.on('pointermove', onDragFromHandMove);
-
-                    app.stage.addChild(card.sprite);
-                    
-                    game.hand.push(card);
-
-                    /*
-                    Animate the card into the player's hand.
-                    */
-                    fixOwnHandSpacing();
-
-                } else {
-                   
-                    let card = new PIXI.Sprite(textures.cardBack);
-
-                    card.anchor.x = .5;
-                    card.anchor.y = .5;
-                    
-                    card.x = app.stage.width * .0146;
-                    card.y = app.stage.height * .1;
-
-                    enemyCardsInHand.push(card);
-
-                    smallSizeCardInHandSprite(card);
-
-                    app.stage.addChild(card);
-
-                    fixEnemyHandSpacing();
-
-                }
-            }
-
-            else if(event.type == 'play card') {
-
-                if(event.player == game.id) { //TODO: account for spells later.
-
-                    let card = game.hand.splice(event.handLoc, 1)[0];//remove the card at the relevant location in the player's hand
-                    game.ownBoard.splice(event.playLoc, 0, card);//insert the card at the correct location in the player's board
-                    card.boardForm();
-                    fixOwnBoardSpacing();
-
-                    card.sprite.off('mouseover', mouseOverCardInHand);
-
-                    card.sprite.off('mouseout', mouseOutCardInHand);
-
-                    card.sprite.off('pointerdown', onDragFromHandStart);
-
-                    card.sprite.off('pointerup', onDragFromHandEnd);
-
-                    card.sprite.off('pointerupoutside', onDragFromHandEnd); //removing mouse events. Then we'll re-add custom events.
-
-                    card.sprite.off('pointermove', onDragFromHandMove);
-
-                    card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
-                    card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
-                    card.sprite.on('pointerdown', onMouseDragCardOnBoardStart);
-                    card.sprite.on('pointerup', onMouseDragCardOnBoardEnd);
-                    card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
-                    card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
-
-                } else {
-
-                    let targetPlay = enemyCardsInHand.splice(event.handLoc, 1)[0];
-
-                    app.stage.removeChild(targetPlay);
-
-                    let enemyCard = ClientCard.from(event.card);
-
-                    game.enemyBoard.splice(event.playLoc, 0, enemyCard);
-                    smallSizeCardInHandSprite(enemyCard.sprite);
-
-                    app.stage.addChild(enemyCard.sprite);
-
-                    enemyCard.sprite.x = targetPlay.x + enemyCard.sprite.width/2;
-                    enemyCard.sprite.y = targetPlay.y;
-                    enemyCard.boardForm();
-
-                    fixEnemyBoardSpacing();
-
-                    enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
-                    enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
-
-                }
-
-            }
-
-            else if(event.type == 'end turn') {
-                game.turnCounter++;
-
-                if((game.turnCounter%4 == 1 || game.turnCounter%4 == 2 && game.id == 1) || (game.turnCounter%4 == 3 || game.turnCounter%4 == 0 && game.id == 2)) {
-                    endTurnButton.filter.saturate(1, false);
-                }
-
-                else {
-                    endTurnButton.desaturate();
-                }
-            }
-
-            else if(event.type == 'start turn') {
-                game.turnCounter++;
-
-                if((game.turnCounter%4 == 1 || game.turnCounter%4 == 2 && game.id == 1) || (game.turnCounter%4 == 3 || game.turnCounter%4 == 0 && game.id == 2)) {
-                    endTurnButton.filter.saturate(1, false);
-                }
-
-                else {
-                    endTurnButton.desaturate();
-                }
-            }
-
-            else if (event.type == 'attack') {
-
-                if(event.player == game.id) {
-
-                    let attacker = game.ownBoard[event.attacker];
-                    let target = game.enemyBoard[event.target];
-
-                    let dx = target.sprite.x - attacker.sprite.x;
-                    let dy = attacker.sprite.y - target.sprite.y;
-
-                    let dist = Math.sqrt(dx * dx + dy * dy);
-
-                    dx = dx/dist;
-                    dy = dy/dist;
-
-                    AnimationQueue.addMoveRequest(attacker.sprite, {x: target.sprite.x, y: target.sprite.y}, 13, () => {
-                        let tempAPower = attacker.currentPower;
-                        let tempTPower = target.currentPower;
-                        attacker.currentPower -= tempTPower;
-                        target.currentPower -= tempAPower;
-
-                        if(attacker.currentPower < 0)
-                            attacker.currentPower = 0;
-                        if(target.currentPower < 0)
-                            target.currentPower = 0;
-
-                        attacker.updatePower();
-                        target.updatePower();
-
-                        AnimationQueue.addMoveRequest(attacker.sprite, {x: attacker.sprite.x - (dx * tempTPower * app.stage.width * .01), y: attacker.sprite.y + (dy * tempTPower * app.stage.width * .01)}, 15);
-                        
-                        AnimationQueue.addMoveRequest(target.sprite, {x: target.sprite.x + (dx * tempAPower * app.stage.width * .01), y: target.sprite.y - (dy * tempAPower * app.stage.width * .01)}, 15, () => {
-                            setTimeout(() => {
-                                fixOwnBoardSpacing();
-                                fixEnemyBoardSpacing();
-                            }, 200);
-                        });
-
-                    });
-
-                }
-                else {
-
-                }
-            }
-
-            else if(event.type == 'kill dead') {
-                if(event.player == game.id) {
-                    let dead = game.ownBoard.splice(event.target, 1)[0];
-                    fixOwnBoardSpacing();
-                    game.ownGraveyard.unshift(dead);
-                    AnimationQueue.addMoveRequest(dead.sprite, {x: app.stage.width * .05, y: app.stage.height * .6}, 20,  () => app.stage.removeChild(dead.sprite));
-                }
-                else {
-                    let dead = game.enemyBoard.splice(event.target, 1)[0];
-                    fixEnemyBoardSpacing();
-                    game.enemyGraveyard.unshift(dead);
-                    AnimationQueue.addMoveRequest(dead.sprite, {x: app.stage.width * .05, y: app.stage.height * .35}, 20, () => app.stage.removeChild(dead.sprite));
-                }
-
-            }
-            
-           
+            eventQueue.push(event);
+            if(eventQueue.length == 1)
+                nextInEventQueue();
         },
 
         /**

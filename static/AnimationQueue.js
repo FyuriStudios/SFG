@@ -19,8 +19,8 @@ return {
                 let targetdy = value.to.y-value.sprite.y;
                 let targetDistance = Math.sqrt(targetdx*targetdx + targetdy*targetdy);
     
-                let framedx = value.xDistance * delta;
-                let framedy = value.yDistance * delta;
+                let framedx = value.xDistance * delta * app.stage.height / 1080;
+                let framedy = value.yDistance * delta * app.stage.height / 1080;
                 let frameDistance = Math.sqrt(framedx*framedx + framedy*framedy);
     
                 if(targetDistance <= frameDistance) {
