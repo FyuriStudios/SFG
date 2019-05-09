@@ -61,8 +61,11 @@ io.on('connection', function(playerSocket) {
     }
 
     else {
-	    //Otherwise, we'll create a new game with both players and run it.
-	    games.push(new Game(playerStorage, playerSocket).start());
+        //Otherwise, we'll create a new game with both players and run it.
+        
+        let game = new Game(playerStorage, playerSocket);
+        games.push(game);
+        game.start(game);
 	    playerStorage = null;
 	    //I don't think that this file needs anything else in it; the Game is meant to handle the rest of everything.
     }

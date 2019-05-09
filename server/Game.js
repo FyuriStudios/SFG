@@ -158,7 +158,7 @@ class Game {
     * the players can ready up all of their stuff.
     * @author Hughes
     */
-    start() {
+    start(gameReference) {
 
 		//first, we're going to handle the case where both players haven't set their decks.
 		if(!(this.player1.setDeck && this.player2.setDeck)) {
@@ -177,7 +177,7 @@ class Game {
 					if(!player.setDeck) {
 						input.forEach(value => player.deck.push(idToCard(value))); //TODO: Make this a real deck
 						player.setDeck = true;
-						this.start();//call itself to check to see if we can progress to the next step
+						gameReference.start();//call itself to check to see if we can progress to the next step
 					}
 				});
 			}
