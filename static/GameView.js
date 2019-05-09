@@ -616,6 +616,15 @@ let GameView = (function() {
                 });
             }
         });
+
+        if(app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y) {
+            outputFunc({
+                type: 'attack',
+                player: game.id,
+                target: -1,
+                attacker: attackerLoc, //targeting the enemy hero
+            });
+        }
     }
 
     function onMouseOverOwnGraveyard() {
@@ -853,9 +862,29 @@ let GameView = (function() {
 
         else if (event.type == 'attack') {
 
-            let attacker;
-            let target;
+            if(event.target == -1) {
 
+                if(event.player == game.id) {
+                    let xDestination = .492 * app.stage.width;
+                    let yDestination = .189 * app.stage.height;
+                    let attacker = game.ownBoard[event.attacker];
+
+                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13);
+                    fixOwnBoardSpacing(event.attacker, () => {nextInEventQueue()});
+                    return;
+                }
+                else {
+                    let xDestination = .5 * app.stage.width;
+                    let yDestination = .834 * app.stage.height;
+                    let attacker = game.enemyBoard[event.attacker];
+
+                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13);
+                    fixEnemyBoardSpacing(event.attacker, () => {nextInEventQueue()});
+                    return;
+                }
+
+            }
+            
             if(event.player == game.id) {
 
                 attacker = game.ownBoard[event.attacker];
@@ -944,8 +973,8 @@ let GameView = (function() {
             to figure out exact decimal values for locations on the board and such.
             */
             document.body.addEventListener('mousedown', function(event) {
-                console.log('x: ' + event.clientX);
-                console.log('y: ' + event.clientY);
+                console.log('x: ' + event.clientX/app.stage.width);
+                console.log('y: ' + event.clientY/app.stage.height);
             });
 
             /*
