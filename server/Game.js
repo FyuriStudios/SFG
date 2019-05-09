@@ -131,7 +131,8 @@ class Game {
 			hand: [], //they don't have a hand yet
 			graveyard: [], //there's nothing in the graveyard
 			mToks: 0, //they have 0 monster tokens and spell tokens
-			sToks: 0
+            sToks: 0,
+            deck: [],
 		};
 
 		this.player2 = { //see above for details on the variables
@@ -143,7 +144,8 @@ class Game {
 			hand: [],
 			graveyard: [],
 			mToks: 0,
-			sToks: 0
+            sToks: 0,
+            deck: [],
 		};
     }
 
