@@ -402,8 +402,8 @@ let GameView = (function() {
             app.stage.removeChild(game.ownHealthText);
             game.ownHealthText = new PIXI.Text(game.ownHealth, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'red', strokeThickness: 8, align: 'center'});
             game.ownHealthText.anchor.x = game.ownHealthText.anchor.y = .5;
-            game.ownHealthText.x = app.stage.width/2 - app.stage.width * .01;
-            game.ownHealthText.y = app.stage.height * .2;
+            game.ownHealthText.x = app.stage.width/2;
+            game.ownHealthText.y = app.stage.height * .75;
             game.ownHealthText.width = app.stage.width * (game.ownHealthText.text.length == 1? .03 : .045);
             game.ownHealthText.height = app.stage.height * .09;
             app.stage.addChild(game.ownHealthText);
@@ -412,8 +412,8 @@ let GameView = (function() {
             app.stage.removeChild(game.enemyHealthText);
             game.enemyHealthText = new PIXI.Text(game.enemyHealth, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'red', strokeThickness: 8, align: 'center'});
             game.enemyHealthText.anchor.x = game.ownHealthText.anchor.y = .5;
-            game.enemyHealthText.x = app.stage.width/2;
-            game.enemyHealthText.y = app.stage.height * .75;
+            game.enemyHealthText.x = app.stage.width/2 - app.stage.width * .01;
+            game.enemyHealthText.y = app.stage.height * .2;
             game.enemyHealthText.width = app.stage.width * (game.enemyHealthText.text.length == 1? .03 : .045);
             game.enemyHealthText.height = app.stage.height * .09;
             app.stage.addChild(game.enemyHealthText);
@@ -869,8 +869,12 @@ let GameView = (function() {
                     let yDestination = .189 * app.stage.height;
                     let attacker = game.ownBoard[event.attacker];
 
-                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13, () => {game.ownHealth -= attacker.currentPower;fixHealths()});
-                    fixOwnBoardSpacing(event.attacker, () => {nextInEventQueue()});
+                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13, () => {
+                        game.enemyHealth -= attacker.currentPower;
+                        fixHealths();
+                        fixOwnBoardSpacing(event.attacker, () => {nextInEventQueue()});
+                    });
+                    
                     game.enemyHealth -= attacker.currentPower;
                     fixHealths();
                     return;
@@ -880,16 +884,21 @@ let GameView = (function() {
                     let yDestination = .834 * app.stage.height;
                     let attacker = game.enemyBoard[event.attacker];
 
-                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13, () => {game.ownHealth -= attacker.currentPower;fixHealths()});
-                    fixEnemyBoardSpacing(event.attacker, () => {nextInEventQueue()});
+                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13, () => {
+                        game.ownHealth -= attacker.currentPower;
+                        fixHealths();
+                        fixEnemyBoardSpacing(event.attacker, () => {nextInEventQueue()});
+                    });
+                    
                     
                     return;
                 }
 
             }
+
+            let attacker, target;
             
             if(event.player == game.id) {
-
                 attacker = game.ownBoard[event.attacker];
                 target = game.enemyBoard[event.target];
             }
