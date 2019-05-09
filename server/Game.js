@@ -159,6 +159,7 @@ class Game {
     * @author Hughes
     */
     start(gameReference) {
+        console.log('made it here');
 
 		//first, we're going to handle the case where both players haven't set their decks.
 		if(!(this.player1.setDeck && this.player2.setDeck)) {
@@ -176,7 +177,8 @@ class Game {
 					//TODO: deck verification and stuff!
 					if(!player.setDeck) {
 						input.forEach(value => player.deck.push(idToCard(value))); //TODO: Make this a real deck
-						player.setDeck = true;
+                        player.setDeck = true;
+                        console.log('recieved a deck');
 						gameReference.start();//call itself to check to see if we can progress to the next step
 					}
 				});
