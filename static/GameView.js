@@ -397,6 +397,29 @@ let GameView = (function() {
         });
     }
 
+    function fixHealths() {
+        if(!(game.ownHealthText != undefined && game.ownHealth + '' == game.ownHealthText.text)) {
+            app.stage.removeChild(game.ownHealthText);
+            game.ownHealthText = new PIXI.Text(game.ownHealth, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'red', strokeThickness: 8, align: 'center'});
+            game.ownHealthText.anchor.x = game.ownHealthText.anchor.y = .5;
+            game.ownHealthText.x = app.stage.width/2 - app.stage.width * .01;
+            game.ownHealthText.y = app.stage.height * .2;
+            game.ownHealthText.width = app.stage.width * (game.ownHealthText.text.length == 1? .03 : .045);
+            game.ownHealthText.height = app.stage.height * .09;
+            app.stage.addChild(game.ownHealthText);
+        }
+        if(!(game.enemyHealthText != undefined && game.enemyHealth + '' == game.enemyHealthText.text)) {
+            app.stage.removeChild(game.enemyHealthText);
+            game.enemyHealthText = new PIXI.Text(game.enemyHealth, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'red', strokeThickness: 8, align: 'center'});
+            game.enemyHealthText.anchor.x = game.ownHealthText.anchor.y = .5;
+            game.enemyHealthText.x = app.stage.width/2;
+            game.enemyHealthText.y = app.stage.height * .75;
+            game.enemyHealthText.width = app.stage.width * (game.enemyHealthText.text.length == 1? .03 : .045);
+            game.enemyHealthText.height = app.stage.height * .09;
+            app.stage.addChild(game.enemyHealthText);
+        }
+    }
+
     /*
     TODO: make this less gross :(
     */
@@ -734,10 +757,10 @@ let GameView = (function() {
 
             if(event.player == game.id) { //TODO: account for spells later.
 
-                if(event.tokenType == 'monster')
-                    game.ownMonsterTokens -= event.cost;
+                if(game.hand[event.handLoc].type == 'monster')
+                    game.ownMonsterTokens -= game.hand[event.handLoc].currentCost;
                 else
-                    game.ownSpellTokens -= event.cost;
+                    game.ownSpellTokens -= game.hand[event.handLoc].currentCost;
                 fixTokens();
 
                 let card = game.hand.splice(event.handLoc, 1)[0];//remove the card at the relevant location in the player's hand
@@ -767,17 +790,17 @@ let GameView = (function() {
 
             } else {
 
-                if(event.tokenType == 'monster')
-                    game.enemyMonsterTokens -= event.cost;
+                let enemyCard = ClientCard.from(event.card);
+
+                if(enemyCard.type == 'monster')
+                    game.enemyMonsterTokens -= enemyCard.currentCost;
                 else
-                    game.enemySpellTokens -= event.cost;
+                    game.enemySpellTokens -= enemyCard.currentCost;
                 fixTokens();
 
                 let targetPlay = enemyCardsInHand.splice(event.handLoc, 1)[0];
 
                 app.stage.removeChild(targetPlay);
-
-                let enemyCard = ClientCard.from(event.card);
 
                 game.enemyBoard.splice(event.playLoc, 0, enemyCard);
                 smallSizeCardInHandSprite(enemyCard.sprite);
@@ -1063,6 +1086,8 @@ let GameView = (function() {
                 enemyTokenFrame.width = .23 * app.stage.width;
                 enemyTokenFrame.height = .15 * app.stage.height;
                 app.stage.addChild(enemyTokenFrame);
+
+                fixHealths();
 
                 
                 /*

@@ -13,14 +13,14 @@ ClientCard = (function() {
      * Defines a generic card. This class shouldn't be constructed directly.
      */
     class Card {
-        constructor(type, id, tokenType, rarity, name, cost) {
+        constructor(type, id, tokenType, rarity, name, cost, playCost) {
             this.type = type;
             this.id = id;
             this.tokenType = tokenType;
             this.rarity = rarity;
             this.name = name;
             this.cost = cost;
-            this.currentCost = cost;//current cost and absolute cost are different
+            this.currentCost = playCost;//current cost and absolute cost are different
         }
 
         updateText() {
@@ -111,7 +111,7 @@ ClientCard = (function() {
     class Monster extends Card {
 
         constructor(backendCard) {
-            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost);
+            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost, backendCard.playCost);
             this.power = backendCard.power;
             this.currentPower = this.power;
             this.hasDefender = backendCard.hasDefender;

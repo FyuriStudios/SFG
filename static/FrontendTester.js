@@ -21,7 +21,8 @@ let test = function() {
             cost: 3,
             power: 3,
             hasDefender: false,
-            isStatic: false
+            isStatic: false,
+            playCost: 3
         }});
             
         GameView.processEvent({type: 'draw card', player: 2});
@@ -35,7 +36,8 @@ let test = function() {
             cost: 3,
             power: 3,
             hasDefender: false,
-            isStatic: false
+            isStatic: false,
+            playCost: 3
         }});
     
         GameView.processEvent({type: 'draw card', player: 2});
@@ -47,21 +49,23 @@ let test = function() {
             rarity: 'common',
             name: 'Test Card',
             cost: 3,
-            power: 4,
+            power: 3,
             hasDefender: false,
-            isStatic: false
+            isStatic: false,
+            playCost: 3
         }});
     
         GameView.processEvent({type: 'draw card', player: 1, card: {
             type: 'monster',
-            id: -1,
-            tokenType: 'monster',
-            rarity: 'common',
-            name: 'Test Card',
-            cost: 3,
-            power: 4,
-            hasDefender: false,
-            isStatic: false
+                id: -1,
+                tokenType: 'monster',
+                rarity: 'common',
+                name: 'Test Card',
+                cost: 3,
+                power: 3,
+                hasDefender: false,
+                isStatic: false,
+                playCost: 3
         }});
     
             GameView.processEvent({type: 'draw card', player: 1, card: {
@@ -73,7 +77,8 @@ let test = function() {
                 cost: 3,
                 power: 3,
                 hasDefender: false,
-                isStatic: false
+                isStatic: false,
+                playCost: 3
             }});
     
             GameView.processEvent({type: 'draw card', player: 2});
@@ -88,7 +93,8 @@ let test = function() {
                 cost: 3,
                 power: 3,
                 hasDefender: false,
-                isStatic: false
+                isStatic: false,
+                playCost: 3
             }});
     
             GameView.processEvent({type: 'play card', player: 1, handLoc: 0, playLoc: 0});
@@ -101,7 +107,8 @@ let test = function() {
                 cost: 3,
                 power: 3,
                 hasDefender: false,
-                isStatic: false
+                isStatic: false,
+                playCost: 3
             }});
     
             GameView.processEvent({type: 'play card', player: 1, handLoc: 0, playLoc: 0});
@@ -114,7 +121,8 @@ let test = function() {
                 cost: 3,
                 power: 3,
                 hasDefender: false,
-                isStatic: false
+                isStatic: false,
+                playCost: 3
             }});
     
             GameView.processEvent({type: 'play card', player: 1, handLoc: 0, playLoc: 0});

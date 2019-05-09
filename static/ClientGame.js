@@ -16,6 +16,7 @@ class ClientGame {
 	constructor() {
         this.initialized = false;
         this.MAX_CARDS = 10;
+        this.STARTING_HEALTH = 50;
 	}
 
 	/**
@@ -53,20 +54,9 @@ class ClientGame {
 		this.ownMonsterTokens = 0;
 		this.ownSpellTokens = 0;
 		this.enemyMonsterTokens = 0;
-		this.enemySpellTokens = 0;
-	}
-
-	/**
-	 * This is the most important function of the class. It takes in an event and then turns the event into
-	 * a data change for the user and updates its own data based on the event's information. The documentation
-	 * on event formatting is at the top of Game.js. This event processor will probably get broken down into a bunch of methods
-	 * so that it's easier to read.
-	 * @param {Event} event the event to be processed
-	 */
-	processEvent(event) {
-		if(event.type == 'draw card') {
-			processDrawCardEvent(event); //like dat
-		}
+        this.enemySpellTokens = 0;
+        this.ownHealth = this.STARTING_HEALTH;
+        this.enemyHealth = this.STARTING_HEALTH;
 	}
 
 	/**
