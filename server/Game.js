@@ -417,6 +417,7 @@ class Game {
             let deadGuys = [];
             for(var i = player.board.length-1; i >= 0; i--) {
 				if(player.board[i].currentPower <= 0) {
+					player.board.splice(i, 1);
                     deadGuys.push(player.board[i]);
                     dead.push({index: i, id: player.id});
 				}
