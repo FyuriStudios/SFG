@@ -943,7 +943,12 @@ let GameView = (function() {
         else if(event.type == 'kill dead') {
             if(event.player == game.id) {
                 let dead = game.ownBoard.splice(event.target, 1)[0];
+
                 fixOwnBoardSpacing();
+
+                if(dead == undefined)
+                    return;
+
                 game.ownGraveyard.unshift(dead);
 
                 if(dead.popup != undefined)
@@ -953,7 +958,12 @@ let GameView = (function() {
             }
             else {
                 let dead = game.enemyBoard.splice(event.target, 1)[0];
+
                 fixEnemyBoardSpacing();
+
+                if(dead == undefined)
+                    return;
+                    
                 game.enemyGraveyard.unshift(dead);
 
                 if(dead.popup != undefined)
