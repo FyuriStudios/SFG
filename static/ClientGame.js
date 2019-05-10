@@ -35,21 +35,19 @@ class ClientGame {
 	 * 8. turnCounter - the current turn that the game is on
 	 *
 	 * @param {number} id the id of this player (either 1 or 2)
-	 * @param {[Card]} hand the hand of this player
 	 * @param {number} ownStartingDeckSize the total size of this player's deck
 	 * @param {number} enemyStartingDeckSize the total size of the other player's deck
 	 */
-    init(id, hand, ownStartingDeckSize, enemyStartingDeckSize) {
+    init(id, ownStartingDeckSize, enemyStartingDeckSize) {
 		this.id = id;
-		this.hand = hand;
+		this.hand = [];
 		this.ownBoard = [];
         this.enemyBoard = [];
         this.ownGraveyard = [];
-        this.enemyGraveyard = [];
-		this.enemyCardsHeld = constants.STARTING_CARDS_DRAWN;
-		this.ownDeckSize = ownStartingDeckSize - constants.STARTING_CARDS_DRAWN;
-		this.enemyDeckSize = enemyStartingDeckSize - constants.STARTING_CARDS_DRAWN;
-		this.turnCounter = 0;
+		this.enemyGraveyard = [];
+		//the length of the enemy's hand is handled elsewhere.
+		this.ownDeckSize = ownStartingDeckSize;
+		this.enemyDeckSize = enemyStartingDeckSize;
 		this.initialized = true;
 		this.ownMonsterTokens = 0;
 		this.ownSpellTokens = 0;
@@ -57,22 +55,6 @@ class ClientGame {
         this.enemySpellTokens = 0;
         this.ownHealth = this.STARTING_HEALTH;
         this.enemyHealth = this.STARTING_HEALTH;
-	}
-
-	/**
-	 * Returns the ID of the current player.
-	 */
-	get currentPlayer() {
-		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? 1:2;
-		//if it's 1,2... 5,6... 9,10... then player 1's turn.
-		//if it's 3,4... 7.8... player 2's turn.
-	}
-
-	/**
-	 * Returns the id of the non-current player.
-	 */
-	get otherPlayer() {
-		return (this.turnCounter%4 == 1 || this.turnCounter%4 == 2) ? 2:1;//literally just the opposite of the above method
 	}
 
 }

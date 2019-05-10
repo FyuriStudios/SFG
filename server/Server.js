@@ -48,22 +48,26 @@ This will get overwritten when I have both players and I can place them into a g
 //FIXME: We should probably find a better way to do this.
 var playerStorage = null;
 var games = [];//so we can reference the games if we care
+var freePlayers = [];
 
 /*
 This sets the in-out library to listen for a person connecting to the server. This function gives a reference to the socket that they're connecting through,
 and we'll use that to create an instance of our Game.
 */
 io.on('connection', function(playerSocket) {
+    console.log('New connection from: ' + playerSocket.handshake.address);
 
-    if(playerStorage == null) {
-	    //Keep a reference to the socket so that it doesn't get dereferenced while we wait for another player.
-	    playerStorage = playerSocket;
-    }
+    freePlayers.push(playerSocket);
+});
 
-    else {
-	    //Otherwise, we'll create a new game with both players and run it.
-	    games.push(new Game(playerStorage, playerSocket).start());
-	    playerStorage = null;
-	    //I don't think that this file needs anything else in it; the Game is meant to handle the rest of everything.
+setInterval(() => {
+    if(freePlayers.length >= 2) {
+        let player1 = freePlayers.pop();
+        let player2 = freePlayers.pop();
+
+        let game = new Game(player1, player2);
+        games.push(game);
+        game.start();
+        console.log('Starting game');
     }
-})
+}, 1000);
