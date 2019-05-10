@@ -159,12 +159,16 @@ class Game {
     * @author Hughes
     */
     start(gameReference) {
-        console.log('made it here');
 
-		//first, we're going to handle the case where both players haven't set their decks.
-		if(!(this.player1.setDeck && this.player2.setDeck)) {
+        console.log('made it into the start block');
 
-			//TODO: add a default deck
+        //first, we're going to handle the case where both players haven't set their decks.
+        //When I first wrote this block, I forgot that negating an entire block also replaces && with ||, 
+        //which is likely why everything didn't work. 
+		if(!this.player1.setDeck || !this.player2.setDeck) {
+
+            console.log('made it into the set deck block');
+
 			this.player1.socket.emit('player id', this.player1.id); //Send both players their IDs just in case they need them.
 			this.player2.socket.emit('player id', this.player2.id);
 
@@ -189,6 +193,8 @@ class Game {
         } 
 
         else if(this.player1.setDeck && this.player2.setDeck) {
+
+            console.log('Made it past the set deck block');
 
             let deckSizes = {
                 player1DeckSize: this.player1.deck.length,
@@ -245,6 +251,8 @@ class Game {
             this.player2.socket.on('event', input => {
                 this.processEvent(this.player2, input);
             });
+
+            console.log('Game started');
 
 		}
     }
