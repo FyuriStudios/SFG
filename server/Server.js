@@ -56,7 +56,7 @@ and we'll use that to create an instance of our Game.
 */
 io.on('connection', function(playerSocket) {
 
-    console.log(freePlayers.length + 'Connected!');
+    console.log('New connection from ' + address.address + ':' + address.port);
 
     freePlayers.push(playerSocket);
 });

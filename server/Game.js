@@ -208,7 +208,6 @@ class Game {
 					if(!player.setDeck) {
 						input.forEach(value => player.deck.push(idToCard(value))); //TODO: Make this a real deck
                         player.setDeck = true;
-                        console.log('received a deck');
 						gameReference.start();//call itself to check to see if we can progress to the next step
 					}
 				});
@@ -317,7 +316,6 @@ class Game {
 				break;
         }
 
-		console.log(eventChain);
         eventChain.forEach(value => {
             if(value.view == 3) {
                 this.currentPlayer.socket.emit('event', value);
@@ -450,8 +448,6 @@ class Game {
      */
     attack(input, eventChain) {
 
-			console.log(input);
-
 			if((input.attacker >= this.currentPlayer.board.length || input.attacker == -1) || input.target >= this.currentPlayer.board.length) { //just real quick making sure that the locations are valid
 				return;
 			}
@@ -477,9 +473,6 @@ class Game {
 		var toPlay = temp.hand[input.handLoc];
 		//TODO: add flex token implementation
 		var tokens = toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks;
-
-		console.log(toPlay.currentCost);
-		console.log(tokens);
 
 		if(toPlay.currentCost>tokens || temp.board.length == constants.MAX_BOARD_SIZE) {
 			return; //they don't have enough tokens to play the card.
@@ -565,8 +558,6 @@ class Game {
 	 * @param {*} eventChain
 	 */
     endTurn(input, eventChain) {
-
-		console.log('Turn ending');
 
 		eventChain.push(
 			{
