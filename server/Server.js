@@ -55,7 +55,7 @@ This sets the in-out library to listen for a person connecting to the server. Th
 and we'll use that to create an instance of our Game.
 */
 io.on('connection', function(playerSocket) {
-
+    var address = playerSocket.handshake.address;
     console.log('New connection from ' + address.address + ':' + address.port);
 
     freePlayers.push(playerSocket);
