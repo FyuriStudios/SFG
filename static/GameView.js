@@ -303,22 +303,16 @@ let GameView = (function() {
             game.hand.forEach((element, index) => element.sprite == this? handLoc = index: null);
 
             /*
-            Figure out what kind of card was played (monster or event). We should probably change the "play spell" to "play event" but it
-            requires some fixing on the backend as well so leave it for now.
-            */
-            let playType = game.hand[handLoc].type == 'monster'?'play monster':'play spell';
-
-            this.spotForCard = undefined;
-
-            /*
             Call outputFunc with an event. Events from the backend to the frontend are similar to events going in the other direction,
             although I haven't documented frontend -> backend events yet.
             */
             outputFunc({
-                type: playType,
+                type: 'play card',
                 handLoc: handLoc,
                 playLoc: this.spotForCard
             });
+
+            this.spotForCard = undefined;
 
         }
 
@@ -531,6 +525,9 @@ let GameView = (function() {
             value.sprite == sprite?index = ind:null;
         });
 
+        if(index == undefined)
+            return;
+
         boardArray[index].displayPopup();
         app.stage.addChild(boardArray[index].popup);
         boardArray[index].popup.height *= 1.1;
@@ -544,7 +541,7 @@ let GameView = (function() {
         let temp;
         boardArray.forEach(value => value.sprite == sprite?temp = value:null);
 
-        if(temp.popup!=undefined)
+        if(temp != undefined && temp.popup!=undefined)
             app.stage.removeChild(temp.popup);
     }
 
@@ -573,7 +570,6 @@ let GameView = (function() {
     function onMouseDragCardOnBoardMove(eventObj) {
 
         if(this.dragging && arrowDragging) {
-            console.log('yeah');
             let pos = this.dragData.getLocalPosition(this.parent);
             let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
 
@@ -714,6 +710,8 @@ let GameView = (function() {
         if(event.type == 'draw card') {
                 
             if(event.player == game.id) {
+
+                game.ownDeckSize -= 1;
                 
                 /*
                 Generate a new card and put it into the player's hand.
@@ -742,6 +740,8 @@ let GameView = (function() {
                 fixOwnHandSpacing(() => nextInEventQueue());
 
             } else {
+
+                game.enemyDeckSize -= 1;
                
                 let card = new PIXI.Sprite(textures.cardBack);
 
@@ -795,6 +795,8 @@ let GameView = (function() {
                 card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
                 card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
 
+                fixOwnHandSpacing();
+
                 fixOwnBoardSpacing(event.playLoc, () => nextInEventQueue());
 
             } else {
@@ -820,6 +822,8 @@ let GameView = (function() {
                 enemyCard.sprite.y = targetPlay.y;
                 enemyCard.boardForm();
 
+                fixEnemyHandSpacing();
+
                 fixEnemyBoardSpacing(event.playLoc, () => nextInEventQueue());
 
                 enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
@@ -830,32 +834,27 @@ let GameView = (function() {
         }
 
         else if(event.type == 'end turn') {
-            game.turnCounter++;
 
-            if((game.turnCounter%4 == 1 || game.turnCounter%4 == 2 && game.id == 1) || (game.turnCounter%4 == 3 || game.turnCounter%4 == 0 && game.id == 2)) {
-            //fix this
-            }
-            else {
-                endTurnButton.desaturate();
+            if(event.player == game.id) {
+                endTurnButton.filter.desaturate();
             }
 
             nextInEventQueue();
         }
 
         else if(event.type == 'start turn') {
-            game.turnCounter++;
 
-            if((game.turnCounter%4 == 1 || game.turnCounter%4 == 2 && game.id == 1) || (game.turnCounter%4 == 3 || game.turnCounter%4 == 0 && game.id == 2)) {
-                endTurnButton.filter.saturate(1, false);
-                game.ownMonsterTokens += 3;
-                game.ownSpellTokens +=3;
-                fixTokens();
+            if(event.player == game.id) {
+                endTurnButton.filter.saturate(1); //TODO: play an animation here.
+                game.ownMonsterTokens += event.monsterTokensGained;
+                game.ownSpellTokens += event.spellTokensGained;
             }
             else {
-                game.enemyMonsterTokens += 3;
-                game.enemySpellTokens +=3;
-                fixTokens();
+                endTurnButton.filter.desaturate();
+                game.enemyMonsterTokens += event.monsterTokensGained;
+                game.enemySpellTokens += event.spellTokensGained;
             }
+            fixTokens();
 
             nextInEventQueue();
         }
@@ -875,7 +874,6 @@ let GameView = (function() {
                         fixOwnBoardSpacing(event.attacker, () => {nextInEventQueue()});
                     });
                     
-                    game.enemyHealth -= attacker.currentPower;
                     fixHealths();
                     return;
                 }
@@ -947,13 +945,21 @@ let GameView = (function() {
                 let dead = game.ownBoard.splice(event.target, 1)[0];
                 fixOwnBoardSpacing();
                 game.ownGraveyard.unshift(dead);
-                AnimationQueue.addMoveRequest(dead.sprite, {x: app.stage.width * .05, y: app.stage.height * .6}, 20,  () => {app.stage.removeChild(dead.sprite); nextInEventQueue();});
+
+                if(dead.popup != undefined)
+                    app.stage.removeChild(dead.popup);
+                app.stage.removeChild(dead.sprite);
+                nextInEventQueue();
             }
             else {
                 let dead = game.enemyBoard.splice(event.target, 1)[0];
                 fixEnemyBoardSpacing();
                 game.enemyGraveyard.unshift(dead);
-                AnimationQueue.addMoveRequest(dead.sprite, {x: app.stage.width * .05, y: app.stage.height * .35}, 20, () => {app.stage.removeChild(dead.sprite); nextInEventQueue();});
+
+                if(dead.popup != undefined)
+                    app.stage.removeChild(dead.popup);
+               app.stage.removeChild(dead.sprite); //TODO: add dust animation.
+               nextInEventQueue();
             }
 
         }
@@ -1087,7 +1093,7 @@ let GameView = (function() {
                 });
 
                 endTurnButton.button.on('mouseup', () => {
-                    outputFunc({type: 'endTurn'});
+                    outputFunc({type: 'end turn'});
                     endTurnButton.button.alpha = 1;
                 });
 
@@ -1250,6 +1256,7 @@ let GameView = (function() {
          */
         processEvent: function(event) {
             eventQueue.push(event);
+            console.log(event);
             if(!processingEvent)    
                 nextInEventQueue();
         },

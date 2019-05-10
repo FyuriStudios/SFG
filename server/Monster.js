@@ -18,13 +18,15 @@ class Monster extends Card {
 	 * @param {*} power 
 	 * @param {*} hasDefender 
 	 */
-  	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false) {
+  	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false, relentless = false) {
 	  super(type, id, tokenType, rarity, name, cost);
 	  this.power = power;
 	  this.currentPower = power;//power and current power are different
 	  this.hasDefender = hasDefender;
 	  this.monsterClass = monsterClass;
 	  this.isStatic = false;
+	  this.relentless = relentless;
+	  this.turnsBeforeAttack = 0;
 	}
 
 	/**
@@ -39,10 +41,14 @@ class Monster extends Card {
 	 * 
 	 * @returns whether or not the attack actually happened.
 	 */
-	attack(enemyCharacter, currentCharacter, targetLoc, eventChain) {
+	attack(enemyCharacter, currentCharacter, attackerLoc, targetLoc, eventChain) {
+
+		if(this.turnsBeforeAttack > 0) {
+			return false;
+		}
 
 		if(this.hasDefender || this.isStatic)//first, we'll check the obvious and make sure that the attacking monster isn't a defender or disabled.
-			return;
+			return false;
 
 		let defenders = [];
 
@@ -52,18 +58,29 @@ class Monster extends Card {
 			}
 		});
 		
-		if(!defenders.includes(targetLoc))
-			return;
+		if(defenders.length > 0 && !defenders.includes(targetLoc))
+			return false;
 
 		var event = {
 			type: 'attack',
 			player: currentCharacter.id,
-			targetLoc: targetLoc,
+			attacker: attackerLoc,
+			target: targetLoc,
 			damageToDefender: this.currentPower,
-			damageToAttacker: enemyCharacter.board[targetLoc].currentPower
+			damageToAttacker: targetLoc == -1? 0: enemyCharacter.board[targetLoc].currentPower,
 		};
 
 		eventChain.push(event);
+
+		if(this.relentless)
+			this.turnsBeforeAttack = 1;
+		else
+			this.turnsBeforeAttack = 2;
+
+		if(targetLoc == -1) {
+			enemyCharacter.health -= this.currentPower;
+			return true;
+		}
 
 		let tempAPower = this.currentPower;
 		let tempTPower = enemyCharacter.board[targetLoc].currentPower;
