@@ -10,7 +10,6 @@
       margin: 0px;
       border: 0;
       overflow: hidden;
-      display: block;
     }
 
     #playButton,
@@ -18,21 +17,31 @@
       align-content: center;
     }
   </style>
+
+  <!-- include the p5.js processing library to create launch screen. Can overlay images and videos etc. -->
+  <script src="/static/assets/libraries/p5.min.js"></script>
+  <script src="/static/assets/libraries/p5.dom.min.js"></script>
+  
   <script src="/static/Launcher.js"></script>
 </head>
 
 <body>
-  <div align='center'>
-    <button onclick="newGame('/static/game.html')" id="playButton">
-      <style>
-        video { 
-          object-fit: fill;
-        }
-      </style>
-      <video width="100%" height="100%" autoplay muted loop>
-        <source src="static/assets/launchAnimation.mp4" type="video/mp4">
-      </video></button>
-  </div>
+
 </body>
 
 </html>
+
+<!-- <style>
+  video {
+    object-fit: fill;
+  }
+</style>
+<video width="100%" height="100%" autoplay muted loop>
+  <source src="static/assets/launchAnimation.mp4" type="video/mp4">
+</video>
+<canvas id="launchCanvas" crossOrigin="Anonymous" width="1920" height="1080"></canvas>
+<img id="loginBox" src="/static/assets/Login_Box.png">
+<img id="playButton" onclick="newGame('/static/game.html')" src="/static/assets/Play_Button.png" />
+<script>
+  launchScreen();
+</script> -->
