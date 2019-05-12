@@ -51,7 +51,7 @@ function draw() {
   loginBox.width = innerWidth / 3;
   loginBox.height = innerHeight / 2;
   loginBox.x = innerWidth - loginBox.width - (innerWidth / 30);
-  loginBox.y = (innerHeight / 2) - (loginBox.height / 1.5);
+  loginBox.y = (innerHeight / 1.8) - (loginBox.height / 1.5);
   image(loginBox.img, loginBox.x, loginBox.y, loginBox.width, loginBox.height);
 
   //draw playButton image
