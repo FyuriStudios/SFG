@@ -27,14 +27,12 @@ let playButton = {
 };
 
 /*
-p5.js library uses setup and draw function.
-Setup runs first then draw runs repeatedly.
+p5.js library uses preload setup and draw function.
+preload runs first, then setup, then draw runs repeatedly.
 Create canvas element in setup then use in draw.
 */
 
-function setup() {
-  createCanvas(innerWidth, innerHeight); //create p5.js canvas element
-
+function preload(){
   //create launchVideo object and hide the dom
   launchVideo = createVideo(['/static/assets/launchAnimation.mp4']);
   launchVideo.hide();
@@ -43,6 +41,10 @@ function setup() {
   //create loginBox and playButton images
   loginBox.img = loadImage('/static/assets/Login_Box.png')
   playButton.img = loadImage('/static/assets/Play_Button.png')
+}
+
+function setup() {
+  createCanvas(innerWidth, innerHeight); //create p5.js canvas element
 }
 
 function draw() {
