@@ -32,10 +32,10 @@ preload runs first, then setup, then draw runs repeatedly.
 Create canvas element in setup then use in draw.
 */
 
-function preload(){
+function preload() {
   //create launchGif object
   launchGif = createImg('/static/assets/launchAnimation.gif');
-  
+
   //create loginBox and playButton images
   loginBox.img = loadImage('/static/assets/Login_Box.png')
   playButton.img = loadImage('/static/assets/Play_Button.png')
@@ -74,5 +74,11 @@ function mouseClicked() {
     mouseY > playButton.y &&
     mouseY < (playButton.y + playButton.height)
   )
+    newGame('/static/game.html');
+}
+
+//if enter key is pressed start the game
+function keyPressed() {
+  if (keyCode == 13)
     newGame('/static/game.html');
 }
