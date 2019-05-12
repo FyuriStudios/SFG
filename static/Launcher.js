@@ -8,7 +8,7 @@ function newGame(url) {
 }
 
 
-let launchVideo;
+let launchGif;
 
 let loginBox = {
   "img": "",
@@ -33,27 +33,20 @@ Create canvas element in setup then use in draw.
 */
 
 function preload(){
-  //create launchVideo object and hide the dom
-  launchVideo = createVideo(['/static/assets/launchAnimation.mp4']);
-  launchVideo.hide();
-  launchVideo.loop();
-
+  //create launchGif object
+  launchGif = createImg('/static/assets/launchAnimation.gif');
+  
   //create loginBox and playButton images
   loginBox.img = loadImage('/static/assets/Login_Box.png')
   playButton.img = loadImage('/static/assets/Play_Button.png')
 }
 
 function setup() {
+  launchGif.position(0, 0);
   createCanvas(innerWidth, innerHeight); //create p5.js canvas element
 }
 
 function draw() {
-  //push/pop isolates the enclosed transformations. Scale video to the size of the window then draw it.
-  push();
-  scale(innerWidth / launchVideo.width, innerHeight / launchVideo.height);
-  image(launchVideo, 0, 0);
-  pop();
-
   //draw loginBox image
   loginBox.width = innerWidth / 3;
   loginBox.height = innerHeight / 2;
@@ -63,9 +56,9 @@ function draw() {
 
   //draw playButton image
   playButton.width = innerWidth / 5;
-  playButton.height = innerHeight / 5;
-  playButton.x = (innerWidth / 2) - (playButton.width / 2);
-  playButton.y = innerHeight - (1.3 * playButton.height);
+  playButton.height = innerHeight / 6;
+  playButton.x = loginBox.x + (loginBox.width / 2) - (playButton.width / 2);
+  playButton.y = loginBox.y + (4 * loginBox.height / 5);
   image(playButton.img, playButton.x, playButton.y, playButton.width, playButton.height);
 }
 
