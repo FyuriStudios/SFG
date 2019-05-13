@@ -308,9 +308,6 @@ class Game {
             case 'end turn':
                 this.endTurn(input, eventChain);
 				break;
-			case 'start turn':
-				this.startTurn(eventChain);
-				break;
         }
 
         eventChain.forEach(value => {
