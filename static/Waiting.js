@@ -28,14 +28,15 @@ function draw() {
     textStyle(BOLD);
     textAlign(CENTER);
 
-
-    let currentTime = floor((new Date).getTime() / 1000);
-    let timeElapsed = currentTime - beginTime;
-
     if (gameStarting) {
         fill(200, 0, 0);
         text('GAME IS STARTING', width / 2, height / 2);
+        waitGif.remove();
+        noLoop();
     } else {
+        let currentTime = floor((new Date).getTime() / 1000);
+        let timeElapsed = currentTime - beginTime;
+
         fill(0);
         text('WAITING FOR OTHER PLAYER', width / 2, (height / 2) - fontSize);
         text('TIME ELAPSED: ' + timeElapsed + ' SEC', width / 2, (height / 2) + fontSize);
