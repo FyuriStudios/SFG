@@ -229,69 +229,66 @@ class Game {
 
 			this.player1.deck.shuffle();
 			this.player2.deck.shuffle();
-
-			setTimeout(() => {
 				
 
-				for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
-					
-					let drawnCard = this.player1.deck.pop();
+            for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
+                
+                let drawnCard = this.player1.deck.pop();
 
-					this.player1.socket.emit('event', {
-						type: 'draw card',
-						player: 1,
-						card: backendCardTranslate(drawnCard),
-					});
+                this.player1.socket.emit('event', {
+                    type: 'draw card',
+                    player: 1,
+                    card: backendCardTranslate(drawnCard),
+                });
 
-					this.player2.socket.emit('event', {
-						type: 'draw card',
-						player: 1
-					});
+                this.player2.socket.emit('event', {
+                    type: 'draw card',
+                    player: 1
+                });
 
-					this.player1.hand.unshift(drawnCard);
-				}
+                this.player1.hand.unshift(drawnCard);
+            }
 
-				for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
-					
-					let drawnCard = this.player2.deck.pop();
+            for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
+                
+                let drawnCard = this.player2.deck.pop();
 
-					this.player2.socket.emit('event', {
-						type: 'draw card',
-						player: 2,
-						card: backendCardTranslate(drawnCard),
-					});
+                this.player2.socket.emit('event', {
+                    type: 'draw card',
+                    player: 2,
+                    card: backendCardTranslate(drawnCard),
+                });
 
-					this.player1.socket.emit('event', {
-						type: 'draw card',
-						player: 2
-					});
+                this.player1.socket.emit('event', {
+                    type: 'draw card',
+                    player: 2
+                });
 
-					this.player2.hand.unshift(drawnCard);
-				}
+                this.player2.hand.unshift(drawnCard);
+            }
 
-				this.turnCounter += 1;
-				let event = {
-					type: 'start turn',
-					player: 1,
-					spellTokensGained: constants.TOKS_PER_TURN,
-					monsterTokensGained: constants.TOKS_PER_TURN,
-				};
+            this.turnCounter += 1;
+            let event = {
+                type: 'start turn',
+                player: 1,
+                spellTokensGained: constants.TOKS_PER_TURN,
+                monsterTokensGained: constants.TOKS_PER_TURN,
+            };
 
-				this.player1.socket.emit('event', event);
-				this.player2.socket.emit('event', event);
-
-			}, 1000);
+            this.player1.socket.emit('event', event);
+            this.player2.socket.emit('event', event);
 
 
-			this.player1.socket.on('event', input => {
-				this.processEvent(this.player1, input);
-			});
 
-			this.player2.socket.on('event', input => {
-				this.processEvent(this.player2, input);
-			});
+            this.player1.socket.on('event', input => {
+                this.processEvent(this.player1, input);
+            });
 
-		}
+            this.player2.socket.on('event', input => {
+                this.processEvent(this.player2, input);
+            });
+
+        }   
     }
 
     processEvent(player, input) {
