@@ -58,6 +58,13 @@ io.on('connection', function(playerSocket) {
     console.log('New connection from: ' + playerSocket.handshake.address);
 
     freePlayers.push(playerSocket);
+
+    playerSocket.once('disconnect', function() {
+        console.log('Disconnection from: ' + playerSocket.handshake.address);
+        let i = freePlayers.indexOf(playerSocket);
+        if(i != -1)
+            freePlayers.splice(i, 1);
+    });
 });
 
 setInterval(() => {
