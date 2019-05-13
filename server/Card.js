@@ -19,4 +19,4 @@ class Card extends Effect{
 
 }
 
-module.exports = Card
+module.exports = Card;
