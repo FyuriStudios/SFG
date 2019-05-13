@@ -21,7 +21,7 @@ class Monster extends Card {
   	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false, relentless = false) {
 	  super(type, id, tokenType, rarity, name, cost);
 	  this.power = power;
-	  this.currentPower = power;//power and current power are different
+      this.currentPower = power;//power and current power are different
 	  this.hasDefender = hasDefender;
 	  this.monsterClass = monsterClass;
 	  this.isStatic = false;

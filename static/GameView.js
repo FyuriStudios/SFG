@@ -319,8 +319,11 @@ let GameView = (function() {
         /**
          * Here I'm just resetting the position of the card.
          */
-        this.x = this.originalPos.x;
-        this.y = this.originalPos.y;
+        
+        if(this.originalPos != undefined) {
+            this.x = this.originalPos.x;
+            this.y = this.originalPos.y;
+        }
     }
 
     /**

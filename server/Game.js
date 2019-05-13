@@ -369,11 +369,11 @@ class Game {
 				player.graveyard.push(temp);
 			}
 			else {
-				player.hand.push(temp);
+				player.hand.unshift(temp);
 				event.type = 'draw card';
 				event.player = player.id;
 				event.view = 2;//semi-private
-				event.card = backendCardTranslate(temp);
+                event.card = backendCardTranslate(temp);
 			}
 
 		}
@@ -468,7 +468,8 @@ class Game {
 			return; //check to see if the card's actually in their hand
 		}
 
-		var toPlay = temp.hand[input.handLoc];
+        var toPlay = temp.hand[input.handLoc];
+    
 		//TODO: add flex token implementation
 		var tokens = toPlay.tokenType == 'monster' ? temp.mToks:temp.sToks;
 
@@ -494,16 +495,18 @@ class Game {
 
 		temp.hand = temp.hand.splice(input.cardLocation);//this line also might not work, but it's supposed to remove the card at input.cardLocation
 
-		eventChain.push(event);
+        eventChain.push(event);
 
 		if(toPlay.type == 'monster') {
 			temp.board.splice(input.playLocation, 0, toPlay);
 			//TODO: add battlecry effect
 		}
 
-		if(toPlay.type == 'spell') {
+		else if(toPlay.type == 'spell') {
 			//TODO: add code here
-		}
+        }
+        
+        this.killDead(eventChain);
 
     }
 
