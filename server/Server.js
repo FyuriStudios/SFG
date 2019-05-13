@@ -31,12 +31,12 @@ This runs while the server is running and gives the root file every time that so
 root directory of the server ('/'). This will respond by giving back the path to the index.html file, which is the file that gets loaded by default on connection from
 the user.
 */
-app.get('/', function(req, res) {
-    res.sendFile(path.join(__dirname, '../static/index.html'));//I'm leaving it like this for now. But we can totally change it.
+app.get('/', function (req, res) {
+    res.sendFile(path.join(__dirname, '../static/index.html')); //I'm leaving it like this for now. But we can totally change it.
 })
 
 //Set the server to listen on port 6001 for a webapp running. When the webapp is running, it calls the function below that simply outputs to the console that the application is working.
-server.listen(port, function() {
+server.listen(port, function () {
     console.log('Server is running on port ' + port);
 })
 
@@ -47,27 +47,27 @@ This will get overwritten when I have both players and I can place them into a g
 */
 //FIXME: We should probably find a better way to do this.
 var playerStorage = null;
-var games = [];//so we can reference the games if we care
+var games = []; //so we can reference the games if we care
 var freePlayers = [];
 
 /*
 This sets the in-out library to listen for a person connecting to the server. This function gives a reference to the socket that they're connecting through,
 and we'll use that to create an instance of our Game.
 */
-io.on('connection', function(playerSocket) {
+io.on('connection', function (playerSocket) {
     console.log('New connection from: ' + playerSocket.handshake.address);
 
     freePlayers.push(playerSocket);
 });
 
 setInterval(() => {
-    if(freePlayers.length >= 2) {
+    if (freePlayers.length >= 2) {
         let player1 = freePlayers.pop();
         let player2 = freePlayers.pop();
 
         let game = new Game(player1, player2);
         games.push(game);
         game.start();
-        console.log('Starting game');
+        console.log('Starting game: ' + games.length + ' Players: ' + player1.handshake.address + " & " + player2.handshake.address);
     }
 }, 1000);
