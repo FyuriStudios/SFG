@@ -91,7 +91,7 @@ function disconnect(gameNum, playerID) {
 
     //end the game
     games.splice(gameNum, 1);
-    console.log("Ended game: " + gameNum)
+    console.log("Ended game: " + gameNum);
 }
 
 setInterval(() => {
