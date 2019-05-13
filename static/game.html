@@ -1,40 +1,61 @@
 <html>
-  <head>
-    <title>SFG</title>
-    <style>
-    	html, body {
-      		width: 100%;
-      		height: 100%;
-      		margin: 0px;
-      		border: 0;
-      		overflow: hidden;
-          display: block;
-    	}
-      canvas {
-        position: absolute;
-        left: 0px;
-        top: 0px;
-        align-content: center;
-        /* border-style: solid;
+
+<head>
+  <title>SFG Player</title>
+  <style>
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0px;
+      border: 0;
+      overflow: hidden;
+      display: block;
+    }
+
+    canvas {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      align-content: center;
+      /* border-style: solid;
         border-radius: 1px; */
-      }
-    </style>
-    <script src="IDToImage.js"></script>
-    <script src="ClientCard.js"></script>
-    <script src="/static/EventHandler.js"></script>
-    <script src="/static/ClientCard.js"></script>
-    <script src="/static/constants.js"></script>
-    <script src="/static/ClientGame.js"></script>
-    <script src="/static/AnimationQueue.js"></script>
-    <script src="/static/IDToText.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
-    <script src='https://cdnjs.cloudflare.com/ajax/libs/PreloadJS/1.0.1/preloadjs.js'></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
-   <script src="/static/GameView.js"></script>
-  </head>
-  <body onload='startGame()' onresize='GameView.resizeDisplay()'>
-    <!-- this is the line that made the random rectangle in the middle idk old canvas? -->
-    <!-- <canvas id='canvas' style='position:absolute;'></canvas> -->
-  </body>
+    }
+
+    img {
+      position: absolute;
+      left: 0px;
+      top: 0px;
+      z-index: -1;
+      width: 100%;
+      height: 100%;
+      object-fit: fill;
+    }
+  </style>
+  <script src="IDToImage.js"></script>
+  <script src="ClientCard.js"></script>
+  <script src="/static/EventHandler.js"></script>
+  <script src="/static/ClientCard.js"></script>
+  <script src="/static/constants.js"></script>
+  <script src="/static/ClientGame.js"></script>
+  <script src="/static/AnimationQueue.js"></script>
+  <script src="/static/IDToText.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
+  <script src='https://cdnjs.cloudflare.com/ajax/libs/PreloadJS/1.0.1/preloadjs.js'></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.2.0/socket.io.js"></script>
+  <script src="/static/GameView.js"></script>
+
+
+  <!-- include the p5.js processing library to create launch screen. Can overlay images and videos etc. -->
+  <script src="/static/assets/libraries/p5.min.js"></script>
+  <script src="/static/assets/libraries/p5.dom.min.js"></script>
+
+  <script src="/static/Waiting.js"></script>
+</head>
+
+<body onload='startGame()' onresize='GameView.resizeDisplay()'>
+  <!-- this is the line that made the random rectangle in the middle idk old canvas? -->
+  <!-- <canvas id='canvas' style='position:absolute;'></canvas> -->
+</body>
 
 </html>

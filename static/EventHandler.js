@@ -12,6 +12,7 @@ function startGame() {
     socket.on('player id', (input) => {
         gameVars.id = input;
         console.log('received id');
+        gameStarting = true;
         socket.emit('deck', deck);
     });
 
