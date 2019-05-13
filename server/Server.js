@@ -75,6 +75,6 @@ setInterval(() => {
         let game = new Game(player1, player2);
         games.push(game);
         game.start();
-        console.log('Starting game');
+        console.log('Starting game. Players: ' + player1.handshake.address + ' & ' + player2.handshake.address);
     }
 }, 1000);
