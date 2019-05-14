@@ -100,7 +100,6 @@ setInterval(() => {
         let player2 = freePlayers.pop();
 
         let game = new Game(player1, player2);
-        console.log(games);
         games.push(game);
         game.start();
         console.log('Starting game: ' + games.length + ' Players: ' + player1.handshake.address + " & " + player2.handshake.address);
