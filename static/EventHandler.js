@@ -6,8 +6,10 @@ function startGame() {
 
     let deck = [];
 
-    for(var i = 0; i< 20; i++)
+    for(var i = 0; i< 10; i++)
         deck.push(-1);
+    for(var i = 0; i<10; i++)
+        deck.push(-2);
 
     socket.on('player id', (input) => {
         gameVars.id = input;
