@@ -4,7 +4,7 @@ function newGame(url) {
   // var value = resolution.options[resolution.selectedIndex].value;
   // console.log(value);
   let value = 1920;
-  popupWindow = window.open(url, 'popUpWindow', 'height=' + value * 0.5625 + ',width=' + value + ',left=0,top=0,resizable=0,scrollbars=no,toolbar=no,menubar=no,location=no,directories=no,status=yes')
+  window.location.replace(url);
 }
 
 
