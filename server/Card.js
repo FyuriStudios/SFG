@@ -6,7 +6,7 @@ var Effect = require('./Effect')
  */
 class Card extends Effect{
 
-    constructor(type, id, tokenType, rarity, name, cost) {
+    constructor(type, id, tokenType, rarity, name, cost, targeting = false) {
 		super();
     	this.type = type;
     	this.id = id;
@@ -14,7 +14,8 @@ class Card extends Effect{
     	this.rarity = rarity;
     	this.name = name;
     	this.cost = cost;
-    	this.currentCost = cost;//current cost and absolute cost are different
+        this.currentCost = cost;//current cost and absolute cost are different
+        this.targeting = targeting;
     }
 
 }

@@ -121,7 +121,8 @@ function backendCardTranslate(card) {
 			power: card.power,
 			currentPower: card.currentPower,
 			hasDefender: card.hasDefender,
-			isStatic: card.isStatic,
+            isStatic: card.isStatic,
+            targeting: card.targeting,
 		};
 	} else {
 		return {
@@ -131,7 +132,8 @@ function backendCardTranslate(card) {
 			rarity: card.rarity,
 			name: card.name,
 			cost: card.cost,
-			playCost: card.playCost,
+            playCost: card.playCost,
+            targeting: card.targeting,
 		};
 	}
 }
