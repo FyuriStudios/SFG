@@ -81,7 +81,7 @@ function disconnect(gameNum, playerID) {
     let otherPlayer = playerID == 1 ? games[gameNum].player2 : games[gameNum].player1;
     if (otherPlayer.socket.connected) {
         let event = {
-            type: 'disconnection'
+            'type': 'disconnection'
         };
         otherPlayer.socket.emit('event', event);
     }

@@ -1032,10 +1032,6 @@ let GameView = (function () {
                     app.stage.removeChild(dead.popup);
                 app.stage.removeChild(dead.sprite);
                 nextInEventQueue();
-            } else if (event.type == 'disconnection') {
-                gameOver(game.id);
-            } else if (event.type == 'game over') {
-                gameOver(event.player);
             } else {
                 let dead = game.enemyBoard.splice(event.target, 1)[0];
 
@@ -1052,6 +1048,10 @@ let GameView = (function () {
                 nextInEventQueue();
             }
 
+        } else if (event.type == 'disconnection') {
+            gameOver(game.id);
+        } else if (event.type == 'game over') {
+            gameOver(event.player);
         }
 
     }
@@ -1090,8 +1090,7 @@ o a testing construct. Every time the pointer is pressed, this prints the pointe
 ut exact decimal values for locations on the board and such.
             */
 
-            document.bo
-            dy.addEventListener('mousedown', function (event) {
+            document.body.addEventListener('mousedown', function (event) {
                 console
                     .log('x: ' + event.clientX / app.stage.width);
                 console.log('y: ' + event.clientY / app.stage.height);
