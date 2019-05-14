@@ -58,7 +58,41 @@ io.on('connection', function (playerSocket) {
     console.log('New connection from: ' + playerSocket.handshake.address);
 
     freePlayers.push(playerSocket);
+
+    playerSocket.once('disconnect', function () {
+        console.log('Disconnection from: ' + playerSocket.handshake.address);
+        let i = freePlayers.indexOf(playerSocket);
+
+        //if player that disconnected was a freePlayer remove it from free players. Otherwise end the game it was in
+        if (i != -1)
+            freePlayers.splice(i, 1);
+        else //find which game the player was in and disconnect the player and end the game
+            for (i = 0; i < games.length; ++games) {
+                if (games[i].player1.socket == playerSocket)
+                    disconnect(i, 1);
+                else if (games[i].player2.socket == playerSocket)
+                    disconnect(i, 2);
+            }
+    });
 });
+
+function disconnect(gameNum, playerID) {
+    console.log("Disconnect player: " + playerID + " game: " + gameNum);
+    let event = {
+        type: 'disconnection'
+    };
+
+    //tell the still connected player the other player disconnected
+    let otherPlayer = playerID == 1 ? games[gameNum].player2 : games[gameNum].player1;
+    if (otherPlayer.socket.connected) {
+        otherPlayer.socket.emit('event', event);
+        console.log("Player " + (playerID % 2 + 1) + " wins");
+    }
+
+    //end the game
+    games.splice(gameNum, 1);
+    console.log("Ended game: " + gameNum);
+}
 
 setInterval(() => {
     if (freePlayers.length >= 2) {
@@ -66,6 +100,7 @@ setInterval(() => {
         let player2 = freePlayers.pop();
 
         let game = new Game(player1, player2);
+        console.log(games);
         games.push(game);
         game.start();
         console.log('Starting game: ' + games.length + ' Players: ' + player1.handshake.address + " & " + player2.handshake.address);
