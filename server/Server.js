@@ -77,16 +77,13 @@ io.on('connection', function (playerSocket) {
 });
 
 function disconnect(gameNum, playerID) {
-    console.log("Disconnect player: " + playerID + " game: " + gameNum);
-    let event = {
-        type: 'disconnection'
-    };
-
     //tell the still connected player the other player disconnected
     let otherPlayer = playerID == 1 ? games[gameNum].player2 : games[gameNum].player1;
     if (otherPlayer.socket.connected) {
+        let event = {
+            'type': 'disconnection'
+        };
         otherPlayer.socket.emit('event', event);
-        console.log("Player " + (playerID % 2 + 1) + " wins");
     }
 
     //end the game

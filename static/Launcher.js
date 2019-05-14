@@ -1,9 +1,5 @@
 //for launching the game in a new window
 function newGame(url) {
-  // var resolution = document.getElementById('resolution');
-  // var value = resolution.options[resolution.selectedIndex].value;
-  // console.log(value);
-  let value = 1920;
   window.location.replace(url);
 }
 

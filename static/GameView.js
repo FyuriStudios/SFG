@@ -21,10 +21,10 @@ Look below for a more detailed explanation of everything that's going on.
  * background. This makes it so that we can reuse commonly used textures instead of having to reload the textures every time we
  * want to use them.
  */
- let textures = {};
+let textures = {};
 
 
-let GameView = (function() {
+let GameView = (function () {
 
     /*
     Don't touch. The last person who touched it got killed brutally.
@@ -49,9 +49,9 @@ let GameView = (function() {
      * variable showing up further down in the code.
      */
     let app = new PIXI.Application({
-            antialias: true,
-            transparent: true,
-            forceCanvas: false //these are just some options that we applied in the constructor. See PIXI documentation for more details.
+        antialias: true,
+        transparent: true,
+        forceCanvas: false //these are just some options that we applied in the constructor. See PIXI documentation for more details.
     });
 
     /**
@@ -60,7 +60,7 @@ let GameView = (function() {
     let enemyCardsInHand = [];
 
     let endTurnButton = {
-        button: null,//This is gross. Fix it if I have the time.
+        button: null, //This is gross. Fix it if I have the time.
         filter: new PIXI.filters.ColorMatrixFilter()
     }
 
@@ -99,15 +99,15 @@ let GameView = (function() {
      * 
      * @param {any} eventObj the object passed in by the mouse event. Look in PIXI documentation for more on what this variable is.
      */
-    let mouseOverCardInHand = function(eventObj) {
+    let mouseOverCardInHand = function (eventObj) {
 
-        if(this.inMoveQueue || this.dragging || arrowDragging)
+        if (this.inMoveQueue || this.dragging || arrowDragging)
             return;
 
         let temp;
-        game.hand.forEach((val) => (val.sprite.x == this.x && val.sprite.y == this.y)?temp=val:null);
+        game.hand.forEach((val) => (val.sprite.x == this.x && val.sprite.y == this.y) ? temp = val : null);
 
-        if(temp != undefined) {
+        if (temp != undefined) {
             temp.displayPopup();
             app.stage.addChild(temp.popup);
         }
@@ -120,10 +120,10 @@ let GameView = (function() {
      * where it was previously. Seriously, just look above if you want to figure out what this does.
      * @param {any} eventObj 
      */
-    let mouseOutCardInHand = function(eventObj) {
+    let mouseOutCardInHand = function (eventObj) {
 
         let temp = this;
-        game.hand.forEach((val) => val.sprite == temp?temp=val:null);
+        game.hand.forEach((val) => val.sprite == temp ? temp = val : null);
         app.stage.removeChild(temp.popup);
         temp.popup = undefined;
 
@@ -134,17 +134,17 @@ let GameView = (function() {
      * the card to where the mouse is.
      * @param {any} eventObj 
      */
-    let onDragFromHandStart = function(eventObj) {
+    let onDragFromHandStart = function (eventObj) {
 
         let temp = this;
-        game.hand.forEach((val) => val.sprite == temp?temp=val:null); //turn off the popup
+        game.hand.forEach((val) => val.sprite == temp ? temp = val : null); //turn off the popup
         app.stage.removeChild(temp.popup);
         temp.popup = undefined;
 
         /*
         If you try to drag a card while it's animating somewhere, literally everything breaks so we just disallow dragging during animation.
         */
-        if(this.inMoveQueue || arrowDragging)
+        if (this.inMoveQueue || arrowDragging)
             return;
 
         /*
@@ -171,13 +171,13 @@ let GameView = (function() {
     /**
      * This gets called when the mouse moves while the card in your hand is being dragged.
      */
-    let onDragFromHandMove = function() {
+    let onDragFromHandMove = function () {
 
         /*
         We have to make sure that the card is actually being dragged so that we don't drag cards that haven't been selected for dragging
         already.
         */
-        if(this.dragging && !arrowDragging) {
+        if (this.dragging && !arrowDragging) {
             /*
             We update the position of the card to the position of the cursor.
             */
@@ -191,55 +191,51 @@ let GameView = (function() {
                 width: .706 * app.stage.width,
                 height: .355 * app.stage.height
             };
-    
+
             /*
             This if statement checks to see if the card is intersecting with the field rectangle. Look up "check for rectangle intersection"
             on StackOverflow if you're curious about what this does.
             */
             if (!(this.x > fieldBounds.x + fieldBounds.width ||
-                this.x + this.width < fieldBounds.x ||
-                this.y > fieldBounds.y + fieldBounds.height ||
-                this.y + this.height < fieldBounds.y))
-            {
+                    this.x + this.width < fieldBounds.x ||
+                    this.y > fieldBounds.y + fieldBounds.height ||
+                    this.y + this.height < fieldBounds.y)) {
                 this.alpha = 0;
                 let temp;
-                game.hand.forEach((val) => val.sprite == this?temp=val:null);
+                game.hand.forEach((val) => val.sprite == this ? temp = val : null);
 
-                temp.monsterContainer.x = this.x -this.width/2;
-                temp.monsterContainer.y = this.y -this.height/2;
+                temp.monsterContainer.x = this.x - this.width / 2;
+                temp.monsterContainer.y = this.y - this.height / 2;
                 temp.monsterContainer.width = this.width * 1.1;
                 temp.monsterContainer.height = this.height * .9;
                 app.stage.addChild(temp.monsterContainer); //this works because PIXI knows when a guy is already on the board.
 
-                if(game.ownBoard.length < game.MAX_CARDS) {
+                if (game.ownBoard.length < game.MAX_CARDS) {
 
                     let spotForCard;
                     game.ownBoard.forEach((card, index) => {
 
-                        if(index == 0 && temp.monsterContainer.x < (card.sprite.xLoc - card.sprite.width/2)) {
+                        if (index == 0 && temp.monsterContainer.x < (card.sprite.xLoc - card.sprite.width / 2)) {
+                            spotForCard = index;
+                        } else if (index > 0 && temp.monsterContainer.x < (card.sprite.xLoc - card.sprite.width / 2) && temp.monsterContainer.x > (game.ownBoard[index - 1].sprite.xLoc - game.ownBoard[index - 1].sprite.width / 2)) {
                             spotForCard = index;
                         }
-                        else if(index > 0 && temp.monsterContainer.x < (card.sprite.xLoc - card.sprite.width/2) && temp.monsterContainer.x > (game.ownBoard[index-1].sprite.xLoc - game.ownBoard[index-1].sprite.width/2)) {
-                            spotForCard = index;
-                        }
-                        
+
                     });
 
-                    if(spotForCard == undefined) {
+                    if (spotForCard == undefined) {
                         spotForCard = game.ownBoard.length;
                     }
 
                     this.spotForCard = spotForCard; //store it as a property of this object just so that it's easier to deal with, gross
 
                     slideCards(spotForCard);
-            
-                }
-                
-            }
 
-            else {
+                }
+
+            } else {
                 let temp;
-                game.hand.forEach((val) => val.sprite == this?temp=val:null);
+                game.hand.forEach((val) => val.sprite == this ? temp = val : null);
 
                 app.stage.removeChild(temp.monsterContainer);
                 this.alpha = 1;
@@ -255,12 +251,12 @@ let GameView = (function() {
      * an event detailing that this card just got played.
      * @param {any} eventObj 
      */
-    let onDragFromHandEnd = function(eventObj) {
+    let onDragFromHandEnd = function (eventObj) {
 
         slideCards();
 
         let temp = this;
-        game.hand.forEach((val) => val.sprite == temp?temp=val:null);
+        game.hand.forEach((val) => val.sprite == temp ? temp = val : null);
 
         app.stage.removeChild(temp.monsterContainer);
         this.alpha = 1;
@@ -287,10 +283,9 @@ let GameView = (function() {
         on StackOverflow if you're curious about what this does.
         */
         if (!(this.x > fieldBounds.x + fieldBounds.width ||
-            this.x + this.width < fieldBounds.x ||
-            this.y > fieldBounds.y + fieldBounds.height ||
-            this.y + this.height < fieldBounds.y))
-        {
+                this.x + this.width < fieldBounds.x ||
+                this.y > fieldBounds.y + fieldBounds.height ||
+                this.y + this.height < fieldBounds.y)) {
             /*
             handLoc will be the location of the card that was played in the player's hand because we need to give the card location as
             part of the card played event.
@@ -300,7 +295,7 @@ let GameView = (function() {
             /*
             Loop through every element of own hand array to find the location of the card that was played.
             */
-            game.hand.forEach((element, index) => element.sprite == this? handLoc = index: null);
+            game.hand.forEach((element, index) => element.sprite == this ? handLoc = index : null);
 
             /*
             Call outputFunc with an event. Events from the backend to the frontend are similar to events going in the other direction,
@@ -319,8 +314,8 @@ let GameView = (function() {
         /**
          * Here I'm just resetting the position of the card.
          */
-        
-        if(this.originalPos != undefined) {
+
+        if (this.originalPos != undefined) {
             this.x = this.originalPos.x;
             this.y = this.originalPos.y;
         }
@@ -361,15 +356,20 @@ let GameView = (function() {
         /*
         Finds the correct location for every card and adds an animation request to put the card in its correct place.
         */
-        cards.forEach(function(card, index) {
-            let x = leftBound + cardSpacingDivisor * (index+1);
+        cards.forEach(function (card, index) {
+            let x = leftBound + cardSpacingDivisor * (index + 1);
             let y = upperBound;
 
-            if(index == 0 && completion != null) {
-                AnimationQueue.addMoveRequest(card.sprite, {x: x, y: y}, 6, completion);
-            }
-            else {
-                AnimationQueue.addMoveRequest(card.sprite, {x: x, y: y}, 6);
+            if (index == 0 && completion != null) {
+                AnimationQueue.addMoveRequest(card.sprite, {
+                    x: x,
+                    y: y
+                }, 6, completion);
+            } else {
+                AnimationQueue.addMoveRequest(card.sprite, {
+                    x: x,
+                    y: y
+                }, 6);
             }
         });
 
@@ -383,35 +383,55 @@ let GameView = (function() {
 
         let cardSpacingDivisor = (rightBound - leftBound) / (enemyCardsInHand.length + 1);
 
-        enemyCardsInHand.forEach(function(card, index) {
-            let x = leftBound + cardSpacingDivisor * (index+1);
+        enemyCardsInHand.forEach(function (card, index) {
+            let x = leftBound + cardSpacingDivisor * (index + 1);
             let y = upperBound;
 
-            if(index == 0 && completion != null)
-                AnimationQueue.addMoveRequest(card, {x: x, y: y}, 6, () => completion());
+            if (index == 0 && completion != null)
+                AnimationQueue.addMoveRequest(card, {
+                    x: x,
+                    y: y
+                }, 6, () => completion());
             else
-                AnimationQueue.addMoveRequest(card, {x: x, y: y}, 6);
+                AnimationQueue.addMoveRequest(card, {
+                    x: x,
+                    y: y
+                }, 6);
         });
     }
 
     function fixHealths() {
-        if(!(game.ownHealthText != undefined && game.ownHealth + '' == game.ownHealthText.text)) {
+        if (!(game.ownHealthText != undefined && game.ownHealth + '' == game.ownHealthText.text)) {
             app.stage.removeChild(game.ownHealthText);
-            game.ownHealthText = new PIXI.Text(game.ownHealth, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'red', strokeThickness: 8, align: 'center'});
+            game.ownHealthText = new PIXI.Text(game.ownHealth, {
+                fontFamily: 'Helvetica',
+                fill: 0xffffff,
+                fontSize: 100,
+                stroke: 'red',
+                strokeThickness: 8,
+                align: 'center'
+            });
             game.ownHealthText.anchor.x = game.ownHealthText.anchor.y = .5;
-            game.ownHealthText.x = app.stage.width/2;
+            game.ownHealthText.x = app.stage.width / 2;
             game.ownHealthText.y = app.stage.height * .75;
-            game.ownHealthText.width = app.stage.width * (game.ownHealthText.text.length == 1? .03 : .045);
+            game.ownHealthText.width = app.stage.width * (game.ownHealthText.text.length == 1 ? .03 : .045);
             game.ownHealthText.height = app.stage.height * .09;
             app.stage.addChild(game.ownHealthText);
         }
-        if(!(game.enemyHealthText != undefined && game.enemyHealth + '' == game.enemyHealthText.text)) {
+        if (!(game.enemyHealthText != undefined && game.enemyHealth + '' == game.enemyHealthText.text)) {
             app.stage.removeChild(game.enemyHealthText);
-            game.enemyHealthText = new PIXI.Text(game.enemyHealth, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'red', strokeThickness: 8, align: 'center'});
+            game.enemyHealthText = new PIXI.Text(game.enemyHealth, {
+                fontFamily: 'Helvetica',
+                fill: 0xffffff,
+                fontSize: 100,
+                stroke: 'red',
+                strokeThickness: 8,
+                align: 'center'
+            });
             game.enemyHealthText.anchor.x = game.ownHealthText.anchor.y = .5;
-            game.enemyHealthText.x = app.stage.width/2 - app.stage.width * .01;
+            game.enemyHealthText.x = app.stage.width / 2 - app.stage.width * .01;
             game.enemyHealthText.y = app.stage.height * .2;
-            game.enemyHealthText.width = app.stage.width * (game.enemyHealthText.text.length == 1? .03 : .045);
+            game.enemyHealthText.width = app.stage.width * (game.enemyHealthText.text.length == 1 ? .03 : .045);
             game.enemyHealthText.height = app.stage.height * .09;
             app.stage.addChild(game.enemyHealthText);
         }
@@ -422,46 +442,74 @@ let GameView = (function() {
     */
     function fixTokens() {
 
-        if(!(game.ownMonsterTokenText != undefined && game.ownMonsterTokens + '' == game.ownMonsterTokenText.text)) {
+        if (!(game.ownMonsterTokenText != undefined && game.ownMonsterTokens + '' == game.ownMonsterTokenText.text)) {
             app.stage.removeChild(game.ownMonsterTokenText);
-            game.ownMonsterTokenText = new PIXI.Text(game.ownMonsterTokens, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'black', strokeThickness: 8, align: 'center'});
+            game.ownMonsterTokenText = new PIXI.Text(game.ownMonsterTokens, {
+                fontFamily: 'Helvetica',
+                fill: 0xffffff,
+                fontSize: 100,
+                stroke: 'black',
+                strokeThickness: 8,
+                align: 'center'
+            });
             game.ownMonsterTokenText.anchor.x = game.ownMonsterTokenText.y = .5;
             game.ownMonsterTokenText.x = app.stage.width * .6255;
             game.ownMonsterTokenText.y = app.stage.height * .839;
-            game.ownMonsterTokenText.width = app.stage.width * (game.ownMonsterTokenText.text.length == 1? .04 : .06);
+            game.ownMonsterTokenText.width = app.stage.width * (game.ownMonsterTokenText.text.length == 1 ? .04 : .06);
             game.ownMonsterTokenText.height = app.stage.height * .12;
             app.stage.addChild(game.ownMonsterTokenText);
         }
 
-        if(!(game.ownSpellTokenText != undefined && game.ownSpellTokens + '' == game.ownSpellTokenText.text)) {
+        if (!(game.ownSpellTokenText != undefined && game.ownSpellTokens + '' == game.ownSpellTokenText.text)) {
             app.stage.removeChild(game.ownSpellTokenText);
-            game.ownSpellTokenText = new PIXI.Text(game.ownSpellTokens, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'black', strokeThickness: 8, align: 'center'});
+            game.ownSpellTokenText = new PIXI.Text(game.ownSpellTokens, {
+                fontFamily: 'Helvetica',
+                fill: 0xffffff,
+                fontSize: 100,
+                stroke: 'black',
+                strokeThickness: 8,
+                align: 'center'
+            });
             game.ownSpellTokenText.anchor.x = game.ownSpellTokenText.y = .5;
             game.ownSpellTokenText.x = app.stage.width * .776;
             game.ownSpellTokenText.y = app.stage.height * .839;
-            game.ownSpellTokenText.width = app.stage.width * (game.ownSpellTokenText.text.length == 1? .04 : .06);
+            game.ownSpellTokenText.width = app.stage.width * (game.ownSpellTokenText.text.length == 1 ? .04 : .06);
             game.ownSpellTokenText.height = app.stage.height * .12;
             app.stage.addChild(game.ownSpellTokenText);
         }
 
-        if(!(game.enemyMonsterTokenText != undefined && game.enemyMonsterTokens + '' == game.enemyMonsterTokenText.text)) {
+        if (!(game.enemyMonsterTokenText != undefined && game.enemyMonsterTokens + '' == game.enemyMonsterTokenText.text)) {
             app.stage.removeChild(game.enemyMonsterTokenText);
-            game.enemyMonsterTokenText = new PIXI.Text(game.enemyMonsterTokens, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'black', strokeThickness: 8, align: 'center'});
+            game.enemyMonsterTokenText = new PIXI.Text(game.enemyMonsterTokens, {
+                fontFamily: 'Helvetica',
+                fill: 0xffffff,
+                fontSize: 100,
+                stroke: 'black',
+                strokeThickness: 8,
+                align: 'center'
+            });
             game.enemyMonsterTokenText.anchor.x = game.enemyMonsterTokenText.y = .5;
             game.enemyMonsterTokenText.x = app.stage.width * .6255;
             game.enemyMonsterTokenText.y = app.stage.height * .031;
-            game.enemyMonsterTokenText.width = app.stage.width * (game.enemyMonsterTokenText.text.length == 1? .04 : .06);
+            game.enemyMonsterTokenText.width = app.stage.width * (game.enemyMonsterTokenText.text.length == 1 ? .04 : .06);
             game.enemyMonsterTokenText.height = app.stage.height * .12;
             app.stage.addChild(game.enemyMonsterTokenText);
         }
 
-        if(!(game.enemySpellTokenText != undefined && game.enemySpellTokens + '' == game.enemySpellTokenText.text)) {
+        if (!(game.enemySpellTokenText != undefined && game.enemySpellTokens + '' == game.enemySpellTokenText.text)) {
             app.stage.removeChild(game.enemySpellTokenText);
-            game.enemySpellTokenText = new PIXI.Text(game.enemySpellTokens, {fontFamily: 'Helvetica', fill: 0xffffff, fontSize: 100, stroke: 'black', strokeThickness: 8, align: 'center'});
+            game.enemySpellTokenText = new PIXI.Text(game.enemySpellTokens, {
+                fontFamily: 'Helvetica',
+                fill: 0xffffff,
+                fontSize: 100,
+                stroke: 'black',
+                strokeThickness: 8,
+                align: 'center'
+            });
             game.enemySpellTokenText.anchor.x = game.enemySpellTokenText.y = .5;
             game.enemySpellTokenText.x = app.stage.width * .776;
             game.enemySpellTokenText.y = app.stage.height * .031;
-            game.enemySpellTokenText.width = app.stage.width * (game.enemySpellTokenText.text.length == 1? .04 : .06);
+            game.enemySpellTokenText.width = app.stage.width * (game.enemySpellTokenText.text.length == 1 ? .04 : .06);
             game.enemySpellTokenText.height = app.stage.height * .12;
             app.stage.addChild(game.enemySpellTokenText);
         }
@@ -470,7 +518,7 @@ let GameView = (function() {
 
     function fixOwnBoardSpacing(farLoc = undefined, completion = undefined) {
         let space = .1 * app.stage.width;
-        let leftBound = app.stage.width/2 - (space * game.ownBoard.length/2);
+        let leftBound = app.stage.width / 2 - (space * game.ownBoard.length / 2);
 
         game.ownBoard.forEach((value, index) => {
 
@@ -478,17 +526,23 @@ let GameView = (function() {
 
             let yDestination = app.stage.height * 0.6;
 
-            if(farLoc != undefined && index == farLoc && completion != undefined)
-                AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10, () => completion());
+            if (farLoc != undefined && index == farLoc && completion != undefined)
+                AnimationQueue.addMoveRequest(value.sprite, {
+                    x: xDestination,
+                    y: yDestination
+                }, 10, () => completion());
             else
-                AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
+                AnimationQueue.addMoveRequest(value.sprite, {
+                    x: xDestination,
+                    y: yDestination
+                }, 10);
             value.sprite.xLoc = xDestination;
         });
     }
 
     function fixEnemyBoardSpacing(farLoc = undefined, completion = undefined) {
         let space = .1 * app.stage.width;
-        let leftBound = app.stage.width/2 - (space * game.enemyBoard.length/2);
+        let leftBound = app.stage.width / 2 - (space * game.enemyBoard.length / 2);
 
         game.enemyBoard.forEach((value, index) => {
 
@@ -496,73 +550,89 @@ let GameView = (function() {
 
             let yDestination = app.stage.height * 0.37;
 
-            if(farLoc != undefined && index == farLoc && completion != undefined)
-                AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10, () => completion());
+            if (farLoc != undefined && index == farLoc && completion != undefined)
+                AnimationQueue.addMoveRequest(value.sprite, {
+                    x: xDestination,
+                    y: yDestination
+                }, 10, () => completion());
             else
-                AnimationQueue.addMoveRequest(value.sprite, {x: xDestination, y: yDestination}, 10);
+                AnimationQueue.addMoveRequest(value.sprite, {
+                    x: xDestination,
+                    y: yDestination
+                }, 10);
         });
     }
 
     function slideCards(loc = -1) {
         game.ownBoard.forEach((value, index) => {
-            if(loc == -1) {
-                AnimationQueue.addMoveRequest(value.sprite, {x: value.sprite.xLoc, y: value.sprite.y}, 10);
-            }
-            else if(loc <= index) {
-                AnimationQueue.addMoveRequest(value.sprite, {x: value.sprite.xLoc + app.stage.width * .05, y: value.sprite.y}, 10);
-            }
-            else {
-                AnimationQueue.addMoveRequest(value.sprite, {x: value.sprite.xLoc - app.stage.width * .05, y: value.sprite.y}, 10);
+            if (loc == -1) {
+                AnimationQueue.addMoveRequest(value.sprite, {
+                    x: value.sprite.xLoc,
+                    y: value.sprite.y
+                }, 10);
+            } else if (loc <= index) {
+                AnimationQueue.addMoveRequest(value.sprite, {
+                    x: value.sprite.xLoc + app.stage.width * .05,
+                    y: value.sprite.y
+                }, 10);
+            } else {
+                AnimationQueue.addMoveRequest(value.sprite, {
+                    x: value.sprite.xLoc - app.stage.width * .05,
+                    y: value.sprite.y
+                }, 10);
             }
         });
     }
 
     function mouseOverCardOnBoard(boardArray, sprite) {
-        
-        if(sprite.inMoveQueue || sprite.dragging || arrowDragging) {
+
+        if (sprite.inMoveQueue || sprite.dragging || arrowDragging) {
             return;
         }
 
         let index;
         boardArray.forEach((value, ind) => {
-            value.sprite == sprite?index = ind:null;
+            value.sprite == sprite ? index = ind : null;
         });
 
-        if(index == undefined)
+        if (index == undefined)
             return;
 
         boardArray[index].displayPopup();
         app.stage.addChild(boardArray[index].popup);
         boardArray[index].popup.height *= 1.1;
         boardArray[index].popup.x = app.stage.width * .834;
-        boardArray[index].popup.y = app.stage.height/2 - boardArray[index].popup.height/2;
+        boardArray[index].popup.y = app.stage.height / 2 - boardArray[index].popup.height / 2;
     }
 
     function mouseOutCardOnBoard(boardArray, sprite) {
-        if(sprite.inMoveQueue)
+        if (sprite.inMoveQueue)
             return;
         let temp;
-        boardArray.forEach(value => value.sprite == sprite?temp = value:null);
+        boardArray.forEach(value => value.sprite == sprite ? temp = value : null);
 
-        if(temp != undefined && temp.popup!=undefined)
+        if (temp != undefined && temp.popup != undefined)
             app.stage.removeChild(temp.popup);
     }
 
-    let mouseOverOwnCardOnBoard = function() {
+    let mouseOverOwnCardOnBoard = function () {
         mouseOverCardOnBoard(game.ownBoard, this);
     }
-    let mouseOverEnemyCardOnBoard = function() {
+    let mouseOverEnemyCardOnBoard = function () {
         mouseOverCardOnBoard(game.enemyBoard, this);
     }
-    let mouseOutOwnCardOnBoard = function() {
+    let mouseOutOwnCardOnBoard = function () {
         mouseOutCardOnBoard(game.ownBoard, this);
     }
-    let mouseOutEnemyCardOnBoard = function() {
+    let mouseOutEnemyCardOnBoard = function () {
         mouseOutCardOnBoard(game.enemyBoard, this);
     }
 
     function onMouseDragCardOnBoardStart(eventObj) {
-        this.originalPos = {x: this.x, y: this.y};
+        this.originalPos = {
+            x: this.x,
+            y: this.y
+        };
         this.dragging = true;
         arrowDragging = true;
         this.alpha = 0.6;
@@ -572,7 +642,7 @@ let GameView = (function() {
 
     function onMouseDragCardOnBoardMove(eventObj) {
 
-        if(this.dragging && arrowDragging) {
+        if (this.dragging && arrowDragging) {
             let pos = this.dragData.getLocalPosition(this.parent);
             let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
 
@@ -602,11 +672,11 @@ let GameView = (function() {
         app.stage.removeChild(arrow);
 
         let attackerLoc;
-        game.ownBoard.forEach((value, index) => value.sprite == this? attackerLoc = index:null);
+        game.ownBoard.forEach((value, index) => value.sprite == this ? attackerLoc = index : null);
 
         game.enemyBoard.forEach((value, index) => {
-            if(value.sprite.x - value.sprite.width/2 <= pos.x && value.sprite.x + value.sprite.width/2 >= pos.x && 
-                value.sprite.y - value.sprite.height/2 <= pos.y && value.sprite.y + value.sprite.height/2 >= pos.y) {
+            if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
+                value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y) {
                 outputFunc({
                     type: 'attack',
                     player: game.id,
@@ -616,7 +686,7 @@ let GameView = (function() {
             }
         });
 
-        if(app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y) {
+        if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y) {
             outputFunc({
                 type: 'attack',
                 player: game.id,
@@ -627,7 +697,7 @@ let GameView = (function() {
     }
 
     function onMouseOverOwnGraveyard() {
-        if(!arrowDragging) {
+        if (!arrowDragging) {
             this.alpha = 0.5;
             ownGraveyardHover = true;
             app.stage.addChild(graveyardDisplay);
@@ -638,14 +708,14 @@ let GameView = (function() {
                 value.popup.height = value.popup.height * .6;
                 value.popup.x = app.stage.width * .1;
                 value.popup.y = index * app.stage.height * .22 + app.stage.height * .01;
-                if(value.popup.y > 0 && value.popup.y + value.popup.height < app.stage.height)
+                if (value.popup.y > 0 && value.popup.y + value.popup.height < app.stage.height)
                     graveyardDisplay.addChild(value.popup);
             });
         }
     }
 
     function onMouseOverEnemyGraveyard() {
-        if(!arrowDragging) {
+        if (!arrowDragging) {
             this.alpha = 0.5;
             enemyGraveyardHover = true;
             app.stage.addChild(graveyardDisplay);
@@ -656,7 +726,7 @@ let GameView = (function() {
                 value.popup.height = value.popup.height * .6;
                 value.popup.x = app.stage.width * .1;
                 value.popup.y = index * app.stage.height * .22 + app.stage.height * .01;
-                if(value.popup.y > 0 && value.popup.y + value.popup.height < app.stage.height)
+                if (value.popup.y > 0 && value.popup.y + value.popup.height < app.stage.height)
                     graveyardDisplay.addChild(value.popup);
             });
         }
@@ -681,18 +751,18 @@ let GameView = (function() {
     function onGraveyardScroll(event) {
         let graveyard;
 
-        if(ownGraveyardHover)
+        if (ownGraveyardHover)
             graveyard = game.ownGraveyard;
-        else if(enemyGraveyardHover)
+        else if (enemyGraveyardHover)
             graveyard = game.enemyGraveyard;
         else
             return;
 
         graveyard.forEach(value => {
-            value.popup.y += event.deltaY * app.stage.height*0.0465;
-            if(value.popup.y < 0 || value.popup.y + value.popup.height > app.stage.height)
+            value.popup.y += event.deltaY * app.stage.height * 0.0465;
+            if (value.popup.y < 0 || value.popup.y + value.popup.height > app.stage.height)
                 graveyardDisplay.removeChild(value.popup);
-            else 
+            else
                 graveyardDisplay.addChild(value.popup);
         });
 
@@ -700,22 +770,21 @@ let GameView = (function() {
 
     function nextInEventQueue() {
 
-        if(eventQueue.length == 0) {
+        if (eventQueue.length == 0) {
             processingEvent = false;
             return;
-        }
-        else {
+        } else {
             processingEvent = true;
         }
 
         let event = eventQueue.shift();
 
-        if(event.type == 'draw card') {
-                
-            if(event.player == game.id) {
+        if (event.type == 'draw card') {
+
+            if (event.player == game.id) {
 
                 game.ownDeckSize -= 1;
-                
+
                 /*
                 Generate a new card and put it into the player's hand.
                 */
@@ -723,8 +792,8 @@ let GameView = (function() {
 
                 smallSizeCardInHandSprite(card.sprite);
 
-                card.sprite.x = app.stage.width*0.0565;
-                card.sprite.y = app.stage.height*0.885;
+                card.sprite.x = app.stage.width * 0.0565;
+                card.sprite.y = app.stage.height * 0.885;
 
                 card.sprite.on('mouseover', mouseOverCardInHand);
                 card.sprite.on('mouseout', mouseOutCardInHand);
@@ -734,7 +803,7 @@ let GameView = (function() {
                 card.sprite.on('pointermove', onDragFromHandMove);
 
                 app.stage.addChild(card.sprite);
-                
+
                 game.hand.unshift(card);
 
                 /*
@@ -745,12 +814,12 @@ let GameView = (function() {
             } else {
 
                 game.enemyDeckSize -= 1;
-               
+
                 let card = new PIXI.Sprite(textures.cardBack);
 
                 card.anchor.x = .5;
                 card.anchor.y = .5;
-                
+
                 card.x = app.stage.width * .0146;
                 card.y = app.stage.height * .1;
 
@@ -763,20 +832,18 @@ let GameView = (function() {
                 fixEnemyHandSpacing(() => nextInEventQueue());
 
             }
-        }
+        } else if (event.type == 'play card') {
 
-        else if(event.type == 'play card') {
+            if (event.player == game.id) { //TODO: account for spells later.
 
-            if(event.player == game.id) { //TODO: account for spells later.
-
-                if(game.hand[event.handLoc].type == 'monster')
+                if (game.hand[event.handLoc].type == 'monster')
                     game.ownMonsterTokens -= game.hand[event.handLoc].currentCost;
                 else
                     game.ownSpellTokens -= game.hand[event.handLoc].currentCost;
                 fixTokens();
 
-                let card = game.hand.splice(event.handLoc, 1)[0];//remove the card at the relevant location in the player's hand
-                game.ownBoard.splice(event.playLoc, 0, card);//insert the card at the correct location in the player's board
+                let card = game.hand.splice(event.handLoc, 1)[0]; //remove the card at the relevant location in the player's hand
+                game.ownBoard.splice(event.playLoc, 0, card); //insert the card at the correct location in the player's board
                 card.boardForm();
 
                 card.sprite.off('mouseover', mouseOverCardInHand);
@@ -806,7 +873,7 @@ let GameView = (function() {
 
                 let enemyCard = ClientCard.from(event.card);
 
-                if(enemyCard.type == 'monster')
+                if (enemyCard.type == 'monster')
                     game.enemyMonsterTokens -= enemyCard.currentCost;
                 else
                     game.enemySpellTokens -= enemyCard.currentCost;
@@ -821,7 +888,7 @@ let GameView = (function() {
 
                 app.stage.addChild(enemyCard.sprite);
 
-                enemyCard.sprite.x = targetPlay.x + enemyCard.sprite.width/2;
+                enemyCard.sprite.x = targetPlay.x + enemyCard.sprite.width / 2;
                 enemyCard.sprite.y = targetPlay.y;
                 enemyCard.boardForm();
 
@@ -834,25 +901,20 @@ let GameView = (function() {
 
             }
 
-        }
+        } else if (event.type == 'end turn') {
 
-        else if(event.type == 'end turn') {
-
-            if(event.player == game.id) {
+            if (event.player == game.id) {
                 endTurnButton.filter.desaturate();
             }
 
             nextInEventQueue();
-        }
+        } else if (event.type == 'start turn') {
 
-        else if(event.type == 'start turn') {
-
-            if(event.player == game.id) {
+            if (event.player == game.id) {
                 endTurnButton.filter.saturate(1); //TODO: play an animation here.
                 game.ownMonsterTokens += event.monsterTokensGained;
                 game.ownSpellTokens += event.spellTokensGained;
-            }
-            else {
+            } else {
                 endTurnButton.filter.desaturate();
                 game.enemyMonsterTokens += event.monsterTokensGained;
                 game.enemySpellTokens += event.spellTokensGained;
@@ -860,125 +922,146 @@ let GameView = (function() {
             fixTokens();
 
             nextInEventQueue();
-        }
+        } else if (event.type == 'attack') {
 
-        else if (event.type == 'attack') {
+            if (event.target == -1) {
 
-            if(event.target == -1) {
-
-                if(event.player == game.id) {
+                if (event.player == game.id) {
                     let xDestination = .492 * app.stage.width;
                     let yDestination = .189 * app.stage.height;
                     let attacker = game.ownBoard[event.attacker];
 
-                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13, () => {
+                    AnimationQueue.addMoveRequest(attacker.sprite, {
+                        x: xDestination,
+                        y: yDestination
+                    }, 13, () => {
                         game.enemyHealth -= attacker.currentPower;
                         fixHealths();
-                        fixOwnBoardSpacing(event.attacker, () => {nextInEventQueue()});
+                        fixOwnBoardSpacing(event.attacker, () => {
+                            nextInEventQueue()
+                        });
                     });
-                    
+
                     fixHealths();
                     return;
-                }
-                else {
+                } else {
                     let xDestination = .5 * app.stage.width;
                     let yDestination = .834 * app.stage.height;
                     let attacker = game.enemyBoard[event.attacker];
 
-                    AnimationQueue.addMoveRequest(attacker.sprite, {x: xDestination, y: yDestination}, 13, () => {
+                    AnimationQueue.addMoveRequest(attacker.sprite, {
+                        x: xDestination,
+                        y: yDestination
+                    }, 13, () => {
                         game.ownHealth -= attacker.currentPower;
                         fixHealths();
-                        fixEnemyBoardSpacing(event.attacker, () => {nextInEventQueue()});
+                        fixEnemyBoardSpacing(event.attacker, () => {
+                            nextInEventQueue()
+                        });
                     });
-                    
-                    
+
+
                     return;
                 }
 
             }
 
             let attacker, target;
-            
-            if(event.player == game.id) {
+
+            if (event.player == game.id) {
                 attacker = game.ownBoard[event.attacker];
                 target = game.enemyBoard[event.target];
-            }
-
-            else {
+            } else {
                 attacker = game.enemyBoard[event.attacker];
                 target = game.ownBoard[event.target];
             }
 
             let dx = target.sprite.x - attacker.sprite.x;
-                let dy = attacker.sprite.y - target.sprite.y;
+            let dy = attacker.sprite.y - target.sprite.y;
 
-                let dist = Math.sqrt(dx * dx + dy * dy);
+            let dist = Math.sqrt(dx * dx + dy * dy);
 
-                dx = dx/dist;
-                dy = dy/dist;
+            dx = dx / dist;
+            dy = dy / dist;
 
-                AnimationQueue.addMoveRequest(attacker.sprite, {x: target.sprite.x, y: target.sprite.y}, 13, () => {
-                    let tempAPower = attacker.currentPower;
-                    let tempTPower = target.currentPower;
-                    attacker.currentPower -= tempTPower;
-                    target.currentPower -= tempAPower;
+            AnimationQueue.addMoveRequest(attacker.sprite, {
+                x: target.sprite.x,
+                y: target.sprite.y
+            }, 13, () => {
+                let tempAPower = attacker.currentPower;
+                let tempTPower = target.currentPower;
+                attacker.currentPower -= tempTPower;
+                target.currentPower -= tempAPower;
 
-                    if(attacker.currentPower < 0)
-                        attacker.currentPower = 0;
-                    if(target.currentPower < 0)
-                        target.currentPower = 0;
+                if (attacker.currentPower < 0)
+                    attacker.currentPower = 0;
+                if (target.currentPower < 0)
+                    target.currentPower = 0;
 
-                    attacker.updatePower();
-                    target.updatePower();
+                attacker.updatePower();
+                target.updatePower();
 
-                    AnimationQueue.addMoveRequest(attacker.sprite, {x: attacker.sprite.x - (dx * tempTPower * app.stage.width * .01), y: attacker.sprite.y + (dy * tempTPower * app.stage.width * .01)}, 15);
-                    
-                    AnimationQueue.addMoveRequest(target.sprite, {x: target.sprite.x + (dx * tempAPower * app.stage.width * .01), y: target.sprite.y - (dy * tempAPower * app.stage.width * .01)}, 15, () => {
-                        setTimeout(() => {
-                            fixOwnBoardSpacing();
-                            fixEnemyBoardSpacing(event.player == game.id? event.target:event.attacker, () => nextInEventQueue());
-                        }, 200);
-                    });
+                AnimationQueue.addMoveRequest(attacker.sprite, {
+                    x: attacker.sprite.x - (dx * tempTPower * app.stage.width * .01),
+                    y: attacker.sprite.y + (dy * tempTPower * app.stage.width * .01)
+                }, 15);
 
+                AnimationQueue.addMoveRequest(target.sprite, {
+                    x: target.sprite.x + (dx * tempAPower * app.stage.width * .01),
+                    y: target.sprite.y - (dy * tempAPower * app.stage.width * .01)
+                }, 15, () => {
+                    setTimeout(() => {
+                        fixOwnBoardSpacing();
+                        fixEnemyBoardSpacing(event.player == game.id ? event.target : event.attacker, () => nextInEventQueue());
+                    }, 200);
                 });
-        }
 
-        else if(event.type == 'kill dead') {
-            if(event.player == game.id) {
+            });
+        } else if (event.type == 'kill dead') {
+            if (event.player == game.id) {
                 let dead = game.ownBoard.splice(event.target, 1)[0];
 
                 fixOwnBoardSpacing();
 
-                if(dead == undefined)
+                if (dead == undefined)
                     return;
 
                 game.ownGraveyard.unshift(dead);
 
-                if(dead.popup != undefined)
+                if (dead.popup != undefined)
                     app.stage.removeChild(dead.popup);
                 app.stage.removeChild(dead.sprite);
                 nextInEventQueue();
-            }
-            else {
+            } else {
                 let dead = game.enemyBoard.splice(event.target, 1)[0];
 
                 fixEnemyBoardSpacing();
 
-                if(dead == undefined)
+                if (dead == undefined)
                     return;
-                    
+
                 game.enemyGraveyard.unshift(dead);
 
-                if(dead.popup != undefined)
+                if (dead.popup != undefined)
                     app.stage.removeChild(dead.popup);
-               app.stage.removeChild(dead.sprite); //TODO: add dust animation.
-               nextInEventQueue();
+                app.stage.removeChild(dead.sprite); //TODO: add dust animation.
+                nextInEventQueue();
             }
 
+        } else if (event.type == 'disconnection') {
+            gameOver(game.id);
+        } else if (event.type == 'game over') {
+            gameOver(event.player);
         }
 
     }
 
+    function gameOver(playerID) {
+        if (playerID == game.id)
+            window.location.replace('/static/win.html');
+        else
+            window.location.replace('/static/lose.html');
+    }
 
     /*
     This "return" statement is just one big JSON object. It contains all of the functions that should be able to be called externally.
@@ -991,7 +1074,7 @@ let GameView = (function() {
          * This function sets up all relevant graphics objects and listeners and data and what have you to make this module all ready
          * to display the game. Call this externally when you're ready to display everything.
          */
-        setupDisplay: function(id, ownStartingDeckSize, enemyStartingDeckSize) {
+        setupDisplay: function (id, ownStartingDeckSize, enemyStartingDeckSize) {
 
             /*
             This is just a test initialization of the game data. It will get better initialized later but for now this is here just
@@ -1000,25 +1083,30 @@ let GameView = (function() {
             game.init(id, ownStartingDeckSize, enemyStartingDeckSize);
 
             /*
-            This is also a testing construct. Every time the pointer is pressed, this prints the pointer location. I've been using this
-            to figure out exact decimal values for locations on the board and such.
+
+            This is als
+o a testing construct. Every time the pointer is pressed, this prints the pointer location. I've been using this
+            to figure o
+ut exact decimal values for locations on the board and such.
             */
-            document.body.addEventListener('mousedown', function(event) {
-                console.log('x: ' + event.clientX/app.stage.width);
-                console.log('y: ' + event.clientY/app.stage.height);
+
+            document.body.addEventListener('mousedown', function (event) {
+                console
+                    .log('x: ' + event.clientX / app.stage.width);
+                console.log('y: ' + event.clientY / app.stage.height);
             });
 
             /*
             Don't touch this. Everything breaks if you do.
             */
-            setTimeout(()=>{
+            setTimeout(() => {
                 app.stage.width = innerWidth;
                 app.stage.height = innerHeight;
 
                 app.renderer.resize(innerWidth, innerHeight);
 
                 document.body.appendChild(app.view);
-            },50);
+            }, 50);
 
             /*
             An alias to PIXI.loader to make this code more readable
@@ -1058,7 +1146,9 @@ let GameView = (function() {
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
-            loader.onLoad.add(() => {console.log('Loaded.')}); // called once per loaded file
+            loader.onLoad.add(() => {
+                console.log('Loaded.')
+            }); // called once per loaded file
 
             /*
             This onComplete function runs once the textures have loaded. It would probably be useful to move this function out
@@ -1085,12 +1175,12 @@ let GameView = (function() {
                 endTurnButton.button.interactive = true;
                 endTurnButton.button.filters = [endTurnButton.filter];
                 endTurnButton.filter.desaturate();
-                
+
                 endTurnButton.button.x = app.stage.width * .005;
                 endTurnButton.button.y = app.stage.height * .455;
                 endTurnButton.button.width = app.stage.width * .103;
                 endTurnButton.button.height = app.stage.height * .09;
-                
+
                 app.stage.addChild(endTurnButton.button);
 
                 endTurnButton.button.on('mouseover', () => {
@@ -1106,7 +1196,9 @@ let GameView = (function() {
                 });
 
                 endTurnButton.button.on('mouseup', () => {
-                    outputFunc({type: 'end turn'});
+                    outputFunc({
+                        type: 'end turn'
+                    });
                     endTurnButton.button.alpha = 1;
                 });
 
@@ -1119,7 +1211,7 @@ let GameView = (function() {
                 let enemyDeck = new PIXI.Sprite(textures.deck);
                 enemyDeck.x = .0146 * app.stage.width;
                 enemyDeck.y = .01 * app.stage.height;
-                enemyDeck.height = .212 * app.stage.height; 
+                enemyDeck.height = .212 * app.stage.height;
                 enemyDeck.width = .0850 * app.stage.width;
                 app.stage.addChild(enemyDeck);
 
@@ -1149,7 +1241,7 @@ let GameView = (function() {
 
                 fixHealths();
 
-                
+
                 /*
                 The below code adds deck size popups. It probably needs to be tweaked a little bit, but it works for now so I'm not
                 going to bother commenting it because I don't really want to even worry about this for a while.
@@ -1159,9 +1251,14 @@ let GameView = (function() {
 
                     let popup = new PIXI.Container();
                     popup.x = enemyDeck.x + enemyDeck.width + app.stage.width * .03;
-                    popup.y = enemyDeck.y + enemyDeck.height/2;
+                    popup.y = enemyDeck.y + enemyDeck.height / 2;
 
-                    let text = new PIXI.Text(game.enemyDeckSize + ' cards in deck', {fontFamily: 'Helvetica', fontSize: 100, fill: 0x000fff, align: 'center'});
+                    let text = new PIXI.Text(game.enemyDeckSize + ' cards in deck', {
+                        fontFamily: 'Helvetica',
+                        fontSize: 100,
+                        fill: 0x000fff,
+                        align: 'center'
+                    });
                     text.width = app.stage.height * .1;
                     text.height = app.stage.width * .017;
                     text.anchor.x = .5;
@@ -1171,20 +1268,25 @@ let GameView = (function() {
                     enemyDeck.popup = popup;
 
                     app.stage.addChild(popup);
-                }); 
+                });
 
                 enemyDeck.on('mouseout', () => {
                     app.stage.removeChild(enemyDeck.popup);
                     enemyDeck.popup = undefined;
-                }); 
+                });
 
                 ownDeck.interactive = true;
                 ownDeck.on('mouseover', () => {
                     let popup = new PIXI.Container();
                     popup.x = ownDeck.x + ownDeck.width + app.stage.width * .03;
-                    popup.y = ownDeck.y + ownDeck.height/2;
+                    popup.y = ownDeck.y + ownDeck.height / 2;
 
-                    let text = new PIXI.Text(game.ownDeckSize + ' cards in deck', {fontFamily: 'Helvetica', fontSize: 100, fill: 0x000fff, align: 'center'});
+                    let text = new PIXI.Text(game.ownDeckSize + ' cards in deck', {
+                        fontFamily: 'Helvetica',
+                        fontSize: 100,
+                        fill: 0x000fff,
+                        align: 'center'
+                    });
                     text.width = app.stage.height * .1;
                     text.height = app.stage.width * .017;
                     text.anchor.x = .5;
@@ -1214,7 +1316,7 @@ let GameView = (function() {
                 let enemyGraveyardIcon = new PIXI.Sprite(textures.graveyardIcon);
                 enemyGraveyardIcon.width = app.stage.width * .07;
                 enemyGraveyardIcon.height = app.stage.height * .11;
-                enemyGraveyardIcon.x = app.stage.width * .02 + enemyGraveyardIcon.width/2;
+                enemyGraveyardIcon.x = app.stage.width * .02 + enemyGraveyardIcon.width / 2;
                 enemyGraveyardIcon.y = app.stage.height * .39;
                 enemyGraveyardIcon.anchor.x = enemyGraveyardIcon.anchor.y = 0.5;
                 enemyGraveyardIcon.rotation = 3.142;
@@ -1231,7 +1333,7 @@ let GameView = (function() {
                 enemyGraveyardIcon.on('mouseout', onMouseOffEnemyGraveyard);
 
                 nextInEventQueue();
-                
+
             });
 
             AnimationQueue.startAnimating(app);
@@ -1241,7 +1343,7 @@ let GameView = (function() {
         /**
          * Resizes the display because maybe the size of the screen changed. Called from index.html when the page is resized by hand.
          */
-        resizeDisplay: function() {
+        resizeDisplay: function () {
 
             /*
             Changes height and width to the new screen size.
@@ -1269,10 +1371,10 @@ let GameView = (function() {
          * translated into graphical changes.
          * @param {Event} event the event to be processed
          */
-        processEvent: function(event) {
+        processEvent: function (event) {
             eventQueue.push(event);
             console.log(event);
-            if(!processingEvent && app.stage.children.length > 0)    
+            if (!processingEvent && app.stage.children.length > 0)
                 nextInEventQueue();
         },
 
