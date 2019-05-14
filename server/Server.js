@@ -67,7 +67,7 @@ io.on('connection', function (playerSocket) {
         if (i != -1)
             freePlayers.splice(i, 1);
         else //find which game the player was in and disconnect the player and end the game
-            for (i = 0; i < games.length; ++games) {
+            for (i = 0; i < games.length; ++i) {
                 if (games[i].player1.socket == playerSocket)
                     disconnect(i, 1);
                 else if (games[i].player2.socket == playerSocket)
