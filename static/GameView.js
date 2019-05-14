@@ -316,19 +316,19 @@ let GameView = (function () {
 
         else {
             if(temp.targeting) {
-                let targetOutput = findTarget(true);
-
-                outputFunc({
-                    type: 'play card',
-                    handLoc: game.ownBoard.indexOf(temp),
-                    targetSide: targetOutput.targetSide,
-                    target: targetOutput.target,
+                findTarget(true, (targetSide, target) => {
+                    outputFunc({
+                        type: 'play card',
+                        handLoc: game.ownBoard.indexOf(temp),
+                        targetSide: targetOutput.targetSide,
+                        target: targetOutput.target,
+                    });
                 });
             } else {
                 outputFunc({
                     type: 'play card',
                     handLoc: game.ownBoard.indexOf(temp),
-                })
+                });
             }
         }
 
@@ -663,7 +663,7 @@ let GameView = (function () {
 
     function onMouseDragCardOnBoardMove(eventObj) {
 
-        if (this.dragging && arrowDragging) {
+        if(this.dragging && arrowDragging) {
             let pos = this.dragData.getLocalPosition(this.parent);
             let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
 
@@ -786,6 +786,71 @@ let GameView = (function () {
             else
                 graveyardDisplay.addChild(value.popup);
         });
+    }
+
+    function findTarget(canTargetFriendly, callback) {
+
+        let arrow = PIXI.Sprite(textures.arrowHead)
+
+        arrow.width = .07 * app.stage.width;
+        arrow.height = .105 * app.stage.height;
+
+        arrow.anchor.x = arrow.anchor.y = .5;
+
+        arrowDragging = true;
+
+        app.stage.addChild(arrow);
+
+        let tickerMethod = function() {
+            let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
+            let pos = {
+                x: renderer.plugins.interaction.mouse.global.x,
+                y: renderer.plugins.interaction.mouse.global.y,
+            };
+
+            arrow.x = pos.x;
+            arrow.y = pos.y;
+    
+            arrow.rotation = 3.14 - angle;
+        }
+
+        let mouseDownMethod = function(){
+            
+            let pos = {
+                x: renderer.plugins.interaction.mouse.global.x,
+                y: renderer.plugins.interaction.mouse.global.y,
+            };
+
+            game.enemyBoard.forEach((value, index) => {
+                if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
+                    value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y)             
+                    completion(game.id == 1? 2:1, index);
+            });
+
+            if(canTargetFriendly)
+                game.ownBoard.forEach((value, index) => {
+                    if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
+                        value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y)
+                        completion(game.id, index);
+                });
+
+            if(app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y)
+                completion(game.id == 1? 2:1, -1);
+            else if(app.stage.with * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .75 <= pos.y && app.stage.height * 1 >= pos.y)
+                completion(game.id, -1);
+
+        }
+
+        let completion = function(playerSide, target) {
+            app.ticker.remove(tickerMethod);
+            document.removeEventListener('mousedown', mouseDownMethod);
+            app.stage.removeChild(arrow);
+            arrowDragging = false;
+            callback(playerSide, target);
+        }
+
+        app.ticker.add(tickerMethod);
+        document.addEventListener('mousedown', mouseDownMethod);
 
     }
 
