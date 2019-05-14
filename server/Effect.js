@@ -26,10 +26,10 @@ class Effect {
         this.selfAttackList.push(func);
     }
 
-    enemyAttack(game, eventChain) {
+    enemyAttack(input, game, eventChain) {
         this.selfAttackList.forEach(function(i) {
-            i.func(game, attackChain);
-        })
+            i.func(input, game, attackChain);
+        });
     }
 
     addEnemyAttack(func) {

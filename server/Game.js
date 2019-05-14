@@ -372,6 +372,8 @@ class Game {
 			}
 		}
 
+        //TODO: add effects.
+
 		eventChain.push(event);
 
 	}
@@ -424,7 +426,13 @@ class Game {
 			let deadGuys = [];
 			for (var i = player.board.length - 1; i >= 0; i--) {
 				if (player.board[i].currentPower <= 0) {
-					player.board.splice(i, 1);
+
+                    let deadGuy = player.board.splice(i, 1)[0];
+                    //TODO: add effects here
+                    if(deadGuy.hasSelfDeath) {
+                        deadGuy.selfDeath(null, this, eventChain);
+                    }
+
 					deadGuys.push(player.board[i]);
 					dead.push({
 						index: i,
@@ -459,11 +467,21 @@ class Game {
 	 */
 	attack(input, eventChain) {
 
-		if ((input.attacker >= this.currentPlayer.board.length || input.attacker == -1) || input.target >= this.currentPlayer.board.length) { //just real quick making sure that the locations are valid
+		if((input.attacker >= this.currentPlayer.board.length || input.attacker == -1) || input.target >= this.currentPlayer.board.length) { //just real quick making sure that the locations are valid
 			return;
 		}
 
-		if (this.currentPlayer.board[input.attacker].attack(this.otherPlayer, this.currentPlayer, input.attacker, input.target, eventChain)) {
+		if(this.currentPlayer.board[input.attacker].attack(this.otherPlayer, this.currentPlayer, input.attacker, input.target, eventChain)) {
+            if(this.currentPlayer.board[input.attacker].hasSelfAttack) {
+                selfAttack(input, this, eventChain);
+            }
+            this.otherPlayer.board.forEach((value) => {
+                if(value.hasEnemyAttack) {
+                    value.enemyAttack(input, this, eventChain);
+                }
+            });
+            //TODO: add effects
+
 			this.killDead(eventChain);
 		}
 	}
@@ -514,9 +532,10 @@ class Game {
 			temp.board.splice(input.playLocation, 0, toPlay);
 			//TODO: add battlecry effect
 		} else if(toPlay.type == 'spell') {
-			//TODO: add code here
-    }    
-    this.killDead(eventChain);
+            toPlay.onCardPlayed(input, this, eventChain);
+            //TODO: add code here
+        }    
+        this.killDead(eventChain);
 	}
 
 	startTurn(eventChain) {

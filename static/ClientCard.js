@@ -13,7 +13,7 @@ ClientCard = (function() {
      * Defines a generic card. This class shouldn't be constructed directly.
      */
     class Card {
-        constructor(type, id, tokenType, rarity, name, cost, playCost) {
+        constructor(type, id, tokenType, rarity, name, cost, playCost, targeting) {
             this.type = type;
             this.id = id;
             this.tokenType = tokenType;
@@ -21,6 +21,7 @@ ClientCard = (function() {
             this.name = name;
             this.cost = cost;
             this.currentCost = playCost;//current cost and absolute cost are different
+            this.targeting = targeting;
         }
 
         updateText() {
@@ -111,7 +112,7 @@ ClientCard = (function() {
     class Monster extends Card {
 
         constructor(backendCard) {
-            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost, backendCard.playCost, backendCard.currentPower);
+            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost, backendCard.playCost, backendCard.currentPower, backendCard.targeting);
             this.power = backendCard.power;
             this.currentPower = backendCard.currentPower;
             this.hasDefender = backendCard.hasDefender;
@@ -224,7 +225,7 @@ ClientCard = (function() {
      */
     class Spell extends Card {
         constructor(backendCard) {
-            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.cost, backendCard.power, backendCard.hasDefender);
+            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.cost, backendCard.power, backendCard.hasDefender, backendCard.targeting);
         }
     }
 
