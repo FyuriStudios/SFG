@@ -17,3 +17,5 @@ let damageWrapper = {
         require('../genericEffects/Damage')(input, game, eventChain, 1 /*1 is the damage that this spell deals.*/);
     }
 }
+
+module.exports = test;
