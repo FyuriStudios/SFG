@@ -327,7 +327,7 @@ let GameView = (function () {
             } else {
                 outputFunc({
                     type: 'play card',
-                    handLoc: game.ownBoard.indexOf(temp);
+                    handLoc: game.ownBoard.indexOf(temp),
                 })
             }
         }
