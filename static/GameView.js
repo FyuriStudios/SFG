@@ -192,6 +192,9 @@ let GameView = (function () {
                 height: .355 * app.stage.height
             };
 
+            let temp;
+            game.hand.forEach((val) => val.sprite == this ? temp = val : null);
+
             /*
             This if statement checks to see if the card is intersecting with the field rectangle. Look up "check for rectangle intersection"
             on StackOverflow if you're curious about what this does.
@@ -199,11 +202,9 @@ let GameView = (function () {
             if (!(this.x > fieldBounds.x + fieldBounds.width ||
                     this.x + this.width < fieldBounds.x ||
                     this.y > fieldBounds.y + fieldBounds.height ||
-                    this.y + this.height < fieldBounds.y)) {
+                    this.y + this.height < fieldBounds.y) && temp.type != 'spell') {
                 this.alpha = 0;
-                let temp;
-                game.hand.forEach((val) => val.sprite == this ? temp = val : null);
-
+                
                 temp.monsterContainer.x = this.x - this.width / 2;
                 temp.monsterContainer.y = this.y - this.height / 2;
                 temp.monsterContainer.width = this.width * 1.1;
@@ -233,7 +234,7 @@ let GameView = (function () {
 
                 }
 
-            } else {
+            } else if(temp.type != spell) {
                 let temp;
                 game.hand.forEach((val) => val.sprite == this ? temp = val : null);
 
@@ -253,62 +254,82 @@ let GameView = (function () {
      */
     let onDragFromHandEnd = function (eventObj) {
 
-        slideCards();
-
         let temp = this;
         game.hand.forEach((val) => val.sprite == temp ? temp = val : null);
 
-        app.stage.removeChild(temp.monsterContainer);
-        this.alpha = 1;
+        if(temp.type == 'monster') {
 
-        /*
-        Unset the fields from earlier because we aren't using them anymore.
-        */
-        this.dragging = false;
-        this.dragData = undefined;
+            slideCards();
 
-        /*
-        Defining a rectangle to be the boundaries of what is considered to be the "field".
-        This is the area that the card is dragged into to play it.
-        */
-        let fieldBounds = {
-            x: .147 * app.stage.width,
-            y: .306 * app.stage.height,
-            width: .706 * app.stage.width,
-            height: .355 * app.stage.height
-        };
-
-        /*
-        This if statement checks to see if the card is intersecting with the field rectangle. Look up "check for rectangle intersection"
-        on StackOverflow if you're curious about what this does.
-        */
-        if (!(this.x > fieldBounds.x + fieldBounds.width ||
-                this.x + this.width < fieldBounds.x ||
-                this.y > fieldBounds.y + fieldBounds.height ||
-                this.y + this.height < fieldBounds.y)) {
-            /*
-            handLoc will be the location of the card that was played in the player's hand because we need to give the card location as
-            part of the card played event.
-            */
-            let handLoc;
+            app.stage.removeChild(temp.monsterContainer);
+            this.alpha = 1;
 
             /*
-            Loop through every element of own hand array to find the location of the card that was played.
+            Unset the fields from earlier because we aren't using them anymore.
             */
-            game.hand.forEach((element, index) => element.sprite == this ? handLoc = index : null);
+            this.dragging = false;
+            this.dragData = undefined;
 
             /*
-            Call outputFunc with an event. Events from the backend to the frontend are similar to events going in the other direction,
-            although I haven't documented frontend -> backend events yet.
+            Defining a rectangle to be the boundaries of what is considered to be the "field".
+            This is the area that the card is dragged into to play it.
             */
-            outputFunc({
-                type: 'play card',
-                handLoc: handLoc,
-                playLoc: this.spotForCard
-            });
+            let fieldBounds = {
+                x: .147 * app.stage.width,
+                y: .306 * app.stage.height,
+                width: .706 * app.stage.width,
+                height: .355 * app.stage.height
+            };
 
-            this.spotForCard = undefined;
+            /*
+            This if statement checks to see if the card is intersecting with the field rectangle. Look up "check for rectangle intersection"
+            on StackOverflow if you're curious about what this does.
+            */
+            if (!(this.x > fieldBounds.x + fieldBounds.width ||
+                    this.x + this.width < fieldBounds.x ||
+                    this.y > fieldBounds.y + fieldBounds.height ||
+                    this.y + this.height < fieldBounds.y)) {
+                /*
+                handLoc will be the location of the card that was played in the player's hand because we need to give the card location as
+                part of the card played event.
+                */
+                let handLoc;
 
+                /*
+                Loop through every element of own hand array to find the location of the card that was played.
+                */
+                game.hand.forEach((element, index) => element.sprite == this ? handLoc = index : null);
+
+                /*
+                Call outputFunc with an event. Events from the backend to the frontend are similar to events going in the other direction,
+                although I haven't documented frontend -> backend events yet.
+                */
+                outputFunc({
+                    type: 'play card',
+                    handLoc: handLoc,
+                    playLoc: this.spotForCard
+                });
+
+                this.spotForCard = undefined;
+            } 
+        }
+
+        else {
+            if(temp.targeting) {
+                let targetOutput = findTarget(true);
+
+                outputFunc({
+                    type: 'play card',
+                    handLoc: game.ownBoard.indexOf(temp),
+                    targetSide: targetOutput.targetSide,
+                    target: targetOutput.target,
+                });
+            } else {
+                outputFunc({
+                    type: 'play card',
+                    handLoc: game.ownBoard.indexOf(temp);
+                })
+            }
         }
 
         /**
