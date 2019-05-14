@@ -28,7 +28,7 @@ function draw() {
     //loop sound
     if(!music.isPlaying())
       music.play();
-      
+
     clear();
 
     let fontSize = width / 20;
@@ -41,6 +41,7 @@ function draw() {
         fill(200, 0, 0);
         text('GAME IS STARTING', width / 2, height / 2);
         waitGif.remove();
+        music.stop();
         noLoop();
     } else {
         let currentTime = floor((new Date).getTime() / 1000);

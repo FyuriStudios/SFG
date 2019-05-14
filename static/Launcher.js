@@ -53,7 +53,7 @@ function setup() {
 
 function draw() {
   //loop sound
-  if(!music.isPlaying())
+  if (!music.isPlaying())
     music.play();
 
   //draw loginBox image
@@ -83,11 +83,14 @@ function mouseClicked() {
     mouseY > playButton.y &&
     mouseY < (playButton.y + playButton.height)
   )
-    newGame('/static/game.html');
+    music.stop();
+  newGame('/static/game.html');
 }
 
 //if enter key is pressed start the game
 function keyPressed() {
-  if (keyCode == 13)
+  if (keyCode == 13) {
+    music.stop();
     newGame('/static/game.html');
+  }
 }
