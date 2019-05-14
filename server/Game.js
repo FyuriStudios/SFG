@@ -382,13 +382,21 @@ class Game {
 	killDead(eventChain) {
 
 		if (this.player1.health == 0) {
-			this.player1.socket.emit('game over', 1);
-			this.player2.socket.emit('game over', 1);
+			let event = {
+				'type': 'game over',
+				'player': 2 //player 2 won
+			}
+			this.player1.socket.emit('event', event);
+			this.player2.socket.emit('event', event);
 			this.player1.socket.disconnect();
 			this.player2.socket.disconnect();
 		} else if (this.player2.health == 0) { //check for game over first.
-			this.player1.socket.emit('game over', 2);
-			this.player2.socket.emit('game over', 2);
+			let event = {
+				'type': 'game over',
+				'player': 1 //player 1 won
+			}
+			this.player1.socket.emit('event', event);
+			this.player2.socket.emit('event', event);
 			this.player1.socket.disconnect();
 			this.player2.socket.disconnect();
 		}
