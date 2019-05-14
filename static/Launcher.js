@@ -1,10 +1,11 @@
-//for launching the game in a new window
+//for launching the game
 function newGame(url) {
   window.location.replace(url);
 }
 
 
 let launchGif;
+let music;
 
 let loginBox = {
   "img": "",
@@ -78,9 +79,10 @@ function mouseClicked() {
     mouseX < (playButton.x + playButton.width) &&
     mouseY > playButton.y &&
     mouseY < (playButton.y + playButton.height)
-  )
+  ) {
     music.stop();
-  newGame('/static/game.html');
+    newGame('/static/game.html');
+  }
 }
 
 //if enter key is pressed start the game

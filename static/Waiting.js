@@ -6,6 +6,7 @@ Create canvas element in setup then use in draw.
 
 let beginTime; //keep track of time elapsed until game begins
 let gameStarting = false;
+let music;
 
 function preload() {
     //create launchGif object
@@ -24,10 +25,12 @@ function setup() {
     music.play();
 }
 
+let txt;
+
 function draw() {
     //loop sound
-    if(!music.isPlaying())
-      music.play();
+    if (!music.isPlaying())
+        music.play();
 
     clear();
 
@@ -39,7 +42,7 @@ function draw() {
 
     if (gameStarting) {
         fill(200, 0, 0);
-        text('GAME IS STARTING', width / 2, height / 2);
+        txt = text('GAME IS STARTING', width / 2, height / 2);
         waitGif.remove();
         music.stop();
         noLoop();
@@ -51,7 +54,6 @@ function draw() {
         text('WAITING FOR OTHER PLAYER', width / 2, (height / 2) - fontSize);
         text('TIME ELAPSED: ' + timeElapsed + ' SEC', width / 2, (height / 2) + fontSize);
     }
-
 }
 
 //if window resized change the canvas size

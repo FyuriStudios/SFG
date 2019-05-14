@@ -1182,6 +1182,8 @@ let GameView = (function () {
          */
         setupDisplay: function (id, ownStartingDeckSize, enemyStartingDeckSize) {
 
+            txt.remove(); //remove the waiting text at the start of the game
+
             /*
             This is just a test initialization of the game data. It will get better initialized later but for now this is here just
             so that the data can be used in testing.
