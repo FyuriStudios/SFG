@@ -229,68 +229,64 @@ class Game {
 			this.player1.deck.shuffle();
 			this.player2.deck.shuffle();
 
-			setTimeout(() => {
+      for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
 
+          let drawnCard = this.player1.deck.pop();
 
-				for (var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
+          this.player1.socket.emit('event', {
+              type: 'draw card',
+              player: 1,
+              card: backendCardTranslate(drawnCard),
+          });
 
-					let drawnCard = this.player1.deck.pop();
+          this.player2.socket.emit('event', {
+              type: 'draw card',
+              player: 1
+          });
 
-					this.player1.socket.emit('event', {
-						type: 'draw card',
-						player: 1,
-						card: backendCardTranslate(drawnCard),
-					});
+          this.player1.hand.unshift(drawnCard);
+      }
 
-					this.player2.socket.emit('event', {
-						type: 'draw card',
-						player: 1
-					});
+            for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
+                
+                let drawnCard = this.player2.deck.pop();
 
-					this.player1.hand.unshift(drawnCard);
-				}
+                this.player2.socket.emit('event', {
+                    type: 'draw card',
+                    player: 2,
+                    card: backendCardTranslate(drawnCard),
+                });
 
-				for (var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
+                this.player1.socket.emit('event', {
+                    type: 'draw card',
+                    player: 2
+                });
 
-					let drawnCard = this.player2.deck.pop();
+                this.player2.hand.unshift(drawnCard);
+            }
 
-					this.player2.socket.emit('event', {
-						type: 'draw card',
-						player: 2,
-						card: backendCardTranslate(drawnCard),
-					});
+            this.turnCounter += 1;
+            let event = {
+                type: 'start turn',
+                player: 1,
+                spellTokensGained: constants.TOKS_PER_TURN,
+                monsterTokensGained: constants.TOKS_PER_TURN,
+            };
 
-					this.player1.socket.emit('event', {
-						type: 'draw card',
-						player: 2
-					});
+            this.player1.socket.emit('event', event);
+            this.player2.socket.emit('event', event);
 
-					this.player2.hand.unshift(drawnCard);
-				}
+      
+            this.player1.socket.on('event', input => {
+                this.processEvent(this.player1, input);
+            });
 
-				this.turnCounter += 1;
-				let event = {
-					type: 'start turn',
-					player: 1,
-					spellTokensGained: constants.TOKS_PER_TURN,
-					monsterTokensGained: constants.TOKS_PER_TURN,
-				};
+            this.player2.socket.on('event', input => {
+                this.processEvent(this.player2, input);
+            });
 
-				this.player1.socket.emit('event', event);
-				this.player2.socket.emit('event', event);
-
-			}, 1000);
-
-			this.player1.socket.on('event', input => {
-				this.processEvent(this.player1, input);
-			});
-
-			this.player2.socket.on('event', input => {
-				this.processEvent(this.player2, input);
-			});
-
-		}
-	}
+        }   
+    }
 
 	processEvent(player, input) {
 
@@ -309,29 +305,23 @@ class Game {
 			case 'end turn':
 				this.endTurn(input, eventChain);
 				break;
-			case 'start turn':
-				this.startTurn(eventChain);
-				break;
-		}
+        }
 
-		eventChain.forEach(value => {
-			if (value.view == 3) {
-				this.currentPlayer.socket.emit('event', value);
-			} else if (value.view == 2) {
-				if (value.player == 1) {
-					this.player1.socket.emit('event', value);
-					this.player2.socket.emit('event', {
-						type: value.type,
-						player: value.player
-					});
-				} else {
-					this.player2.socket.emit('event', value);
-					this.player1.socket.emit('event', {
-						type: value.type,
-						player: value.player
-					});
-				}
-			} else {
+        eventChain.forEach(value => {
+            if(value.view == 3) {
+                this.currentPlayer.socket.emit('event', value);
+            }
+            else if(value.view == 2) {
+                if(value.player == 1) {
+                    this.player1.socket.emit('event', value);
+                    this.player2.socket.emit('event', {type: value.type, player: value.player});
+                }
+                else {
+                    this.player2.socket.emit('event', value);
+                    this.player1.socket.emit('event', {type: value.type, player: value.player});
+                }
+            }
+            else {
 				this.player1.socket.emit('event', value);
 				this.player2.socket.emit('event', value);
 			}
@@ -372,13 +362,12 @@ class Game {
 				event.card = backendCardTranslate(temp);
 				player.graveyard.push(temp);
 			} else {
-				player.hand.push(temp);
+				player.hand.unshift(temp);
 				event.type = 'draw card';
 				event.player = player.id;
-				event.view = 2; //semi-private
-				event.card = backendCardTranslate(temp);
+				event.view = 2;//semi-private
+                event.card = backendCardTranslate(temp);
 			}
-
 		}
 
 		eventChain.push(event);
@@ -482,7 +471,8 @@ class Game {
 			return; //check to see if the card's actually in their hand
 		}
 
-		var toPlay = temp.hand[input.handLoc];
+        var toPlay = temp.hand[input.handLoc];
+    
 		//TODO: add flex token implementation
 		var tokens = toPlay.tokenType == 'monster' ? temp.mToks : temp.sToks;
 
@@ -508,17 +498,15 @@ class Game {
 
 		temp.hand = temp.hand.splice(input.cardLocation); //this line also might not work, but it's supposed to remove the card at input.cardLocation
 
-		eventChain.push(event);
+        eventChain.push(event);
 
 		if (toPlay.type == 'monster') {
 			temp.board.splice(input.playLocation, 0, toPlay);
 			//TODO: add battlecry effect
-		}
-
-		if (toPlay.type == 'spell') {
+		} else if(toPlay.type == 'spell') {
 			//TODO: add code here
-		}
-
+    }    
+    this.killDead(eventChain);
 	}
 
 	startTurn(eventChain) {

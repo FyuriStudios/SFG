@@ -103,6 +103,6 @@ setInterval(() => {
         console.log(games);
         games.push(game);
         game.start();
-        console.log('Starting game. Players: ' + player1.handshake.address + ' & ' + player2.handshake.address);
+        console.log('Starting game: ' + games.length + ' Players: ' + player1.handshake.address + " & " + player2.handshake.address);
     }
 }, 1000);

@@ -319,8 +319,11 @@ let GameView = (function() {
         /**
          * Here I'm just resetting the position of the card.
          */
-        this.x = this.originalPos.x;
-        this.y = this.originalPos.y;
+        
+        if(this.originalPos != undefined) {
+            this.x = this.originalPos.x;
+            this.y = this.originalPos.y;
+        }
     }
 
     /**
@@ -1226,6 +1229,8 @@ let GameView = (function() {
                 enemyGraveyardIcon.interactive = true;
                 enemyGraveyardIcon.on('mouseover', onMouseOverEnemyGraveyard);
                 enemyGraveyardIcon.on('mouseout', onMouseOffEnemyGraveyard);
+
+                nextInEventQueue();
                 
             });
 
@@ -1267,7 +1272,7 @@ let GameView = (function() {
         processEvent: function(event) {
             eventQueue.push(event);
             console.log(event);
-            if(!processingEvent)    
+            if(!processingEvent && app.stage.children.length > 0)    
                 nextInEventQueue();
         },
 
