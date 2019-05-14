@@ -10,6 +10,9 @@ let gameStarting = false;
 function preload() {
     //create launchGif object
     waitGif = createImg('/static/assets/launchAnimation.gif');
+
+    //load music
+    music = loadSound('/static/assets/sounds/STRUGGLE_FOR_GERA.m4a');
 }
 
 function setup() {
@@ -17,9 +20,15 @@ function setup() {
     createCanvas(innerWidth, innerHeight); //create p5.js canvas element
 
     beginTime = floor((new Date).getTime() / 1000);
+
+    music.play();
 }
 
 function draw() {
+    //loop sound
+    if(!music.isPlaying())
+      music.play();
+      
     clear();
 
     let fontSize = width / 20;

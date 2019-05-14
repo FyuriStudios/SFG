@@ -39,14 +39,23 @@ function preload() {
   //create loginBox and playButton images
   loginBox.img = loadImage('/static/assets/Login_Box.png')
   playButton.img = loadImage('/static/assets/Play_Button.png')
+
+  //load music
+  music = loadSound('/static/assets/sounds/STRUGGLE_FOR_GERA.m4a');
 }
 
 function setup() {
   launchGif.position(0, 0);
   createCanvas(innerWidth, innerHeight); //create p5.js canvas element
+
+  music.play();
 }
 
 function draw() {
+  //loop sound
+  if(!music.isPlaying())
+    music.play();
+
   //draw loginBox image
   loginBox.width = innerWidth / 3;
   loginBox.height = innerHeight / 2;
