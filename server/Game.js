@@ -231,8 +231,6 @@ class Game {
 
 			this.player1.deck.shuffle();
             this.player2.deck.shuffle();
-            
-            this.player1.deck.forEach(value => console.log(value.id));
 
             for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
 
