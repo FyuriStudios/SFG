@@ -254,8 +254,36 @@ let GameView = (function () {
      */
     let onDragFromHandEnd = function (eventObj) {
 
+        /*
+        Unset the fields from earlier because we aren't using them anymore.
+        */
+        this.dragging = false;
+        this.dragData = undefined;
+
         let temp = this;
         game.hand.forEach((val) => val.sprite == temp ? temp = val : null);
+
+        /*
+        Defining a rectangle to be the boundaries of what is considered to be the "field".
+        This is the area that the card is dragged into to play it.
+        */
+        let fieldBounds = {
+            x: .147 * app.stage.width,
+            y: .306 * app.stage.height,
+            width: .706 * app.stage.width,
+            height: .355 * app.stage.height
+        };
+
+        /*
+        handLoc will be the location of the card that was played in the player's hand because we need to give the card location as
+        part of the card played event.
+        */
+        let handLoc;
+
+        /*
+        Loop through every element of own hand array to find the location of the card that was played.
+        */
+        game.hand.forEach((element, index) => element.sprite == this ? handLoc = index : null);
 
         if(temp.type == 'monster') {
 
@@ -265,23 +293,6 @@ let GameView = (function () {
             this.alpha = 1;
 
             /*
-            Unset the fields from earlier because we aren't using them anymore.
-            */
-            this.dragging = false;
-            this.dragData = undefined;
-
-            /*
-            Defining a rectangle to be the boundaries of what is considered to be the "field".
-            This is the area that the card is dragged into to play it.
-            */
-            let fieldBounds = {
-                x: .147 * app.stage.width,
-                y: .306 * app.stage.height,
-                width: .706 * app.stage.width,
-                height: .355 * app.stage.height
-            };
-
-            /*
             This if statement checks to see if the card is intersecting with the field rectangle. Look up "check for rectangle intersection"
             on StackOverflow if you're curious about what this does.
             */
@@ -289,16 +300,7 @@ let GameView = (function () {
                     this.x + this.width < fieldBounds.x ||
                     this.y > fieldBounds.y + fieldBounds.height ||
                     this.y + this.height < fieldBounds.y)) {
-                /*
-                handLoc will be the location of the card that was played in the player's hand because we need to give the card location as
-                part of the card played event.
-                */
-                let handLoc;
-
-                /*
-                Loop through every element of own hand array to find the location of the card that was played.
-                */
-                game.hand.forEach((element, index) => element.sprite == this ? handLoc = index : null);
+    
 
                 /*
                 Call outputFunc with an event. Events from the backend to the frontend are similar to events going in the other direction,
@@ -315,19 +317,22 @@ let GameView = (function () {
         }
 
         else {
-            if(temp.targeting) {
+            if(temp.targeting && !(this.x > fieldBounds.x + fieldBounds.width ||
+                this.x + this.width < fieldBounds.x ||
+                this.y > fieldBounds.y + fieldBounds.height ||
+                this.y + this.height < fieldBounds.y)) {
                 findTarget(true, (targetSide, target) => {
                     outputFunc({
                         type: 'play card',
-                        handLoc: game.ownBoard.indexOf(temp),
-                        targetSide: targetOutput.targetSide,
-                        target: targetOutput.target,
+                        handLoc: handLoc,
+                        targetSide: targetSide,
+                        target: target,
                     });
                 });
             } else {
                 outputFunc({
                     type: 'play card',
-                    handLoc: game.ownBoard.indexOf(temp),
+                    handLoc:handLoc,
                 });
             }
         }
@@ -929,31 +934,39 @@ let GameView = (function () {
                 fixTokens();
 
                 let card = game.hand.splice(event.handLoc, 1)[0]; //remove the card at the relevant location in the player's hand
-                game.ownBoard.splice(event.playLoc, 0, card); //insert the card at the correct location in the player's board
-                card.boardForm();
+                
+                if(card.type == 'monster') {
+                    game.ownBoard.splice(event.playLoc, 0, card); //insert the card at the correct location in the player's board
+                    card.boardForm();
 
-                card.sprite.off('mouseover', mouseOverCardInHand);
+                    card.sprite.off('mouseover', mouseOverCardInHand);
 
-                card.sprite.off('mouseout', mouseOutCardInHand);
+                    card.sprite.off('mouseout', mouseOutCardInHand);
 
-                card.sprite.off('pointerdown', onDragFromHandStart);
+                    card.sprite.off('pointerdown', onDragFromHandStart);
 
-                card.sprite.off('pointerup', onDragFromHandEnd);
+                    card.sprite.off('pointerup', onDragFromHandEnd);
 
-                card.sprite.off('pointerupoutside', onDragFromHandEnd); //removing mouse events. Then we'll re-add custom events.
+                    card.sprite.off('pointerupoutside', onDragFromHandEnd); //removing mouse events. Then we'll re-add custom events.
 
-                card.sprite.off('pointermove', onDragFromHandMove);
+                    card.sprite.off('pointermove', onDragFromHandMove);
 
-                card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
-                card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
-                card.sprite.on('pointerdown', onMouseDragCardOnBoardStart);
-                card.sprite.on('pointerup', onMouseDragCardOnBoardEnd);
-                card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
-                card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
+                    card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
+                    card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
+                    card.sprite.on('pointerdown', onMouseDragCardOnBoardStart);
+                    card.sprite.on('pointerup', onMouseDragCardOnBoardEnd);
+                    card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
+                    card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
 
-                fixOwnHandSpacing();
+                    fixOwnHandSpacing();
 
-                fixOwnBoardSpacing(event.playLoc, () => nextInEventQueue());
+                    fixOwnBoardSpacing(event.playLoc, () => nextInEventQueue());
+                }
+
+                else {
+                    AnimationQueue.addMoveRequest(card.sprite, {x: app.stage.width * .02, y: app.stage.height * .55});
+                    game.ownGraveyard.push(card);
+                }
 
             } else {
 
@@ -976,14 +989,21 @@ let GameView = (function () {
 
                 enemyCard.sprite.x = targetPlay.x + enemyCard.sprite.width / 2;
                 enemyCard.sprite.y = targetPlay.y;
-                enemyCard.boardForm();
 
-                fixEnemyHandSpacing();
+                if(enemyCard.type == 'monster') {
+                    enemyCard.boardForm();
 
-                fixEnemyBoardSpacing(event.playLoc, () => nextInEventQueue());
+                    fixEnemyHandSpacing();
 
-                enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
-                enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
+                    fixEnemyBoardSpacing(event.playLoc, () => nextInEventQueue());
+
+                    enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
+                    enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
+                }
+                else {
+                    AnimationQueue.addMoveRequest(enemyCard.sprite, {x: app.stage.width * .02, y: app.stage.height * .39});
+                    game.enemyGraveyard.push(enemyCard);
+                }
 
             }
 
@@ -1042,7 +1062,7 @@ let GameView = (function () {
                         game.ownHealth -= attacker.currentPower;
                         fixHealths();
                         fixEnemyBoardSpacing(event.attacker, () => {
-                            nextInEventQueue()
+                            nextInEventQueue();
                         });
                     });
 

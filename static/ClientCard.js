@@ -25,6 +25,9 @@ ClientCard = (function() {
         }
 
         updateText() {
+            if(this.id == -2) {
+                console.log('yup');
+            }
             this.sprite.removeChild(this.costText);
             this.costText = new PIXI.Text(this.cost, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
             this.costText.interactive = true;
@@ -42,7 +45,7 @@ ClientCard = (function() {
         displayPopup() { 
             let popup = new PIXI.Container();
 
-            let image = PIXI.Sprite.fromImage('/static/assets/cards/test_hover.png');
+            let image = IDToImage.popupFromId(this.id);
             image.width = this.sprite.width * 2;
             image.height = this.sprite.height * 2;
 
@@ -226,6 +229,7 @@ ClientCard = (function() {
     class Spell extends Card {
         constructor(backendCard) {
             super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.cost, backendCard.power, backendCard.hasDefender, backendCard.targeting);
+            this.generateImages();
         }
     }
 

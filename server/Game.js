@@ -126,6 +126,7 @@ function backendCardTranslate(card) {
 		};
 	} else {
 		return {
+            id: card.id,
 			type: card.type,
 			power: card.power,
 			tokenType: card.tokenType,
@@ -229,25 +230,27 @@ class Game {
 			this.player2.socket.emit('deck sizes', deckSizes);
 
 			this.player1.deck.shuffle();
-			this.player2.deck.shuffle();
+            this.player2.deck.shuffle();
+            
+            this.player1.deck.forEach(value => console.log(value.id));
 
-      for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
+            for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
 
-          let drawnCard = this.player1.deck.pop();
+                let drawnCard = this.player1.deck.pop();
 
-          this.player1.socket.emit('event', {
-              type: 'draw card',
-              player: 1,
-              card: backendCardTranslate(drawnCard),
-          });
+                this.player1.socket.emit('event', {
+                    type: 'draw card',
+                    player: 1,
+                    card: backendCardTranslate(drawnCard),
+                });
 
-          this.player2.socket.emit('event', {
-              type: 'draw card',
-              player: 1
-          });
+                this.player2.socket.emit('event', {
+                    type: 'draw card',
+                    player: 1
+                });
 
-          this.player1.hand.unshift(drawnCard);
-      }
+                this.player1.hand.unshift(drawnCard);
+            }
 
             for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
                 
