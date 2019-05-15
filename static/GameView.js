@@ -1162,6 +1162,9 @@ let GameView = (function () {
         } else if (event.type == 'game over') {
             gameOver(event.player);
         }
+        else if(event.type == 'damage') {
+            
+        }
 
     }
 
@@ -1184,7 +1187,7 @@ let GameView = (function () {
          * to display the game. Call this externally when you're ready to display everything.
          */
         setupDisplay: function (id, ownStartingDeckSize, enemyStartingDeckSize) {
-            
+
             /*
             This is just a test initialization of the game data. It will get better initialized later but for now this is here just
             so that the data can be used in testing.

@@ -25,11 +25,9 @@ ClientCard = (function() {
         }
 
         updateText() {
-            if(this.id == -2) {
-                console.log('yup');
-            }
+            
             this.sprite.removeChild(this.costText);
-            this.costText = new PIXI.Text(this.currentCcost, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
+            this.costText = new PIXI.Text(this.currentCost, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
             this.costText.interactive = true;
 
             this.costText.anchor.x = .5;

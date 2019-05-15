@@ -18,7 +18,7 @@ class Effect {
     
     selfAttack(input, game, eventChain) {
         this.selfAttackList.forEach(function(i) {
-            i.func(input, game, attackChain);
+            i.func(input, game, eventChain);
         });
     }
 
@@ -28,7 +28,7 @@ class Effect {
 
     enemyAttack(input, game, eventChain) {
         this.selfAttackList.forEach(function(i) {
-            i.func(input, game, attackChain);
+            i.func(input, game, eventChain);
         });
     }
 
@@ -38,7 +38,7 @@ class Effect {
 
     selfDeath(input, game, eventChain) {
         this.selfDeathList.forEach(function(i) {
-            i.func(input, game, attackChain);
+            i.func(input, game, eventChain);
         });
     }
 
@@ -48,7 +48,7 @@ class Effect {
 
     turnIncrement(input, game, eventChain) {
         this.turnIncrementList.forEach(function(i) {
-            i.func(input, game, attackChain);
+            i.func(input, game, eventChain);
         });
     }
 
@@ -58,7 +58,7 @@ class Effect {
 
     cardPlayed(input, game, eventChain) {
         this.cardPlayedList.forEach(function(i) {
-            i.func(input, game, attackChain);
+            i.func(input, game, eventChain);
         });
     }
 
@@ -68,7 +68,7 @@ class Effect {
 
     questFulfilled(input, game, eventChain) {
         this.questFulfilledList.forEach(function(i) {
-            i.func(input, game, attackChain);
+            i.func(input, game, eventChain);
         });
     }
 
