@@ -1185,7 +1185,7 @@ let GameView = (function () {
                 }
                 else {
                     game.enemyBoard[event.target].currentPower -= event.damage;
-                    game.ownBoard[event.target].updatePower();
+                    game.enemyBoard[event.target].updatePower();
                 }
             }
         }
