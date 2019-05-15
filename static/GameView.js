@@ -1186,6 +1186,7 @@ let GameView = (function () {
 
             if(txt != undefined)
                 txt.remove(); //remove the waiting text at the start of the game
+            
             /*
             This is just a test initialization of the game data. It will get better initialized later but for now this is here just
             so that the data can be used in testing.
@@ -1194,15 +1195,12 @@ let GameView = (function () {
 
             /*
 
-            This is als
-o a testing construct. Every time the pointer is pressed, this prints the pointer location. I've been using this
-            to figure o
-ut exact decimal values for locations on the board and such.
+            This is also a testing construct. Every time the pointer is pressed, this prints the pointer location. I've been using this
+            to figure out exact decimal values for locations on the board and such.
             */
 
             document.body.addEventListener('mousedown', function (event) {
-                console
-                    .log('x: ' + event.clientX / app.stage.width);
+                console.log('x: ' + event.clientX / app.stage.width);
                 console.log('y: ' + event.clientY / app.stage.height);
             });
 
