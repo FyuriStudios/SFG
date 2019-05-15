@@ -25,7 +25,7 @@ function setup() {
     music.play();
 }
 
-let txt;
+var txt;
 
 function draw() {
     //loop sound

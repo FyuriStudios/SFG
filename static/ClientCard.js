@@ -29,7 +29,7 @@ ClientCard = (function() {
                 console.log('yup');
             }
             this.sprite.removeChild(this.costText);
-            this.costText = new PIXI.Text(this.cost, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
+            this.costText = new PIXI.Text(this.currentCcost, {fontFamily: 'Helvetica', dropShadow: true, dropShadowColor: 0xffffff, fontSize: 100, fill: 0x000000, align: 'center'});
             this.costText.interactive = true;
 
             this.costText.anchor.x = .5;
@@ -228,7 +228,7 @@ ClientCard = (function() {
      */
     class Spell extends Card {
         constructor(backendCard) {
-            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.cost, backendCard.power, backendCard.hasDefender, backendCard.targeting);
+            super(backendCard.type, backendCard.is, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost, backendCard.playCost, backendCard.targeting);
             this.generateImages();
         }
     }
