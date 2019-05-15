@@ -1241,9 +1241,6 @@ let GameView = (function () {
                 if (waitGif != undefined)
                     waitGif.remove();
 
-                if (cnv != undefined)
-                    remove();
-
                 app.stage.width = innerWidth;
                 app.stage.height = innerHeight;
 
