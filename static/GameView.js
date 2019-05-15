@@ -345,7 +345,7 @@ let GameView = (function () {
 
                 this.alpha = 1;
                 
-                app.stage.removeChild(arrow);
+                app.stage.removeChild(temp.arrow);
 
                 game.enemyBoard.forEach((value, index) => {
                     if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
@@ -965,14 +965,10 @@ let GameView = (function () {
 
                     fixOwnBoardSpacing(event.playLoc, () => nextInEventQueue());
                 } else {
-                    AnimationQueue.addMoveRequest(card.sprite, {
-                        x: app.stage.width * .02,
-                        y: app.stage.height * .55
-                    }, 12, () => {
+
                         app.stage.removeChild(card.sprite);
                         game.ownGraveyard.push(card);
                         nextInEventQueue();
-                    });
                 }
 
             } else {
@@ -1007,14 +1003,10 @@ let GameView = (function () {
                     enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
                     enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
                 } else {
-                    AnimationQueue.addMoveRequest(enemyCard.sprite, {
-                        x: app.stage.width * .02,
-                        y: app.stage.height * .39
-                    }, 12, () => {
-                        app.stage.removeChild(enemyCard.sprite);
-                        game.enemyGraveyard.push(enemyCard);
-                        nextInEventQueue();
-                    });
+
+                    app.stage.removeChild(enemyCard.sprite);
+                    game.enemyGraveyard.push(enemyCard);
+                    nextInEventQueue();
                     
                 }
 
@@ -1175,7 +1167,27 @@ let GameView = (function () {
         }
         
         else if (event.type == 'damage') {
-            console.log('Damage event not implemented!');
+            //TODO: add animation for this.
+            
+            if(event.target == -1) {
+                if(event.targetSide == game.id) {
+                    game.ownHealth -= event.damage;
+                }
+                else {
+                    game.enemyHealth -= event.damage;
+                }
+                fixHealths();
+            }
+            else {
+                if(event.targetSide == game.id) {
+                    game.ownBoard[event.target].currentPower -= event.damage;
+                    game.ownBoard[event.target].updatePower();
+                }
+                else {
+                    game.enemyBoard[event.target].currentPower -= event.damage;
+                    game.ownBoard[event.target].updatePower();
+                }
+            }
         }
 
     }

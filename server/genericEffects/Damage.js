@@ -7,7 +7,7 @@ module.exports = {
         let event = {
             view: 1,
             type: 'damage',
-            player: game.currentPlayer,
+            player: game.currentPlayer.id,
             targetSide: input.targetSide,
             target: input.target,
             damage: damage,
