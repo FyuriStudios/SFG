@@ -14,7 +14,9 @@ let damageWrapper = {
     name: 'damage',
     
     func: function(input, game, eventChain) {
-        require('../genericEffects/Damage')(input, game, eventChain, 1 /*1 is the damage that this spell deals.*/);
+        let damage = require('../genericEffects/Damage');
+
+        damage(input, game, eventChain, 1);
     }
 }
 
