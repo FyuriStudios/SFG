@@ -206,6 +206,7 @@ let GameView = (function () {
             game.hand.forEach((val) => val.sprite == this ? temp = val : null);
 
             if(temp.type == 'spell') {
+                arrowDragging = true;
                 this.alpha = 0;
                 app.stage.addChild(temp.arrow);
                 temp.arrow.x = this.x;
@@ -255,7 +256,7 @@ let GameView = (function () {
 
                 }
 
-            } else if (temp.type != 'spell' && temp.targeting) {
+            } else if (temp.type != 'spell') {
                 let temp;
                 game.hand.forEach((val) => val.sprite == this ? temp = val : null);
 
@@ -275,11 +276,8 @@ let GameView = (function () {
      */
     let onDragFromHandEnd = function (eventObj) {
 
-        /*
-        Unset the fields from earlier because we aren't using them anymore.
-        */
         this.dragging = false;
-        this.dragData = undefined;
+        
 
         let temp = this;
         game.hand.forEach((val) => val.sprite == temp ? temp = val : null);
@@ -339,47 +337,55 @@ let GameView = (function () {
 
         else {
             
-            if (temp.targeting) {
+            if(temp.targeting) {
 
-                app.stage.removeChild(temp.arrow);
-                temp.sprite.alpha = 1;
+                let pos = this.dragData.getLocalPosition(this.parent);
+
+                this.alpha = 1;
+                
+                app.stage.removeChild(arrow);
 
                 game.enemyBoard.forEach((value, index) => {
-                    if(pointIntersectsWithSprite(pos, value))
+                    if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
+                        value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y) {
                         outputFunc({
                             type: 'play card',
                             handLoc: handLoc,
+                            target: index,
                             targetSide: game.id == 1?2:1,
-                            target: index
                         });
+                    }
                 });
-                
+
                 game.ownBoard.forEach((value, index) => {
-                    if(pointIntersectsWithSprite(pos, value))
+                    if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
+                        value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y) {
                         outputFunc({
                             type: 'play card',
                             handLoc: handLoc,
+                            target: index,
                             targetSide: game.id,
-                            target: index
                         });
+                    }
                 });
-    
-                if(app.stage.width * .435 <= temp.x && app.stage.width * .548 >= temp.x && app.stage.height * .0121 <= temp.y && app.stage.height * .189 >= temp.y)
+
+                if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y) {
                     outputFunc({
-                        type: 'play card',
-                        handLoc: handLoc, 
-                        targetSide: game.id == 1?2:1,
+                        type: 'attack',
+                        player: game.id,
                         target: -1,
+                        targetSide: game.id == 1?2:1,
                     });
+                }
 
-                else if (app.stage.with * .435 <= temp.x && app.stage.width * .548 >= temp.x && app.stage.height * .75 <= temp.y && app.stage.height * 1 >= temp.y)
-                outputFunc({
-                    type: 'play card',
-                    handLoc: handLoc, 
-                    targetSide: game.id,
-                    target: -1,
-                });
-
+                else if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .75 <= pos.y && app.stage.height * .95 >= pos.y) {
+                    outputFunc({
+                        type: 'attack',
+                        player: game.id,
+                        target: -1,
+                        targetSide: game.id,
+                    });
+                }
 
             }
             else if (!(this.x > fieldBounds.x + fieldBounds.width ||
@@ -391,6 +397,8 @@ let GameView = (function () {
                     handLoc: handLoc,
                 });
             }
+
+            arrowDragging = false;
         }
 
         /**
@@ -401,6 +409,9 @@ let GameView = (function () {
             this.x = this.originalPos.x;
             this.y = this.originalPos.y;
         }
+
+        this.dragging = false;
+        this.dragData = undefined;
     }
 
     /**
@@ -413,6 +424,7 @@ let GameView = (function () {
     }
 
     function pointIntersectsWithSprite(point, sprite) {
+        console.log('checking intersection');
         if(sprite.x - sprite.width / 2 <= point.x && sprite.x + sprite.width / 2 >= point.x &&
             sprite.y - value.sprite.height / 2 <= point.y && sprite.y + sprite.height / 2 >= point.y)
             return true;
@@ -856,72 +868,6 @@ let GameView = (function () {
         });
     }
 
-    // function findTarget(canTargetFriendly, callback) {
-
-    //     let arrow = new PIXI.Sprite(textures.arrowHead);
-
-    //     arrow.width = .07 * app.stage.width;
-    //     arrow.height = .105 * app.stage.height;
-
-    //     arrow.anchor.x = arrow.anchor.y = .5;
-
-    //     arrowDragging = true;
-
-    //     app.stage.addChild(arrow);
-
-    //     let mouseDragMove = function () {
-    //         let pos = {
-    //             x: PIXI.renderer.plugins.interaction.mouse.global.x,
-    //             y: PIXI.renderer.plugins.interaction.mouse.global.y,
-    //         };
-
-    //         let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
-
-    //         arrow.x = pos.x;
-    //         arrow.y = pos.y;
-
-    //         arrow.rotation = 3.14 - angle;
-    //     }
-
-    //     let mouseDown = function () {
-
-    //         let pos = {
-    //             x: renderer.plugins.interaction.mouse.global.x,
-    //             y: renderer.plugins.interaction.mouse.global.y,
-    //         };
-
-    //         game.enemyBoard.forEach((value, index) => {
-    //             if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
-    //                 value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y)
-    //                 completion(game.id == 1 ? 2 : 1, index);
-    //         });
-
-    //         if (canTargetFriendly)
-    //             game.ownBoard.forEach((value, index) => {
-    //                 if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
-    //                     value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y)
-    //                     completion(game.id, index);
-    //             });
-
-    //         if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y)
-    //             completion(game.id == 1 ? 2 : 1, -1);
-    //         else if (app.stage.with * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .75 <= pos.y && app.stage.height * 1 >= pos.y)
-    //             completion(game.id, -1);
-
-    //     }
-
-    //     let completion = function (playerSide, target) {
-    //         app.ticker.remove(tickerMethod);
-    //         document.removeEventListener('mousedown', mouseDownMethod);
-    //         app.stage.removeChild(arrow);
-    //         arrowDragging = false;
-    //         callback(playerSide, target);
-    //     }
-
-    //     app.ticker.add(tickerMethod);
-    //     document.addEventListener('mousedown', mouseDownMethod);
-
-    // }
 
     function nextInEventQueue() {
 
