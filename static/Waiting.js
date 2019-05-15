@@ -12,8 +12,6 @@ var waitGameImage;
 var waitPlayersImage;
 var waitGif;
 
-var cnv;
-
 function preload() {
     //create launchGif object
     waitGif = createImg('/static/assets/launchAnimation.gif');
@@ -33,7 +31,7 @@ function setup() {
     waitGameImage.hide();
     waitPlayersImage.position(0, 0);
 
-    cnv = createCanvas(innerWidth, innerHeight); //create p5.js canvas element
+    createCanvas(innerWidth, innerHeight); //create p5.js canvas element
 
     beginTime = floor((new Date).getTime() / 1000);
 
@@ -54,7 +52,6 @@ function draw() {
         waitGameImage.show();
         music.stop();
         noLoop();
-        //remove();
     } else {
         let currentTime = floor((new Date).getTime() / 1000);
         let timeElapsed = currentTime - beginTime;
