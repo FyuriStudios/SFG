@@ -204,7 +204,7 @@ let GameView = (function () {
                     this.y > fieldBounds.y + fieldBounds.height ||
                     this.y + this.height < fieldBounds.y) && temp.type != 'spell') {
                 this.alpha = 0;
-                
+
                 temp.monsterContainer.x = this.x - this.width / 2;
                 temp.monsterContainer.y = this.y - this.height / 2;
                 temp.monsterContainer.width = this.width * 1.1;
@@ -234,7 +234,7 @@ let GameView = (function () {
 
                 }
 
-            } else if(temp.type != spell) {
+            } else if (temp.type != spell) {
                 let temp;
                 game.hand.forEach((val) => val.sprite == this ? temp = val : null);
 
@@ -285,7 +285,7 @@ let GameView = (function () {
         */
         game.hand.forEach((element, index) => element.sprite == this ? handLoc = index : null);
 
-        if(temp.type == 'monster') {
+        if (temp.type == 'monster') {
 
             slideCards();
 
@@ -300,7 +300,7 @@ let GameView = (function () {
                     this.x + this.width < fieldBounds.x ||
                     this.y > fieldBounds.y + fieldBounds.height ||
                     this.y + this.height < fieldBounds.y)) {
-    
+
 
                 /*
                 Call outputFunc with an event. Events from the backend to the frontend are similar to events going in the other direction,
@@ -313,14 +313,12 @@ let GameView = (function () {
                 });
 
                 this.spotForCard = undefined;
-            } 
-        }
-
-        else {
-            if(temp.targeting && !(this.x > fieldBounds.x + fieldBounds.width ||
-                this.x + this.width < fieldBounds.x ||
-                this.y > fieldBounds.y + fieldBounds.height ||
-                this.y + this.height < fieldBounds.y)) {
+            }
+        } else {
+            if (temp.targeting && !(this.x > fieldBounds.x + fieldBounds.width ||
+                    this.x + this.width < fieldBounds.x ||
+                    this.y > fieldBounds.y + fieldBounds.height ||
+                    this.y + this.height < fieldBounds.y)) {
                 findTarget(true, (targetSide, target) => {
                     outputFunc({
                         type: 'play card',
@@ -332,7 +330,7 @@ let GameView = (function () {
             } else {
                 outputFunc({
                     type: 'play card',
-                    handLoc:handLoc,
+                    handLoc: handLoc,
                 });
             }
         }
@@ -668,7 +666,7 @@ let GameView = (function () {
 
     function onMouseDragCardOnBoardMove(eventObj) {
 
-        if(this.dragging && arrowDragging) {
+        if (this.dragging && arrowDragging) {
             let pos = this.dragData.getLocalPosition(this.parent);
             let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
 
@@ -808,7 +806,7 @@ let GameView = (function () {
 
         console.log('made it to here');
 
-        let tickerMethod = function() {
+        let tickerMethod = function () {
             let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
             let pos = {
                 x: renderer.plugins.interaction.mouse.global.x,
@@ -817,12 +815,12 @@ let GameView = (function () {
 
             arrow.x = pos.x;
             arrow.y = pos.y;
-    
+
             arrow.rotation = 3.14 - angle;
         }
 
-        let mouseDownMethod = function(){
-            
+        let mouseDownMethod = function () {
+
             let pos = {
                 x: renderer.plugins.interaction.mouse.global.x,
                 y: renderer.plugins.interaction.mouse.global.y,
@@ -830,25 +828,25 @@ let GameView = (function () {
 
             game.enemyBoard.forEach((value, index) => {
                 if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
-                    value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y)             
-                    completion(game.id == 1? 2:1, index);
+                    value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y)
+                    completion(game.id == 1 ? 2 : 1, index);
             });
 
-            if(canTargetFriendly)
+            if (canTargetFriendly)
                 game.ownBoard.forEach((value, index) => {
                     if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
                         value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y)
                         completion(game.id, index);
                 });
 
-            if(app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y)
-                completion(game.id == 1? 2:1, -1);
-            else if(app.stage.with * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .75 <= pos.y && app.stage.height * 1 >= pos.y)
+            if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y)
+                completion(game.id == 1 ? 2 : 1, -1);
+            else if (app.stage.with * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .75 <= pos.y && app.stage.height * 1 >= pos.y)
                 completion(game.id, -1);
 
         }
 
-        let completion = function(playerSide, target) {
+        let completion = function (playerSide, target) {
             app.ticker.remove(tickerMethod);
             document.removeEventListener('mousedown', mouseDownMethod);
             app.stage.removeChild(arrow);
@@ -936,8 +934,8 @@ let GameView = (function () {
                 fixTokens();
 
                 let card = game.hand.splice(event.handLoc, 1)[0]; //remove the card at the relevant location in the player's hand
-                
-                if(card.type == 'monster') {
+
+                if (card.type == 'monster') {
                     game.ownBoard.splice(event.playLoc, 0, card); //insert the card at the correct location in the player's board
                     card.boardForm();
 
@@ -963,10 +961,11 @@ let GameView = (function () {
                     fixOwnHandSpacing();
 
                     fixOwnBoardSpacing(event.playLoc, () => nextInEventQueue());
-                }
-
-                else {
-                    AnimationQueue.addMoveRequest(card.sprite, {x: app.stage.width * .02, y: app.stage.height * .55});
+                } else {
+                    AnimationQueue.addMoveRequest(card.sprite, {
+                        x: app.stage.width * .02,
+                        y: app.stage.height * .55
+                    });
                     game.ownGraveyard.push(card);
                 }
 
@@ -992,7 +991,7 @@ let GameView = (function () {
                 enemyCard.sprite.x = targetPlay.x + enemyCard.sprite.width / 2;
                 enemyCard.sprite.y = targetPlay.y;
 
-                if(enemyCard.type == 'monster') {
+                if (enemyCard.type == 'monster') {
                     enemyCard.boardForm();
 
                     fixEnemyHandSpacing();
@@ -1001,9 +1000,11 @@ let GameView = (function () {
 
                     enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
                     enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
-                }
-                else {
-                    AnimationQueue.addMoveRequest(enemyCard.sprite, {x: app.stage.width * .02, y: app.stage.height * .39});
+                } else {
+                    AnimationQueue.addMoveRequest(enemyCard.sprite, {
+                        x: app.stage.width * .02,
+                        y: app.stage.height * .39
+                    });
                     game.enemyGraveyard.push(enemyCard);
                 }
 
@@ -1183,9 +1184,6 @@ let GameView = (function () {
          * to display the game. Call this externally when you're ready to display everything.
          */
         setupDisplay: function (id, ownStartingDeckSize, enemyStartingDeckSize) {
-
-            if(txt != undefined)
-                txt.remove(); //remove the waiting text at the start of the game
             /*
             This is just a test initialization of the game data. It will get better initialized later but for now this is here just
             so that the data can be used in testing.
@@ -1210,6 +1208,9 @@ ut exact decimal values for locations on the board and such.
             Don't touch this. Everything breaks if you do.
             */
             setTimeout(() => {
+                if (txt != undefined)
+                    txt.remove(); //remove the waiting text if the little bugger tries to come back
+
                 app.stage.width = innerWidth;
                 app.stage.height = innerHeight;
 
