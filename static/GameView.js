@@ -966,6 +966,7 @@ let GameView = (function () {
                     fixOwnBoardSpacing(event.playLoc, () => nextInEventQueue());
                 } else {
 
+                        fixOwnHandSpacing();
                         app.stage.removeChild(card.sprite);
                         game.ownGraveyard.push(card);
                         nextInEventQueue();
@@ -994,18 +995,18 @@ let GameView = (function () {
                 enemyCard.sprite.y = targetPlay.y;
 
                 if (enemyCard.type == 'monster') {
+
                     enemyCard.boardForm();
-
                     fixEnemyHandSpacing();
-
                     fixEnemyBoardSpacing(event.playLoc, () => nextInEventQueue());
-
                     enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
                     enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
+
                 } else {
 
                     app.stage.removeChild(enemyCard.sprite);
                     game.enemyGraveyard.push(enemyCard);
+                    fixEnemyHandSpacing();
                     nextInEventQueue();
                     
                 }
@@ -1019,6 +1020,7 @@ let GameView = (function () {
             }
 
             nextInEventQueue();
+            
         } else if (event.type == 'start turn') {
 
             if (event.player == game.id) {

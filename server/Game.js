@@ -281,11 +281,12 @@ class Game {
 
       
             this.player1.socket.on('event', input => {
+                console.log(input);
                 this.processEvent(this.player1, input);
-                
             });
 
             this.player2.socket.on('event', input => {
+                console.log(input);
                 this.processEvent(this.player2, input);
             });
 
@@ -482,7 +483,6 @@ class Game {
                 }
             });
             //TODO: add effects
-
 			this.killDead(eventChain);
 		}
 	}
@@ -525,7 +525,7 @@ class Game {
 		else
 			temp.sToks -= toPlay.currentCost;
 
-		temp.hand = temp.hand.splice(input.cardLocation); //this line also might not work, but it's supposed to remove the card at input.cardLocation
+		temp.hand.splice(input.cardLocation, 1); //this line also might not work, but it's supposed to remove the card at input.cardLocation
 
         eventChain.push(event);
 
@@ -534,7 +534,6 @@ class Game {
 			//TODO: add battlecry effect
 		} else if(toPlay.type == 'spell') {
             toPlay.cardPlayed(input, this, eventChain);
-            console.log(eventChain);
         }
 	}
 
@@ -587,6 +586,8 @@ class Game {
 	 * @param {*} eventChain
 	 */
 	endTurn(input, eventChain) {
+
+        console.log(this.currentPlayer.id);
 
 		eventChain.push({
 			type: 'end turn',
