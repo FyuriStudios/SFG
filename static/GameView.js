@@ -167,7 +167,7 @@ let GameView = (function () {
         */
         this.dragging = true;
 
-        if(temp.type == 'spell' && temp.targeting) {
+        if (temp.type == 'spell' && temp.targeting) {
             temp.arrow = new PIXI.Sprite(textures.arrowHead);
 
             temp.arrow.width = .07 * app.stage.width;
@@ -212,7 +212,7 @@ let GameView = (function () {
                 temp.arrow.x = this.x;
                 temp.arrow.y = this.y;
 
-                let angle = Math.atan2(pos.x - app.stage.width/2, pos.y - app.stage.height * .75);
+                let angle = Math.atan2(pos.x - app.stage.width / 2, pos.y - app.stage.height * .75);
 
                 temp.arrow.rotation = 3.14 - angle;
             }
@@ -333,9 +333,7 @@ let GameView = (function () {
 
                 this.spotForCard = undefined;
             }
-        } 
-
-        else {
+        } else {
             
             if(temp.targeting) {
 
@@ -387,11 +385,10 @@ let GameView = (function () {
                     });
                 }
 
-            }
-            else if (!(this.x > fieldBounds.x + fieldBounds.width ||
-                this.x + this.width < fieldBounds.x ||
-                this.y > fieldBounds.y + fieldBounds.height ||
-                this.y + this.height < fieldBounds.y)) {
+            } else if (!(this.x > fieldBounds.x + fieldBounds.width ||
+                    this.x + this.width < fieldBounds.x ||
+                    this.y > fieldBounds.y + fieldBounds.height ||
+                    this.y + this.height < fieldBounds.y)) {
                 outputFunc({
                     type: 'play card',
                     handLoc: handLoc,
@@ -421,14 +418,6 @@ let GameView = (function () {
     function smallSizeCardInHandSprite(card) {
         card.width = app.stage.width * .086;
         card.height = app.stage.height * .21;
-    }
-
-    function pointIntersectsWithSprite(point, sprite) {
-        console.log('checking intersection');
-        if(sprite.x - sprite.width / 2 <= point.x && sprite.x + sprite.width / 2 >= point.x &&
-            sprite.y - value.sprite.height / 2 <= point.y && sprite.y + sprite.height / 2 >= point.y)
-            return true;
-        return false;
     }
 
     /**
@@ -1171,8 +1160,9 @@ let GameView = (function () {
             gameOver(game.id);
         } else if (event.type == 'game over') {
             gameOver(event.player);
-        }
-        else if(event.type == 'damage') {
+        } else if (event.type == 'damage') {
+
+        } else if (event.type == 'damage') {
             console.log('Damage event not implemented!');
         }
 
@@ -1219,10 +1209,14 @@ let GameView = (function () {
             Don't touch this. Everything breaks if you do.
             */
             setTimeout(() => {
-                if(txt != undefined)
-                    txt.remove(); //remove the waiting text if the little bugger tries to come back
-                else
-                    setTimeout(() => {if(txt!= undefined) txt.remove()}, 4000); //if he's still not around, we'll try one more time.
+                if (waitGameImage != undefined)
+                    waitGameImage.remove(); //remove the waiting text if the little bugger tries to come back
+
+                if (waitGif != undefined)
+                    waitGif.remove();
+
+                if (cnv != undefined)
+                    remove();
 
                 app.stage.width = innerWidth;
                 app.stage.height = innerHeight;

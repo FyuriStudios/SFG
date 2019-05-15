@@ -8,24 +8,37 @@ let beginTime; //keep track of time elapsed until game begins
 let gameStarting = false;
 let music;
 
+var waitGameImage;
+var waitPlayersImage;
+var waitGif;
+
+var cnv;
+
 function preload() {
     //create launchGif object
     waitGif = createImg('/static/assets/launchAnimation.gif');
+    waitGameImage = createImg('/static/assets/WaitGameImage.png');
+    waitPlayersImage = createImg('/static/assets/WaitPlayersImage.png');
 
     //load music
     music = loadSound('/static/assets/sounds/STRUGGLE_FOR_GERA.m4a');
+
+    //load font
+    timeFont = loadFont('/static/assets/fonts/Piedra-Regular.ttf');
 }
 
 function setup() {
     waitGif.position(0, 0);
-    createCanvas(innerWidth, innerHeight); //create p5.js canvas element
+    waitGameImage.position(0, 0);
+    waitGameImage.hide();
+    waitPlayersImage.position(0, 0);
+
+    cnv = createCanvas(innerWidth, innerHeight); //create p5.js canvas element
 
     beginTime = floor((new Date).getTime() / 1000);
 
     music.play();
 }
-
-var txt;
 
 function draw() {
     //loop sound
@@ -34,25 +47,27 @@ function draw() {
 
     clear();
 
-    let fontSize = width / 20;
-    textSize(fontSize);
-    textFont('Georgia');
-    textStyle(BOLD);
-    textAlign(CENTER);
-
     if (gameStarting) {
         fill(200, 0, 0);
-        txt = text('GAME IS STARTING', width / 2, height / 2);
-        waitGif.remove();
+        //text('GAME IS STARTING', width / 2, height / 2);
+        waitPlayersImage.remove();
+        waitGameImage.show();
         music.stop();
         noLoop();
+        //remove();
     } else {
         let currentTime = floor((new Date).getTime() / 1000);
         let timeElapsed = currentTime - beginTime;
 
-        fill(0);
-        text('WAITING FOR OTHER PLAYER', width / 2, (height / 2) - fontSize);
-        text('TIME ELAPSED: ' + timeElapsed + ' SEC', width / 2, (height / 2) + fontSize);
+        fill(255);
+        let fontSize = width / 20;
+        textSize(fontSize);
+        textFont(timeFont);
+        textStyle(BOLD);
+        textAlign(CENTER);
+        stroke(0);
+        strokeWeight(fontSize / 20);
+        text(timeElapsed + "s", (width / 2) + (3 * width / 13), (height / 2) + (3 * height / 11));
     }
 }
 
