@@ -333,6 +333,7 @@ let GameView = (function () {
 
                 this.spotForCard = undefined;
             }
+            
         } else {
             
             if(temp.targeting) {
