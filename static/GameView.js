@@ -1161,9 +1161,8 @@ let GameView = (function () {
             gameOver(game.id);
         } else if (event.type == 'game over') {
             gameOver(event.player);
-        }
-        else if(event.type == 'damage') {
-            
+        } else if (event.type == 'damage') {
+
         }
 
     }
@@ -1209,8 +1208,8 @@ let GameView = (function () {
             Don't touch this. Everything breaks if you do.
             */
             setTimeout(() => {
-                if (txt != undefined)
-                    txt.remove(); //remove the waiting text if the little bugger tries to come back
+                if (waitImage != undefined)
+                    waitImage.remove(); //remove the waiting text if the little bugger tries to come back
 
                 app.stage.width = innerWidth;
                 app.stage.height = innerHeight;
