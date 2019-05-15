@@ -228,7 +228,7 @@ ClientCard = (function() {
      */
     class Spell extends Card {
         constructor(backendCard) {
-            super(backendCard.type, backendCard.is, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost, backendCard.playCost, backendCard.targeting);
+            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost, backendCard.playCost, backendCard.targeting);
             this.generateImages();
         }
     }
