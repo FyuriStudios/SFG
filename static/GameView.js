@@ -1275,8 +1275,8 @@ let GameView = (function () {
             Don't touch this. Everything breaks if you do.
             */
             setTimeout(() => {
-                if (waitImage != undefined)
-                    waitImage.remove(); //remove the waiting text if the little bugger tries to come back
+                if (waitGameImage != undefined)
+                    waitGameImage.remove(); //remove the waiting text if the little bugger tries to come back
 
                 app.stage.width = innerWidth;
                 app.stage.height = innerHeight;

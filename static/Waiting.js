@@ -14,14 +14,14 @@ var waitPlayersImage;
 function preload() {
     //create launchGif object
     waitGif = createImg('/static/assets/launchAnimation.gif');
-    waitGameImage = createImg('/static/assets/waitGameImage.png');
-    waitPlayersImage = createImg('/static/assets/waitPlayerImage.png');
+    waitGameImage = createImg('/static/assets/WaitGameImage.png');
+    waitPlayersImage = createImg('/static/assets/WaitPlayersImage.png');
 
     //load music
     music = loadSound('/static/assets/sounds/STRUGGLE_FOR_GERA.m4a');
 
     //load font
-    timeFont = loadFont('/assets/fonts/Piedra-Regular.ttf')
+    timeFont = loadFont('/static/assets/fonts/Piedra-Regular.ttf');
 }
 
 function setup() {
@@ -51,19 +51,21 @@ function draw() {
         waitPlayersImage.remove();
         waitGameImage.show();
         music.stop();
-        remove();
         noLoop();
+        //remove();
     } else {
         let currentTime = floor((new Date).getTime() / 1000);
         let timeElapsed = currentTime - beginTime;
 
-        fill(0);
+        fill(255);
         let fontSize = width / 20;
         textSize(fontSize);
         textFont(timeFont);
         textStyle(BOLD);
         textAlign(CENTER);
-        text(timeElapsed, width / 2, (height / 2) + fontSize);
+        stroke(0);
+        strokeWeight(fontSize / 20);
+        text(timeElapsed + "s", (width / 2) + (3 * width / 13), (height / 2) + (3 * height / 11));
     }
 }
 
