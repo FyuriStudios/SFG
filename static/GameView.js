@@ -806,6 +806,8 @@ let GameView = (function () {
 
         app.stage.addChild(arrow);
 
+        console.log('made it to here');
+
         let tickerMethod = function() {
             let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
             let pos = {

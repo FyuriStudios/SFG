@@ -133,7 +133,7 @@ function backendCardTranslate(card) {
 			rarity: card.rarity,
 			name: card.name,
 			cost: card.cost,
-            playCost: card.playCost,
+            playCost: card.currentCost,
             targeting: card.targeting,
 		};
 	}
@@ -533,7 +533,7 @@ class Game {
 			temp.board.splice(input.playLocation, 0, toPlay);
 			//TODO: add battlecry effect
 		} else if(toPlay.type == 'spell') {
-            toPlay.onCardPlayed(input, this, eventChain);
+            toPlay.cardPlayed(input, this, eventChain);
             //TODO: add code here
         }    
         this.killDead(eventChain);
