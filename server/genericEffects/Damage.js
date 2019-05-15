@@ -12,11 +12,11 @@ module.exports = {
 
         let player = input.targetSide == 1? game.player1: game.player2;
 
-        if(target == -1) {
+        if(input.target == -1) {
             player.health -= damage;
         }
         else {
-            let card = player.board[target];
+            let card = player.board[input.target];
             card.currentPower -= damage;
         }
 

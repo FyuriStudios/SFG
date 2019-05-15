@@ -166,6 +166,16 @@ let GameView = (function () {
         Define another property on this object saying "hey, this is currently being dragged!!1"
         */
         this.dragging = true;
+
+        if(temp.type == 'spell' && temp.targeting) {
+            temp.arrow = new PIXI.Sprite(textures.arrowHead);
+
+            temp.arrow.width = .07 * app.stage.width;
+            temp.arrow.height = .105 * app.stage.height;
+
+            temp.arrow.anchor.x = arrow.anchor.y = .5;
+        }
+
     }
 
     /**
@@ -177,7 +187,7 @@ let GameView = (function () {
         We have to make sure that the card is actually being dragged so that we don't drag cards that haven't been selected for dragging
         already.
         */
-        if (this.dragging && !arrowDragging) {
+        if (this.dragging) {
             /*
             We update the position of the card to the position of the cursor.
             */
@@ -195,14 +205,25 @@ let GameView = (function () {
             let temp;
             game.hand.forEach((val) => val.sprite == this ? temp = val : null);
 
+            if(temp.type == 'spell') {
+                this.alpha = 0;
+                app.stage.addChild(temp.arrow);
+                temp.arrow.x = this.x;
+                temp.arrow.y = this.y;
+
+                let angle = Math.atan2(pos.x - app.stage.width/2, pos.y - app.stage.height * .75);
+
+                temp.arrow.rotation = 3.14 - angle;
+            }
+
             /*
             This if statement checks to see if the card is intersecting with the field rectangle. Look up "check for rectangle intersection"
             on StackOverflow if you're curious about what this does.
             */
-            if (!(this.x > fieldBounds.x + fieldBounds.width ||
+            else if (!(this.x > fieldBounds.x + fieldBounds.width ||
                     this.x + this.width < fieldBounds.x ||
                     this.y > fieldBounds.y + fieldBounds.height ||
-                    this.y + this.height < fieldBounds.y) && temp.type != 'spell') {
+                    this.y + this.height < fieldBounds.y)) {
                 this.alpha = 0;
 
                 temp.monsterContainer.x = this.x - this.width / 2;
@@ -234,7 +255,7 @@ let GameView = (function () {
 
                 }
 
-            } else if (temp.type != spell) {
+            } else if (temp.type != 'spell' && temp.targeting) {
                 let temp;
                 game.hand.forEach((val) => val.sprite == this ? temp = val : null);
 
@@ -314,20 +335,57 @@ let GameView = (function () {
 
                 this.spotForCard = undefined;
             }
-        } else {
-            if (temp.targeting && !(this.x > fieldBounds.x + fieldBounds.width ||
-                    this.x + this.width < fieldBounds.x ||
-                    this.y > fieldBounds.y + fieldBounds.height ||
-                    this.y + this.height < fieldBounds.y)) {
-                findTarget(true, (targetSide, target) => {
+        } 
+
+        else {
+            
+            if (temp.targeting) {
+
+                app.stage.removeChild(temp.arrow);
+                temp.sprite.alpha = 1;
+
+                game.enemyBoard.forEach((value, index) => {
+                    if(pointIntersectsWithSprite(pos, value))
+                        outputFunc({
+                            type: 'play card',
+                            handLoc: handLoc,
+                            targetSide: game.id == 1?2:1,
+                            target: index
+                        });
+                });
+                
+                game.ownBoard.forEach((value, index) => {
+                    if(pointIntersectsWithSprite(pos, value))
+                        outputFunc({
+                            type: 'play card',
+                            handLoc: handLoc,
+                            targetSide: game.id,
+                            target: index
+                        });
+                });
+    
+                if(app.stage.width * .435 <= temp.x && app.stage.width * .548 >= temp.x && app.stage.height * .0121 <= temp.y && app.stage.height * .189 >= temp.y)
                     outputFunc({
                         type: 'play card',
-                        handLoc: handLoc,
-                        targetSide: targetSide,
-                        target: target,
+                        handLoc: handLoc, 
+                        targetSide: game.id == 1?2:1,
+                        target: -1,
                     });
+
+                else if (app.stage.with * .435 <= temp.x && app.stage.width * .548 >= temp.x && app.stage.height * .75 <= temp.y && app.stage.height * 1 >= temp.y)
+                outputFunc({
+                    type: 'play card',
+                    handLoc: handLoc, 
+                    targetSide: game.id,
+                    target: -1,
                 });
-            } else {
+
+
+            }
+            else if (!(this.x > fieldBounds.x + fieldBounds.width ||
+                this.x + this.width < fieldBounds.x ||
+                this.y > fieldBounds.y + fieldBounds.height ||
+                this.y + this.height < fieldBounds.y)) {
                 outputFunc({
                     type: 'play card',
                     handLoc: handLoc,
@@ -352,6 +410,13 @@ let GameView = (function () {
     function smallSizeCardInHandSprite(card) {
         card.width = app.stage.width * .086;
         card.height = app.stage.height * .21;
+    }
+
+    function pointIntersectsWithSprite(point, sprite) {
+        if(sprite.x - sprite.width / 2 <= point.x && sprite.x + sprite.width / 2 >= point.x &&
+            sprite.y - value.sprite.height / 2 <= point.y && sprite.y + sprite.height / 2 >= point.y)
+            return true;
+        return false;
     }
 
     /**
@@ -791,73 +856,72 @@ let GameView = (function () {
         });
     }
 
-    function findTarget(canTargetFriendly, callback) {
+    // function findTarget(canTargetFriendly, callback) {
 
-        let arrow = PIXI.Sprite(textures.arrowHead)
+    //     let arrow = new PIXI.Sprite(textures.arrowHead);
 
-        arrow.width = .07 * app.stage.width;
-        arrow.height = .105 * app.stage.height;
+    //     arrow.width = .07 * app.stage.width;
+    //     arrow.height = .105 * app.stage.height;
 
-        arrow.anchor.x = arrow.anchor.y = .5;
+    //     arrow.anchor.x = arrow.anchor.y = .5;
 
-        arrowDragging = true;
+    //     arrowDragging = true;
 
-        app.stage.addChild(arrow);
+    //     app.stage.addChild(arrow);
 
-        console.log('made it to here');
+    //     let mouseDragMove = function () {
+    //         let pos = {
+    //             x: PIXI.renderer.plugins.interaction.mouse.global.x,
+    //             y: PIXI.renderer.plugins.interaction.mouse.global.y,
+    //         };
 
-        let tickerMethod = function () {
-            let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
-            let pos = {
-                x: renderer.plugins.interaction.mouse.global.x,
-                y: renderer.plugins.interaction.mouse.global.y,
-            };
+    //         let angle = Math.atan2(pos.x - this.originalPos.x, pos.y - this.originalPos.y);
 
-            arrow.x = pos.x;
-            arrow.y = pos.y;
+    //         arrow.x = pos.x;
+    //         arrow.y = pos.y;
 
-            arrow.rotation = 3.14 - angle;
-        }
+    //         arrow.rotation = 3.14 - angle;
+    //     }
 
-        let mouseDownMethod = function () {
+    //     let mouseDown = function () {
 
-            let pos = {
-                x: renderer.plugins.interaction.mouse.global.x,
-                y: renderer.plugins.interaction.mouse.global.y,
-            };
+    //         let pos = {
+    //             x: renderer.plugins.interaction.mouse.global.x,
+    //             y: renderer.plugins.interaction.mouse.global.y,
+    //         };
 
-            game.enemyBoard.forEach((value, index) => {
-                if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
-                    value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y)
-                    completion(game.id == 1 ? 2 : 1, index);
-            });
+    //         game.enemyBoard.forEach((value, index) => {
+    //             if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
+    //                 value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y)
+    //                 completion(game.id == 1 ? 2 : 1, index);
+    //         });
 
-            if (canTargetFriendly)
-                game.ownBoard.forEach((value, index) => {
-                    if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
-                        value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y)
-                        completion(game.id, index);
-                });
+    //         if (canTargetFriendly)
+    //             game.ownBoard.forEach((value, index) => {
+    //                 if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
+    //                     value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y)
+    //                     completion(game.id, index);
+    //             });
 
-            if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y)
-                completion(game.id == 1 ? 2 : 1, -1);
-            else if (app.stage.with * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .75 <= pos.y && app.stage.height * 1 >= pos.y)
-                completion(game.id, -1);
+    //         if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y)
+    //             completion(game.id == 1 ? 2 : 1, -1);
+    //         else if (app.stage.with * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .75 <= pos.y && app.stage.height * 1 >= pos.y)
+    //             completion(game.id, -1);
 
-        }
+    //     }
 
-        let completion = function (playerSide, target) {
-            app.ticker.remove(tickerMethod);
-            document.removeEventListener('mousedown', mouseDownMethod);
-            app.stage.removeChild(arrow);
-            arrowDragging = false;
-            callback(playerSide, target);
-        }
+    //     let completion = function (playerSide, target) {
+    //         app.ticker.remove(tickerMethod);
+    //         document.removeEventListener('mousedown', mouseDownMethod);
+    //         app.stage.removeChild(arrow);
+    //         arrowDragging = false;
+    //         callback(playerSide, target);
+    //     }
 
-        app.ticker.add(tickerMethod);
-        document.addEventListener('mousedown', mouseDownMethod);
+    //     app.ticker.add(tickerMethod);
+    //     document.addEventListener('mousedown', mouseDownMethod);
 
-    }
+    // }
 
     function nextInEventQueue() {
 
@@ -1163,6 +1227,9 @@ let GameView = (function () {
             gameOver(event.player);
         } else if (event.type == 'damage') {
 
+        }
+        else if(event.type == 'damage') {
+            console.log('Damage event not implemented!');
         }
 
     }
