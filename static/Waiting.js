@@ -10,6 +10,9 @@ let music;
 
 var waitGameImage;
 var waitPlayersImage;
+var waitGif;
+
+var cnv;
 
 function preload() {
     //create launchGif object
@@ -30,7 +33,7 @@ function setup() {
     waitGameImage.hide();
     waitPlayersImage.position(0, 0);
 
-    createCanvas(innerWidth, innerHeight); //create p5.js canvas element
+    cnv = createCanvas(innerWidth, innerHeight); //create p5.js canvas element
 
     beginTime = floor((new Date).getTime() / 1000);
 
@@ -47,7 +50,6 @@ function draw() {
     if (gameStarting) {
         fill(200, 0, 0);
         //text('GAME IS STARTING', width / 2, height / 2);
-        waitGif.remove();
         waitPlayersImage.remove();
         waitGameImage.show();
         music.stop();

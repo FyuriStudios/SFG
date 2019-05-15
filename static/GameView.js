@@ -167,7 +167,7 @@ let GameView = (function () {
         */
         this.dragging = true;
 
-        if(temp.type == 'spell' && temp.targeting) {
+        if (temp.type == 'spell' && temp.targeting) {
             temp.arrow = new PIXI.Sprite(textures.arrowHead);
 
             temp.arrow.width = .07 * app.stage.width;
@@ -205,13 +205,13 @@ let GameView = (function () {
             let temp;
             game.hand.forEach((val) => val.sprite == this ? temp = val : null);
 
-            if(temp.type == 'spell') {
+            if (temp.type == 'spell') {
                 this.alpha = 0;
                 app.stage.addChild(temp.arrow);
                 temp.arrow.x = this.x;
                 temp.arrow.y = this.y;
 
-                let angle = Math.atan2(pos.x - app.stage.width/2, pos.y - app.stage.height * .75);
+                let angle = Math.atan2(pos.x - app.stage.width / 2, pos.y - app.stage.height * .75);
 
                 temp.arrow.rotation = 3.14 - angle;
             }
@@ -335,27 +335,25 @@ let GameView = (function () {
 
                 this.spotForCard = undefined;
             }
-        } 
+        } else {
 
-        else {
-            
             if (temp.targeting) {
 
                 app.stage.removeChild(temp.arrow);
                 temp.sprite.alpha = 1;
 
                 game.enemyBoard.forEach((value, index) => {
-                    if(pointIntersectsWithSprite(pos, value))
+                    if (pointIntersectsWithSprite(pos, value))
                         outputFunc({
                             type: 'play card',
                             handLoc: handLoc,
-                            targetSide: game.id == 1?2:1,
+                            targetSide: game.id == 1 ? 2 : 1,
                             target: index
                         });
                 });
-                
+
                 game.ownBoard.forEach((value, index) => {
-                    if(pointIntersectsWithSprite(pos, value))
+                    if (pointIntersectsWithSprite(pos, value))
                         outputFunc({
                             type: 'play card',
                             handLoc: handLoc,
@@ -363,29 +361,28 @@ let GameView = (function () {
                             target: index
                         });
                 });
-    
-                if(app.stage.width * .435 <= temp.x && app.stage.width * .548 >= temp.x && app.stage.height * .0121 <= temp.y && app.stage.height * .189 >= temp.y)
+
+                if (app.stage.width * .435 <= temp.x && app.stage.width * .548 >= temp.x && app.stage.height * .0121 <= temp.y && app.stage.height * .189 >= temp.y)
                     outputFunc({
                         type: 'play card',
-                        handLoc: handLoc, 
-                        targetSide: game.id == 1?2:1,
+                        handLoc: handLoc,
+                        targetSide: game.id == 1 ? 2 : 1,
                         target: -1,
                     });
 
                 else if (app.stage.with * .435 <= temp.x && app.stage.width * .548 >= temp.x && app.stage.height * .75 <= temp.y && app.stage.height * 1 >= temp.y)
-                outputFunc({
-                    type: 'play card',
-                    handLoc: handLoc, 
-                    targetSide: game.id,
-                    target: -1,
-                });
+                    outputFunc({
+                        type: 'play card',
+                        handLoc: handLoc,
+                        targetSide: game.id,
+                        target: -1,
+                    });
 
 
-            }
-            else if (!(this.x > fieldBounds.x + fieldBounds.width ||
-                this.x + this.width < fieldBounds.x ||
-                this.y > fieldBounds.y + fieldBounds.height ||
-                this.y + this.height < fieldBounds.y)) {
+            } else if (!(this.x > fieldBounds.x + fieldBounds.width ||
+                    this.x + this.width < fieldBounds.x ||
+                    this.y > fieldBounds.y + fieldBounds.height ||
+                    this.y + this.height < fieldBounds.y)) {
                 outputFunc({
                     type: 'play card',
                     handLoc: handLoc,
@@ -413,7 +410,7 @@ let GameView = (function () {
     }
 
     function pointIntersectsWithSprite(point, sprite) {
-        if(sprite.x - sprite.width / 2 <= point.x && sprite.x + sprite.width / 2 >= point.x &&
+        if (sprite.x - sprite.width / 2 <= point.x && sprite.x + sprite.width / 2 >= point.x &&
             sprite.y - value.sprite.height / 2 <= point.y && sprite.y + sprite.height / 2 >= point.y)
             return true;
         return false;
@@ -1227,8 +1224,7 @@ let GameView = (function () {
             gameOver(event.player);
         } else if (event.type == 'damage') {
 
-        }
-        else if(event.type == 'damage') {
+        } else if (event.type == 'damage') {
             console.log('Damage event not implemented!');
         }
 
@@ -1277,6 +1273,12 @@ let GameView = (function () {
             setTimeout(() => {
                 if (waitGameImage != undefined)
                     waitGameImage.remove(); //remove the waiting text if the little bugger tries to come back
+
+                if (waitGif != undefined)
+                    waitGif.remove();
+
+                if (cnv != undefined)
+                    remove();
 
                 app.stage.width = innerWidth;
                 app.stage.height = innerHeight;
