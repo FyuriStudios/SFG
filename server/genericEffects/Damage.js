@@ -2,7 +2,10 @@ module.exports = {
     name: 'damage', 
     func: function(input, game, eventChain, damage) {
 
+        console.log('made it to the damage block');
+
         let event = {
+            view: 1,
             type: 'damage',
             player: game.currentPlayer,
             targetSide: input.targetSide,

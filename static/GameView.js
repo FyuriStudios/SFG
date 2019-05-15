@@ -276,6 +276,9 @@ let GameView = (function () {
      */
     let onDragFromHandEnd = function (eventObj) {
 
+        if(!this.dragging || this.dragData == undefined)
+            return;
+
         this.dragging = false;
         
 
@@ -333,7 +336,7 @@ let GameView = (function () {
 
                 this.spotForCard = undefined;
             }
-            
+
         } else {
             
             if(temp.targeting) {
@@ -370,8 +373,8 @@ let GameView = (function () {
 
                 if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y) {
                     outputFunc({
-                        type: 'attack',
-                        player: game.id,
+                        type: 'play card',
+                        handLoc: handLoc,
                         target: -1,
                         targetSide: game.id == 1?2:1,
                     });
@@ -379,8 +382,8 @@ let GameView = (function () {
 
                 else if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .75 <= pos.y && app.stage.height * .95 >= pos.y) {
                     outputFunc({
-                        type: 'attack',
-                        player: game.id,
+                        type: 'play card',
+                        handLoc: handLoc,
                         target: -1,
                         targetSide: game.id,
                     });
@@ -965,8 +968,11 @@ let GameView = (function () {
                     AnimationQueue.addMoveRequest(card.sprite, {
                         x: app.stage.width * .02,
                         y: app.stage.height * .55
+                    }, 12, () => {
+                        app.stage.removeChild(card.sprite);
+                        game.ownGraveyard.push(card);
+                        nextInEventQueue();
                     });
-                    game.ownGraveyard.push(card);
                 }
 
             } else {
@@ -1004,8 +1010,12 @@ let GameView = (function () {
                     AnimationQueue.addMoveRequest(enemyCard.sprite, {
                         x: app.stage.width * .02,
                         y: app.stage.height * .39
+                    }, 12, () => {
+                        app.stage.removeChild(enemyCard.sprite);
+                        game.enemyGraveyard.push(enemyCard);
+                        nextInEventQueue();
                     });
-                    game.enemyGraveyard.push(enemyCard);
+                    
                 }
 
             }
@@ -1141,6 +1151,7 @@ let GameView = (function () {
                     app.stage.removeChild(dead.popup);
                 app.stage.removeChild(dead.sprite);
                 nextInEventQueue();
+
             } else {
                 let dead = game.enemyBoard.splice(event.target, 1)[0];
 
@@ -1161,9 +1172,9 @@ let GameView = (function () {
             gameOver(game.id);
         } else if (event.type == 'game over') {
             gameOver(event.player);
-        } else if (event.type == 'damage') {
-
-        } else if (event.type == 'damage') {
+        }
+        
+        else if (event.type == 'damage') {
             console.log('Damage event not implemented!');
         }
 

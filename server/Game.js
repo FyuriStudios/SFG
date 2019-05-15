@@ -282,6 +282,7 @@ class Game {
       
             this.player1.socket.on('event', input => {
                 this.processEvent(this.player1, input);
+                
             });
 
             this.player2.socket.on('event', input => {
@@ -374,7 +375,6 @@ class Game {
 		}
 
         //TODO: add effects.
-
 		eventChain.push(event);
 
 	}
@@ -534,9 +534,8 @@ class Game {
 			//TODO: add battlecry effect
 		} else if(toPlay.type == 'spell') {
             toPlay.cardPlayed(input, this, eventChain);
-            //TODO: add code here
-        }    
-        this.killDead(eventChain);
+            console.log(eventChain);
+        }
 	}
 
 	startTurn(eventChain) {
