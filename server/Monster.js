@@ -18,15 +18,15 @@ class Monster extends Card {
 	 * @param {*} power 
 	 * @param {*} hasDefender 
 	 */
-  	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false, relentless = false) {
-	  super(type, id, tokenType, rarity, name, cost);
-	  this.power = power;
-      this.currentPower = power;//power and current power are different
-	  this.hasDefender = hasDefender;
-	  this.monsterClass = monsterClass;
-	  this.isStatic = false;
-	  this.relentless = relentless;
-	  this.turnsBeforeAttack = 0;
+	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false, relentless = false) {
+		super(type, id, tokenType, rarity, name, cost);
+		this.power = power;
+		this.currentPower = power; //power and current power are different
+		this.hasDefender = hasDefender;
+		this.monsterClass = monsterClass;
+		this.isStatic = false;
+		this.relentless = relentless;
+		this.turnsBeforeAttack = 0;
 	}
 
 	/**
@@ -43,22 +43,22 @@ class Monster extends Card {
 	 */
 	attack(enemyCharacter, currentCharacter, attackerLoc, targetLoc, eventChain) {
 
-		if(this.turnsBeforeAttack > 0) {
+		if (this.turnsBeforeAttack > 0) {
 			return false;
 		}
 
-		if(this.hasDefender || this.isStatic)//first, we'll check the obvious and make sure that the attacking monster isn't a defender or disabled.
+		if (this.hasDefender || this.isStatic) //first, we'll check the obvious and make sure that the attacking monster isn't a defender or disabled.
 			return false;
 
 		let defenders = [];
 
 		enemyCharacter.board.forEach((monster, location) => {
-			if(monster.hasDefender) {
+			if (monster.hasDefender) {
 				defenders.append(location);
 			}
 		});
-		
-		if(defenders.length > 0 && !defenders.includes(targetLoc))
+
+		if (defenders.length > 0 && !defenders.includes(targetLoc))
 			return false;
 
 		var event = {
@@ -67,17 +67,17 @@ class Monster extends Card {
 			attacker: attackerLoc,
 			target: targetLoc,
 			damageToDefender: this.currentPower,
-			damageToAttacker: targetLoc == -1? 0: enemyCharacter.board[targetLoc].currentPower,
+			damageToAttacker: targetLoc == -1 ? 0 : enemyCharacter.board[targetLoc].currentPower,
 		};
 
 		eventChain.push(event);
 
-		if(this.relentless)
+		if (this.relentless)
 			this.turnsBeforeAttack = 1;
 		else
 			this.turnsBeforeAttack = 2;
 
-		if(targetLoc == -1) {
+		if (targetLoc == -1) {
 			enemyCharacter.health -= this.currentPower;
 			return true;
 		}
