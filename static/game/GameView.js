@@ -964,6 +964,7 @@ let GameView = (function () {
                     fixOwnHandSpacing();
 
                     fixOwnBoardSpacing(event.playLoc, () => nextInEventQueue());
+
                 } else {
 
                         fixOwnHandSpacing();
@@ -986,7 +987,6 @@ let GameView = (function () {
 
                 app.stage.removeChild(targetPlay);
 
-                game.enemyBoard.splice(event.playLoc, 0, enemyCard);
                 smallSizeCardInHandSprite(enemyCard.sprite);
 
                 app.stage.addChild(enemyCard.sprite);
@@ -995,6 +995,8 @@ let GameView = (function () {
                 enemyCard.sprite.y = targetPlay.y;
 
                 if (enemyCard.type == 'monster') {
+
+                    game.enemyBoard.splice(event.playLoc, 0, enemyCard);
 
                     enemyCard.boardForm();
                     fixEnemyHandSpacing();
