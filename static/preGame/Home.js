@@ -98,11 +98,17 @@ function draw() {
     textSize(fontSize);
     text("BUILD NEW DECK", 3 * innerWidth / 4, innerHeight / 5);
 
+    fontSize = width / 25;
+    strokeWeight(fontSize / 20);
+    fill(255, 60, 60);
+    textSize(fontSize);
+    text("PRESS ENTER FOR RANDOM DECK", innerWidth / 2, 10 * innerHeight / 11);
+
     //draw useButton image
     useButton.width = innerWidth / 4;
     useButton.height = innerHeight / 5;
     useButton.x = innerWidth / 4;
-    useButton.y = 43 * innerHeight / 50;
+    useButton.y = 19 * innerHeight / 25;
     push();
     imageMode(CENTER);
     image(useButton.img, useButton.x, useButton.y, useButton.width, useButton.height);
@@ -110,7 +116,7 @@ function draw() {
 
     //draw textBox
     textDiv.width = innerWidth / 3;
-    textDiv.height = innerHeight / 2;
+    textDiv.height = 4 * innerHeight / 10;
     textDiv.x = innerWidth / 12;
     textDiv.y = innerHeight / 4;
     textDiv.div.size(textDiv.width, textDiv.height);
@@ -137,3 +143,10 @@ function mouseClicked() {
             pasteText = "BAD DECK";
     }
 }
+
+//if enter key is pressed use random deck
+function keyPressed() {
+    if (keyCode == 13) {
+        textToDeck("random");
+    }
+  }

@@ -7,16 +7,15 @@ function startGame() {
     let passDeck = localStorage.getItem("deckStored");
 
     let deck = [];
-    for (let i = 0; i < 20 * 2; ++i) {
-        if (i % 2 == 0) {
-            deck.push(Number(passDeck[i]));
-        }
+
+    if (passDeck == "random") {
+        for (var i = 0; i < 10; i++)
+            deck.push(-1);
+        for (var i = 0; i < 10; i++)
+            deck.push(-2);
+    } else {
+        deck = passDeck.split(',\n').map(Number);
     }
-    // deck 20 long
-    // for(var i = 0; i< 10; i++)
-    //     deck.push(-1);
-    // for(var i = 0; i<10; i++)
-    //     deck.push(-2);
 
     socket.on('player id', (input) => {
         gameVars.id = input;
