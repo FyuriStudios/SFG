@@ -1,8 +1,4 @@
 //for launching the game
-function newGame(url) {
-  window.location.replace(url);
-}
-
 
 let launchGif;
 let music;
@@ -34,8 +30,8 @@ function preload() {
   launchGif = createImg('/static/assets/launchAnimation.gif');
 
   //create loginBox and playButton images
-  loginBox.img = loadImage('/static/assets/Login_Box.png')
-  playButton.img = loadImage('/static/assets/Play_Button.png')
+  loginBox.img = loadImage('/static/assets/Login_Box.png');
+  playButton.img = loadImage('/static/assets/Play_Button.png');
 
   //load music
   music = loadSound('/static/assets/sounds/STRUGGLE_FOR_GERA.m4a');
@@ -81,7 +77,8 @@ function mouseClicked() {
     mouseY < (playButton.y + playButton.height)
   ) {
     music.stop();
-    newGame('/static/game/game.html');
+    //window.location.replace('/static/game/game.html');
+    window.location.replace('/static/preGame/home.html');
   }
 }
 
@@ -89,6 +86,7 @@ function mouseClicked() {
 function keyPressed() {
   if (keyCode == 13) {
     music.stop();
-    newGame('/static/game/game.html');
+    //window.location.replace('/static/game/game.html');
+    window.location.replace('/static/preGame/home.html');
   }
 }

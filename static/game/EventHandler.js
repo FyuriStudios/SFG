@@ -4,12 +4,18 @@ function startGame() {
 
     let gameVars = {};
 
+    let passDeck = localStorage.getItem("deckStored");
+
     let deck = [];
 
-    for(var i = 0; i< 10; i++)
-        deck.push(-1);
-    for(var i = 0; i<10; i++)
-        deck.push(-2);
+    if (passDeck == "random") {
+        for (var i = 0; i < 10; i++)
+            deck.push(-1);
+        for (var i = 0; i < 10; i++)
+            deck.push(-2);
+    } else {
+        deck = passDeck.split(',\n').map(Number);
+    }
 
     socket.on('player id', (input) => {
         gameVars.id = input;
@@ -24,11 +30,10 @@ function startGame() {
 
         let ownDeckSize, enemyDeckSize;
 
-        if(gameVars.id == 1) {
+        if (gameVars.id == 1) {
             ownDeckSize = input.player1DeckSize;
             enemyDeckSize = input.player2DeckSize;
-        }
-        else {
+        } else {
             ownDeckSize = input.player2DeckSize;
             enemyDeckSize = input.player1DeckSize;
         }
@@ -37,7 +42,7 @@ function startGame() {
         GameView.setupDisplay(gameVars.id, ownDeckSize, enemyDeckSize);
     })
 
-    GameView.setupOutput(function(output) {
+    GameView.setupOutput(function (output) {
         socket.emit('event', output);
         console.log(output);
     });
