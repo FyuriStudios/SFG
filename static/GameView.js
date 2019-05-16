@@ -1237,6 +1237,11 @@ let GameView = (function () {
             Don't touch this. Everything breaks if you do.
             */
             setTimeout(() => {
+                if(waitGameImage != undefined)
+                    waitGameImage.remove();
+
+                if(waitGif != undefined)
+                    waitGif.remove();
 
                 app.stage.width = innerWidth;
                 app.stage.height = innerHeight;
