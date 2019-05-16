@@ -85,7 +85,7 @@ class Monster extends Card {
 		let tempAPower = this.currentPower;
 		let tempTPower = enemyCharacter.board[targetLoc].currentPower;
 
-		this.currentPower -= tempAPower;
+		this.currentPower -= tempTPower;
 		enemyCharacter.board[targetLoc].currentPower -= tempAPower;
 
 		return true;
