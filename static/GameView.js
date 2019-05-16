@@ -1189,7 +1189,9 @@ let GameView = (function () {
                     game.enemyBoard[event.target].currentPower -= event.damage;
                     game.enemyBoard[event.target].updatePower();
                 }
-            }
+            }//TODO: add animation
+
+            nextInEventQueue();
         }
 
     }
@@ -1235,11 +1237,6 @@ let GameView = (function () {
             Don't touch this. Everything breaks if you do.
             */
             setTimeout(() => {
-                if (waitGameImage != undefined)
-                    waitGameImage.remove(); //remove the waiting text if the little bugger tries to come back
-
-                if (waitGif != undefined)
-                    waitGif.remove();
 
                 app.stage.width = innerWidth;
                 app.stage.height = innerHeight;
@@ -1514,7 +1511,6 @@ let GameView = (function () {
          */
         processEvent: function (event) {
             eventQueue.push(event);
-            console.log(event);
             if (!processingEvent && app.stage.children.length > 0)
                 nextInEventQueue();
         },

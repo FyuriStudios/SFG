@@ -281,12 +281,10 @@ class Game {
 
       
             this.player1.socket.on('event', input => {
-                console.log(input);
                 this.processEvent(this.player1, input);
             });
 
             this.player2.socket.on('event', input => {
-                console.log(input);
                 this.processEvent(this.player2, input);
             });
 
@@ -295,8 +293,10 @@ class Game {
 
 	processEvent(player, input) {
 
-		if (player != this.currentPlayer)
-			return;
+		if (player != this.currentPlayer) {
+
+            return;
+        }
 
 		let eventChain = [];
 
@@ -329,7 +329,6 @@ class Game {
             else {
 				this.player1.socket.emit('event', value);
                 this.player2.socket.emit('event', value);
-                
 			}
 		});
 	}

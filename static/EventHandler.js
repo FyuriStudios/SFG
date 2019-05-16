@@ -43,6 +43,7 @@ function startGame() {
     });
 
     socket.on('event', (value) => {
+        console.log(value);
         GameView.processEvent(value);
     })
 
