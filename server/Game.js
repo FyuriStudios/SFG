@@ -500,7 +500,7 @@ class Game {
 			return; //check to see if the card's actually in their hand
 		}
 
-        var toPlay = temp.hand[input.handLoc];
+        var toPlay = temp.hand.splice(input.handLoc, 1)[0];
     
 		//TODO: add flex token implementation
 		var tokens = toPlay.tokenType == 'monster' ? temp.mToks : temp.sToks;
@@ -524,8 +524,6 @@ class Game {
 			temp.mToks -= toPlay.currentCost;
 		else
 			temp.sToks -= toPlay.currentCost;
-
-		temp.hand.splice(input.cardLocation, 1); //this line also might not work, but it's supposed to remove the card at input.cardLocation
 
         eventChain.push(event);
 
