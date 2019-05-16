@@ -963,7 +963,10 @@ let GameView = (function () {
 
                     fixOwnHandSpacing();
 
-                    fixOwnBoardSpacing(event.playLoc, () => nextInEventQueue());
+                    fixOwnBoardSpacing(event.playLoc, () => {
+                        fixOwnBoardSpacing();//Calling this function again because sometimes monsters get stuck on the board.
+                        nextInEventQueue()
+                    });
 
                 } else {
 
