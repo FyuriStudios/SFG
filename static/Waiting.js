@@ -63,7 +63,7 @@ function draw() {
         textAlign(CENTER, CENTER);
         stroke(0);
         strokeWeight(fontSize / 20);
-        text(timeElapsed + "s", (width / 2) + (3 * width / 13), (height / 2) + (5 * height / 22));
+        text(timeElapsed + "s", (width / 2) + (3 * width / 13), (height / 2) + (5 * height / 23));
     }
 }
 
