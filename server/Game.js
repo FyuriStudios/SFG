@@ -328,7 +328,8 @@ class Game {
             }
             else {
 				this.player1.socket.emit('event', value);
-				this.player2.socket.emit('event', value);
+                this.player2.socket.emit('event', value);
+                
 			}
 		});
 	}
@@ -541,7 +542,8 @@ class Game {
 
 		this.turnCounter++;
 
-		var temp = this.currentPlayer;
+        var temp = this.currentPlayer;
+        
 		var event = {
 			type: 'start turn',
 			view: 1,
@@ -587,16 +589,16 @@ class Game {
 	 */
 	endTurn(input, eventChain) {
 
-        console.log(this.currentPlayer.id);
-
 		eventChain.push({
 			type: 'end turn',
 			view: 1,
 			player: this.currentPlayer.id
 		});
 
-		this.turnCounter++;
-		this.killDead(eventChain);
+        this.turnCounter++;
+        //TODO: add effects
+        this.killDead(eventChain);
+        
 		this.startTurn(eventChain);
 	}
 
