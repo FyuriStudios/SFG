@@ -32,7 +32,7 @@ root directory of the server ('/'). This will respond by giving back the path to
 the user.
 */
 app.get('/', function (req, res) {
-    res.sendFile(path.join(__dirname, '../static/index.html')); //I'm leaving it like this for now. But we can totally change it.
+    res.sendFile(path.join(__dirname, '../static/preGame/index.html')); //I'm leaving it like this for now. But we can totally change it.
 })
 
 //Set the server to listen on port 6001 for a webapp running. When the webapp is running, it calls the function below that simply outputs to the console that the application is working.

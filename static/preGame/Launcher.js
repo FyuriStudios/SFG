@@ -81,7 +81,7 @@ function mouseClicked() {
     mouseY < (playButton.y + playButton.height)
   ) {
     music.stop();
-    newGame('/static/game.html');
+    newGame('/static/game/game.html');
   }
 }
 
@@ -89,6 +89,6 @@ function mouseClicked() {
 function keyPressed() {
   if (keyCode == 13) {
     music.stop();
-    newGame('/static/game.html');
+    newGame('/static/game/game.html');
   }
 }

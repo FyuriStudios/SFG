@@ -1198,9 +1198,9 @@ let GameView = (function () {
 
     function gameOver(playerID) {
         if (playerID == game.id)
-            window.location.replace('/static/win.html');
+            window.location.replace('/static/postGame/win.html');
         else
-            window.location.replace('/static/lose.html');
+            window.location.replace('/static/postGame/lose.html');
     }
 
     /*
