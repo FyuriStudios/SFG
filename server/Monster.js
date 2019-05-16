@@ -43,6 +43,8 @@ class Monster extends Card {
 	 */
 	attack(enemyCharacter, currentCharacter, attackerLoc, targetLoc, eventChain) {
 
+        console.log(enemyCharacter.board);
+
 		if(this.turnsBeforeAttack > 0) {
 			return false;
 		}
