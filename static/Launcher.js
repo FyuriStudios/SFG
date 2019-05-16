@@ -49,7 +49,23 @@ function setup() {
 }
 
 function draw() {
-  viewBuilder ? deckBuilder() : homeScreen();
+  //loop sound
+  if (!music.isPlaying())
+    music.play();
+
+  //draw loginBox image
+  loginBox.width = innerWidth / 3;
+  loginBox.height = innerHeight / 2;
+  loginBox.x = innerWidth - loginBox.width - (innerWidth / 30);
+  loginBox.y = (innerHeight / 1.8) - (loginBox.height / 1.3);
+  image(loginBox.img, loginBox.x, loginBox.y, loginBox.width, loginBox.height);
+
+  //draw playButton image
+  playButton.width = innerWidth / 5;
+  playButton.height = innerHeight / 6;
+  playButton.x = loginBox.x + (loginBox.width / 2) - (playButton.width / 2);
+  playButton.y = loginBox.y + (4 * loginBox.height / 5);
+  image(playButton.img, playButton.x, playButton.y, playButton.width, playButton.height);
 }
 
 //if window resized change the canvas size
@@ -64,6 +80,14 @@ function mouseClicked() {
     mouseY > playButton.y &&
     mouseY < (playButton.y + playButton.height)
   ) {
+    music.stop();
+    newGame('/static/game.html');
+  }
+}
+
+//if enter key is pressed start the game
+function keyPressed() {
+  if (keyCode == 13) {
     music.stop();
     newGame('/static/game.html');
   }
