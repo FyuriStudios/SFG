@@ -18,7 +18,7 @@ module.exports = {
         }
         else {
             let card = player.board[input.target];
-            console.log(player.board);
+            console.log('players board: ' + player.board);
             card.currentPower -= damage;
         }
 
