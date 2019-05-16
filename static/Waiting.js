@@ -47,7 +47,6 @@ function draw() {
 
     if (gameStarting) {
         fill(200, 0, 0);
-        //text('GAME IS STARTING', width / 2, height / 2);
         waitPlayersImage.remove();
         waitGameImage.show();
         music.stop();
@@ -57,14 +56,14 @@ function draw() {
         let timeElapsed = currentTime - beginTime;
 
         fill(255);
-        let fontSize = width / 20;
+        let fontSize = width / 13;
         textSize(fontSize);
         textFont(timeFont);
         textStyle(BOLD);
         textAlign(CENTER, CENTER);
         stroke(0);
         strokeWeight(fontSize / 20);
-        text(timeElapsed + "s", (width / 2) + (3 * width / 13), (height / 2) + (3 * height / 11));
+        text(timeElapsed + "s", (width / 2) + (3 * width / 13), (height / 2) + (5 * height / 22));
     }
 }
 
