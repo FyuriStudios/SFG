@@ -1,0 +1,2 @@
+#ignore npm log files
+npm-debug.log
