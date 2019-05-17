@@ -22,7 +22,7 @@ IDToImage = (function () {
 
         monsterFromID: function(id) {
             if(id == -1) {
-                return PIXI.Sprite.from('/static/assets/monster_pieces/Board-Piece-HickoryBlueBear.png');
+                return PIXI.Sprite.from('/static/assets/monster_pieces/Hickory_Board_Piece.png');
             }
         }
     }
