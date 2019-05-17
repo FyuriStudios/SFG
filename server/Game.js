@@ -495,7 +495,7 @@ class Game {
 
 		var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
 
-		if (input.handLoc > temp.hand.length || input.playLoc < 0) {
+		if (input.handLoc >= temp.hand.length || input.playLoc < 0) {
 			return; //check to see if the card's actually in their hand
 		}
 
@@ -531,7 +531,7 @@ class Game {
             
             if(toPlay.hasCardPlayed)
                 toPlay.cardPlayed(input, this, eventChain);
-                
+
 		} else if(toPlay.type == 'spell') {
             toPlay.cardPlayed(input, this, eventChain);
         }

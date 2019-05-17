@@ -78,8 +78,8 @@ class Monster extends Card {
             let tempAPower = this.currentPower;
             let tempTPower = enemyCharacter.board[targetLoc].currentPower;
 
-            this.currentPower -= tempTPower;
-            enemyCharacter.board[targetLoc].currentPower -= tempAPower;
+            this.currentPower = (this.currentPower - tempTPower);//in case this fixes Mantra
+            enemyCharacter.board[targetLoc].currentPower = (enemyCharacter.board[targetLoc].currentPower - tempAPower);
 
             event.damageToDefender = tempTPower - enemyCharacter.board[targetLoc].currentPower;
             event.damageToAttacker =  tempAPower - this.currentPower;
