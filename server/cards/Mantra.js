@@ -4,11 +4,11 @@ class Mantra extends Monster {
 
     constructor() {
 
-        super('monster', 2, 'monster', 'legendary', 'Mantra', 6, 3, 'mercenary', true, false);
+        super('monster', 2, 'monster', 'legendary', 'Mantra', 6, undefined, 'mercenary', true, false);
         this.hasCardPlayed = true;
         
-        this._currentPower = this.currentPower;
-        this.currentPower = undefined;
+        this.power = 3;
+        this._currentPower = 3;
 
         this.addCardPlayed({
             name: 'Mantra Signature',
@@ -48,7 +48,7 @@ class Mantra extends Monster {
                             type: 'hand invoke',
                             player: game.currentPlayer.id,
                             handLoc: melodyIndex,
-                            card: game.backendCardTranslate(mantra),
+                            card: game.backendCardTranslate(melody),
                         };
     
                         eventChain.push(event);
@@ -65,15 +65,15 @@ class Mantra extends Monster {
     }
 
     set currentPower(value) {
-        if(value == this._currentPower -1 || value == this.currentPower -2) {
+
+        if(this._currentPower - value <= 2 && !(value > this._currentPower))
             return;
-        }
-        else if(value < this._currentPower - 2) {
-            this._currentPower = value + 2;
-        }
-        else if(value >= this._currentPower) {
+        else if(value > this._currentPower)
             this._currentPower = value;
-        }
+        else
+            this._currentPower = value + 2;
+
+        console.log('Mantra power:' + this.currentPower);
     }
 
 }

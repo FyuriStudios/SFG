@@ -6,7 +6,6 @@ class Melody extends Monster {
 
         super('monster', 1, 'monster', 'legendary', 'Melody', 6, 2, 'mercenary', false, true);
         this.hasCardPlayed = true;
-        this.hasSelfAttack = true;
 
         this.addCardPlayed({
             name: 'Melody Signature',
@@ -71,7 +70,7 @@ class Melody extends Monster {
 
 		enemyCharacter.board.forEach((monster, location) => {
 			if (monster.hasDefender) {
-				defenders.append(location);
+				defenders.push(location);
 			}
 		});
 
@@ -80,7 +79,7 @@ class Melody extends Monster {
 
         if(targetLoc == -1) {
             let melodyIndex;
-            game.currentPlayer.board.forEach((value, index) => {
+            currentCharacter.board.forEach((value, index) => {
                 if(value == this) {
                     melodyIndex = index;
                 }
@@ -90,7 +89,7 @@ class Melody extends Monster {
 
             let boostEvent = {
                 type: 'boost',
-                targetSide: game.currentPlayer.id,
+                targetSide: currentCharacter.id,
                 target: melodyIndex,
                 boost: 2
             };

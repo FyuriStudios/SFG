@@ -1238,7 +1238,7 @@ let GameView = (function () {
 
             let target;
 
-            if(targetSide == game.id) {
+            if(event.targetSide == game.id) {
                 target = game.ownBoard[event.target];
             }
             else {
@@ -1352,7 +1352,7 @@ let GameView = (function () {
 
                 enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
                 enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
-                
+
                 fixEnemyBoardSpacing(event.playLoc, () => nextInEventQueue());
 
             }

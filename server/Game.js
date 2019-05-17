@@ -528,7 +528,10 @@ class Game {
 
 		if (toPlay.type == 'monster') {
 			temp.board.splice(input.playLocation, 0, toPlay);
-			//TODO: add battlecry effect
+            
+            if(toPlay.hasCardPlayed)
+                toPlay.cardPlayed(input, this, eventChain);
+                
 		} else if(toPlay.type == 'spell') {
             toPlay.cardPlayed(input, this, eventChain);
         }

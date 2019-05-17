@@ -54,7 +54,7 @@ class Monster extends Card {
 
 		enemyCharacter.board.forEach((monster, location) => {
 			if (monster.hasDefender) {
-				defenders.append(location);
+				defenders.push(location);
 			}
 		});
 
