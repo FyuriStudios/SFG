@@ -1,12 +1,13 @@
 function textToDeck(text) { //TODO check if the deck is valid
     if (text != "random") {
+        
         let deckString = text.split(', ');
+        
         if (deckString.length != 30)
             return "bad";
-        for (let i = 0; i < deckString.length; ++i) {
-            if (isNaN(deckString[i]))
-                return "bad";
-        }
+
+        deckString.forEach(value => { if(isNaN(value)) return 'bad'; });
+        
         if (!checkDeck(deckString.map(Number)))
             return "bad";
     }

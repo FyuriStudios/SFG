@@ -72,8 +72,6 @@ class Mantra extends Monster {
             this._currentPower = value;
         else
             this._currentPower = value + 2;
-
-        console.log('Mantra power:' + this.currentPower);
     }
 
 }
