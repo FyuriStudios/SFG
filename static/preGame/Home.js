@@ -3,6 +3,8 @@
 let launchGif;
 let music;
 
+let deckWord = "DECK";
+
 let textDiv = {
     "div": "",
     "width": "",
@@ -21,10 +23,38 @@ let useButton = {
 
 let buildButton = {
     "img": "",
-    "width": "",
-    "height": "",
     "x": "",
     "y": ""
+};
+
+let character = {
+    "yakov": {
+        "img": "",
+        "x": "",
+        "y": ""
+    },
+    "rinwald": {
+        "img": "",
+        "x": "",
+        "y": ""
+    },
+    "caius": {
+        "img": "",
+        "x": "",
+        "y": ""
+    },
+    "lorewell": {
+        "img": "",
+        "x": "",
+        "y": ""
+    },
+    "ignea": {
+        "img": "",
+        "x": "",
+        "y": ""
+    },
+    "width": "",
+    "height": ""
 };
 
 let textBox;
@@ -55,6 +85,18 @@ function preload() {
     useButton.img1 = createImg('/static/assets/useButtonHover.png');
     useButton.img1.hide();
 
+    //create characters' images
+    character.caius.img = createImg('/static/assets/caius.png');
+    character.caius.img.hide();
+    character.yakov.img = createImg('/static/assets/yakov.png');
+    character.yakov.img.hide();
+    character.lorewell.img = createImg('/static/assets/lorewell.png');
+    character.lorewell.img.hide();
+    character.rinwald.img = createImg('/static/assets/rinwald.png');
+    character.rinwald.img.hide();
+    character.ignea.img = createImg('/static/assets/ignea.png');
+    character.ignea.img.hide();
+
     //load music
     music = loadSound('/static/assets/sounds/STRUGGLE_FOR_GERA.m4a');
 
@@ -78,6 +120,9 @@ function setup() {
 function draw() {
     clear();
 
+
+    pasteText = pasteText.substr(0, pasteText.length - 4) + deckWord;
+
     //loop sound
     if (!music.isPlaying())
         music.play();
@@ -98,13 +143,13 @@ function draw() {
     strokeWeight(fontSize / 20);
     fill(255, 60, 60);
     textSize(fontSize);
-    text("BUILD A NEW DECK", 3 * innerWidth / 4, innerHeight / 5);
+    text("BUILD NEW " + deckWord, 3 * innerWidth / 4, innerHeight / 5);
 
     fontSize = width / 30;
     strokeWeight(fontSize / 20);
     fill(60, 180, 60);
     textSize(fontSize);
-    text("PRESS 'ENTER' TO USE A RANDOM DECK", innerWidth / 2, 10 * innerHeight / 11);
+    text("PRESS 'ENTER' TO USE A RANDOM " + deckWord, innerWidth / 2, 10 * innerHeight / 11);
 
     //draw useButton image
     useButton.width = innerWidth / 6;
@@ -127,6 +172,9 @@ function draw() {
     textDiv.div.size(textDiv.width, textDiv.height);
     textDiv.div.position(textDiv.x, textDiv.y);
     document.getElementById('textBox').style.fontSize = (width / 30).toString(10) + "px";
+
+    //drawCharacters
+    drawCharacters();
 }
 
 //if window resized change the canvas size
@@ -146,8 +194,41 @@ function mouseClicked() {
         document.execCommand('copy');
         alert("Deck copied to clipboard");
         if (textToDeck(box.value) == "bad")
-            pasteText = "BAD DECK";
+            pasteText = "BAD " + deckWord;
+        return;
     }
+
+    // switch (characterPressed()) {
+    //     case "ignea":
+    //         localStorage.setItem("character", "ignea");
+    //         window.location.replace('/static/preGame/deckbuilder.html');
+    //         break;
+
+    //     case "lorewell":
+    //         localStorage.setItem("character", "lorewell");
+    //         window.location.replace('/static/preGame/deckbuilder.html');
+    //         break;
+
+    //     case "caius":
+    //         localStorage.setItem("character", "caius");
+    //         window.location.replace('/static/preGame/deckbuilder.html');
+    //         break;
+
+    //     case "yakov":
+    //         localStorage.setItem("character", "yakov");
+    //         window.location.replace('/static/preGame/deckbuilder.html');
+    //         break;
+
+    //     case "rinwald":
+    //         localStorage.setItem("character", "rinwald");
+    //         window.location.replace('/static/preGame/deckbuilder.html');
+    //         break;
+
+    //     default:
+    //         return;
+    // }
+
+    deckWord = deckWord == "DECK" ? "DICK" : "DECK";
 }
 
 //if enter key is pressed use random deck
@@ -164,6 +245,68 @@ function mouseIsOver() {
         mouseY < (useButton.y + useButton.height / 2)
     )
         return true;
-    else
-        return false;
+
+    return false;
+}
+
+function drawCharacters() {
+    character.width = width / 11;
+    character.height = 2 * height / 11;
+
+    character.ignea.x = 32.5 * width / 50;
+    character.ignea.y = height / 4;
+    character.lorewell.x = 32.5 * width / 50;
+    character.lorewell.y = (height / 4) + (height / 5);
+    character.yakov.x = 32.5 * width / 50;
+    character.yakov.y = (height / 4) + 2 * (height / 5);
+    character.caius.x = (42.5 * width / 50) - character.width;
+    character.caius.y = height / 4;
+    character.rinwald.x = (42.5 * width / 50) - character.width;
+    character.rinwald.y = (height / 4) + (height / 5);
+
+
+    image(character.ignea.img, character.ignea.x, character.ignea.y, character.width, character.height);
+    image(character.lorewell.img, character.lorewell.x, character.lorewell.y, character.width, character.height);
+    image(character.yakov.img, character.yakov.x, character.yakov.y, character.width, character.height);
+    image(character.caius.img, character.caius.x, character.caius.y, character.width, character.height);
+    image(character.rinwald.img, character.rinwald.x, character.rinwald.y, character.width, character.height);
+}
+
+function characterPressed() {
+    if (mouseX > (character.ignea.x) &&
+        mouseX < (character.ignea.x + character.width) &&
+        mouseY > (character.ignea.y) &&
+        mouseY < (character.ignea.y + character.height)
+    )
+        return "ignea";
+
+    if (mouseX > (character.lorewell.x) &&
+        mouseX < (character.lorewell.x + character.width) &&
+        mouseY > (character.lorewell.y) &&
+        mouseY < (character.lorewell.y + character.height)
+    )
+        return "lorewell";
+
+    if (mouseX > (character.yakov.x) &&
+        mouseX < (character.yakov.x + character.width) &&
+        mouseY > (character.yakov.y) &&
+        mouseY < (character.yakov.y + character.height)
+    )
+        return "yakov";
+
+    if (mouseX > (character.caius.x) &&
+        mouseX < (character.caius.x + character.width) &&
+        mouseY > (character.caius.y) &&
+        mouseY < (character.caius.y + character.height)
+    )
+        return "caius";
+
+    if (mouseX > (character.rinwald.x) &&
+        mouseX < (character.rinwald.x + character.width) &&
+        mouseY > (character.rinwald.y) &&
+        mouseY < (character.rinwald.y + character.height)
+    )
+        return "rinwald";
+
+    return "none";
 }
