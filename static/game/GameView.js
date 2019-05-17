@@ -1297,7 +1297,7 @@ let GameView = (function () {
 
         else if(event.type == 'hand invoke') {
 
-            if(event.id == game.id) {
+            if(event.player == game.id) {
                 let card = game.hand.splice(event.handLoc, 1)[0]; //remove the card at the relevant location in the player's hand
 
                 game.ownBoard.unshift(card);
