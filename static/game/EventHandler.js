@@ -9,9 +9,11 @@ function startGame() {
     let deck = [];
 
     if (passDeck == "random") {
-        for (var i = 0; i < 10; i++)
+        deck.push(1);
+        deck.push(2);
+        for (var i = 0; i < 9; i++)
             deck.push(-1);
-        for (var i = 0; i < 10; i++)
+        for (var i = 0; i < 9; i++)
             deck.push(-2);
     } else {
         deck = passDeck.split(',\n').map(Number);
