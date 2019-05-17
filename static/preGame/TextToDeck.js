@@ -1,4 +1,4 @@
-function textToDeck(text) { //TODO check if the deck is valid
+function textToDeck(text) {
     if (text != "random") {
         
         let deckString = text.split(', ');
@@ -17,6 +17,6 @@ function textToDeck(text) { //TODO check if the deck is valid
     window.location.replace('/static/game/game.html');
 }
 
-function checkDeck(deckToCheck) {
+function checkDeck(deckToCheck) { //TODO check if the deck is valid
     return true;
 }

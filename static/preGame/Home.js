@@ -126,6 +126,7 @@ function draw() {
     textDiv.y = innerHeight / 4;
     textDiv.div.size(textDiv.width, textDiv.height);
     textDiv.div.position(textDiv.x, textDiv.y);
+    document.getElementById('textBox').style.fontSize = (width / 30).toString(10) + "px";
 }
 
 //if window resized change the canvas size
