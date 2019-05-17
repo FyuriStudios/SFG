@@ -1,4 +1,5 @@
 let Monster = require('../Monster');
+let Game = require('../Game');
 
 class Mantra extends Monster {
 
@@ -28,7 +29,7 @@ class Mantra extends Monster {
                     let event = {
                         type: 'deck invoke',
                         player: game.currentPlayer.id,
-                        card: melody,
+                        card: Game.backendCardTranslate(melody),
                     };
 
                     eventChain.push(event);
@@ -48,7 +49,7 @@ class Mantra extends Monster {
                             type: 'hand invoke',
                             player: game.currentPlayer.id,
                             handLoc: melodyIndex,
-                            card: mantra,
+                            card: Game.backendCardTranslate(mantra),
                         };
     
                         eventChain.push(event);

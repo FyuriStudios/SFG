@@ -1235,15 +1235,128 @@ let GameView = (function () {
         }
 
         else if(event.type == 'boost') {
-            
+
+            let target;
+
+            if(targetSide == game.id) {
+                target = game.ownBoard[event.target];
+            }
+            else {
+                target = game.enemyBoard[event.target];
+            }
+
+            target.currentPower += event.boost;
+            target.updatePower();
+            nextInEventQueue();
         }
 
         else if(event.type == 'deck invoke') {
 
+            let card = ClientCard.from(event.card);
+
+            app.stage.addChild(card.sprite);
+
+            card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
+            card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
+            card.sprite.on('pointerdown', onMouseDragCardOnBoardStart);
+            card.sprite.on('pointerup', onMouseDragCardOnBoardEnd);
+            card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
+            card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
+
+            smallSizeCardInHandSprite(card.sprite);
+
+            card.boardForm();
+
+            if(event.player == game.id) {
+
+                game.ownDeckSize -= 1;
+
+                card.sprite.x = app.stage.width * 0.0565;
+                card.sprite.y = app.stage.height * 0.885;
+
+                game.ownBoard.unshift(card);
+
+                fixOwnBoardSpacing(0, () => {
+                    fixOwnBoardSpacing();
+                    nextInEventQueue();
+                });
+            }
+            else {
+                game.enemyDeckSize -= 1;
+
+                game.enemyBoard.unshift(card);
+
+                card.sprite.x = app.stage.width * .0565;
+                card.sprite.y = app.stage.height * .1;
+
+                fixEnemyBoardSpacing(0, () => {
+                    fixEnemyBoardSpacing();
+                    nextInEventQueue();
+                });
+            }
         }
 
         else if(event.type == 'hand invoke') {
 
+            if(event.id == game.id) {
+                let card = game.hand.splice(event.handLoc, 1)[0]; //remove the card at the relevant location in the player's hand
+
+                game.ownBoard.unshift(card);
+                card.boardForm();
+
+                card.sprite.off('mouseover', mouseOverCardInHand);
+
+                card.sprite.off('mouseout', mouseOutCardInHand);
+
+                card.sprite.off('pointerdown', onDragFromHandStart);
+
+                card.sprite.off('pointerup', onDragFromHandEnd);
+
+                card.sprite.off('pointerupoutside', onDragFromHandEnd); //removing mouse events. Then we'll re-add custom events.
+
+                card.sprite.off('pointermove', onDragFromHandMove);
+
+                card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
+                card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
+                card.sprite.on('pointerdown', onMouseDragCardOnBoardStart);
+                card.sprite.on('pointerup', onMouseDragCardOnBoardEnd);
+                card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
+                card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
+
+                fixOwnHandSpacing();
+
+                fixOwnBoardSpacing(event.playLoc, () => {
+                    fixOwnBoardSpacing();//Calling this function again because sometimes monsters get stuck on the board.
+                    nextInEventQueue()
+                });
+            }
+            else {
+
+                let enemyCard = ClientCard.from(event.card);
+
+                let targetPlay = enemyCardsInHand.splice(event.handLoc, 1)[0];
+
+                app.stage.removeChild(targetPlay);
+
+                smallSizeCardInHandSprite(enemyCard.sprite);
+
+                app.stage.addChild(enemyCard.sprite);
+
+                enemyCard.sprite.x = targetPlay.x + enemyCard.sprite.width / 2;
+                enemyCard.sprite.y = targetPlay.y;
+
+                game.enemyBoard.splice(event.playLoc, 0, enemyCard);
+
+                enemyCard.boardForm();
+                fixEnemyHandSpacing();
+
+                enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
+                enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
+                
+                fixEnemyBoardSpacing(event.playLoc, () => nextInEventQueue());
+
+            }
+            
         }
 
     }
