@@ -107,38 +107,6 @@ Array.prototype.shuffle = function () {
 	}
 }
 
-function backendCardTranslate(card) {
-	if (card.type == 'monster') {
-		return {
-			id: card.id,
-			type: card.type,
-			power: card.power,
-			tokenType: card.tokenType,
-			rarity: card.rarity,
-			name: card.name,
-			cost: card.cost,
-			playCost: card.currentCost,
-			power: card.power,
-			currentPower: card.currentPower,
-			hasDefender: card.hasDefender,
-            isStatic: card.isStatic,
-            targeting: card.targeting,
-		};
-	} else {
-		return {
-            id: card.id,
-			type: card.type,
-			power: card.power,
-			tokenType: card.tokenType,
-			rarity: card.rarity,
-			name: card.name,
-			cost: card.cost,
-            playCost: card.currentCost,
-            targeting: card.targeting,
-		};
-	}
-}
-
 class Game {
 
 	/**
@@ -181,7 +149,39 @@ class Game {
 			sToks: 0,
 			deck: [],
 		};
-	}
+    }
+    
+    backendCardTranslate(card) {
+        if (card.type == 'monster') {
+            return {
+                id: card.id,
+                type: card.type,
+                power: card.power,
+                tokenType: card.tokenType,
+                rarity: card.rarity,
+                name: card.name,
+                cost: card.cost,
+                playCost: card.currentCost,
+                power: card.power,
+                currentPower: card.currentPower,
+                hasDefender: card.hasDefender,
+                isStatic: card.isStatic,
+                targeting: card.targeting,
+            };
+        } else {
+            return {
+                id: card.id,
+                type: card.type,
+                power: card.power,
+                tokenType: card.tokenType,
+                rarity: card.rarity,
+                name: card.name,
+                cost: card.cost,
+                playCost: card.currentCost,
+                targeting: card.targeting,
+            };
+        }
+    }
 
 	/**
 	 * Starts the game. Call this function when you're ready for the entire game to start.
@@ -239,7 +239,7 @@ class Game {
                 this.player1.socket.emit('event', {
                     type: 'draw card',
                     player: 1,
-                    card: backendCardTranslate(drawnCard),
+                    card: this.backendCardTranslate(drawnCard),
                 });
 
                 this.player2.socket.emit('event', {
@@ -257,7 +257,7 @@ class Game {
                 this.player2.socket.emit('event', {
                     type: 'draw card',
                     player: 2,
-                    card: backendCardTranslate(drawnCard),
+                    card: this.backendCardTranslate(drawnCard),
                 });
 
                 this.player1.socket.emit('event', {
@@ -364,13 +364,13 @@ class Game {
 				event.type = 'burn card';
 				event.view = 1;
 				event.player = player.id;
-				event.card = backendCardTranslate(temp);
+				event.card = this.backendCardTranslate(temp);
 			} else {
 				player.hand.unshift(temp);
 				event.type = 'draw card';
 				event.player = player.id;
 				event.view = 2;//semi-private
-                event.card = backendCardTranslate(temp);
+                event.card = this.backendCardTranslate(temp);
 			}
 		}
 
@@ -516,7 +516,7 @@ class Game {
 			cost: toPlay.currentCost,
 			tokenType: toPlay.tokenType,
 			player: temp.id,
-			card: backendCardTranslate(toPlay),
+			card: this.backendCardTranslate(toPlay),
 		};
 
 		if (toPlay.tokenType == 'monster')
@@ -612,4 +612,3 @@ class Game {
 }
 
 module.exports = Game;
-module.exports.backendCardTranslate = backendCardTranslate;
