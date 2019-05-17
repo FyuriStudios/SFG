@@ -468,6 +468,9 @@ class Game {
 	 */
 	attack(input, eventChain) {
 
+        console.log('attacker index: ' + input.attacker);
+        console.log(this.currentPlayer.board);
+
 		if((input.attacker >= this.currentPlayer.board.length || input.attacker == -1) || input.target >= this.currentPlayer.board.length) { //just real quick making sure that the locations are valid
 			return;
 		}
@@ -495,7 +498,7 @@ class Game {
 
 		var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
 
-		if (input.handLoc >= temp.hand.length || input.playLoc < 0) {
+		if (input.handLoc >= temp.hand.length || input.handLoc < 0 || input.playLoc < 0) {
 			return; //check to see if the card's actually in their hand
 		}
 
