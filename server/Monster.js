@@ -59,16 +59,31 @@ class Monster extends Card {
 		});
 
 		if (defenders.length > 0 && !defenders.includes(targetLoc))
-			return false;
+            return false;
 
-		var event = {
-			type: 'attack',
-			player: currentCharacter.id,
-			attacker: attackerLoc,
-			target: targetLoc,
-			damageToDefender: this.currentPower,
-			damageToAttacker: targetLoc == -1 ? 0 : enemyCharacter.board[targetLoc].currentPower,
-		};
+        var event = {
+            type: 'attack',
+            player: currentCharacter.id,
+            attacker: attackerLoc,
+            target: targetLoc,
+        }
+            
+        if (targetLoc == -1) {
+            let currHealth = enemyCharacter.health;
+            enemyCharacter.health -= this.currentPower;
+            event.damageToDefender = enemyCharacter.currHealth - enemyCharacter.health;
+            event.damageToAttacker = 0;
+        }
+        else {
+            let tempAPower = this.currentPower;
+            let tempTPower = enemyCharacter.board[targetLoc].currentPower;
+
+            this.currentPower -= tempTPower;
+            enemyCharacter.board[targetLoc].currentPower -= tempAPower;
+
+            event.damageToDefender = tempTPower - enemyCharacter.board[targetLoc].currentPower;
+            event.damageToAttacker =  tempAPower - this.currentPower;
+        }
 
 		eventChain.push(event);
 
@@ -76,17 +91,6 @@ class Monster extends Card {
 			this.turnsBeforeAttack = 1;
 		else
 			this.turnsBeforeAttack = 2;
-
-		if (targetLoc == -1) {
-			enemyCharacter.health -= this.currentPower;
-			return true;
-		}
-
-		let tempAPower = this.currentPower;
-		let tempTPower = enemyCharacter.board[targetLoc].currentPower;
-
-		this.currentPower -= tempTPower;
-		enemyCharacter.board[targetLoc].currentPower -= tempAPower;
 
 		return true;
 	}
