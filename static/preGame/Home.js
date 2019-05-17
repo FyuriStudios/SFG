@@ -3,6 +3,8 @@
 let launchGif;
 let music;
 
+let deckWord = "DECK";
+
 let textDiv = {
     "div": "",
     "width": "",
@@ -118,6 +120,9 @@ function setup() {
 function draw() {
     clear();
 
+
+    pasteText = pasteText.substr(0, pasteText.length - 4) + deckWord;
+
     //loop sound
     if (!music.isPlaying())
         music.play();
@@ -138,13 +143,13 @@ function draw() {
     strokeWeight(fontSize / 20);
     fill(255, 60, 60);
     textSize(fontSize);
-    text("BUILD NEW DECK", 3 * innerWidth / 4, innerHeight / 5);
+    text("BUILD NEW " + deckWord, 3 * innerWidth / 4, innerHeight / 5);
 
     fontSize = width / 30;
     strokeWeight(fontSize / 20);
     fill(60, 180, 60);
     textSize(fontSize);
-    text("PRESS 'ENTER' TO USE A RANDOM DECK", innerWidth / 2, 10 * innerHeight / 11);
+    text("PRESS 'ENTER' TO USE A RANDOM " + deckWord, innerWidth / 2, 10 * innerHeight / 11);
 
     //draw useButton image
     useButton.width = innerWidth / 6;
@@ -189,7 +194,8 @@ function mouseClicked() {
         document.execCommand('copy');
         alert("Deck copied to clipboard");
         if (textToDeck(box.value) == "bad")
-            pasteText = "BAD DECK";
+            pasteText = "BAD " + deckWord;
+        return;
     }
 
     // switch (characterPressed()) {
@@ -222,6 +228,7 @@ function mouseClicked() {
     //         return;
     // }
 
+    deckWord = deckWord == "DECK" ? "DICK" : "DECK";
 }
 
 //if enter key is pressed use random deck
@@ -243,18 +250,18 @@ function mouseIsOver() {
 }
 
 function drawCharacters() {
-    character.width = width / 10;
+    character.width = width / 11;
     character.height = 2 * height / 11;
 
-    character.ignea.x = 32 * width / 50;
+    character.ignea.x = 32.5 * width / 50;
     character.ignea.y = height / 4;
-    character.lorewell.x = 32 * width / 50;
+    character.lorewell.x = 32.5 * width / 50;
     character.lorewell.y = (height / 4) + (height / 5);
-    character.yakov.x = 32 * width / 50;
+    character.yakov.x = 32.5 * width / 50;
     character.yakov.y = (height / 4) + 2 * (height / 5);
-    character.caius.x = (43 * width / 50) - character.width;
+    character.caius.x = (42.5 * width / 50) - character.width;
     character.caius.y = height / 4;
-    character.rinwald.x = (43 * width / 50) - character.width;
+    character.rinwald.x = (42.5 * width / 50) - character.width;
     character.rinwald.y = (height / 4) + (height / 5);
 
 
