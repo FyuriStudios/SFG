@@ -1235,7 +1235,7 @@ let GameView = (function () {
         }
 
         else if(event.type == 'boost') {
-
+            
         }
 
         else if(event.type == 'deck invoke') {
@@ -1243,7 +1243,7 @@ let GameView = (function () {
         }
 
         else if(event.type == 'hand invoke') {
-            
+
         }
 
     }
