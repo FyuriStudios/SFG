@@ -365,7 +365,6 @@ class Game {
 				event.view = 1;
 				event.player = player.id;
 				event.card = backendCardTranslate(temp);
-				player.graveyard.push(temp);
 			} else {
 				player.hand.unshift(temp);
 				event.type = 'draw card';

@@ -4,6 +4,6 @@ module.exports = {
     MAX_HAND_SIZE : 10,
     MAX_BOARD_SIZE : 10,
     STARTING_CARDS_DRAWN : 5,
-    FATIGUE_DAMAGE : 20,
+    FATIGUE_DAMAGE : 15,
     STARTING_HEALTH : 50
 };

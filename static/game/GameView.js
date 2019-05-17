@@ -1199,6 +1199,41 @@ let GameView = (function () {
             nextInEventQueue();
         }
 
+        else if(event.type == 'fatigue') {
+            if(game.id == event.player) {
+                game.ownHealth -= event.damage;
+            }
+            else {
+                game.enemyHealth -= event.damage;
+            }
+            fixHealths();
+            nextInEventQueue();
+        }
+
+        else if(event.type == 'burn card') {
+
+            let burnedCard = ClientCard.from(event.card);
+            smallSizeCardInHandSprite(burnedCard.sprite);
+
+            burnedCard.sprite.x = app.stage.width * 0.0565;
+
+            app.stage.addChild(burnedCard.sprite);
+
+            if(game.id == event.player) {
+                game.ownDeckSize -= 1;
+                burnedCard.sprite.y = app.stage.height * 0.885;
+            }
+            else {
+                game.enemyDeckSize -= 1;
+                burnedCard.sprite.y = app.stage.height * .1;
+            }
+
+            AnimationQueue.addMoveRequest(burnedCard.sprite, {x: app.stage.width * .25, y: app.stage.height * .5}, 15, () => {
+                app.stage.removeChild(burnedCard.sprite);
+                nextInEventQueue();
+            });
+        }
+
     }
 
     function gameOver(playerID) {
