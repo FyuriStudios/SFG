@@ -198,35 +198,35 @@ function mouseClicked() {
         return;
     }
 
-    // switch (characterPressed()) {
-    //     case "ignea":
-    //         localStorage.setItem("character", "ignea");
-    //         window.location.replace('/static/preGame/Deckbuilder.html');
-    //         break;
+    switch (characterPressed()) {
+        case "ignea":
+            localStorage.setItem("character", "ignea");
+            window.location.replace('/static/preGame/deckbuilder.html');
+            break;
 
-    //     case "lorewell":
-    //         localStorage.setItem("character", "lorewell");
-    //         window.location.replace('/static/preGame/Deckbuilder.html');
-    //         break;
+        case "lorewell":
+            localStorage.setItem("character", "lorewell");
+            window.location.replace('/static/preGame/deckbuilder.html');
+            break;
 
-    //     case "caius":
-    //         localStorage.setItem("character", "caius");
-    //         window.location.replace('/static/preGame/Deckbuilder.html');
-    //         break;
+        case "caius":
+            localStorage.setItem("character", "caius");
+            window.location.replace('/static/preGame/deckbuilder.html');
+            break;
 
-    //     case "yakov":
-    //         localStorage.setItem("character", "yakov");
-    //         window.location.replace('/static/preGame/Deckbuilder.html');
-    //         break;
+        case "yakov":
+            localStorage.setItem("character", "yakov");
+            window.location.replace('/static/preGame/deckbuilder.html');
+            break;
 
-    //     case "rinwald":
-    //         localStorage.setItem("character", "rinwald");
-    //         window.location.replace('/static/preGame/Deckbuilder.html');
-    //         break;
+        case "rinwald":
+            localStorage.setItem("character", "rinwald");
+            window.location.replace('/static/preGame/deckbuilder.html');
+            break;
 
-    //     default:
-    //         return;
-    // }
+        default:
+            return;
+    }
 
     deckWord = deckWord == "DECK" ? "DICK" : "DECK";
 }
@@ -273,38 +273,38 @@ function drawCharacters() {
 }
 
 function characterPressed() {
-    if (mouseX > (character.ignea.x - character.width / 2) &&
-        mouseX < (character.ignea.x + character.width / 2) &&
-        mouseY > (character.ignea.y - character.height / 2) &&
-        mouseY < (character.ignea.y + character.height / 2)
+    if (mouseX > (character.ignea.x) &&
+        mouseX < (character.ignea.x + character.width) &&
+        mouseY > (character.ignea.y) &&
+        mouseY < (character.ignea.y + character.height)
     )
         return "ignea";
 
-    if (mouseX > (character.lorewell.x - character.width / 2) &&
-        mouseX < (character.lorewell.x + character.width / 2) &&
-        mouseY > (character.lorewell.y - character.height / 2) &&
-        mouseY < (character.lorewell.y + character.height / 2)
+    if (mouseX > (character.lorewell.x) &&
+        mouseX < (character.lorewell.x + character.width) &&
+        mouseY > (character.lorewell.y) &&
+        mouseY < (character.lorewell.y + character.height)
     )
         return "lorewell";
 
-    if (mouseX > (character.yakov.x - character.width / 2) &&
-        mouseX < (character.yakov.x + character.width / 2) &&
-        mouseY > (character.yakov.y - character.height / 2) &&
-        mouseY < (character.yakov.y + character.height / 2)
+    if (mouseX > (character.yakov.x) &&
+        mouseX < (character.yakov.x + character.width) &&
+        mouseY > (character.yakov.y) &&
+        mouseY < (character.yakov.y + character.height)
     )
         return "yakov";
 
-    if (mouseX > (character.caius.x - character.width / 2) &&
-        mouseX < (character.caius.x + character.width / 2) &&
-        mouseY > (character.caius.y - character.height / 2) &&
-        mouseY < (character.caius.y + character.height / 2)
+    if (mouseX > (character.caius.x) &&
+        mouseX < (character.caius.x + character.width) &&
+        mouseY > (character.caius.y) &&
+        mouseY < (character.caius.y + character.height)
     )
         return "caius";
 
-    if (mouseX > (character.rinwald.x - character.width / 2) &&
-        mouseX < (character.rinwald.x + character.width / 2) &&
-        mouseY > (character.rinwald.y - character.height / 2) &&
-        mouseY < (character.rinwald.y + character.height / 2)
+    if (mouseX > (character.rinwald.x) &&
+        mouseX < (character.rinwald.x + character.width) &&
+        mouseY > (character.rinwald.y) &&
+        mouseY < (character.rinwald.y + character.height)
     )
         return "rinwald";
 
