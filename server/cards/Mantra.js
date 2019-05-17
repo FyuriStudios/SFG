@@ -4,7 +4,7 @@ class Mantra extends Monster {
 
     constructor() {
 
-        super('monster', 1, 'monster', 'legendary', 'Mantra', 6, 3, 'mercenary', true, false);
+        super('monster', 2, 'monster', 'legendary', 'Mantra', 6, 3, 'mercenary', true, false);
         this.hasCardPlayed = true;
         
         this._currentPower = this.currentPower;
