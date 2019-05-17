@@ -50,8 +50,10 @@ function preload() {
     textBox.id('textBox');
 
     //create useButton object
-    useButton.img = createImg('/static/assets/useButton.png');
-    useButton.img.hide();
+    useButton.img0 = createImg('/static/assets/useButton.png');
+    useButton.img0.hide();
+    useButton.img1 = createImg('/static/assets/useButtonHover.png');
+    useButton.img1.hide();
 
     //load music
     music = loadSound('/static/assets/sounds/STRUGGLE_FOR_GERA.m4a');
@@ -111,7 +113,10 @@ function draw() {
     useButton.y = 19 * innerHeight / 25;
     push();
     imageMode(CENTER);
-    image(useButton.img, useButton.x, useButton.y, useButton.width, useButton.height);
+    if (mouseIsOver())
+        image(useButton.img1, useButton.x, useButton.y, useButton.width, useButton.height);
+    else
+        image(useButton.img0, useButton.x, useButton.y, useButton.width, useButton.height);
     pop();
 
     //draw textBox
@@ -139,7 +144,7 @@ function mouseClicked() {
         box.select();
         document.execCommand('copy');
         alert("Deck copied to clipboard");
-        if(textToDeck(box.value) == "bad")
+        if (textToDeck(box.value) == "bad")
             pasteText = "BAD DECK";
     }
 }
@@ -149,4 +154,15 @@ function keyPressed() {
     if (keyCode == 13) {
         textToDeck("random");
     }
-  }
+}
+
+function mouseIsOver() {
+    if (mouseX > (useButton.x - useButton.width / 2) &&
+        mouseX < (useButton.x + useButton.width / 2) &&
+        mouseY > (useButton.y - useButton.height / 2) &&
+        mouseY < (useButton.y + useButton.height / 2)
+    )
+        return true;
+    else
+        return false;
+}
