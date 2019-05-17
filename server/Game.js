@@ -347,7 +347,7 @@ class Game {
 		Here, we're going to check for fatigue and do the fatigues if it seems to be a thing
 		*/
 		if (player.deck.length == 0) {
-			player.takeDamage(constants.FATIGUE_DAMAGE);
+			player.health -= constants.FATIGUE_DAMAGE;
 			event.view = 1; //public
 			event.type = 'fatigue';
 			event.damage = FATIGUE_DAMAGE;
