@@ -1053,7 +1053,7 @@ let GameView = (function () {
                         x: xDestination,
                         y: yDestination
                     }, 13, () => {
-                        game.enemyHealth -= attacker.currentPower;
+                        game.enemyHealth -= event.damageToDefender;
                         fixHealths();
                         fixOwnBoardSpacing(event.attacker, () => {
                             nextInEventQueue()
@@ -1071,7 +1071,7 @@ let GameView = (function () {
                         x: xDestination,
                         y: yDestination
                     }, 13, () => {
-                        game.ownHealth -= attacker.currentPower;
+                        game.ownHealth -= event.damageToDefender;
                         fixHealths();
                         fixEnemyBoardSpacing(event.attacker, () => {
                             nextInEventQueue();
@@ -1106,10 +1106,8 @@ let GameView = (function () {
                 x: target.sprite.x,
                 y: target.sprite.y
             }, 13, () => {
-                let tempAPower = attacker.currentPower;
-                let tempTPower = target.currentPower;
-                attacker.currentPower -= tempTPower;
-                target.currentPower -= tempAPower;
+                attacker.currentPower -= event.damageToAttacker;
+                target.currentPower -= event.damageToDefender;
 
                 if (attacker.currentPower < 0)
                     attacker.currentPower = 0;
