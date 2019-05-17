@@ -21,10 +21,38 @@ let useButton = {
 
 let buildButton = {
     "img": "",
-    "width": "",
-    "height": "",
     "x": "",
     "y": ""
+};
+
+let character = {
+    "yakov": {
+        "img": "",
+        "x": "",
+        "y": ""
+    },
+    "rinwald": {
+        "img": "",
+        "x": "",
+        "y": ""
+    },
+    "caius": {
+        "img": "",
+        "x": "",
+        "y": ""
+    },
+    "lorewell": {
+        "img": "",
+        "x": "",
+        "y": ""
+    },
+    "ignea": {
+        "img": "",
+        "x": "",
+        "y": ""
+    },
+    "width": "",
+    "height": ""
 };
 
 let textBox;
@@ -54,6 +82,18 @@ function preload() {
     useButton.img0.hide();
     useButton.img1 = createImg('/static/assets/useButtonHover.png');
     useButton.img1.hide();
+
+    //create characters' images
+    character.caius.img = createImg('/static/assets/caius.png');
+    character.caius.img.hide();
+    character.yakov.img = createImg('/static/assets/yakov.png');
+    character.yakov.img.hide();
+    character.lorewell.img = createImg('/static/assets/lorewell.png');
+    character.lorewell.img.hide();
+    character.rinwald.img = createImg('/static/assets/rinwald.png');
+    character.rinwald.img.hide();
+    character.ignea.img = createImg('/static/assets/ignea.png');
+    character.ignea.img.hide();
 
     //load music
     music = loadSound('/static/assets/sounds/STRUGGLE_FOR_GERA.m4a');
@@ -98,7 +138,7 @@ function draw() {
     strokeWeight(fontSize / 20);
     fill(255, 60, 60);
     textSize(fontSize);
-    text("BUILD A NEW DECK", 3 * innerWidth / 4, innerHeight / 5);
+    text("BUILD NEW DECK", 3 * innerWidth / 4, innerHeight / 5);
 
     fontSize = width / 30;
     strokeWeight(fontSize / 20);
@@ -127,6 +167,9 @@ function draw() {
     textDiv.div.size(textDiv.width, textDiv.height);
     textDiv.div.position(textDiv.x, textDiv.y);
     document.getElementById('textBox').style.fontSize = (width / 30).toString(10) + "px";
+
+    //drawCharacters
+    drawCharacters();
 }
 
 //if window resized change the canvas size
@@ -148,6 +191,37 @@ function mouseClicked() {
         if (textToDeck(box.value) == "bad")
             pasteText = "BAD DECK";
     }
+
+    // switch (characterPressed()) {
+    //     case "ignea":
+    //         localStorage.setItem("character", "ignea");
+    //         window.location.replace('/static/preGame/Deckbuilder.html');
+    //         break;
+
+    //     case "lorewell":
+    //         localStorage.setItem("character", "lorewell");
+    //         window.location.replace('/static/preGame/Deckbuilder.html');
+    //         break;
+
+    //     case "caius":
+    //         localStorage.setItem("character", "caius");
+    //         window.location.replace('/static/preGame/Deckbuilder.html');
+    //         break;
+
+    //     case "yakov":
+    //         localStorage.setItem("character", "yakov");
+    //         window.location.replace('/static/preGame/Deckbuilder.html');
+    //         break;
+
+    //     case "rinwald":
+    //         localStorage.setItem("character", "rinwald");
+    //         window.location.replace('/static/preGame/Deckbuilder.html');
+    //         break;
+
+    //     default:
+    //         return;
+    // }
+
 }
 
 //if enter key is pressed use random deck
@@ -164,6 +238,68 @@ function mouseIsOver() {
         mouseY < (useButton.y + useButton.height / 2)
     )
         return true;
-    else
-        return false;
+
+    return false;
+}
+
+function drawCharacters() {
+    character.width = width / 10;
+    character.height = 2 * height / 11;
+
+    character.ignea.x = 32 * width / 50;
+    character.ignea.y = height / 4;
+    character.lorewell.x = 32 * width / 50;
+    character.lorewell.y = (height / 4) + (height / 5);
+    character.yakov.x = 32 * width / 50;
+    character.yakov.y = (height / 4) + 2 * (height / 5);
+    character.caius.x = (43 * width / 50) - character.width;
+    character.caius.y = height / 4;
+    character.rinwald.x = (43 * width / 50) - character.width;
+    character.rinwald.y = (height / 4) + (height / 5);
+
+
+    image(character.ignea.img, character.ignea.x, character.ignea.y, character.width, character.height);
+    image(character.lorewell.img, character.lorewell.x, character.lorewell.y, character.width, character.height);
+    image(character.yakov.img, character.yakov.x, character.yakov.y, character.width, character.height);
+    image(character.caius.img, character.caius.x, character.caius.y, character.width, character.height);
+    image(character.rinwald.img, character.rinwald.x, character.rinwald.y, character.width, character.height);
+}
+
+function characterPressed() {
+    if (mouseX > (character.ignea.x - character.width / 2) &&
+        mouseX < (character.ignea.x + character.width / 2) &&
+        mouseY > (character.ignea.y - character.height / 2) &&
+        mouseY < (character.ignea.y + character.height / 2)
+    )
+        return "ignea";
+
+    if (mouseX > (character.lorewell.x - character.width / 2) &&
+        mouseX < (character.lorewell.x + character.width / 2) &&
+        mouseY > (character.lorewell.y - character.height / 2) &&
+        mouseY < (character.lorewell.y + character.height / 2)
+    )
+        return "lorewell";
+
+    if (mouseX > (character.yakov.x - character.width / 2) &&
+        mouseX < (character.yakov.x + character.width / 2) &&
+        mouseY > (character.yakov.y - character.height / 2) &&
+        mouseY < (character.yakov.y + character.height / 2)
+    )
+        return "yakov";
+
+    if (mouseX > (character.caius.x - character.width / 2) &&
+        mouseX < (character.caius.x + character.width / 2) &&
+        mouseY > (character.caius.y - character.height / 2) &&
+        mouseY < (character.caius.y + character.height / 2)
+    )
+        return "caius";
+
+    if (mouseX > (character.rinwald.x - character.width / 2) &&
+        mouseX < (character.rinwald.x + character.width / 2) &&
+        mouseY > (character.rinwald.y - character.height / 2) &&
+        mouseY < (character.rinwald.y + character.height / 2)
+    )
+        return "rinwald";
+
+    return "none";
 }
