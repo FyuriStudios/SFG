@@ -198,35 +198,35 @@ function mouseClicked() {
         return;
     }
 
-    switch (characterPressed()) {
-        case "ignea":
-            localStorage.setItem("character", "ignea");
-            window.location.replace('/static/preGame/deckbuilder.html');
-            break;
+    // switch (characterPressed()) {
+    //     case "ignea":
+    //         localStorage.setItem("character", "ignea");
+    //         window.location.replace('/static/preGame/deckbuilder.html');
+    //         break;
 
-        case "lorewell":
-            localStorage.setItem("character", "lorewell");
-            window.location.replace('/static/preGame/deckbuilder.html');
-            break;
+    //     case "lorewell":
+    //         localStorage.setItem("character", "lorewell");
+    //         window.location.replace('/static/preGame/deckbuilder.html');
+    //         break;
 
-        case "caius":
-            localStorage.setItem("character", "caius");
-            window.location.replace('/static/preGame/deckbuilder.html');
-            break;
+    //     case "caius":
+    //         localStorage.setItem("character", "caius");
+    //         window.location.replace('/static/preGame/deckbuilder.html');
+    //         break;
 
-        case "yakov":
-            localStorage.setItem("character", "yakov");
-            window.location.replace('/static/preGame/deckbuilder.html');
-            break;
+    //     case "yakov":
+    //         localStorage.setItem("character", "yakov");
+    //         window.location.replace('/static/preGame/deckbuilder.html');
+    //         break;
 
-        case "rinwald":
-            localStorage.setItem("character", "rinwald");
-            window.location.replace('/static/preGame/deckbuilder.html');
-            break;
+    //     case "rinwald":
+    //         localStorage.setItem("character", "rinwald");
+    //         window.location.replace('/static/preGame/deckbuilder.html');
+    //         break;
 
-        default:
-            return;
-    }
+    //     default:
+    //         return;
+    // }
 
     deckWord = deckWord == "DECK" ? "DICK" : "DECK";
 }
