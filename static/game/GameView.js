@@ -1053,7 +1053,7 @@ let GameView = (function () {
                         x: xDestination,
                         y: yDestination
                     }, 13, () => {
-                        game.enemyHealth -= attacker.currentPower;
+                        game.enemyHealth -= event.damageToDefender;
                         fixHealths();
                         fixOwnBoardSpacing(event.attacker, () => {
                             nextInEventQueue()
@@ -1071,7 +1071,7 @@ let GameView = (function () {
                         x: xDestination,
                         y: yDestination
                     }, 13, () => {
-                        game.ownHealth -= attacker.currentPower;
+                        game.ownHealth -= event.damageToDefender;
                         fixHealths();
                         fixEnemyBoardSpacing(event.attacker, () => {
                             nextInEventQueue();
@@ -1106,10 +1106,9 @@ let GameView = (function () {
                 x: target.sprite.x,
                 y: target.sprite.y
             }, 13, () => {
-                let tempAPower = attacker.currentPower;
-                let tempTPower = target.currentPower;
-                attacker.currentPower -= tempTPower;
-                target.currentPower -= tempAPower;
+
+                attacker.currentPower -= event.damageToAttacker;
+                target.currentPower -= event.damageToDefender;
 
                 if (attacker.currentPower < 0)
                     attacker.currentPower = 0;
@@ -1120,13 +1119,13 @@ let GameView = (function () {
                 target.updatePower();
 
                 AnimationQueue.addMoveRequest(attacker.sprite, {
-                    x: attacker.sprite.x - (dx * tempTPower * app.stage.width * .01),
-                    y: attacker.sprite.y + (dy * tempTPower * app.stage.width * .01)
+                    x: attacker.sprite.x - (dx * event.damageToAttacker * app.stage.width * .01),
+                    y: attacker.sprite.y + (dy * event.damageToAttacker * app.stage.width * .01)
                 }, 15);
 
                 AnimationQueue.addMoveRequest(target.sprite, {
-                    x: target.sprite.x + (dx * tempAPower * app.stage.width * .01),
-                    y: target.sprite.y - (dy * tempAPower * app.stage.width * .01)
+                    x: target.sprite.x + (dx * event.damageToDefender * app.stage.width * .01),
+                    y: target.sprite.y - (dy * event.damageToDefender * app.stage.width * .01)
                 }, 15, () => {
                     setTimeout(() => {
                         fixOwnBoardSpacing();
