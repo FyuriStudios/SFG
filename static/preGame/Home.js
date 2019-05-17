@@ -86,26 +86,26 @@ function draw() {
     textSize(fontSize);
     text("HOME", innerWidth / 2, innerHeight / 12);
 
-    fontSize = width / 25;
+    fontSize = width / 30;
     strokeWeight(fontSize / 20);
     fill(255, 60, 60);
     textSize(fontSize);
     text(pasteText, innerWidth / 4, innerHeight / 5);
 
-    fontSize = width / 25;
+    fontSize = width / 30;
     strokeWeight(fontSize / 20);
     fill(255, 60, 60);
     textSize(fontSize);
-    text("BUILD NEW DECK", 3 * innerWidth / 4, innerHeight / 5);
+    text("BUILD A NEW DECK", 3 * innerWidth / 4, innerHeight / 5);
 
-    fontSize = width / 25;
+    fontSize = width / 30;
     strokeWeight(fontSize / 20);
-    fill(255, 60, 60);
+    fill(60, 180, 60);
     textSize(fontSize);
-    text("PRESS ENTER FOR RANDOM DECK", innerWidth / 2, 10 * innerHeight / 11);
+    text("PRESS 'ENTER' TO USE A RANDOM DECK", innerWidth / 2, 10 * innerHeight / 11);
 
     //draw useButton image
-    useButton.width = innerWidth / 4;
+    useButton.width = innerWidth / 6;
     useButton.height = innerHeight / 5;
     useButton.x = innerWidth / 4;
     useButton.y = 19 * innerHeight / 25;
@@ -121,7 +121,6 @@ function draw() {
     textDiv.y = innerHeight / 4;
     textDiv.div.size(textDiv.width, textDiv.height);
     textDiv.div.position(textDiv.x, textDiv.y);
-    //image(loginBox.img, loginBox.x, loginBox.y, loginBox.width, loginBox.height);
 }
 
 //if window resized change the canvas size
@@ -139,6 +138,7 @@ function mouseClicked() {
         var box = document.getElementById('textBox');
         box.select();
         document.execCommand('copy');
+        alert("Deck copied to clipboard");
         if(textToDeck(box.value) == "bad")
             pasteText = "BAD DECK";
     }

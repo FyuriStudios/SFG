@@ -10,5 +10,6 @@ function textToDeck(text) { //TODO check if the deck is valid
     }
     localStorage.setItem("deckStored", text);
     music.stop();
+    remove();
     window.location.replace('/static/game/game.html');
 }
