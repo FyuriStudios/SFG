@@ -71,7 +71,7 @@ class Monster extends Card {
         if (targetLoc == -1) {
             let currHealth = enemyCharacter.health;
             enemyCharacter.health -= this.currentPower;
-            event.damageToDefender = enemyCharacter.currHealth - enemyCharacter.health;
+            event.damageToDefender = currHealth - enemyCharacter.health;
             event.damageToAttacker = 0;
         }
         else {

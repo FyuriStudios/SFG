@@ -78,23 +78,25 @@ class Melody extends Monster {
 		if (defenders.length > 0 && !defenders.includes(targetLoc))
             return false;
 
-        let melodyIndex;
-        game.currentPlayer.board.forEach((value, index) => {
-            if(value == this) {
-                melodyIndex = index;
-            }
-        });
+        if(targetLoc == -1) {
+            let melodyIndex;
+            game.currentPlayer.board.forEach((value, index) => {
+                if(value == this) {
+                    melodyIndex = index;
+                }
+            });
 
-        this.currentPower += 2;
+            this.currentPower += 2;
 
-        let boostEvent = {
-            type: 'boost',
-            targetSide: game.currentPlayer.id,
-            target: melodyIndex,
-            boost: 2
-        };
+            let boostEvent = {
+                type: 'boost',
+                targetSide: game.currentPlayer.id,
+                target: melodyIndex,
+                boost: 2
+            };
 
-        eventChain.push(boostEvent);
+            eventChain.push(boostEvent);
+        }
 
         var event = {
             type: 'attack',
@@ -106,7 +108,7 @@ class Melody extends Monster {
         if (targetLoc == -1) {
             let currHealth = enemyCharacter.health;
             enemyCharacter.health -= this.currentPower;
-            event.damageToDefender = enemyCharacter.currHealth - enemyCharacter.health;
+            event.damageToDefender = currHealth - enemyCharacter.health;
             event.damageToAttacker = 0;
         }
         else {
