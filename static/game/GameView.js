@@ -392,7 +392,7 @@ let GameView = (function () {
             } else if (!(this.x > fieldBounds.x + fieldBounds.width ||
                     this.x + this.width < fieldBounds.x ||
                     this.y > fieldBounds.y + fieldBounds.height ||
-                    this.y + this.height < fieldBounds.y)) {
+                    this.y + this.height < fieldBounds.y) && !temp.targeting) {
                 outputFunc({
                     type: 'play card',
                     handLoc: handLoc,
