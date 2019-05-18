@@ -57,7 +57,7 @@ class Melody extends Monster {
  
     }
 
-    attack(enemyCharacter, currentCharacter, attackerLoc, targetLoc, eventChain) {
+    attack(game, attackerLoc, targetLoc, eventChain) {
 
         if (this.turnsBeforeAttack > 0) {
 			return false;
@@ -68,7 +68,7 @@ class Melody extends Monster {
 
 		let defenders = [];
 
-		enemyCharacter.board.forEach((monster, location) => {
+		game.otherPlayer.board.forEach((monster, location) => {
 			if (monster.hasDefender) {
 				defenders.push(location);
 			}
@@ -89,7 +89,7 @@ class Melody extends Monster {
 
             let boostEvent = {
                 type: 'boost',
-                targetSide: currentCharacter.id,
+                targetSide: game.currentPlayer.id,
                 target: melodyIndex,
                 boost: 2
             };
@@ -105,19 +105,19 @@ class Melody extends Monster {
         }
             
         if (targetLoc == -1) {
-            let currHealth = enemyCharacter.health;
-            enemyCharacter.health -= this.currentPower;
-            event.damageToDefender = currHealth - enemyCharacter.health;
+            let currHealth = game.otherPlayer.health;
+            game.otherPlayer.health -= this.currentPower;
+            event.damageToDefender = currHealth - game.otherPlayer.health;
             event.damageToAttacker = 0;
         }
         else {
             let tempAPower = this.currentPower;
-            let tempTPower = enemyCharacter.board[targetLoc].currentPower;
+            let tempTPower = game.otherPlayer.board[targetLoc].currentPower;
 
             this.currentPower -= tempTPower;
-            enemyCharacter.board[targetLoc].currentPower -= tempAPower;
+            game.otherPlayer.board[targetLoc].currentPower -= tempAPower;
 
-            event.damageToDefender = tempTPower - enemyCharacter.board[targetLoc].currentPower;
+            event.damageToDefender = tempTPower - game.otherPlayer.board[targetLoc].currentPower;
             event.damageToAttacker =  tempAPower - this.currentPower;
         }
 
