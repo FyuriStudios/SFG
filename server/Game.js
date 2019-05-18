@@ -468,9 +468,9 @@ class Game {
 	 */
 	attack(input, eventChain) {
 
-        console.log('attacker index: ' + input.attacker);
-        console.log(this.currentPlayer.board);
-
+        console.log('attack dialogue');
+        console.log(input);
+        
 		if((input.attacker >= this.currentPlayer.board.length || input.attacker == -1) || input.target >= this.currentPlayer.board.length) { //just real quick making sure that the locations are valid
 			return;
 		}
