@@ -678,7 +678,7 @@ let GameView = (function () {
         });
     }
 
-    function mouseOverCardOnBoard(boardArray, sprite) {
+    function mouseOverCardOnBoard(boardArray, sprite) { //Make it so this can't happen while cards are attacking.
 
         if (sprite.inMoveQueue || sprite.dragging || arrowDragging) {
             return;
@@ -766,7 +766,7 @@ let GameView = (function () {
         app.stage.removeChild(arrow);
 
         let attackerLoc;
-        game.ownBoard.forEach((value, index) => value.sprite == this ? attackerLoc = index : null);
+        game.ownBoard.forEach((value, index) => value.sprite == this ? attackerLoc = index : null); //ATTACKER IS SOMETIMES UNDEFINED
 
         game.enemyBoard.forEach((value, index) => {
             if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&

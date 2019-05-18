@@ -475,7 +475,7 @@ class Game {
 			return;
 		}
 
-		if(this.currentPlayer.board[input.attacker].attack(this.otherPlayer, this.currentPlayer, input.attacker, input.target, eventChain)) {
+		if(this.currentPlayer.board[input.attacker].attack(this, input.attacker, input.target, eventChain)) {
             if(this.currentPlayer.board[input.attacker].hasSelfAttack) {
                 this.currentPlayer.board[input.attacker].selfAttack(input, this, eventChain);
             }
@@ -575,9 +575,18 @@ class Game {
 		this.drawCard(temp, eventChain);
 
 		temp.board.forEach(value => {
-			if (!value.defender && !value.isStatic) {
+			if (!value.hasDefender && !value.isStatic) {
 				value.turnsBeforeAttack -= 1;
 			}
+		});
+
+		this.currentPlayer.board.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
+		});
+		this.otherPlayer.board.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
 		});
 
 		this.killDead(eventChain);
@@ -597,8 +606,17 @@ class Game {
 			player: this.currentPlayer.id
 		});
 
-        this.turnCounter++;
-        //TODO: add effects
+		this.turnCounter++;
+		
+		
+		this.currentPlayer.board.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
+		});
+		this.otherPlayer.board.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
+		});
         this.killDead(eventChain);
         
 		this.startTurn(eventChain);
