@@ -15,18 +15,23 @@ class Crust extends Monster {
             }
         });
 
+        this.hasTurnIncrement = true;
+
+        this.addTurnIncrement({
+            name: 'fuck crust',
+            func: function(input, game, eventChain) {
+                if(game.turnCounter %2 == 0 && this.turnCounter == game.turnCounter - 1) {
+                    this.turnsBeforeAttack = 2;
+                }
+            }
+        });
+
         this.attacksThisTurn = 0;
     }
 
     attack(enemyCharacter, currentCharacter, attackerLoc, targetLoc, eventChain) {
 
-        if (this.attacksThisTurn == 2) {
-            this.attacksThisTurn = 0;
-            this.turnsBeforeAttack = 2;
-            return false;
-        }
-
-		if (this.turnsBeforeAttack > 0) {
+        if (this.turnsBeforeAttack > 0) {
 			return false;
 		}
 
@@ -44,7 +49,15 @@ class Crust extends Monster {
 		if (defenders.length > 0 && !defenders.includes(targetLoc))
             return false;
 
-        this.attacksThisTurn++;
+        if(this.turnCounter == undefined || this.turnCounter != game.turnCounter)  { //if he hasn't attacked yet
+            this.turnCounter = game.turnCounter;
+            this.attacksThisTurn = 1;
+        }
+        else if(this.turnCounter == game.turnCounter && this.attacksThisTurn == 1) {
+            this.attacksThisTurn = 2;
+        }
+        else if(this.attacksThisTurn == 2)
+            return false;
 
         var event = {
             type: 'attack',
@@ -70,7 +83,7 @@ class Crust extends Monster {
             event.damageToAttacker =  tempAPower - this.currentPower;
         }
 
-		eventChain.push(event);
+        eventChain.push(event);
 
 		return true;
 	}

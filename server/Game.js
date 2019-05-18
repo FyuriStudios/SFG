@@ -580,6 +580,15 @@ class Game {
 			}
 		});
 
+		this.currentPlayer.board.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
+		});
+		this.otherPlayer.board.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
+		});
+
 		this.killDead(eventChain);
 
 	}
@@ -597,8 +606,16 @@ class Game {
 			player: this.currentPlayer.id
 		});
 
-        this.turnCounter++;
-        //TODO: add effects
+		this.turnCounter++;
+		
+		this.currentPlayer.board.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
+		});
+		this.otherPlayer.board.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
+		});
         this.killDead(eventChain);
         
 		this.startTurn(eventChain);
