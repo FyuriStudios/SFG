@@ -392,7 +392,7 @@ let GameView = (function () {
             } else if (!(this.x > fieldBounds.x + fieldBounds.width ||
                     this.x + this.width < fieldBounds.x ||
                     this.y > fieldBounds.y + fieldBounds.height ||
-                    this.y + this.height < fieldBounds.y)) {
+                    this.y + this.height < fieldBounds.y) && !temp.targeting) {
                 outputFunc({
                     type: 'play card',
                     handLoc: handLoc,
@@ -1297,7 +1297,7 @@ let GameView = (function () {
 
         else if(event.type == 'hand invoke') {
 
-            if(event.id == game.id) {
+            if(event.player == game.id) {
                 let card = game.hand.splice(event.handLoc, 1)[0]; //remove the card at the relevant location in the player's hand
 
                 game.ownBoard.unshift(card);

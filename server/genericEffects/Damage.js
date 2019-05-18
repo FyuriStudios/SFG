@@ -13,12 +13,15 @@ module.exports = {
 
         let player = input.targetSide == 1? game.player1: game.player2;
 
+        if(input.target >= player.board.length || input.target < -1) {
+            console.log('Invalid damage target');
+            return;
+        }
         if(input.target == -1) {
             player.health -= damage;
         }
         else {
             let card = player.board[input.target];
-            console.log('players board: ' + player.board);
             card.currentPower -= damage;
         }
 
