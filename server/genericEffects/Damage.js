@@ -8,7 +8,6 @@ module.exports = {
             player: game.currentPlayer.id,
             targetSide: input.targetSide,
             target: input.target,
-            damage: damage,
         };
 
         let player = input.targetSide == 1? game.player1: game.player2;
@@ -17,12 +16,16 @@ module.exports = {
             console.log('Invalid damage target');
             return;
         }
+
         if(input.target == -1) {
             player.health -= damage;
         }
         else {
             let card = player.board[input.target];
-            card.currentPower -= damage;
+            let tempPower = card.currentPower;
+
+            card.currentPower = (card.currentPower - damage);
+            event.damage = tempPower - card.currentPower; //using this because of Mantra
         }
 
         eventChain.push(event);
