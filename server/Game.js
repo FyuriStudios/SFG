@@ -477,7 +477,7 @@ class Game {
 
 		if(this.currentPlayer.board[input.attacker].attack(this.otherPlayer, this.currentPlayer, input.attacker, input.target, eventChain)) {
             if(this.currentPlayer.board[input.attacker].hasSelfAttack) {
-                selfAttack(input, this, eventChain);
+                this.currentPlayer.board[input.attacker].selfAttack(input, this, eventChain);
             }
             this.otherPlayer.board.forEach((value) => {
                 if(value.hasEnemyAttack) {

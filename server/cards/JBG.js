@@ -23,7 +23,7 @@ class JBG extends Monster {
                     view: 2,
                 }
 
-                let card = game.player2.deck.pop();
+                card = game.player2.deck.pop();
                 game.player2.hand.unshift(card);
 
                 let event2 = {
