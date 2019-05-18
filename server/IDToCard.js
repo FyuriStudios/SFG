@@ -24,4 +24,8 @@ module.exports = function (id) {
         let card = require('./cards/Crust');
         return new card();
     }
+    else if(id == 5) {
+        let card = require('./cards/Domino');
+        return new card();
+    }
 }
