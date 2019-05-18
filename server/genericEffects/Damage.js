@@ -19,6 +19,7 @@ module.exports = {
 
         if(input.target == -1) {
             player.health -= damage;
+            event.damage = damage;
         }
         else {
             let card = player.board[input.target];
