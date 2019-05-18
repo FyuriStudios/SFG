@@ -20,4 +20,8 @@ module.exports = function (id) {
         let card = require('./cards/JBG');
         return new card();
     }
+    else if(id == 4) {
+        let card = require('./cards/Crust');
+        return new card();
+    }
 }
