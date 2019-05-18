@@ -9,14 +9,15 @@ class Monster extends Card {
 
 	/**
 	 * 
-	 * @param {*} type 
-	 * @param {*} id 
-	 * @param {*} tokenType 
-	 * @param {*} rarity 
-	 * @param {*} name 
-	 * @param {*} cost 
-	 * @param {*} power 
-	 * @param {*} hasDefender 
+	 * @param {string} type 
+	 * @param {Number} id 
+	 * @param {string} tokenType 
+	 * @param {string} rarity 
+	 * @param {string} name 
+	 * @param {Number} cost 
+	 * @param {Number} power 
+	 * @param {boolean} hasDefender 
+	 * @param {boolean} relentless
 	 */
 	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false, relentless = false) {
 		super(type, id, tokenType, rarity, name, cost);

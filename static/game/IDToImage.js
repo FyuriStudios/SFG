@@ -11,6 +11,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Melody_Hand.png');
             } else if(id == 2) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Mantra_Hand.png');
+            } else if(id == 3) {
+                return PIXI.Sprite.from('/static/assets/in_hand/JBG_Hand.png');
             }
         },
 
@@ -23,6 +25,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Melody_Hover.png');
             } else if(id == 2) {
                 return PIXI.Sprite.from('/static/assets/popup/Mantra_Hover.png');
+            } else if(id == 3) {
+                return PIXI.Sprite.from('/static/assets/popup/JBG_Hover.png');
             }
         },
 
@@ -33,6 +37,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Melody_Board_Piece.png');
             } else if(id == 2) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Mantra_Board_Piece.png');
+            } else if(id == 3) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/JBG_Board_Piece.png');
             }
         }
     }

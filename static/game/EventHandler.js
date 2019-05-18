@@ -11,9 +11,10 @@ function startGame() {
     if (passDeck == "random") {
         deck.push(1);
         deck.push(2);
-        for (var i = 0; i < 14; i++)
+        deck.push(3);
+        for (var i = 0; i < 8; i++)
             deck.push(-1);
-        for (var i = 0; i < 14; i++)
+        for (var i = 0; i < 8; i++)
             deck.push(-2);
     } else {
         deck = passDeck.split(', ').map(Number);
