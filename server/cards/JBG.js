@@ -1,7 +1,7 @@
 let Monster = require('../Monster');
 let Damage = require('../genericEffects/Damage');
 
-class JBG extends Monster {
+class JBG extends Monster { //Fix this guy.
 
     constructor() {
         super('monster', 3, 'monster', 'legendary', 'Jasper the Obsessed', 5, 6, 'advisor', false, true);
@@ -19,7 +19,7 @@ class JBG extends Monster {
                 let event1 = {
                     type: 'draw card',
                     player: 1,
-                    card: card,
+                    card: game.backendCardTranslate(card),
                     view: 2,
                 }
 
@@ -29,7 +29,7 @@ class JBG extends Monster {
                 let event2 = {
                     type: 'draw card',
                     player: 2,
-                    card: card,
+                    card: game.backendCardTranslate(card),
                     view: 2,
                 }
 
