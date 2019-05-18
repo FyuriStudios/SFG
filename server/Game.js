@@ -608,6 +608,7 @@ class Game {
 
 		this.turnCounter++;
 		
+		
 		this.currentPlayer.board.forEach(value => {
 			if(value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);

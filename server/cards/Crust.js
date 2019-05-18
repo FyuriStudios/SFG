@@ -17,11 +17,13 @@ class Crust extends Monster {
 
         this.hasTurnIncrement = true;
 
+        let fuckCrust = this;
+
         this.addTurnIncrement({
             name: 'fuck crust',
             func: function(input, game, eventChain) {
-                if(game.turnCounter %2 == 0 && this.turnCounter == game.turnCounter - 1) {
-                    this.turnsBeforeAttack = 2;
+                if(game.turnCounter %2 == 0 && fuckCrust.turnCounter == game.turnCounter - 1) {
+                    fuckCrust.turnsBeforeAttack = 2;
                 }
             }
         });
