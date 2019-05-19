@@ -16,4 +16,16 @@ module.exports = function (id) {
         let card = require('./cards/Mantra');
         return new card();
     }
+    else if(id == 3) {
+        let card = require('./cards/JBG');
+        return new card();
+    }
+    else if(id == 4) {
+        let card = require('./cards/Crust');
+        return new card();
+    }
+    else if(id == 5) {
+        let card = require('./cards/Domino');
+        return new card();
+    }
 }

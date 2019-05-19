@@ -547,7 +547,7 @@ let GameView = (function () {
                 align: 'center'
             });
             game.ownMonsterTokenText.anchor.x = game.ownMonsterTokenText.y = .5;
-            game.ownMonsterTokenText.x = app.stage.width * .6255;
+            game.ownMonsterTokenText.x = app.stage.width * .776;
             game.ownMonsterTokenText.y = app.stage.height * .839;
             game.ownMonsterTokenText.width = app.stage.width * (game.ownMonsterTokenText.text.length == 1 ? .04 : .06);
             game.ownMonsterTokenText.height = app.stage.height * .12;
@@ -565,7 +565,7 @@ let GameView = (function () {
                 align: 'center'
             });
             game.ownSpellTokenText.anchor.x = game.ownSpellTokenText.y = .5;
-            game.ownSpellTokenText.x = app.stage.width * .776;
+            game.ownSpellTokenText.x = app.stage.width * .6255;
             game.ownSpellTokenText.y = app.stage.height * .839;
             game.ownSpellTokenText.width = app.stage.width * (game.ownSpellTokenText.text.length == 1 ? .04 : .06);
             game.ownSpellTokenText.height = app.stage.height * .12;
@@ -583,7 +583,7 @@ let GameView = (function () {
                 align: 'center'
             });
             game.enemyMonsterTokenText.anchor.x = game.enemyMonsterTokenText.y = .5;
-            game.enemyMonsterTokenText.x = app.stage.width * .6255;
+            game.enemyMonsterTokenText.x = app.stage.width * .776;
             game.enemyMonsterTokenText.y = app.stage.height * .031;
             game.enemyMonsterTokenText.width = app.stage.width * (game.enemyMonsterTokenText.text.length == 1 ? .04 : .06);
             game.enemyMonsterTokenText.height = app.stage.height * .12;
@@ -601,7 +601,7 @@ let GameView = (function () {
                 align: 'center'
             });
             game.enemySpellTokenText.anchor.x = game.enemySpellTokenText.y = .5;
-            game.enemySpellTokenText.x = app.stage.width * .776;
+            game.enemySpellTokenText.x = app.stage.width * .6255;
             game.enemySpellTokenText.y = app.stage.height * .031;
             game.enemySpellTokenText.width = app.stage.width * (game.enemySpellTokenText.text.length == 1 ? .04 : .06);
             game.enemySpellTokenText.height = app.stage.height * .12;
@@ -678,7 +678,7 @@ let GameView = (function () {
         });
     }
 
-    function mouseOverCardOnBoard(boardArray, sprite) {
+    function mouseOverCardOnBoard(boardArray, sprite) { //Make it so this can't happen while cards are attacking.
 
         if (sprite.inMoveQueue || sprite.dragging || arrowDragging) {
             return;
@@ -766,7 +766,7 @@ let GameView = (function () {
         app.stage.removeChild(arrow);
 
         let attackerLoc;
-        game.ownBoard.forEach((value, index) => value.sprite == this ? attackerLoc = index : null);
+        game.ownBoard.forEach((value, index) => value.sprite == this ? attackerLoc = index : null); //ATTACKER IS SOMETIMES UNDEFINED
 
         game.enemyBoard.forEach((value, index) => {
             if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
