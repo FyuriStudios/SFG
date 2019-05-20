@@ -2,100 +2,86 @@ let character;
 let music;
 let font;
 
-function preload() {
-    //load music
-    music = loadSound('/static/assets/sounds/STRUGGLE_FOR_GERA.m4a');
+let music = new Audio('/static/assets/sounds/STRUGGLE_FOR_GERA.m4a');
+music.loop = true;
+music.play();
 
-    //load font
-    font = loadFont('/static/assets/fonts/Piedra-Regular.ttf');
+character = localStorage.getItem("character");
+console.log(character);
 
-    character = localStorage.getItem("character");
+let app = new PIXI.Application({
+    antialias: true,
+    transparent: true,
+    forceCanvas: false //these are just some options that we applied in the constructor. See PIXI documentation for more details.
+});
 
-    console.log(character);
+document.body.addEventListener('mousedown', function (event) {
+    console.log('x: ' + event.clientX / app.stage.width);
+    console.log('y: ' + event.clientY / app.stage.height);
+});
 
-    switch (character) {
-        case "ignea":
-            preloadIgnea();
-            break;
+/*
+            Don't touch this. Everything breaks if you do.
+            */
+setTimeout(() => {
+    if (waitGameImage != undefined)
+        waitGameImage.remove();
 
-        case "lorewell":
-            preloadLorewell();
-            break;
+    if (waitGif != undefined)
+        waitGif.remove();
 
-        case "caius":
-            preloadCaius();
-            break;
+    app.stage.width = innerWidth;
+    app.stage.height = innerHeight;
 
-        case "yakov":
-            preloadYakov();
-            break;
+    app.renderer.resize(innerWidth, innerHeight);
 
-        case "rinwald":
-            preloadRinwald();
-            break;
+    document.body.appendChild(app.view);
+}, 50);
 
-        default:
-            return;
-    }
+
+
+
+switch (character) {
+    case "ignea":
+        ignea();
+        break;
+
+    case "lorewell":
+        lorewell();
+        break;
+
+    case "caius":
+        caius();
+        break;
+
+    case "yakov":
+        yakov();
+        break;
+
+    case "rinwald":
+        rinwald();
+        break;
+
+    default:
+        break;
 }
 
-function setup() {
-    clear();
 
-    //loop sound
-    if (!music.isPlaying())
-        music.play();
+function resizeDisplay() {
 
+    /*
+    Changes height and width to the new screen size.
+    */
+    app.stage.width = innerWidth;
+    app.stage.height = innerHeight;
 
-    switch (character) {
-        case "ignea":
-            setupIgnea();
-            break;
+    /*
+    Force resizes the screen in the renderer.
+    */
+    app.renderer.resize(innerWidth, innerHeight);
 
-        case "lorewell":
-            setupLorewell();
-            break;
-
-        case "caius":
-            setupCaius();
-            break;
-
-        case "yakov":
-            setupYakov();
-            break;
-
-        case "rinwald":
-            setupRinwald();
-            break;
-
-        default:
-            return;
-    }
-}
-
-function draw() {
-    switch (character) {
-        case "ignea":
-            drawIgnea();
-            break;
-
-        case "lorewell":
-            drawLorewell();
-            break;
-
-        case "caius":
-            drawCaius();
-            break;
-
-        case "yakov":
-            drawYakov();
-            break;
-
-        case "rinwald":
-            drawRinwald();
-            break;
-
-        default:
-            return;
-    }
+    /*
+    Adds a new view child. This might be unnecessary but I haven't tested it much.
+    */
+    document.body.appendChild(app.view);
 }

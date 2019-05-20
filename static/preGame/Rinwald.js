@@ -1,11 +1,3 @@
-function preloadRinwald() {
-
-}
-
-function setupRinwald() {
-
-}
-
-function drawRinwald() {
+function preloadrinwald() {
 
 }

@@ -44,10 +44,7 @@
         }
     </style>
 
-    <!-- include the p5.js processing library to create launch screen. Can overlay images and videos etc. -->
-    <script src="/static/assets/libraries/p5.min.js"></script>
-    <script src="/static/assets/libraries/p5.dom.min.js"></script>
-    <script src="/static/assets/libraries/p5.sound.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pixi.js/4.5.1/pixi.min.js"></script>
 
     <script src="/static/preGame/Deckbuilder.js"></script>
     <script src="/static/preGame/TextToDeck.js"></script>
@@ -58,7 +55,7 @@
     <script src="/static/preGame/Yakov.js"></script>
 </head>
 
-<body>
+<body onresize='resizeDisplay()'>
 
 </body>
 
