@@ -28,4 +28,8 @@ module.exports = function (id) {
         let card = require('./cards/Domino');
         return new card();
     }
+    else if(id == 6) {
+        let card = require('./cards/SecretGrove');
+        return new card();
+    }
 }
