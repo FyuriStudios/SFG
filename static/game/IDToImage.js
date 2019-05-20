@@ -42,7 +42,7 @@ IDToImage = (function () {
             } else if(id == 6) {
                 return PIXI.Sprite.from('/static/assets/popup/Secret_Hover.png');
             } else if(id == 7) {
-                return PIXI.Sprite.from('/static/assets/in_hand/Ratakhe_Hover.png');
+                return PIXI.Sprite.from('/static/assets/popup/Ratakhe_Hover.png');
             }
         },
 
@@ -60,7 +60,7 @@ IDToImage = (function () {
             } else if(id == 5) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Domino_Board_Piece.png');
             } else if(id == 7) {
-                return PIXI.Sprite.from('/static/assets/in_hand/Ratakhe_Board_Piece.png');
+                return PIXI.Sprite.from('/static/assets/board_pieces/Ratakhe_Board_Piece.png');
             }
         }
     }
