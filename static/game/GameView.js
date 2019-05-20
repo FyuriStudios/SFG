@@ -970,10 +970,10 @@ let GameView = (function () {
 
                 } else {
 
-                        fixOwnHandSpacing();
-                        app.stage.removeChild(card.sprite);
-                        game.ownGraveyard.push(card);
-                        nextInEventQueue();
+                    fixOwnHandSpacing();
+                    app.stage.removeChild(card.sprite);
+                    game.ownGraveyard.push(card);
+                    nextInEventQueue();
                 }
 
             } else {
@@ -1009,10 +1009,12 @@ let GameView = (function () {
 
                 } else {
 
-                    app.stage.removeChild(enemyCard.sprite);
-                    game.enemyGraveyard.push(enemyCard);
-                    fixEnemyHandSpacing();
-                    nextInEventQueue();
+                    AnimationQueue.addMoveRequest(enemyCard.sprite, {x: app.stage.width * .25, y: app.stage.height * .5}, 15, () => {
+                        app.stage.removeChild(enemyCard.sprite);
+                        game.enemyGraveyard.push(enemyCard);
+                        fixEnemyHandSpacing();
+                        nextInEventQueue();
+                    });
                     
                 }
 
