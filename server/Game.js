@@ -169,6 +169,7 @@ class Game {
                 hasDefender: card.hasDefender,
                 isStatic: card.isStatic,
                 targeting: card.targeting,
+                forseeing: card.forseeing,
             };
         } else {
             return {
