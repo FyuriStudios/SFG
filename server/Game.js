@@ -472,10 +472,6 @@ class Game {
 
         console.log('attack dialogue');
         console.log(input);
-        
-		if((input.attacker >= this.currentPlayer.board.length || input.attacker == -1) || input.target >= this.currentPlayer.board.length || input.attacker == undefined) { //just real quick making sure that the locations are valid
-			return;
-		}
 
 		if(this.currentPlayer.board[input.attacker].attack(this, input.attacker, input.target, eventChain)) {
             if(this.currentPlayer.board[input.attacker].hasSelfAttack) {
