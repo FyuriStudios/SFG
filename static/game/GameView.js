@@ -424,6 +424,10 @@ let GameView = (function () {
         card.height = app.stage.height * .21;
     }
 
+    function forsee(completion) {
+
+    }
+
     /**
      * This function finds all of the sprites that are in the player's hand array and animates them to the "correct" location in their 
      * hand. For example, when a player draws a card you can add it to their hand array and then call this function.
@@ -1439,8 +1443,9 @@ let GameView = (function () {
                 .add('endButtonHover', '/static/assets/End_Turn_Button_Hover.png')
                 .add('tokenFrame', '/static/assets/tokenFrame.png')
                 .add('arrowHead', '/static/assets/arrow_head.png')
-                .add('arrowBody', '/static/assets/arrow_body.png')
-                .add('graveyardIcon', '/static/assets/graveyardIcon.png');
+                .add('graveyardIcon', '/static/assets/graveyardIcon.png')
+                .add('monsterTokensPanel', '/static/assets/monster_tokens_panel.png')
+                .add('actionTokensPanel', '/static/assets/action_tokens_panel.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -1454,8 +1459,9 @@ let GameView = (function () {
                 textures.endButtonHover = resources.endButtonHover.texture;
                 textures.tokenFrame = resources.tokenFrame.texture;
                 textures.arrowHead = resources.arrowHead.texture;
-                textures.arrowBody = resources.arrowBody.texture;
                 textures.graveyardIcon = resources.graveyardIcon.texture;
+                textures.actionTokensPanel = resoures.actionTokensPanel.texture;
+                textures.monsterTokensPanel = resources.monsterTokensPanel.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
