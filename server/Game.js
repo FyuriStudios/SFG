@@ -353,7 +353,7 @@ class Game {
 			player.health -= constants.FATIGUE_DAMAGE;
 			event.view = 1; //public
 			event.type = 'fatigue';
-			event.damage = FATIGUE_DAMAGE;
+			event.damage = constants.FATIGUE_DAMAGE;
 			event.player = player.id;
 		}
 
