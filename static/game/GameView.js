@@ -323,16 +323,23 @@ let GameView = (function () {
                     this.y > fieldBounds.y + fieldBounds.height ||
                     this.y + this.height < fieldBounds.y)) {
 
-
-                /*
-                Call outputFunc with an event. Events from the backend to the frontend are similar to events going in the other direction,
-                although I haven't documented frontend -> backend events yet.
-                */
-                outputFunc({
-                    type: 'play card',
-                    handLoc: handLoc,
-                    playLoc: this.spotForCard
-                });
+                if(temp.forseeing) {
+                    forsee(choice => {
+                        outputFunc({
+                            choice: choice,
+                            type: 'play card',
+                            handLoc: handLoc,
+                            playLoc: this.spotForCard
+                        });
+                    });
+                }
+                else {
+                    outputFunc({
+                        type: 'play card',
+                        handLoc: handLoc,
+                        playLoc: this.spotForCard
+                    });
+                }
 
                 this.spotForCard = undefined;
             }
@@ -350,53 +357,118 @@ let GameView = (function () {
                 game.enemyBoard.forEach((value, index) => {
                     if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
                         value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y) {
-                        outputFunc({
-                            type: 'play card',
-                            handLoc: handLoc,
-                            target: index,
-                            targetSide: game.id == 1?2:1,
-                        });
+
+                        if(temp.forseeing) {
+                            forsee(choice => {
+                                outputFunc({
+                                    choice: choice,
+                                    type: 'play card',
+                                    handLoc: handLoc,
+                                    targetSide: game.id == 1?2:1,
+                                    target: index,
+                                });
+                            });
+                        }
+                        else {
+                            outputFunc({
+                                type: 'play card',
+                                handLoc: handLoc,
+                                target: index,
+                                targetSide: game.id == 1?2:1,
+                            });
+                        }
                     }
                 });
 
                 game.ownBoard.forEach((value, index) => {
                     if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
                         value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y) {
-                        outputFunc({
-                            type: 'play card',
-                            handLoc: handLoc,
-                            target: index,
-                            targetSide: game.id,
-                        });
+                        if(temp.forseeing) {
+                            forsee(choice => {
+                                outputFunc({
+                                    choice: choice,
+                                    type: 'play card',
+                                    handLoc: handLoc,
+                                    targetSide: game.id,
+                                    target: index,
+                                });
+                            });
+                        }
+                        else {
+                            outputFunc({
+                                type: 'play card',
+                                handLoc: handLoc,
+                                target: index,
+                                targetSide: game.id,
+                            });
+                        }
                     }
                 });
 
                 if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y) {
-                    outputFunc({
-                        type: 'play card',
-                        handLoc: handLoc,
-                        target: -1,
-                        targetSide: game.id == 1?2:1,
-                    });
+                    if(temp.forseeing) {
+                        forsee(choice => {
+                            outputFunc({
+                                choice: choice,
+                                type: 'play card',
+                                handLoc: handLoc,
+                                targetSide: game.id == 1?2:1,
+                                target: -1,
+                            });
+                        });
+                    }
+                    else {
+                        outputFunc({
+                            type: 'play card',
+                            handLoc: handLoc,
+                            target: -1,
+                            targetSide: game.id == 1?2:1,
+                        });
+                    }
                 }
 
                 else if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .75 <= pos.y && app.stage.height * .95 >= pos.y) {
-                    outputFunc({
-                        type: 'play card',
-                        handLoc: handLoc,
-                        target: -1,
-                        targetSide: game.id,
-                    });
+                    if(temp.forseeing) {
+                        forsee(choice => {
+                            outputFunc({
+                                choice: choice,
+                                type: 'play card',
+                                handLoc: handLoc,
+                                targetSide: game.id,
+                                target: -1,
+                            });
+                        });
+                    }
+                    else {
+                        outputFunc({
+                            type: 'play card',
+                            handLoc: handLoc,
+                            target: -1,
+                            targetSide: game.id,
+                        });
+                    }
                 }
 
             } else if (!(this.x > fieldBounds.x + fieldBounds.width ||
                     this.x + this.width < fieldBounds.x ||
                     this.y > fieldBounds.y + fieldBounds.height ||
                     this.y + this.height < fieldBounds.y) && !temp.targeting) {
-                outputFunc({
-                    type: 'play card',
-                    handLoc: handLoc,
-                });
+
+                if(temp.forseeing) {
+                    forsee(() => {
+                        outputFunc({
+                            type: 'play card',
+                            choice: choice,
+                            handLoc: handLoc,
+                        });
+                    });
+                }
+                else {
+                    outputFunc({
+                        type: 'play card',
+                        handLoc: handLoc,
+                    });
+                }
             }
 
             arrowDragging = false;
@@ -426,6 +498,42 @@ let GameView = (function () {
 
     function forsee(completion) {
 
+        let monsterTokensPanel = new PIXI.Sprite(textures.monsterTokensPanel);
+        let actionTokensPanel = new PIXI.Sprite(textures.actionTokensPanel);
+
+        actionTokensPanel.anchor.x = actionTokensPanel.anchor.y = .5;
+        monsterTokensPanel.anchor.x = monsterTokensPanel.anchor.y = .5;
+
+        actionTokensPanel.width = monsterTokensPanel.width = app.stage.width * .5;
+        actionTokensPanel.height = actionTokensPanel.width * 2.06;
+
+        actionTokensPanel.x = app.stage.width * .33;
+        monsterTokensPanel.x = app.stage.width * .66;
+
+        actionTokensPanel.y = monsterTokensPanel.y = app.stage.height * .5;
+
+        app.stage.addChild(actionTokensPanel);
+        app.stage.addChild(monsterTokensPanel);
+
+        actionTokensPanel.on('mouseover', this.alpha = 0.6);
+
+        monsterTokensPanel.on('mouseover', this.alpha = 0.6);
+
+        actionTokensPanel.on('mouseout', this.alpha = 1);
+
+        monsterTokensPanel.on('mouseout', this.alpha = 1);
+
+        actionTokensPanel.on('mouseup', () => {
+            app.stage.removeChild(monsterTokensPanel);
+            app.stage.removeChild(actionTokensPanel);
+            completion('action');
+        });
+
+        monsterTokensPanel.on('mouseup', () => {
+            app.stage.removeChild(monsterTokensPanel);
+            app.stage.removeChild(actionTokensPanel);
+            completion('monster');
+        });
     }
 
     /**
