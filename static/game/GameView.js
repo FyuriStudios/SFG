@@ -205,7 +205,7 @@ let GameView = (function () {
             let temp;
             game.hand.forEach((val) => val.sprite == this ? temp = val : null);
 
-            if(temp.type == 'spell') {
+            if(temp.type == 'spell' && temp.targeting) {
                 arrowDragging = true;
                 this.alpha = 0;
                 app.stage.addChild(temp.arrow);
@@ -224,7 +224,7 @@ let GameView = (function () {
             else if (!(this.x > fieldBounds.x + fieldBounds.width ||
                     this.x + this.width < fieldBounds.x ||
                     this.y > fieldBounds.y + fieldBounds.height ||
-                    this.y + this.height < fieldBounds.y)) {
+                    this.y + this.height < fieldBounds.y) && temp.type == 'monster') {
                 this.alpha = 0;
 
                 temp.monsterContainer.x = this.x - this.width / 2;
@@ -504,8 +504,8 @@ let GameView = (function () {
         actionTokensPanel.anchor.x = actionTokensPanel.anchor.y = .5;
         monsterTokensPanel.anchor.x = monsterTokensPanel.anchor.y = .5;
 
-        actionTokensPanel.width = monsterTokensPanel.width = app.stage.width * .5;
-        actionTokensPanel.height = actionTokensPanel.width * 2.06;
+        actionTokensPanel.width = monsterTokensPanel.width = app.stage.width * .2;
+        actionTokensPanel.height = monsterTokensPanel.height = actionTokensPanel.width / 2.06;
 
         actionTokensPanel.x = app.stage.width * .33;
         monsterTokensPanel.x = app.stage.width * .66;
@@ -1581,7 +1581,7 @@ let GameView = (function () {
                 textures.tokenFrame = resources.tokenFrame.texture;
                 textures.arrowHead = resources.arrowHead.texture;
                 textures.graveyardIcon = resources.graveyardIcon.texture;
-                textures.actionTokensPanel = resoures.actionTokensPanel.texture;
+                textures.actionTokensPanel = resources.actionTokensPanel.texture;
                 textures.monsterTokensPanel = resources.monsterTokensPanel.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
