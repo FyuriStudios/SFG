@@ -134,7 +134,8 @@ class Game {
 			graveyard: [], //there's nothing in the graveyard
 			mToks: 3,
 			sToks: 3,
-			deck: [],
+            deck: [],
+            effects: [],
 		};
 
 		this.player2 = { //see above for details on the variables
@@ -147,7 +148,8 @@ class Game {
 			graveyard: [],
 			mToks: 0,
 			sToks: 0,
-			deck: [],
+            deck: [],
+            effects: [],
 		};
     }
     
@@ -179,6 +181,7 @@ class Game {
                 cost: card.cost,
                 playCost: card.currentCost,
                 targeting: card.targeting,
+                forseeing: card.forseeing,
             };
         }
     }
@@ -294,7 +297,6 @@ class Game {
 	processEvent(player, input) {
 
 		if (player != this.currentPlayer) {
-
             return;
         }
 
@@ -434,14 +436,14 @@ class Game {
                         deadGuy.selfDeath(null, this, eventChain);
                     }
 
-					deadGuys.push(player.board[i]);
+					deadGuys.push(deadGuy);
 					dead.push({
 						index: i,
 						id: player.id
 					});
 				}
 			}
-			player.graveyard.extend(dead);
+			player.graveyard.extend(deadGuys);
 		}
 
 		removeDead(this.currentPlayer);
@@ -471,7 +473,7 @@ class Game {
         console.log('attack dialogue');
         console.log(input);
         
-		if((input.attacker >= this.currentPlayer.board.length || input.attacker == -1) || input.target >= this.currentPlayer.board.length) { //just real quick making sure that the locations are valid
+		if((input.attacker >= this.currentPlayer.board.length || input.attacker == -1) || input.target >= this.currentPlayer.board.length || input.attacker == undefined) { //just real quick making sure that the locations are valid
 			return;
 		}
 
@@ -480,6 +482,12 @@ class Game {
                 this.currentPlayer.board[input.attacker].selfAttack(input, this, eventChain);
             }
             this.otherPlayer.board.forEach((value) => {
+                if(value.hasEnemyAttack) {
+                    value.enemyAttack(input, this, eventChain);
+                }
+            });
+
+            this.otherPlayer.effects.forEach((value) => {
                 if(value.hasEnemyAttack) {
                     value.enemyAttack(input, this, eventChain);
                 }
@@ -587,6 +595,14 @@ class Game {
 		this.otherPlayer.board.forEach(value => {
 			if(value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);
+        });
+        this.currentPlayer.effects.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
+		});
+		this.otherPlayer.effects.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
 		});
 
 		this.killDead(eventChain);
@@ -614,6 +630,14 @@ class Game {
 				value.turnIncrement({}, this, eventChain);
 		});
 		this.otherPlayer.board.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
+        });
+        this.currentPlayer.effects.forEach(value => {
+			if(value.hasTurnIncrement)
+				value.turnIncrement({}, this, eventChain);
+		});
+		this.otherPlayer.effects.forEach(value => {
 			if(value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);
 		});
