@@ -756,6 +756,10 @@ let GameView = (function () {
 
     function onMouseDragCardOnBoardEnd() {
 
+        for(var i = 0; i< 10; i++)
+            console.log('RIGHT HERE DINO');
+        console.log(game.ownBoard);
+
         let pos = this.dragData.getLocalPosition(this.parent);
 
         this.alpha = 1;
