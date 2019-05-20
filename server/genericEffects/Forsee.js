@@ -23,7 +23,19 @@ class ForseeEffect extends Effect {
         this.addTurnIncrement({
             name: 'Forsee Effect',
             func: function(input, game, eventChain) {
+                if(game.turnCounter == eff.creationDate + 4) {
+                    let event = {
+                        type: 'gain tokens',
+                        player: game.currentPlayer.id,
+                        
+                    }
+                    if(eff.choice == 'monster') {
 
+                    }
+                    else if(eff.choice == 'spell') {
+
+                    }
+                }
             }
         });
     }
