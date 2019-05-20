@@ -27,13 +27,17 @@ class ForseeEffect extends Effect {
                     let event = {
                         type: 'gain tokens',
                         player: game.currentPlayer.id,
-                        
-                    }
-                    if(eff.choice == 'monster') {
+                        tokenType: eff.choice,
+                        view: 1,
+                    };
 
+                    eventChain.push(event);
+
+                    if(eff.choice == 'monster') {
+                        game.currentPlayer.mToks += eff.tokenAmount;
                     }
                     else if(eff.choice == 'spell') {
-
+                        game.currentPlayer.sToks += eff.tokenAmount;
                     }
                 }
             }
