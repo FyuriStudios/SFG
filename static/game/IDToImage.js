@@ -19,6 +19,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Domino_Hand.png');
             } else if(id == 6) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Secret_Grove_Hand.png');
+            } else if(id == 7) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Ratakhe_Hand.png');
             }
         },
 
@@ -39,6 +41,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Domino_Hover.png');
             } else if(id == 6) {
                 return PIXI.Sprite.from('/static/assets/popup/Secret_Hover.png');
+            } else if(id == 7) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Ratakhe_Hover.png');
             }
         },
 
@@ -55,6 +59,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Crust_Board_Piece.png');
             } else if(id == 5) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Domino_Board_Piece.png');
+            } else if(id == 7) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Ratakhe_Board_Piece.png');
             }
         }
     }

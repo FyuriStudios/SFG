@@ -15,6 +15,7 @@ function startGame() {
         deck.push(4);
         deck.push(5);
         deck.push(6);
+        deck.push(7);
         for (var i = 0; i < 7; i++)
             deck.push(-1);
         for (var i = 0; i < 7; i++)

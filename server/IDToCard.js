@@ -32,4 +32,8 @@ module.exports = function (id) {
         let card = require('./cards/SecretGrove');
         return new card();
     }
+    else if(id == 7) {
+        let card = require('./cards/Ratakhe');
+        return new card();
+    }
 }
