@@ -29,6 +29,7 @@ class ForseeEffect extends Effect {
                         player: game.currentPlayer.id,
                         tokenType: eff.choice,
                         view: 1,
+                        amount: eff.tokenAmount,
                     };
 
                     eventChain.push(event);
@@ -36,7 +37,7 @@ class ForseeEffect extends Effect {
                     if(eff.choice == 'monster') {
                         game.currentPlayer.mToks += eff.tokenAmount;
                     }
-                    else if(eff.choice == 'spell') {
+                    else if(eff.choice == 'action') {
                         game.currentPlayer.sToks += eff.tokenAmount;
                     }
                 }

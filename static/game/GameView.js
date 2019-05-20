@@ -868,10 +868,6 @@ let GameView = (function () {
 
     function onMouseDragCardOnBoardEnd() {
 
-        for(var i = 0; i< 10; i++)
-            console.log('RIGHT HERE DINO');
-        console.log(game.ownBoard);
-
         let pos = this.dragData.getLocalPosition(this.parent);
 
         this.alpha = 1;
@@ -1474,6 +1470,23 @@ let GameView = (function () {
 
             }
             
+        }
+
+        else if(event.type == 'gain tokens') {
+            if(event.player == game.id) {
+                if(event.tokenType == 'monster')
+                    game.ownMonsterTokens += event.amount;
+                else if(event.tokenType == 'action')
+                    game.ownSpellTokens += event.amount;
+                fixTokens();
+            }
+            else {
+                if(event.tokenType == 'monster')
+                    game.enemyMonsterTokens += event.amount;
+                else if(event.tokenType == 'action')
+                    game.enemySpellTokens += event.amount;
+                fixTokens();
+            }
         }
 
     }
