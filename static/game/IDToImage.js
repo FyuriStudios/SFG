@@ -13,10 +13,12 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Mantra_Hand.png');
             } else if(id == 3) {
                 return PIXI.Sprite.from('/static/assets/in_hand/JBG_Hand.png');
-            } else if(id ==4) {
+            } else if(id == 4) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Crust_Hand.png');
-            }else if(id == 5) {
+            } else if(id == 5) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Domino_Hand.png');
+            } else if(id == 6) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Secret_Grove_Hand.png');
             }
         },
 
@@ -31,10 +33,12 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Mantra_Hover.png');
             } else if(id == 3) {
                 return PIXI.Sprite.from('/static/assets/popup/JBG_Hover.png');
-            } else if(id ==4) {
+            } else if(id == 4) {
                 return PIXI.Sprite.from('/static/assets/popup/Crust_Hover.png');
-            }else if(id == 5) {
+            } else if(id == 5) {
                 return PIXI.Sprite.from('/static/assets/popup/Domino_Hover.png');
+            } else if(id == 6) {
+                return PIXI.Sprite.from('/static/assets/popup/Secret_Hover.png');
             }
         },
 
@@ -47,7 +51,7 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Mantra_Board_Piece.png');
             } else if(id == 3) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/JBG_Board_Piece.png');
-            } else if(id ==4) {
+            } else if(id == 4) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Crust_Board_Piece.png');
             } else if(id == 5) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Domino_Board_Piece.png');
