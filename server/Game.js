@@ -538,7 +538,7 @@ class Game {
         eventChain.push(event);
 
 		if (toPlay.type == 'monster') {
-			temp.board.splice(input.playLocation, 0, toPlay);
+			temp.board.splice(input.playLoc, 0, toPlay);
             
             if(toPlay.hasCardPlayed)
                 toPlay.cardPlayed(input, this, eventChain);
