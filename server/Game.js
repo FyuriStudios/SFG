@@ -502,10 +502,6 @@ class Game {
 
 		var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
 
-		if (input.handLoc >= temp.hand.length || input.handLoc < 0 || input.playLoc < 0) {
-			return; //check to see if the card's actually in their hand
-		}
-
         var toPlay = temp.hand.splice(input.handLoc, 1)[0];
     
 		//TODO: add flex token implementation
@@ -541,6 +537,7 @@ class Game {
 
 		} else if(toPlay.type == 'spell') {
             toPlay.cardPlayed(input, this, eventChain);
+            temp.graveyard.push(toPlay);
         }
 	}
 
