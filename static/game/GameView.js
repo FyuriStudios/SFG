@@ -1481,15 +1481,16 @@ let GameView = (function () {
                     game.ownMonsterTokens += event.amount;
                 else if(event.tokenType == 'action')
                     game.ownSpellTokens += event.amount;
-                fixTokens();
+                
             }
             else {
                 if(event.tokenType == 'monster')
                     game.enemyMonsterTokens += event.amount;
                 else if(event.tokenType == 'action')
                     game.enemySpellTokens += event.amount;
-                fixTokens();
             }
+            fixTokens();
+            nextInEventQueue();
         }
 
     }

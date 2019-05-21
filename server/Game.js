@@ -316,6 +316,7 @@ class Game {
 				this.endTurn(input, eventChain);
 				break;
         }
+        console.log(this.currentPlayer.board);
 
         eventChain.forEach(value => {
             if(value.view == 3) {
