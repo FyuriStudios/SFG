@@ -21,6 +21,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Secret_Grove_Hand.png');
             } else if(id == 7) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Ratakhe_Hand.png');
+            } else if(id == 8) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Sanguine_Mire_Hand.png');
             }
         },
 
@@ -43,6 +45,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Secret_Hover.png');
             } else if(id == 7) {
                 return PIXI.Sprite.from('/static/assets/popup/Ratakhe_Hover.png');
+            } else if(id == 8) {
+                return PIXI.Sprite.from('/static/assets/popup/Sanguine_Mire_Hover.png');
             }
         },
 

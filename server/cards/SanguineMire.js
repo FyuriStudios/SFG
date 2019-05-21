@@ -20,7 +20,7 @@ class SanguineMire extends Spell {
         this.addTurnIncrement({
             name: 'Sanguine Effect',
             func: function(input, game, eventChain) {
-                if((card.creationDate-game.turnCounter)%4 == 0){
+                if((card.creationDate - game.turnCounter)%4 == 0){
                     let damage = require('../genericEffects/Damage');
                     damage.func({
                         targetSide: game.otherPlayer.id,
