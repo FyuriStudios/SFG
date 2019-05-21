@@ -285,10 +285,12 @@ class Game {
 
       
             this.player1.socket.on('event', input => {
+                console.log(input);
                 this.processEvent(this.player1, input);
             });
 
             this.player2.socket.on('event', input => {
+                console.log(input);
                 this.processEvent(this.player2, input);
             });
 
@@ -470,9 +472,6 @@ class Game {
 	 *
 	 */
 	attack(input, eventChain) {
-
-        console.log('attack dialogue');
-        console.log(input);
 
 		if(this.currentPlayer.board[input.attacker].attack(this, input.attacker, input.target, eventChain)) {
             if(this.currentPlayer.board[input.attacker].hasSelfAttack) {
