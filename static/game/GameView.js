@@ -1166,7 +1166,7 @@ let GameView = (function () {
                             game.enemyFieldSpell.sprite.on('mouseover', mouseOverCardInHand);
                             game.enemyFieldSpell.sprite.on('mouseout', mouseOutCardInHand);//this should probably work.
 
-                            AnimationQueue.addMoveRequest(game.enemyFieldSpell.sprite, {x: app.stage.width * .9 - card.sprite.width, y: app.stage.height * .35 - card.sprite.height/2}, 10, () => {
+                            AnimationQueue.addMoveRequest(game.enemyFieldSpell.sprite, {x: app.stage.width * .9 - card.sprite.width, y: app.stage.height * .35 - game.enemyFieldSpell.sprite.height/2}, 10, () => {
                                 nextInEventQueue();
                             });
 
