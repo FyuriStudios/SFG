@@ -501,6 +501,8 @@ class Game {
 	 */
 	playCard(input, eventChain) {
 
+        var toPlay = temp.hand[input.handLoc];
+
         var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
         
         //TODO: add flex token implementation
@@ -510,7 +512,7 @@ class Game {
 			return; //they don't have enough tokens to play the card.
 		}
 
-        var toPlay = temp.hand.splice(input.handLoc, 1)[0];
+        temp.hand.splice(input.handLoc, 1)
 
 		var event = { //now that we're sure the event is going to happen
 			view: 1,
