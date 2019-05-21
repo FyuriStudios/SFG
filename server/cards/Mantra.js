@@ -68,15 +68,12 @@ class Mantra extends Monster {
 
         if(this._currentPower - value <= 2 && !(value > this._currentPower)) {
             return;
-            console.log('no effect');
         }
         else if(value > this._currentPower) {
             this._currentPower = value;
-            console.log('added health');
         }
         else {
             this._currentPower = value + 2;
-            console.log('took damage');
         }
     }
 
