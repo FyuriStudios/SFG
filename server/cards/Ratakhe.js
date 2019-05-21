@@ -10,24 +10,13 @@ class Ratakhe extends Monster {
         this.addCardPlayed({
             name: 'Ratakhe Signature',
             func: function(input, game, eventChain){
-                let card;
+
                 for(let i = 0; i < 7; i++){
-                    card = game.otherPlayer.deck.pop();
-                    game.otherPlayer.hand.unshift(card);
-
-                    let event = {
-                        type: 'draw card',
-                        player: game.otherPlayer.id,
-                        card: card,
-                        view: 2,
-                    }
-
-                    eventChain.push(event);
+                    game.drawCard(game.otherPlayer, eventChain);
                 }
-
-                
+ 
             }
-        })
+        });
     }
 }
 
