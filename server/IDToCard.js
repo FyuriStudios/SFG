@@ -36,4 +36,8 @@ module.exports = function (id) {
         let card = require('./cards/Ratakhe');
         return new card();
     }
+    else if(id == 8) {
+        let card = require('./cards/SanguineMire');
+        return new card();
+    }
 }
