@@ -541,7 +541,7 @@ let GameView = (function () {
 
     function flexTokens(amount, completion) {
         
-        
+
     }
 
     /**
@@ -1466,7 +1466,7 @@ let GameView = (function () {
                 enemyCard.sprite.x = targetPlay.x + enemyCard.sprite.width / 2;
                 enemyCard.sprite.y = targetPlay.y;
 
-                game.enemyBoard.splice(event.playLoc, 0, enemyCard);
+                game.enemyBoard.unshift(enemyCard);
 
                 enemyCard.boardForm();
                 fixEnemyHandSpacing();
