@@ -501,9 +501,9 @@ class Game {
 	 */
 	playCard(input, eventChain) {
 
-        var toPlay = temp.hand[input.handLoc];
-
         var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
+
+        var toPlay = temp.hand[input.handLoc];
         
         //TODO: add flex token implementation
 		var tokens = toPlay.tokenType == 'monster' ? temp.mToks : temp.sToks;
