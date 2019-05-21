@@ -1575,7 +1575,8 @@ let GameView = (function () {
                 .add('arrowHead', '/static/assets/arrow_head.png')
                 .add('graveyardIcon', '/static/assets/graveyardIcon.png')
                 .add('monsterTokensPanel', '/static/assets/monster_tokens_panel.png')
-                .add('actionTokensPanel', '/static/assets/action_tokens_panel.png');
+                .add('actionTokensPanel', '/static/assets/action_tokens_panel.png')
+                .add('plusButton', '/static/assets/plus_button.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -1592,6 +1593,7 @@ let GameView = (function () {
                 textures.graveyardIcon = resources.graveyardIcon.texture;
                 textures.actionTokensPanel = resources.actionTokensPanel.texture;
                 textures.monsterTokensPanel = resources.monsterTokensPanel.texture;
+                textures.plusButton = resources.plusButton.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
