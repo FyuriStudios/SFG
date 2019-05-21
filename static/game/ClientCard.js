@@ -48,7 +48,7 @@ ClientCard = (function() {
             image.width = this.sprite.width * 2;
             image.height = this.sprite.height * 2;
 
-            let cost = new PIXI.Text(this.cost, 
+            let cost = new PIXI.Text(this.currentCost, 
                 {
                     fontFamily: 'Helvetica', 
                     dropShadow: true, 
@@ -145,7 +145,7 @@ ClientCard = (function() {
         displayPopup() {
             super.displayPopup();
 
-            let power = new PIXI.Text(this.power, 
+            let power = new PIXI.Text(this.currentPower, 
                 {
                     fontFamily: 'Helvetica', 
                     dropShadow: true, 

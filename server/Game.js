@@ -611,7 +611,13 @@ class Game {
 		this.otherPlayer.effects.forEach(value => {
 			if(value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);
-		});
+        });
+        if(this.currentPlayer.fieldSpell != null && this.currentPlayer.fieldSpell.hasTurnIncrement) {
+            this.currentPlayer.fieldSpell.turnIncrement({}, this, eventChain);
+        }
+        if(this.otherPlayer.fieldSpell != null && this.otherPlayer.fieldSpell.hasTurnIncrement) {
+            this.otherPlayer.fieldSpell.turnIncrement({}, this, eventChain);
+        }
 
 		this.killDead(eventChain);
 
