@@ -136,6 +136,7 @@ class Game {
 			sToks: 3,
             deck: [],
             effects: [],
+            fieldSpell: null,
 		};
 
 		this.player2 = { //see above for details on the variables
@@ -150,6 +151,7 @@ class Game {
 			sToks: 0,
             deck: [],
             effects: [],
+            fieldSpell: null,
 		};
     }
     
@@ -183,6 +185,7 @@ class Game {
                 playCost: card.currentCost,
                 targeting: card.targeting,
                 forseeing: card.forseeing,
+                field: card.field,
             };
         }
     }
@@ -539,8 +542,17 @@ class Game {
                 toPlay.cardPlayed(input, this, eventChain);
 
 		} else if(toPlay.type == 'spell') {
-            toPlay.cardPlayed(input, this, eventChain);
-            temp.graveyard.push(toPlay);
+
+            if(toPlay.field) {
+                if(temp.fieldSpell != null) {
+                    temp.graveyard.push(temp.fieldSpell);
+                }
+                temp.fieldSpell = toPlay;
+            }
+            else {
+                toPlay.cardPlayed(input, this, eventChain);
+                temp.graveyard.push(toPlay);
+            }
         }
 	}
 
