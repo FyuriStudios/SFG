@@ -16,9 +16,10 @@ function startGame() {
         deck.push(5);
         deck.push(6);
         deck.push(7);
-        for (var i = 0; i < 7; i++)
+        deck.push(8);
+        for (var i = 0; i < 6; i++)
             deck.push(-1);
-        for (var i = 0; i < 7; i++)
+        for (var i = 0; i < 6; i++)
             deck.push(-2);
     } else {
         deck = passDeck.split(', ').map(Number);
