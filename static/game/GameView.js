@@ -1091,6 +1091,29 @@ let GameView = (function () {
                 } else {
 
                     fixOwnHandSpacing();
+
+                    if(card.field) {
+
+                        if(game.ownFieldSpell != null) {
+                            app.stage.removeChild(game.ownFieldSpell.sprite);
+                            game.ownGraveyard.push(game.ownFieldSpell);
+                        }
+
+                        game.ownFieldSpell = card;
+
+                        card.sprite.off('pointerdown', onDragFromHandStart);
+
+                        card.sprite.off('pointerup', onDragFromHandEnd);
+
+                        card.sprite.off('pointerupoutside', onDragFromHandEnd); //removing mouse events. Then we'll re-add custom events.
+
+                        card.sprite.off('pointermove', onDragFromHandMove);
+
+                        AnimationQueue.addMoveRequest(card.sprite, {x: app.stage.width * .9 - card.sprite.width, y: app.stage.height * .65 - card.sprite.height/2}, 10, () => {
+                            nextInEventQueue();
+                        });
+
+                    }
                     app.stage.removeChild(card.sprite);
                     game.ownGraveyard.push(card);
                     nextInEventQueue();
@@ -1130,10 +1153,28 @@ let GameView = (function () {
                 } else {
 
                     AnimationQueue.addMoveRequest(enemyCard.sprite, {x: app.stage.width * .25, y: app.stage.height * .5}, 15, () => {
-                        app.stage.removeChild(enemyCard.sprite);
-                        game.enemyGraveyard.push(enemyCard);
                         fixEnemyHandSpacing();
-                        nextInEventQueue();
+                        if(enemyCard.field) {
+                            if(game.enemyFieldSpell != null) {
+                                app.stage.removeChild(game.enemyFieldSpell);
+                                game.enemyGraveyard.push(game.enemyFieldSpell);
+                            }
+
+                            game.enemyFieldSpell = enemyCard;
+                            game.enemyFieldSpell.on('mouseover', mouseOverCardInHand);
+                            game.enemyFieldSpell.on('mouseout', mouseOutCardInHand);//this should probably work.
+
+                            AnimationQueue.addMoveRequest(game.enemyFieldSpell.sprite, {x: app.stage.width * .9 - card.sprite.width, y: app.stage.height * .35 - card.sprite.height/2}, 10, () => {
+                                nextInEventQueue();
+                            });
+
+
+                        }
+                        else {
+                            app.stage.removeChild(enemyCard.sprite);
+                            game.enemyGraveyard.push(enemyCard);
+                            nextInEventQueue();
+                        }
                     });
                     
                 }

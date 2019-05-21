@@ -55,6 +55,8 @@ class ClientGame {
         this.enemySpellTokens = 0;
         this.ownHealth = this.STARTING_HEALTH;
         this.enemyHealth = this.STARTING_HEALTH;
+        this.ownFieldSpell = null;
+        this.enemyFieldSpell = null;
 	}
 
 }
