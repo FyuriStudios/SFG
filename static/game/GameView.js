@@ -1105,7 +1105,7 @@ let GameView = (function () {
 
                         card.sprite.off('pointerup', onDragFromHandEnd);
 
-                        card.sprite.off('pointerupoutside', onDragFromHandEnd); //removing mouse events. Then we'll re-add custom events.
+                        card.sprite.off('pointerupoutside', onDragFromHandEnd);
 
                         card.sprite.off('pointermove', onDragFromHandMove);
 
@@ -1114,9 +1114,11 @@ let GameView = (function () {
                         });
 
                     }
-                    app.stage.removeChild(card.sprite);
-                    game.ownGraveyard.push(card);
-                    nextInEventQueue();
+                    else {
+                        app.stage.removeChild(card.sprite);
+                        game.ownGraveyard.push(card);
+                        nextInEventQueue();
+                    }
                 }
 
             } else {
@@ -1161,8 +1163,8 @@ let GameView = (function () {
                             }
 
                             game.enemyFieldSpell = enemyCard;
-                            game.enemyFieldSpell.on('mouseover', mouseOverCardInHand);
-                            game.enemyFieldSpell.on('mouseout', mouseOutCardInHand);//this should probably work.
+                            game.enemyFieldSpell.sprite.on('mouseover', mouseOverCardInHand);
+                            game.enemyFieldSpell.sprite.on('mouseout', mouseOutCardInHand);//this should probably work.
 
                             AnimationQueue.addMoveRequest(game.enemyFieldSpell.sprite, {x: app.stage.width * .9 - card.sprite.width, y: app.stage.height * .35 - card.sprite.height/2}, 10, () => {
                                 nextInEventQueue();
