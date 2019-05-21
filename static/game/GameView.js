@@ -455,7 +455,7 @@ let GameView = (function () {
                     this.y + this.height < fieldBounds.y) && !temp.targeting) {
 
                 if(temp.forseeing) {
-                    forsee(() => {
+                    forsee(choice => {
                         outputFunc({
                             type: 'play card',
                             choice: choice,
@@ -501,6 +501,8 @@ let GameView = (function () {
         let monsterTokensPanel = new PIXI.Sprite(textures.monsterTokensPanel);
         let actionTokensPanel = new PIXI.Sprite(textures.actionTokensPanel);
 
+        monsterTokensPanel.interactive = actionTokensPanel.interactive = true;
+
         actionTokensPanel.anchor.x = actionTokensPanel.anchor.y = .5;
         monsterTokensPanel.anchor.x = monsterTokensPanel.anchor.y = .5;
 
@@ -511,17 +513,6 @@ let GameView = (function () {
         monsterTokensPanel.x = app.stage.width * .66;
 
         actionTokensPanel.y = monsterTokensPanel.y = app.stage.height * .5;
-
-        app.stage.addChild(actionTokensPanel);
-        app.stage.addChild(monsterTokensPanel);
-
-        actionTokensPanel.on('mouseover', this.alpha = 0.6);
-
-        monsterTokensPanel.on('mouseover', this.alpha = 0.6);
-
-        actionTokensPanel.on('mouseout', this.alpha = 1);
-
-        monsterTokensPanel.on('mouseout', this.alpha = 1);
 
         actionTokensPanel.on('mouseup', () => {
             app.stage.removeChild(monsterTokensPanel);
@@ -534,6 +525,18 @@ let GameView = (function () {
             app.stage.removeChild(actionTokensPanel);
             completion('monster');
         });
+
+        actionTokensPanel.on('mouseover', () => actionTokensPanel.alpha = .6);
+
+        monsterTokensPanel.on('mouseover', () => monsterTokensPanel.alpha = .6);
+
+        actionTokensPanel.on('mouseout', () => actionTokensPanel.alpha = 1);
+
+        monsterTokensPanel.on('mouseout', () => monsterTokensPanel.alpha = 1);
+
+        app.stage.addChild(actionTokensPanel);
+        app.stage.addChild(monsterTokensPanel);
+
     }
 
     /**

@@ -5,13 +5,15 @@ module.exports = {
     func: function(input, game, eventChain, amount) {
         let forseeEffect = new ForseeEffect(game.turnCounter, input.choice, amount);
 
-        game.currentPlayer.effects.push(effect);
+        game.currentPlayer.effects.push(forseeEffect);
     }
 };
 
 class ForseeEffect extends Effect {
 
     constructor(turnCounter, choice, amount) {
+        super();
+
         this.tokenAmount = amount;
         this.creationDate = turnCounter;
         this.choice = choice;
