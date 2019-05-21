@@ -501,16 +501,16 @@ class Game {
 	 */
 	playCard(input, eventChain) {
 
-		var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
-
-        var toPlay = temp.hand.splice(input.handLoc, 1)[0];
-    
-		//TODO: add flex token implementation
+        var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
+        
+        //TODO: add flex token implementation
 		var tokens = toPlay.tokenType == 'monster' ? temp.mToks : temp.sToks;
 
 		if (toPlay.currentCost > tokens || temp.board.length == constants.MAX_BOARD_SIZE) {
 			return; //they don't have enough tokens to play the card.
 		}
+
+        var toPlay = temp.hand.splice(input.handLoc, 1)[0];
 
 		var event = { //now that we're sure the event is going to happen
 			view: 1,

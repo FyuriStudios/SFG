@@ -539,6 +539,11 @@ let GameView = (function () {
 
     }
 
+    function flexTokens(amount, completion) {
+        
+        
+    }
+
     /**
      * This function finds all of the sprites that are in the player's hand array and animates them to the "correct" location in their 
      * hand. For example, when a player draws a card you can add it to their hand array and then call this function.
