@@ -13,27 +13,9 @@ class JBG extends Monster { //Fix this guy.
 
             func: function(input, game, eventChain) {
 
-                let card = game.player1.deck.pop();
-                game.player1.hand.unshift(card);
+                game.drawCard(game.player1, eventChain);
 
-                let event1 = {
-                    type: 'draw card',
-                    player: 1,
-                    card: game.backendCardTranslate(card),
-                    view: 2,
-                }
-
-                card = game.player2.deck.pop();
-                game.player2.hand.unshift(card);
-
-                let event2 = {
-                    type: 'draw card',
-                    player: 2,
-                    card: game.backendCardTranslate(card),
-                    view: 2,
-                }
-
-                eventChain.push(event2, event1);
+                game.drawCard(game.player2, eventChain);
             }
         });
     }
