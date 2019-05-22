@@ -891,12 +891,13 @@ let GameView = (function () {
         game.enemyBoard.forEach((value, index) => {
             if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
                 value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y) {
-                outputFunc({
-                    type: 'attack',
-                    player: game.id,
-                    target: index,
-                    attacker: attackerLoc,
-                });
+                if(attackerLoc != undefined)
+                    outputFunc({
+                        type: 'attack',
+                        player: game.id,
+                        target: index,
+                        attacker: attackerLoc,
+                    });
             }
         });
 
@@ -1176,13 +1177,16 @@ let GameView = (function () {
 
                     enemyCard.boardForm();
                     fixEnemyHandSpacing();
-                    fixEnemyBoardSpacing(event.playLoc, () => nextInEventQueue());
-                    enemyCard.sprite.on('mouseover', mouseOverEnemyFieldSpell);
-                    enemyCard.sprite.on('mouseout', mouseOutEnemyFieldSpell);
+                    fixEnemyBoardSpacing(event.playLoc, () => {
+                        enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
+                        enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
+                        nextInEventQueue();
+                    });
+                    
 
                 } else {
 
-                    AnimationQueue.addMoveRequest(enemyCard.sprite, {x: app.stage.width * .25, y: app.stage.height * .5}, 15, () => {
+                    AnimationQueue.addMoveRequest(enemyCard.sprite, {x: app.stage.width * .35, y: app.stage.height * .5}, 15, () => {
                         fixEnemyHandSpacing();
                         if(enemyCard.field) {
                             if(game.enemyFieldSpell != null) {
@@ -1191,10 +1195,10 @@ let GameView = (function () {
                             }
 
                             game.enemyFieldSpell = enemyCard;
-                            game.enemyFieldSpell.sprite.on('mouseover', mouseOverCardInHand);
-                            game.enemyFieldSpell.sprite.on('mouseout', mouseOutCardInHand);//this should probably work.
+                            game.enemyFieldSpell.sprite.on('mouseover', mouseOverEnemyFieldSpell);
+                            game.enemyFieldSpell.sprite.on('mouseout', mouseOutEnemyFieldSpell);//this should probably work.
 
-                            AnimationQueue.addMoveRequest(game.enemyFieldSpell.sprite, {x: app.stage.width * game.enemyFieldSpell.sprite.width * .75, y: app.stage.height * .25 - game.enemyFieldSpell.sprite.height/2}, 10, () => {
+                            AnimationQueue.addMoveRequest(game.enemyFieldSpell.sprite, {x: app.stage.width - game.enemyFieldSpell.sprite.width * .75, y: app.stage.height * .25 - game.enemyFieldSpell.sprite.height/2}, 10, () => {
                                 nextInEventQueue();
                             });
 
@@ -1447,13 +1451,6 @@ let GameView = (function () {
 
             app.stage.addChild(card.sprite);
 
-            card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
-            card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
-            card.sprite.on('pointerdown', onMouseDragCardOnBoardStart);
-            card.sprite.on('pointerup', onMouseDragCardOnBoardEnd);
-            card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
-            card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
-
             smallSizeCardInHandSprite(card.sprite);
 
             card.boardForm();
@@ -1468,6 +1465,12 @@ let GameView = (function () {
                 game.ownBoard.unshift(card);
 
                 fixOwnBoardSpacing(0, () => {
+                    card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
+                    card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
+                    card.sprite.on('pointerdown', onMouseDragCardOnBoardStart);
+                    card.sprite.on('pointerup', onMouseDragCardOnBoardEnd);
+                    card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
+                    card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
                     fixOwnBoardSpacing();
                     nextInEventQueue();
                 });
@@ -1481,6 +1484,8 @@ let GameView = (function () {
                 card.sprite.y = app.stage.height * .1;
 
                 fixEnemyBoardSpacing(0, () => {
+                    card.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
+                    card.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
                     fixEnemyBoardSpacing();
                     nextInEventQueue();
                 });
@@ -1541,12 +1546,11 @@ let GameView = (function () {
                 enemyCard.boardForm();
                 fixEnemyHandSpacing();
 
-                enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
-                enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
-
-                fixEnemyBoardSpacing(event.playLoc, () => nextInEventQueue());
-
-            }
+                fixEnemyBoardSpacing(event.playLoc, () => {
+                    enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
+                    enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
+                    nextInEventQueue()});
+                }
             
         }
 

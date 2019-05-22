@@ -1,6 +1,5 @@
 let AnimationQueue = (function() {
 
-    let app;
     let moveQueue = [];
     let completions = [];
 
@@ -23,7 +22,7 @@ return {
                 let framedy = value.yDistance * delta * app.stage.height / 1080;
                 let frameDistance = Math.sqrt(framedx*framedx + framedy*framedy);
     
-                if(targetDistance <= frameDistance) {
+                if(targetDistance <= frameDistance || value.xDistance * (value.sprite.x - value.to.x) == -1 || value.yDistance * (value.sprite.y - value.to.y) == -1) {
                     value.sprite.x = value.to.x;
                     value.sprite.y = value.to.y;
                     value.sprite.inMoveQueue = false;
@@ -68,8 +67,12 @@ return {
     * @returns void
     */
     addMoveRequest: function (sprite, to, vel = 1, onComplete = null) {
-        if(to.x == sprite.x && to.y == sprite.y)
+        if(to.x == sprite.x && to.y == sprite.y) {
+            if(onComplete != null) {
+                onComplete();
+            }
             return true;
+        }
 
         let dx = to.x - sprite.x;
         let dy = to.y - sprite.y;
