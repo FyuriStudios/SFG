@@ -48,4 +48,8 @@ module.exports = function (id) {
         let card = require('./cards/AncientCur');
         return new card();
     }
+    else if(id == 11) {
+        let card = require('./cards/SyncHorde');
+        return new card();
+    }
 }
