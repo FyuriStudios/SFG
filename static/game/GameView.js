@@ -891,12 +891,13 @@ let GameView = (function () {
         game.enemyBoard.forEach((value, index) => {
             if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
                 value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y) {
-                outputFunc({
-                    type: 'attack',
-                    player: game.id,
-                    target: index,
-                    attacker: attackerLoc,
-                });
+                if(attacker != undefined)
+                    outputFunc({
+                        type: 'attack',
+                        player: game.id,
+                        target: index,
+                        attacker: attackerLoc,
+                    });
             }
         });
 
