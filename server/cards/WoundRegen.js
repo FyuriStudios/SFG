@@ -1,5 +1,6 @@
 var Spell = require('../Spell');
 var Damage = require('../genericEffects/Damage');
+var constants = require('../../constants/constants');
 
 class WoundRegen extends Spell {
 
@@ -13,7 +14,14 @@ class WoundRegen extends Spell {
             func: function(input, game, eventChain) {
                 input.targetSide = game.currentPlayer.id;
                 input.target = -1;
-                Damage.func(input, game, eventChain, -10);
+                
+                let healthGain = 10;
+
+                if(constants.STARTING_HEALTH - game.currentPlayer.health < healthGain) {
+                    healthGain = constants.STARTING_HEALTH - game.currentPlayer.health;
+                }
+
+                Damage.func(input, game, eventChain, healthGain);
             }
         });
         
