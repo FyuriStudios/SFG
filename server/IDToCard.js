@@ -52,4 +52,8 @@ module.exports = function (id) {
         let card = require('./cards/SyncHorde');
         return new card();
     }
+    else if(id == 12) {
+        let card = require('./cards/WoundRegen');
+        return new card();
+    }
 }
