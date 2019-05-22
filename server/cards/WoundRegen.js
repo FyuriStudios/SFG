@@ -21,7 +21,7 @@ class WoundRegen extends Spell {
                     healthGain = constants.STARTING_HEALTH - game.currentPlayer.health;
                 }
 
-                Damage.func(input, game, eventChain, healthGain);
+                Damage.func(input, game, eventChain, -healthGain);
             }
         });
         
