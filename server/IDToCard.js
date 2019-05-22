@@ -40,4 +40,8 @@ module.exports = function (id) {
         let card = require('./cards/SanguineMire');
         return new card();
     }
+    else if(id == 9) {
+        let card = require('./cards/Lugneus');
+        return new card();
+    }
 }
