@@ -44,4 +44,8 @@ module.exports = function (id) {
         let card = require('./cards/Lugneus');
         return new card();
     }
+    else if(id == 10) {
+        let card = require('./cards/AncientCur');
+        return new card();
+    }
 }
