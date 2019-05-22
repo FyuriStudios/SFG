@@ -543,6 +543,8 @@ class Game {
 
 		} else if(toPlay.type == 'spell') {
 
+            toPlay.cardPlayed(input, this, eventChain);
+
             if(toPlay.field) {
                 if(temp.fieldSpell != null) {
                     temp.graveyard.push(temp.fieldSpell);
@@ -550,7 +552,6 @@ class Game {
                 temp.fieldSpell = toPlay;
             }
             else {
-                toPlay.cardPlayed(input, this, eventChain);
                 temp.graveyard.push(toPlay);
             }
         }
