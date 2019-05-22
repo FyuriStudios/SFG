@@ -7,6 +7,7 @@ class Effect {
         this.hasTurnIncrement = false;
         this.hasCardPlayed = false;
         this.hasQuestFulfilled = false;
+        this.hasEntersBoard = false;
 
         this.selfAttackList = [];
         this.enemyAttackList = [];
@@ -14,6 +15,7 @@ class Effect {
         this.turnIncrementList = [];
         this.cardPlayedList = [];
         this.questFulfilledList = [];
+        this.entersBoardList = [];
     }
     
     selfAttack(input, game, eventChain) {
@@ -60,20 +62,22 @@ class Effect {
         this.cardPlayedList.forEach(function(i) {
             i.func(input, game, eventChain);
         });
+        if(this.hasEntersBoard)
+            this.entersBoard();
     }
 
     addCardPlayed(func) {
         this.cardPlayedList.push(func);
     }
 
-    questFulfilled(input, game, eventChain) {
-        this.questFulfilledList.forEach(function(i) {
+    entersBoard(input, game, eventChain) {
+        this.entersBoardList.forEach(function(i) {
             i.func(input, game, eventChain);
         });
     }
 
-    addQuestFullfilled(func) {
-        this.questFulfilled.push(func);
+    addEntersBoard(func) {
+        this.entersBoardList.push(func);
     }
 
 }
