@@ -91,14 +91,14 @@ function disconnect(gameNum, playerID) {
     console.log("Ended game: " + gameNum);
 }
 
-setInterval(() => {
+setInterval(async () => {
     if (freePlayers.length >= 2) {
         let player1 = freePlayers.pop();
         let player2 = freePlayers.pop();
 
         let game = new Game(player1, player2);
         games.push(game);
-        game.start();
+        await game.start();
         console.log('Starting game: ' + games.length + ' Players: ' + player1.handshake.address + " & " + player2.handshake.address);
     }
 }, 1000);

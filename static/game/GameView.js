@@ -26,6 +26,12 @@ let textures = {};
 
 let GameView = (function () {
 
+    //This is a reference to the socket. I hate everything. Don't reference this, period. If I see a reference to this in any place other than the shitty code that I wrote,
+    //I'll seriously lose it. Seriously. Don't.
+    //Don't even think about it. grass is a joke, this is not.
+    //By the way, Hughes, if you're reading this, I hope you're doing ok man. Past Hughes didn't enjoy writing this. His sanity was at about 15%.
+    let DONT_USE_THIS;
+
     /*
     Don't touch. The last person who touched it got killed brutally.
     */
@@ -1046,7 +1052,10 @@ let GameView = (function () {
                 /*
                 Animate the card into the player's hand.
                 */
-                fixOwnHandSpacing(() => nextInEventQueue());
+                fixOwnHandSpacing(() => {
+                    fixOwnHandSpacing();
+                    nextInEventQueue();
+                });
 
             } else {
 
@@ -1572,6 +1581,31 @@ let GameView = (function () {
             nextInEventQueue();
         }
 
+        else if(event.type == 'choose card') {
+            UserChoices.chooseCard(game, DONT_USE_THIS, nextInEventQueue);
+        }
+
+        else if(event.type == 'remove hand card') {
+            if(event.player == game.id) {
+                let card = game.hand.splice(event.index, 1)[0];
+                app.stage.removeChild(card.sprite);
+                fixOwnHandSpacing(() => nextInEventQueue());
+            }
+            else {
+                app.stage.removeChild(enemyCardsInHand.splice(event.index, 1)[0]);
+                fixEnemyHandSpacing(() => nextInEventQueue());
+            }
+        }
+
+        else if(event.type == 'add deck card') {
+            if(event.player == game.id)
+                game.ownDeckSize += 1;
+            else
+                game.enemyDeckSize += 1;
+            
+            nextInEventQueue();
+        }
+
     }
 
     function gameOver(playerID) {
@@ -1592,7 +1626,9 @@ let GameView = (function () {
          * This function sets up all relevant graphics objects and listeners and data and what have you to make this module all ready
          * to display the game. Call this externally when you're ready to display everything.
          */
-        setupDisplay: function (id, ownStartingDeckSize, enemyStartingDeckSize) {
+        setupDisplay: function (id, ownStartingDeckSize, enemyStartingDeckSize, socket) {
+
+            DONT_USE_THIS = socket;
 
             /*
             This is just a test initialization of the game data. It will get better initialized later but for now this is here just
