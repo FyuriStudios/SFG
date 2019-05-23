@@ -228,7 +228,7 @@ function mouseClicked() {
     //         return;
     // }
 
-    deckWord = deckWord == "DECK" ? "DICK" : "DECK";
+    // deckWord = deckWord == "DECK" ? "DICK" : "DECK";
 }
 
 //if enter key is pressed use random deck

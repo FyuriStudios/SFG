@@ -29,6 +29,10 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Ancient_Cur_Hand.png');
             } else if(id == 11) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Sync_Horde_Hand.png');
+            } else if(id == 12) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Wound_Regen_Hand.png');
+            } else if(id == 13) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Bottom_Hand.png');
             }
         },
 
@@ -59,6 +63,10 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Ancient_Cur_Hover.png');
             } else if(id == 11) {
                 return PIXI.Sprite.from('/static/assets/popup/Sync_Horde_Hover.png');
+            } else if(id == 12) {
+                return PIXI.Sprite.from('/static/assets/popup/Wound_Regen_Hover.png');
+            } else if(id == 13) {
+                return PIXI.Sprite.from('/static/assets/popup/Bottom_Hover.png');
             }
         },
 
@@ -81,6 +89,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Lugneus_Board.png');
             } else if(id == 10) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Ancient_Cur_Board.png');
+            } else if(id == 13) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Bottom_Board.png');
             }
         }
     }
