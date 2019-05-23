@@ -61,7 +61,11 @@ module.exports = function (id) {
         return new card();
     }
     else if(id == 14) {
-        let card =  require('./cards/ShadeOfPain');
+        let card = require('./cards/ShadeOfPain');
         return new card();
+    }
+    else if(id == 15) {
+        let card = require('./cards/BurrowGator');
+        return new card(); 
     }
 }
