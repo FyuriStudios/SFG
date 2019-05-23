@@ -24,12 +24,8 @@ function startGame() {
         deck.push(13);
         deck.push(14);
         deck.push(14);
-        deck.push(14);
-        deck.push(14);
-        for (var i = 0; i < 2; i++)
-            deck.push(-1);
-        for (var i = 0; i < 2; i++)
-            deck.push(-2);
+        deck.push(15);
+        deck.push(15);
     } else {
         deck = passDeck.split(', ').map(Number);
     }
