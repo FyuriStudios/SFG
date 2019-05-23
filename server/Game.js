@@ -319,9 +319,13 @@ class Game {
 				this.endTurn(input, eventChain);
 				break;
         }
-        console.log(this.currentPlayer.board);
+		console.log(this.currentPlayer.board);
+		
+		this.outputEventChain(eventChain);
+	}
 
-        eventChain.forEach(value => {
+	outputEventChain(eventChain) {
+		eventChain.forEach(value => {
             if(value.view == 3) {
                 this.currentPlayer.socket.emit('event', value);
             }
@@ -395,7 +399,7 @@ class Game {
 	 */
 	killDead(eventChain) {
 
-		if (this.player1.health == 0) {
+		if (this.player1.health <= 0) {
 			let event = {
 				'type': 'game over',
 				'player': 2 //player 2 won
@@ -404,7 +408,7 @@ class Game {
 			this.player2.socket.emit('event', event);
 			this.player1.socket.disconnect();
 			this.player2.socket.disconnect();
-		} else if (this.player2.health == 0) { //check for game over first.
+		} else if (this.player2.health <= 0) { //check for game over first.
 			let event = {
 				'type': 'game over',
 				'player': 1 //player 1 won
@@ -440,7 +444,7 @@ class Game {
                     let deadGuy = player.board.splice(i, 1)[0];
                     //TODO: add effects here
                     if(deadGuy.hasSelfDeath) {
-                        deadGuy.selfDeath(null, this, eventChain);
+                        waitFor(deadGuy.selfDeath(null, this, eventChain));
                     }
 
 					deadGuys.push(deadGuy);
@@ -554,7 +558,9 @@ class Game {
             else {
                 temp.graveyard.push(toPlay);
             }
-        }
+		}
+		
+		this.killDead(eventChain);
 	}
 
 	startTurn(eventChain) {

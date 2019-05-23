@@ -22,6 +22,10 @@ function startGame() {
         deck.push(11);
         deck.push(12);
         deck.push(13);
+        deck.push(14);
+        deck.push(14);
+        deck.push(14);
+        deck.push(14);
         for (var i = 0; i < 2; i++)
             deck.push(-1);
         for (var i = 0; i < 2; i++)
@@ -52,7 +56,7 @@ function startGame() {
         }
 
 
-        GameView.setupDisplay(gameVars.id, ownDeckSize, enemyDeckSize);
+        GameView.setupDisplay(gameVars.id, ownDeckSize, enemyDeckSize, socket);
     })
 
     GameView.setupOutput(function (output) {

@@ -60,4 +60,8 @@ module.exports = function (id) {
         let card = require('./cards/BottomFeeder');
         return new card();
     }
+    else if(id == 14) {
+        let card =  require('./cards/ShadeOfPain');
+        return new card();
+    }
 }

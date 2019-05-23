@@ -33,6 +33,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Wound_Regen_Hand.png');
             } else if(id == 13) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Bottom_Hand.png');
+            } else if(id == 14) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Shade_Of_Pain_Hand.png');
             }
         },
 
@@ -67,6 +69,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Wound_Regen_Hover.png');
             } else if(id == 13) {
                 return PIXI.Sprite.from('/static/assets/popup/Bottom_Hover.png');
+            } else if(id == 14) {
+                return PIXI.Sprite.from('/static/assets/popup/Shade_Of_Pain_Hover.png');
             }
         },
 
@@ -91,6 +95,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Ancient_Cur_Board.png');
             } else if(id == 13) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Bottom_Board.png');
+            } else if(id == 14) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Shade_Of_Pain_Board.png');
             }
         }
     }

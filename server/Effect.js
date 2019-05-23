@@ -63,7 +63,7 @@ class Effect {
             i.func(input, game, eventChain);
         });
         if(this.hasEntersBoard)
-            this.entersBoard();
+            this.entersBoard(input, game, eventChain);
     }
 
     addCardPlayed(func) {
