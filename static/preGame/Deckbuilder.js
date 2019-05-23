@@ -1,10 +1,8 @@
 let character;
-let music;
 let font;
 
-let music = new Audio('/static/assets/sounds/STRUGGLE_FOR_GERA.m4a');
-music.loop = true;
-music.play();
+// console.log(document.getElementById('music'));
+// document.getElementById('music').play();
 
 character = localStorage.getItem("character");
 console.log(character);
@@ -15,7 +13,7 @@ let app = new PIXI.Application({
     forceCanvas: false //these are just some options that we applied in the constructor. See PIXI documentation for more details.
 });
 
-document.body.addEventListener('mousedown', function (event) {
+document.addEventListener('mousedown', function (event) {
     console.log('x: ' + event.clientX / app.stage.width);
     console.log('y: ' + event.clientY / app.stage.height);
 });
@@ -24,12 +22,6 @@ document.body.addEventListener('mousedown', function (event) {
             Don't touch this. Everything breaks if you do.
             */
 setTimeout(() => {
-    if (waitGameImage != undefined)
-        waitGameImage.remove();
-
-    if (waitGif != undefined)
-        waitGif.remove();
-
     app.stage.width = innerWidth;
     app.stage.height = innerHeight;
 
@@ -58,13 +50,14 @@ switch (character) {
         yakov();
         break;
 
-    case "rinwald":
-        rinwald();
-        break;
+        resizeDisplay
+        resizeDisplay
+        resizeDisplay
 
-    default:
-        break;
+        resizeDisplay
+        resizeDisplay
 }
+resizeDisplay
 
 
 function resizeDisplay() {

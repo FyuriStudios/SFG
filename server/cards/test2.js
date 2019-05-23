@@ -16,7 +16,7 @@ let damageWrapper = {
     func: function(input, game, eventChain) {
         let damage = require('../genericEffects/Damage');
 
-        damage.func(input, game, eventChain, 1);
+        damage.func(input, game, eventChain, 4);
     }
 }
 
