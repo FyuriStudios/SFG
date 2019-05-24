@@ -92,5 +92,9 @@ module.exports = function (id) {
         let card = require('./cards/BestialSupport');
         return new card();
     }
+    else if(id == 22) {
+        let card = require('./cards/SowChaos');
+        return new card();
+    }
 
 }

@@ -2,7 +2,7 @@ var Spell = require('../Spell');
 let Damage = require('../genericEffects/Damage');
 let CharacterHealing = require('../genericEffects/CharacterHealing');
 
-class test extends Spell {
+class BestialSupport extends Spell {
 
     constructor() {
         super(21, 'spell', 'uncommon', 'Bestial Support', 30, false, false, false);
@@ -36,4 +36,4 @@ class test extends Spell {
 
 }
 
-module.exports = test;
+module.exports = BestialSupport;

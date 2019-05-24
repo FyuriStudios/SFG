@@ -50,7 +50,7 @@ IDToImage = (function () {
             } else if(id == 21) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Bestial_Support_Hand.png');
             } else if(id == 22) {
-                return PIXI.Sprite.from('/static/assets/in_hand/                ');
+                return PIXI.Sprite.from('/static/assets/in_hand/Sow_Chaos_Hand.png');
             } else if(id == 23) {
                 return PIXI.Sprite.from('/static/assets/in_hand/                ');
             }
@@ -104,7 +104,7 @@ IDToImage = (function () {
             } else if(id == 21) {
                 return PIXI.Sprite.from('/static/assets/popup/Bestial_Support_Hover.png');
             } else if(id == 22) {
-                return PIXI.Sprite.from('/static/assets/popup/                 ');
+                return PIXI.Sprite.from('/static/assets/popup/Sow_Chaos_Hover.png');
             } else if(id == 23) {
                 return PIXI.Sprite.from('/static/assets/popup/                 ');
             }
