@@ -387,18 +387,51 @@ class Game {
 				event.type = 'burn card';
 				event.view = 1;
 				event.player = player.id;
-				event.card = this.backendCardTranslate(temp);
+                event.card = this.backendCardTranslate(temp);
+                eventChain.push(event);
 			} else {
 				player.hand.unshift(temp);
 				event.type = 'draw card';
 				event.player = player.id;
 				event.view = 2;//semi-private
                 event.card = this.backendCardTranslate(temp);
-			}
-		}
+                eventChain.push(event);
 
-        //TODO: add effects.
-		eventChain.push(event);
+                game.currentPlayer.board.forEach(value => {
+                    if(value.hasCardDraw) {
+                        value.cardDraw({player: player.id}, game, eventChain);
+                    }
+                });
+        
+                game.otherPlayer.board.forEach(value => {
+                    if(value.hasCardDraw) {
+                        value.cardDraw({player: player.id}, game, eventChain);
+                    }
+                });
+        
+                game.currentPlayer.effects.forEach(value => {
+                    if(value.hasCardDraw) {
+                        value.cardDraw({player: player.id}, game, eventChain);
+                    }
+                });
+        
+                game.otherPlayer.effects.forEach(value => {
+                    if(value.hasCardDraw) {
+                        value.cardDraw({player: player.id}, game, eventChain);
+                    }
+                });
+        
+                if(game.currentPlayer.fieldSpell.hasCardDraw) {
+                    game.currentPlayer.fieldSpell.cardDraw({player: player.id}, game, eventChain);
+                }
+        
+                if(game.otherPlayer.fieldSpell.hasCardDraw) {
+                    game.otherPlayer.fieldSpell.cardDraw({player: player.id}, game, eventChain);
+                }
+			}
+        }
+        
+        this.killDead(eventChain);
 
 	}
 

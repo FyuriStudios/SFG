@@ -52,7 +52,7 @@ IDToImage = (function () {
             } else if(id == 22) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Sow_Chaos_Hand.png');
             } else if(id == 23) {
-                return PIXI.Sprite.from('/static/assets/in_hand/                ');
+                return PIXI.Sprite.from('/static/assets/in_hand/Strenuous_Path_Hand.png');
             }
         },
 
@@ -106,7 +106,7 @@ IDToImage = (function () {
             } else if(id == 22) {
                 return PIXI.Sprite.from('/static/assets/popup/Sow_Chaos_Hover.png');
             } else if(id == 23) {
-                return PIXI.Sprite.from('/static/assets/popup/                 ');
+                return PIXI.Sprite.from('/static/assets/popup/Strenuous_Path_Hover.png');
             }
         },
 

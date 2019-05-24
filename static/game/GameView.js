@@ -1597,6 +1597,36 @@ let GameView = (function () {
             }
         }
 
+        else if(event.type == 'discard') {
+            if(event.player == game.id) {
+                let card = game.hand.splice(event.index, 1)[0];
+                game.ownGraveyard.push(card);
+                AnimationQueue.addMoveRequest(card.sprite, {x: app.stage.width * .25, y: app.stage.height * .5}, 15, () => {
+                    app.stage.removeChild(card.sprite);
+                    fixOwnHandSpacing(() => nextInEventQueue());
+                });
+            }
+            else {
+                let cardSprite = enemyCardsInHand.splice(event.index, 1)[0];
+
+                let burnedCard = ClientCard.from(event.card);
+                smallSizeCardInHandSprite(burnedCard.sprite);
+
+                burnedCard.sprite.x = cardSprite.x;
+                burnedCard.sprite.y = cardSprite.y;
+
+                app.stage.removeChild(cardSprite);
+
+                app.stage.addChild(burnedCard.sprite);
+
+                game.enemyGraveyard.push(burnedCard); 
+                AnimationQueue.addMoveRequest(burnedCard.sprite, {x: app.stage.width * .25, y: app.stage.height * .5}, 15, () => {
+                    app.stage.removeChild(burnedCard.sprite);
+                    fixEnemyHandSpacing(() => nextInEventQueue());
+                });
+            }
+        }
+
         else if(event.type == 'add deck card') {
             if(event.player == game.id)
                 game.ownDeckSize += 1;

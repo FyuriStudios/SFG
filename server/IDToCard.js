@@ -96,5 +96,9 @@ module.exports = function (id) {
         let card = require('./cards/SowChaos');
         return new card();
     }
+    else if(id == 23) {
+        let card = require('./cards/StrenuousPath');
+        return new card();
+    }
 
 }
