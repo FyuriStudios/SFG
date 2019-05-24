@@ -26,8 +26,13 @@ class Monster extends Card {
 		this.hasDefender = hasDefender;
 		this.monsterClass = monsterClass;
 		this.isStatic = false;
-		this.relentless = relentless;
-		this.turnsBeforeAttack = 0;
+        this.relentless = relentless;
+        this.vanguard = vanguard;
+        this.slow = slow;
+        if(slow)
+            this.turnsBeforeAttack = 1;
+        else
+		    this.turnsBeforeAttack = 0;
 	}
 
 	/**
