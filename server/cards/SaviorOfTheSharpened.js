@@ -1,6 +1,6 @@
 let Monster = require('../Monster');
 
-class test extends Monster {
+class SaviorOfTheSharpened extends Monster {
 
     constructor() {
         super('monster', 16, 'monster', 'secret weapon', 'Savior of the Sharpened', 8, 5, 'cur');
@@ -20,4 +20,4 @@ class test extends Monster {
     }
 }
 
-module.exports = test;
+module.exports = SaviorOfTheSharpened;

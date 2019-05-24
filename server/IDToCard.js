@@ -72,4 +72,8 @@ module.exports = function (id) {
         let card = require('./cards/SaviorOfTheSharpened');
         return new card();
     }
+    else if(id == 17) {
+        let card = require('./cards/Habuero');
+        return new card();
+    }
 }

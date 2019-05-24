@@ -39,6 +39,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Burrowgator_Hand.png');
             } else if(id == 16) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Savior_Hand.png');
+            } else if(id == 17) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Habuero_Hand.png');
             } 
         },
 
@@ -79,7 +81,9 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Burrowgator_Hover.png');
             } else if(id == 16) {
                 return PIXI.Sprite.from('/static/assets/popup/Savior_Hover.png');
-            } 
+            } else if(id == 17) {
+                return PIXI.Sprite.from('/static/assets/popup/Habuero_Hover.png');
+            }  
         },
 
         monsterFromID: function(id) {
@@ -109,7 +113,9 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Burrowgator_Board.png');
             } else if(id == 16) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Savior_Board_Piece.png');
-            } 
+            } else if(id == 17) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Habuero_Board_Piece.png');
+            }  
         }
     }
 
