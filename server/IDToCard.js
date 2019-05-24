@@ -80,4 +80,8 @@ module.exports = function (id) {
         let card = require('./cards/RahMut');
         return new card();
     }
+    else if(id == 19) {
+        let card = require('./cards/Cow');
+        return new card();
+    }
 }
