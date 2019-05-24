@@ -33,10 +33,10 @@ ClientCard = (function() {
 
             this.costText.anchor.x = .5;
             this.costText.anchor.y = .5;
-            this.costText.width = this.sprite.width * .09;
-            this.costText.height = this.sprite.height * .12;
-            this.costText.x -= this.sprite.width * .415;
-            this.costText.y -= this.sprite.height * .425;
+            this.costText.width = this.sprite.width * (this.currentCost+''.length == 1?.12:.18);
+            this.costText.height = this.sprite.height * .15;
+            this.costText.x -= this.sprite.width * .41;
+            this.costText.y -= this.sprite.height * .42;
 
             this.sprite.addChild(this.costText);
         }
@@ -134,10 +134,10 @@ ClientCard = (function() {
 
             this.powerText.anchor.x = .5;
             this.powerText.anchor.y = .5;
-            this.powerText.width = this.sprite.width * .09;
-            this.powerText.height = this.sprite.height * .12;
-            this.powerText.x += this.sprite.width * .415;
-            this.powerText.y -= this.sprite.height * .425;
+            this.powerText.width = this.sprite.width * this.sprite.width * (this.currentPower+''.length == 1?.12:.18);
+            this.powerText.height = this.sprite.height * .15;
+            this.powerText.x += this.sprite.width * .41;
+            this.powerText.y -= this.sprite.height * .42;
 
             this.sprite.addChild(this.powerText);
         }
