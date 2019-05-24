@@ -35,6 +35,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Bottom_Hand.png');
             } else if(id == 14) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Shade_Of_Pain_Hand.png');
+            } else if(id == 15) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Burrowgator_Hand.png');
             }
         },
 
@@ -71,6 +73,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Bottom_Hover.png');
             } else if(id == 14) {
                 return PIXI.Sprite.from('/static/assets/popup/Shade_Of_Pain_Hover.png');
+            } else if(id == 15) {
+                return PIXI.Sprite.from('/static/assets/popup/Burrowgator_Hover.png');
             }
         },
 
@@ -97,6 +101,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Bottom_Board.png');
             } else if(id == 14) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Shade_Of_Pain_Board.png');
+            } else if(id == 15) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Burrowgator_Board.png');
             }
         }
     }
