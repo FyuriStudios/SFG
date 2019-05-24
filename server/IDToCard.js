@@ -68,4 +68,8 @@ module.exports = function (id) {
         let card = require('./cards/BurrowGator');
         return new card(); 
     }
+    else if(id == 16) {
+        let card = require('./cards/SaviorOfTheSharpened');
+        return new card();
+    }
 }
