@@ -339,6 +339,17 @@ let GameView = (function () {
                         });
                     });
                 }
+                else if(temp.targeting) {
+                    UserChoices.target(game, (targetSide, target) => {
+                        outputFunc({
+                            type: 'play card',
+                            handLoc: handLoc,
+                            playLoc: this.spotForCard,
+                            targetSide: targetSide,
+                            target: target,
+                        });
+                    })
+                }
                 else {
                     outputFunc({
                         type: 'play card',
