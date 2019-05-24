@@ -239,6 +239,16 @@ class Game {
 			this.player1.deck.shuffle();
             this.player2.deck.shuffle();
 
+            this.player1.deck.forEach(value => {
+                if(value.hasCreation)
+                    value.creation({}, this, null);
+            });
+
+            this.player2.deck.forEach(value => {
+                if(value.hasCreation)
+                    value.creation({}, this, null);
+            });
+
             for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
 
                 let drawnCard = this.player1.deck.pop();

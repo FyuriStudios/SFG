@@ -8,6 +8,7 @@ class Effect {
         this.hasCardPlayed = false;
         this.hasQuestFulfilled = false;
         this.hasEntersBoard = false;
+        this.hasCreation = false;
 
         this.selfAttackList = [];
         this.enemyAttackList = [];
@@ -16,6 +17,7 @@ class Effect {
         this.cardPlayedList = [];
         this.questFulfilledList = [];
         this.entersBoardList = [];
+        this.creationList = [];
     }
     
     selfAttack(input, game, eventChain) {
@@ -78,6 +80,16 @@ class Effect {
 
     addEntersBoard(func) {
         this.entersBoardList.push(func);
+    }
+
+    creation(input, game, eventChain) {
+        this.creationList.forEach(function(i) {
+            i.func(input, game, eventChain);
+        });
+    }
+
+    addCreation(func) {
+        this.creationList.push(func);
     }
 
 }

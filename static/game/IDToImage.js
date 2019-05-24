@@ -41,7 +41,19 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Savior_Hand.png');
             } else if(id == 17) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Habuero_Hand.png');
-            } 
+            } else if(id == 18) {
+                return PIXI.Sprite.from('/static/assets/in_hand/RahMut_Hand.png');
+            } else if(id == 19) {
+                return PIXI.Sprite.from('/static/assets/in_hand/                ');
+            } else if(id == 20) {
+                return PIXI.Sprite.from('/static/assets/in_hand/                ');
+            } else if(id == 21) {
+                return PIXI.Sprite.from('/static/assets/in_hand/                ');
+            } else if(id == 22) {
+                return PIXI.Sprite.from('/static/assets/in_hand/                ');
+            } else if(id == 23) {
+                return PIXI.Sprite.from('/static/assets/in_hand/                ');
+            }
         },
 
         popupFromId: function(id) {
@@ -83,7 +95,19 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Savior_Hover.png');
             } else if(id == 17) {
                 return PIXI.Sprite.from('/static/assets/popup/Habuero_Hover.png');
-            }  
+            } else if(id == 18) {
+                return PIXI.Sprite.from('/static/assets/popup/RahMut_Hover.png');
+            } else if(id == 19) {
+                return PIXI.Sprite.from('/static/assets/popup/                 ');
+            } else if(id == 20) {
+                return PIXI.Sprite.from('/static/assets/popup/                 ');
+            } else if(id == 21) {
+                return PIXI.Sprite.from('/static/assets/popup/                 ');
+            } else if(id == 22) {
+                return PIXI.Sprite.from('/static/assets/popup/                 ');
+            } else if(id == 23) {
+                return PIXI.Sprite.from('/static/assets/popup/                 ');
+            }
         },
 
         monsterFromID: function(id) {
@@ -115,7 +139,9 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Savior_Board_Piece.png');
             } else if(id == 17) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Habuero_Board_Piece.png');
-            }  
+            } else if(id == 18) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/RahMut_Board_Piece.png');
+            }
         }
     }
 

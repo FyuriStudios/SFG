@@ -76,4 +76,8 @@ module.exports = function (id) {
         let card = require('./cards/Habuero');
         return new card();
     }
+    else if(id == 18) {
+        let card = require('./cards/RahMut');
+        return new card();
+    }
 }
