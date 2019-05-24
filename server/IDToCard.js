@@ -104,5 +104,9 @@ module.exports = function (id) {
         let card = require('./cards/TwistedSimian');
         return new card();
     }
+    else if(id == 25) {
+        let card = require('./cards/CorruptedEagle');
+        return new card();
+    }
 
 }
