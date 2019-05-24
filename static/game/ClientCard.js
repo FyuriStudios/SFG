@@ -33,10 +33,10 @@ ClientCard = (function() {
 
             this.costText.anchor.x = .5;
             this.costText.anchor.y = .5;
-            this.costText.width = this.sprite.width * (this.currentCost+''.length == 1?.12:.18);
+            this.costText.width = this.sprite.width * ((this.currentCost+'').length == 1? .12:.18);
             this.costText.height = this.sprite.height * .15;
-            this.costText.x -= this.sprite.width * .41;
-            this.costText.y -= this.sprite.height * .42;
+            this.costText.x -= this.sprite.width * .37;
+            this.costText.y -= this.sprite.height * .4;
 
             this.sprite.addChild(this.costText);
         }
@@ -62,7 +62,7 @@ ClientCard = (function() {
             popup.addChild(cost);
 
             cost.anchor.x = cost.anchor.y = .5;
-            cost.width = popup.width * .09;
+            cost.width = popup.width * ((this.currentCost+ '').length == 1?.09:.135);
             cost.height = popup.height * .12;
 
             cost.x = popup.width * .12;
@@ -134,10 +134,10 @@ ClientCard = (function() {
 
             this.powerText.anchor.x = .5;
             this.powerText.anchor.y = .5;
-            this.powerText.width = this.sprite.width * this.sprite.width * (this.currentPower+''.length == 1?.12:.18);
+            this.powerText.width = this.sprite.width * ((this.currentPower+'').length == 1? .12:.18);
             this.powerText.height = this.sprite.height * .15;
-            this.powerText.x += this.sprite.width * .41;
-            this.powerText.y -= this.sprite.height * .42;
+            this.powerText.x += this.sprite.width * .39;
+            this.powerText.y -= this.sprite.height * .41;
 
             this.sprite.addChild(this.powerText);
         }
@@ -156,7 +156,7 @@ ClientCard = (function() {
                 });
 
             power.anchor.x = power.anchor.y = .5;
-            power.width = this.popup.width * .11;
+            power.width = this.popup.width * ((this.currentPower+'').length == 1? .11:.165);
             power.height = this.popup.height * .145;
 
             power.x = this.popup.width * .87;

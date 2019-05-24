@@ -1717,7 +1717,9 @@ let GameView = (function () {
                 .add('monsterTokensPanel', '/static/assets/monster_tokens_panel.png')
                 .add('actionTokensPanel', '/static/assets/action_tokens_panel.png')
                 .add('plusButton', '/static/assets/plus_button.png')
-                .add('playButton', '/static/assets/Play_Button.png');
+                .add('playButton', '/static/assets/Play_Button.png')
+                .add('ownIgneaPortrait', '/static/assets/portraits/own-Ignea-Portrait.png')
+                .add('enemyIgneaPortrait', '/static/assets/portraits/enemy-Ignea-Portrait.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -1736,6 +1738,8 @@ let GameView = (function () {
                 textures.monsterTokensPanel = resources.monsterTokensPanel.texture;
                 textures.plusButton = resources.plusButton.texture;
                 textures.playButton = resources.playButton.texture;
+                textures.ownIgneaPortrait = resources.ownIgneaPortrait.texture;
+                textures.enemyIgneaPortrait = resources.enemyIgneaPortrait.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
@@ -1794,6 +1798,27 @@ let GameView = (function () {
                     });
                     endTurnButton.button.alpha = 1;
                 });
+
+                game.ownCharacterSprite = new PIXI.Sprite(textures.ownIgneaPortrait);
+                game.ownCharacterSprite.anchor.x = .5;
+                game.ownCharacterSprite.anchor.y = 1;
+
+                game.ownCharacterSprite.x = app.stage.width * .5;
+                game.ownCharacterSprite.y = app.stage.height;
+
+                game.ownCharacterSprite.width = game.ownCharacterSprite.width * .34;
+                game.ownCharacterSprite.height = game.ownCharacterSprite.height * .34;
+                app.stage.addChild(game.ownCharacterSprite);
+
+                game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyIgneaPortrait);
+                game.enemyCharacterSprite.anchor.x = .5;
+                game.enemyCharacterSprite.anchor.y = 0;
+
+                game.enemyCharacterSprite.x = app.stage.width * .491;
+                game.enemyCharacterSprite.y = 0;
+                game.enemyCharacterSprite.height = game.enemyCharacterSprite.height * .34;
+                game.enemyCharacterSprite.width = game.enemyCharacterSprite.width * .34;
+                app.stage.addChild(game.enemyCharacterSprite);
 
                 /*
                 Add the enemy's deck image to the stage. We add the sprite at the very end because if we add the sprite before resizing
