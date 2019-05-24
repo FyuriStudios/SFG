@@ -100,5 +100,9 @@ module.exports = function (id) {
         let card = require('./cards/StrenuousPath');
         return new card();
     }
+    else if(id == 24) {
+        let card = require('./cards/TwistedSimian');
+        return new card();
+    }
 
 }

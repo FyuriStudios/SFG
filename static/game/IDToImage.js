@@ -53,6 +53,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Sow_Chaos_Hand.png');
             } else if(id == 23) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Strenuous_Path_Hand.png');
+            } else if(id == 24) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Twisted_Simian_Hand.png');
             }
         },
 
@@ -107,6 +109,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Sow_Chaos_Hover.png');
             } else if(id == 23) {
                 return PIXI.Sprite.from('/static/assets/popup/Strenuous_Path_Hover.png');
+            } else if(id == 24) {
+                return PIXI.Sprite.from('/static/assets/popup/Twisted_Simian_Hover.png');
             }
         },
 
@@ -143,6 +147,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/RahMut_Board_Piece.png');
             } else if(id == 19) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Cow_Board_Piece.png');
+            } else if(id == 24) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Twisted_Simian_Board.png');
             }
         }
     }

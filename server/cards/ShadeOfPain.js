@@ -13,6 +13,10 @@ class ShadeOfPain extends Monster {
 
                 let player = game.currentPlayer;
 
+                if(player.hand.length == 0) {
+                    game.drawCard(player, eventChain);
+                }
+
                 eventChain.push({
                     type: 'choose card',
                     player: player.id,
