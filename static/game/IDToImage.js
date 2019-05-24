@@ -48,7 +48,7 @@ IDToImage = (function () {
             } else if(id == 20) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Twilight_Fog_Hand.png');
             } else if(id == 21) {
-                return PIXI.Sprite.from('/static/assets/in_hand/                ');
+                return PIXI.Sprite.from('/static/assets/in_hand/Bestial_Support_Hand.png');
             } else if(id == 22) {
                 return PIXI.Sprite.from('/static/assets/in_hand/                ');
             } else if(id == 23) {
@@ -102,7 +102,7 @@ IDToImage = (function () {
             } else if(id == 20) {
                 return PIXI.Sprite.from('/static/assets/popup/Twilight_Fog_Hover.png');
             } else if(id == 21) {
-                return PIXI.Sprite.from('/static/assets/popup/                 ');
+                return PIXI.Sprite.from('/static/assets/popup/Bestial_Support_Hover.png');
             } else if(id == 22) {
                 return PIXI.Sprite.from('/static/assets/popup/                 ');
             } else if(id == 23) {

@@ -86,5 +86,11 @@ module.exports = function (id) {
     } 
     else if(id == 20) {
         let card = require('./cards/TwilightFog');
+        return new card();
     }
+    else if(id == 21) {
+        let card = require('./cards/BestialSupport');
+        return new card();
+    }
+
 }
