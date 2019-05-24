@@ -19,8 +19,8 @@ class Monster extends Card {
 	 * @param {boolean} hasDefender 
 	 * @param {boolean} relentless
 	 */
-	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false, relentless = false, targeting = false, forseeing = false) {
-		super(type, id, tokenType, rarity, name, cost, targeting, forseeing);
+	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false, relentless = false, targeting = false, slow = false, vanguard = false) {
+		super(type, id, tokenType, rarity, name, cost, targeting);
 		this.power = power;
 		this.currentPower = power; //power and current power are different
 		this.hasDefender = hasDefender;
@@ -54,7 +54,7 @@ class Monster extends Card {
 		let defenders = [];
 
 		game.otherPlayer.board.forEach((monster, location) => {
-			if (monster.hasDefender) {
+			if (monster.hasDefender || monster.vanguard) {
 				defenders.push(location);
 			}
 		});

@@ -43,7 +43,7 @@ class Crust extends Monster {
 		let defenders = [];
 
 		game.otherPlayer.board.forEach((monster, location) => {
-			if (monster.hasDefender) {
+			if (monster.hasDefender || monster.vanguard) {
 				defenders.push(location);
 			}
 		});
