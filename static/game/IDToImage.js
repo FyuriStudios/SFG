@@ -46,7 +46,7 @@ IDToImage = (function () {
             } else if(id == 19) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Cow_Hand.png');
             } else if(id == 20) {
-                return PIXI.Sprite.from('/static/assets/in_hand/                ');
+                return PIXI.Sprite.from('/static/assets/in_hand/Twilight_Fog_Hand.png');
             } else if(id == 21) {
                 return PIXI.Sprite.from('/static/assets/in_hand/                ');
             } else if(id == 22) {
@@ -100,7 +100,7 @@ IDToImage = (function () {
             } else if(id == 19) {
                 return PIXI.Sprite.from('/static/assets/popup/Cow_Hover.png');
             } else if(id == 20) {
-                return PIXI.Sprite.from('/static/assets/popup/                 ');
+                return PIXI.Sprite.from('/static/assets/popup/Twilight_Fog_Hover.png');
             } else if(id == 21) {
                 return PIXI.Sprite.from('/static/assets/popup/                 ');
             } else if(id == 22) {

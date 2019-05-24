@@ -83,5 +83,8 @@ module.exports = function (id) {
     else if(id == 19) {
         let card = require('./cards/Cow');
         return new card();
+    } 
+    else if(id == 20) {
+        let card = require('./cards/TwilightFog');
     }
 }
