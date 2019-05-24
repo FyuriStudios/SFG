@@ -19,7 +19,7 @@ class Monster extends Card {
 	 * @param {boolean} hasDefender 
 	 * @param {boolean} relentless
 	 */
-	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false, relentless = false, targeting = false, slow = false, vanguard = false) {
+	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false, relentless = false, targeting = false, slow = false, vanguard = false, actionTargetable = true) {
 		super(type, id, tokenType, rarity, name, cost, targeting);
 		this.power = power;
 		this.currentPower = power; //power and current power are different
@@ -29,6 +29,7 @@ class Monster extends Card {
         this.relentless = relentless;
         this.vanguard = vanguard;
         this.slow = slow;
+        this.actionTargetable = actionTargetable;
         if(slow)
             this.turnsBeforeAttack = 1;
         else

@@ -560,9 +560,17 @@ class Game {
 
 		if (toPlay.currentCost > tokens || temp.board.length == constants.MAX_BOARD_SIZE) {
 			return; //they don't have enough tokens to play the card.
-		}
+        }
+        
+        temp.hand.splice(input.handLoc, 1);
 
-        temp.hand.splice(input.handLoc, 1)
+        if(toPlay.type == 'spell' && toPlay.targeting) {
+            if(input.target != -1) {
+                let player = input.targetSide == 1?this.player1:this.player2;
+                if(!(player.board[input.target].actionTargetable))
+                    return;
+            }
+        }
 
 		var event = { //now that we're sure the event is going to happen
 			view: 1,
