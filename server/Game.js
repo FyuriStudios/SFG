@@ -16,7 +16,7 @@ follow this general format:
 The type specifies what kind of event is denoted; for example 'draw card' if a card was drawn.
 Here's a complete list and set of descriptions for all of the various event types (list is a work in progress):
 
-1) type: 'fatigue' - This event occurs when a player draws a card but doesn't have a card in their deck to draw. They take damage to their
+1) type: 'fatigue' - This event occurs when a player deckdraws a card but doesn't have a card in their deck to draw. They take damage to their
 face as a result of it.
 	Follows this format:
 
@@ -84,8 +84,6 @@ face as a result of it.
 	}
 
 	7) type: 'play card'
-	
-
 */
 
 //require everything that we need, probably this list will expand as we go
@@ -136,7 +134,8 @@ class Game {
 			sToks: 3,
             deck: [],
             effects: [],
-            fieldSpell: null,
+			fieldSpell: null,
+			character: null,
 		};
 
 		this.player2 = { //see above for details on the variables
@@ -152,6 +151,7 @@ class Game {
             deck: [],
             effects: [],
             fieldSpell: null,
+			character: null,
 		};
     }
     
@@ -195,7 +195,7 @@ class Game {
 	 * This function is separate from the initializer, just in case. Like, maybe we want to let both players ready up?
 	 *
 	 * This function lets the players set their decks and (TODO) let the players choose characters.
-	 * After that, it sets up the game input required so that the players can start. This function repeatedly calls itself so that
+	 * After that, it sets up the gamedeck input required so that the players can start. This function repeatedly calls itself so that
 	 * the players can ready up all of their stuff.
 	 * @author Hughes
 	 */
@@ -214,6 +214,10 @@ class Game {
 			then turns that deck input into their deck.
 			*/
 			function deckConstruction(player) {
+				player.socket.on('character', function (input) {
+					player.character = input;
+					console.log(player.id + ": " + player.character);
+				});
 				player.socket.on('deck', function (input) {
 					//TODO: deck verification and stuff!
 					if (!player.setDeck) {
@@ -436,7 +440,7 @@ class Game {
 	}
 
 	/**
-	 * This function simply goes through the board and kills all dead dudes.
+	 * This function simply goes througameVarsgh the board and kills all dead dudes.
 	 * It also will end the game if a hero is dead.
 	 * @param eventChain - An object containing the chain of events that can be sent to the frontend. If this function decides that it needs to add something to the chain, it will.
 	 */

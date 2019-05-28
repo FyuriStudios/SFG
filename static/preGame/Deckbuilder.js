@@ -49,15 +49,7 @@ switch (character) {
     case "yakov":
         yakov();
         break;
-
-        resizeDisplay
-        resizeDisplay
-        resizeDisplay
-
-        resizeDisplay
-        resizeDisplay
 }
-resizeDisplay
 
 
 function resizeDisplay() {

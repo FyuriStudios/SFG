@@ -5,6 +5,7 @@ function startGame() {
     let gameVars = {};
 
     let passDeck = localStorage.getItem("deckStored");
+    let character = localStorage.getItem("character");
 
     let deck = [];
 
@@ -32,9 +33,11 @@ function startGame() {
 
     socket.on('player id', (input) => {
         gameVars.id = input;
+        gameVars.character = character;
         console.log('received id');
         gameStarting = true;
         socket.emit('deck', deck);
+        socket.emit('character', character);
     });
 
     socket.on('deck sizes', (input) => {
