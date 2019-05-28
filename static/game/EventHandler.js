@@ -33,11 +33,15 @@ function startGame() {
 
     socket.on('player id', (input) => {
         gameVars.id = input;
-        gameVars.character = character;
+        gameVars.ownCharacter = character;
         console.log('received id');
         gameStarting = true;
         socket.emit('deck', deck);
         socket.emit('character', character);
+    });
+
+    socket.on('character', (input) => {
+        gameVars.enemyCharacter = input;
     });
 
     socket.on('deck sizes', (input) => {
@@ -47,16 +51,17 @@ function startGame() {
         let ownDeckSize, enemyDeckSize;
 
         if (gameVars.id == 1) {
-            ownDeckSize = input.player1DeckSize;
-            enemyDeckSize = input.player2DeckSize;
+            gameVars.ownDeckSize = input.player1DeckSize;
+            gameVars.enemyDeckSize = input.player2DeckSize;
         } else {
-            ownDeckSize = input.player2DeckSize;
-            enemyDeckSize = input.player1DeckSize;
+            gameVars.ownDeckSize = input.player2DeckSize;
+            gameVars.enemyDeckSize = input.player1DeckSize;
         }
-
-
-        GameView.setupDisplay(gameVars.id, ownDeckSize, enemyDeckSize, socket);
     })
+
+    socket.on('start', (input) => {
+        GameView.setupDisplay(gameVars.id, gameVars.ownDeckSize, gameVars.enemyDeckSize, socket, gameVars.ownCharacter, gameVars.enemyCharacter);
+    });
 
     GameView.setupOutput(function (output) {
         socket.emit('event', output);

@@ -38,7 +38,7 @@ class ClientGame {
 	 * @param {number} ownStartingDeckSize the total size of this player's deck
 	 * @param {number} enemyStartingDeckSize the total size of the other player's deck
 	 */
-    init(id, ownStartingDeckSize, enemyStartingDeckSize) {
+    init(id, ownStartingDeckSize, enemyStartingDeckSize, ownCharacter, enemyCharacter) {
 		this.id = id;
 		this.hand = [];
 		this.ownBoard = [];
@@ -56,7 +56,9 @@ class ClientGame {
         this.ownHealth = this.STARTING_HEALTH;
         this.enemyHealth = this.STARTING_HEALTH;
         this.ownFieldSpell = null;
-        this.enemyFieldSpell = null;
+		this.enemyFieldSpell = null;
+		this.ownCharacter = ownCharacter;
+		this.enemyCharacter = enemyCharacter;
 	}
 
 }

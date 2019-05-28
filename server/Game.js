@@ -132,10 +132,11 @@ class Game {
 			graveyard: [], //there's nothing in the graveyard
 			mToks: 3,
 			sToks: 3,
-            deck: [],
-            effects: [],
+			deck: [],
+			effects: [],
 			fieldSpell: null,
 			character: null,
+			ready: false,
 		};
 
 		this.player2 = { //see above for details on the variables
@@ -148,47 +149,48 @@ class Game {
 			graveyard: [],
 			mToks: 0,
 			sToks: 0,
-            deck: [],
-            effects: [],
-            fieldSpell: null,
+			deck: [],
+			effects: [],
+			fieldSpell: null,
 			character: null,
+			ready: false,
 		};
-    }
-    
-    backendCardTranslate(card) {
-        if (card.type == 'monster') {
-            return {
-                id: card.id,
-                type: card.type,
-                power: card.power,
-                tokenType: card.tokenType,
-                rarity: card.rarity,
-                name: card.name,
-                cost: card.cost,
-                playCost: card.currentCost,
-                power: card.power,
-                currentPower: card.currentPower,
-                hasDefender: card.hasDefender,
-                isStatic: card.isStatic,
-                targeting: card.targeting,
-                forseeing: card.forseeing,
-            };
-        } else {
-            return {
-                id: card.id,
-                type: card.type,
-                power: card.power,
-                tokenType: card.tokenType,
-                rarity: card.rarity,
-                name: card.name,
-                cost: card.cost,
-                playCost: card.currentCost,
-                targeting: card.targeting,
-                forseeing: card.forseeing,
-                field: card.field,
-            };
-        }
-    }
+	}
+
+	backendCardTranslate(card) {
+		if (card.type == 'monster') {
+			return {
+				id: card.id,
+				type: card.type,
+				power: card.power,
+				tokenType: card.tokenType,
+				rarity: card.rarity,
+				name: card.name,
+				cost: card.cost,
+				playCost: card.currentCost,
+				power: card.power,
+				currentPower: card.currentPower,
+				hasDefender: card.hasDefender,
+				isStatic: card.isStatic,
+				targeting: card.targeting,
+				forseeing: card.forseeing,
+			};
+		} else {
+			return {
+				id: card.id,
+				type: card.type,
+				power: card.power,
+				tokenType: card.tokenType,
+				rarity: card.rarity,
+				name: card.name,
+				cost: card.cost,
+				playCost: card.currentCost,
+				targeting: card.targeting,
+				forseeing: card.forseeing,
+				field: card.field,
+			};
+		}
+	}
 
 	/**
 	 * Starts the game. Call this function when you're ready for the entire game to start.
@@ -200,6 +202,28 @@ class Game {
 	 * @author Hughes
 	 */
 	start(gameReference = this) {
+
+		this.player1.socket.on('character', (input) => {
+			this.player1.character = input;
+			this.player2.socket.emit('character', this.player1.character);
+			console.log(this.player1.character);
+			this.player1.ready = true;
+			if (this.player2.ready) {
+				this.player1.socket.emit('start', 0);
+				this.player2.socket.emit('start', 0);
+			}
+		});
+
+		this.player2.socket.on('character', (input) => {
+			this.player2.character = input;
+			this.player1.socket.emit('character', this.player2.character);
+			console.log(this.player2.character);
+			this.player2.ready = true;
+			if (this.player1.ready) {
+				this.player1.socket.emit('start', 0);
+				this.player2.socket.emit('start', 0);
+			}
+		});
 
 		//first, we're going to handle the case where both players haven't set their decks.
 		//When I first wrote this block, I forgot that negating an entire block also replaces && with ||, 
@@ -214,10 +238,6 @@ class Game {
 			then turns that deck input into their deck.
 			*/
 			function deckConstruction(player) {
-				player.socket.on('character', function (input) {
-					player.character = input;
-					console.log(player.id + ": " + player.character);
-				});
 				player.socket.on('deck', function (input) {
 					//TODO: deck verification and stuff!
 					if (!player.setDeck) {
@@ -241,84 +261,84 @@ class Game {
 			this.player2.socket.emit('deck sizes', deckSizes);
 
 			this.player1.deck.shuffle();
-            this.player2.deck.shuffle();
+			this.player2.deck.shuffle();
 
-            this.player1.deck.forEach(value => {
-                if(value.hasCreation)
-                    value.creation({}, this, null);
-            });
+			this.player1.deck.forEach(value => {
+				if (value.hasCreation)
+					value.creation({}, this, null);
+			});
 
-            this.player2.deck.forEach(value => {
-                if(value.hasCreation)
-                    value.creation({}, this, null);
-            });
+			this.player2.deck.forEach(value => {
+				if (value.hasCreation)
+					value.creation({}, this, null);
+			});
 
-            for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
+			for (var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
 
-                let drawnCard = this.player1.deck.pop();
+				let drawnCard = this.player1.deck.pop();
 
-                this.player1.socket.emit('event', {
-                    type: 'draw card',
-                    player: 1,
-                    card: this.backendCardTranslate(drawnCard),
-                });
+				this.player1.socket.emit('event', {
+					type: 'draw card',
+					player: 1,
+					card: this.backendCardTranslate(drawnCard),
+				});
 
-                this.player2.socket.emit('event', {
-                    type: 'draw card',
-                    player: 1
-                });
+				this.player2.socket.emit('event', {
+					type: 'draw card',
+					player: 1
+				});
 
-                this.player1.hand.unshift(drawnCard);
-            }
+				this.player1.hand.unshift(drawnCard);
+			}
 
-            for(var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
-                
-                let drawnCard = this.player2.deck.pop();
+			for (var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
 
-                this.player2.socket.emit('event', {
-                    type: 'draw card',
-                    player: 2,
-                    card: this.backendCardTranslate(drawnCard),
-                });
+				let drawnCard = this.player2.deck.pop();
 
-                this.player1.socket.emit('event', {
-                    type: 'draw card',
-                    player: 2
-                });
+				this.player2.socket.emit('event', {
+					type: 'draw card',
+					player: 2,
+					card: this.backendCardTranslate(drawnCard),
+				});
 
-                this.player2.hand.unshift(drawnCard);
-            }
+				this.player1.socket.emit('event', {
+					type: 'draw card',
+					player: 2
+				});
 
-            this.turnCounter += 1;
-            let event = {
-                type: 'start turn',
-                player: 1,
-                spellTokensGained: constants.TOKS_PER_TURN,
-                monsterTokensGained: constants.TOKS_PER_TURN,
-            };
+				this.player2.hand.unshift(drawnCard);
+			}
 
-            this.player1.socket.emit('event', event);
-            this.player2.socket.emit('event', event);
+			this.turnCounter += 1;
+			let event = {
+				type: 'start turn',
+				player: 1,
+				spellTokensGained: constants.TOKS_PER_TURN,
+				monsterTokensGained: constants.TOKS_PER_TURN,
+			};
 
-      
-            this.player1.socket.on('event', input => {
-                console.log(input);
-                this.processEvent(this.player1, input);
-            });
+			this.player1.socket.emit('event', event);
+			this.player2.socket.emit('event', event);
 
-            this.player2.socket.on('event', input => {
-                console.log(input);
-                this.processEvent(this.player2, input);
-            });
 
-        }   
-    }
+			this.player1.socket.on('event', input => {
+				console.log(input);
+				this.processEvent(this.player1, input);
+			});
+
+			this.player2.socket.on('event', input => {
+				console.log(input);
+				this.processEvent(this.player2, input);
+			});
+
+		}
+	}
 
 	processEvent(player, input) {
 
 		if (player != this.currentPlayer) {
-            return;
-        }
+			return;
+		}
 
 		let eventChain = [];
 
@@ -332,30 +352,33 @@ class Game {
 			case 'end turn':
 				this.endTurn(input, eventChain);
 				break;
-        }
+		}
 		console.log(this.currentPlayer.board);
-		
+
 		this.outputEventChain(eventChain);
 	}
 
 	outputEventChain(eventChain) {
 		eventChain.forEach(value => {
-            if(value.view == 3) {
-                this.currentPlayer.socket.emit('event', value);
-            }
-            else if(value.view == 2) {
-                if(value.player == 1) {
-                    this.player1.socket.emit('event', value);
-                    this.player2.socket.emit('event', {type: value.type, player: value.player});
-                }
-                else {
-                    this.player2.socket.emit('event', value);
-                    this.player1.socket.emit('event', {type: value.type, player: value.player});
-                }
-            }
-            else {
+			if (value.view == 3) {
+				this.currentPlayer.socket.emit('event', value);
+			} else if (value.view == 2) {
+				if (value.player == 1) {
+					this.player1.socket.emit('event', value);
+					this.player2.socket.emit('event', {
+						type: value.type,
+						player: value.player
+					});
+				} else {
+					this.player2.socket.emit('event', value);
+					this.player1.socket.emit('event', {
+						type: value.type,
+						player: value.player
+					});
+				}
+			} else {
 				this.player1.socket.emit('event', value);
-                this.player2.socket.emit('event', value);
+				this.player2.socket.emit('event', value);
 			}
 		});
 	}
@@ -391,56 +414,68 @@ class Game {
 				event.type = 'burn card';
 				event.view = 1;
 				event.player = player.id;
-                event.card = this.backendCardTranslate(temp);
-                eventChain.push(event);
+				event.card = this.backendCardTranslate(temp);
+				eventChain.push(event);
 			} else {
 				player.hand.unshift(temp);
 				event.type = 'draw card';
 				event.player = player.id;
-				event.view = 2;//semi-private
-                event.card = this.backendCardTranslate(temp);
-                eventChain.push(event);
+				event.view = 2; //semi-private
+				event.card = this.backendCardTranslate(temp);
+				eventChain.push(event);
 
-                game.currentPlayer.board.forEach(value => {
-                    if(value.hasCardDraw) {
-                        value.cardDraw({player: player.id}, game, eventChain);
-                    }
-                });
-        
-                game.otherPlayer.board.forEach(value => {
-                    if(value.hasCardDraw) {
-                        value.cardDraw({player: player.id}, game, eventChain);
-                    }
-                });
-        
-                game.currentPlayer.effects.forEach(value => {
-                    if(value.hasCardDraw) {
-                        value.cardDraw({player: player.id}, game, eventChain);
-                    }
-                });
-        
-                game.otherPlayer.effects.forEach(value => {
-                    if(value.hasCardDraw) {
-                        value.cardDraw({player: player.id}, game, eventChain);
-                    }
-                });
-        
-                if(game.currentPlayer.fieldSpell.hasCardDraw) {
-                    game.currentPlayer.fieldSpell.cardDraw({player: player.id}, game, eventChain);
-                }
-        
-                if(game.otherPlayer.fieldSpell.hasCardDraw) {
-                    game.otherPlayer.fieldSpell.cardDraw({player: player.id}, game, eventChain);
-                }
+				game.currentPlayer.board.forEach(value => {
+					if (value.hasCardDraw) {
+						value.cardDraw({
+							player: player.id
+						}, game, eventChain);
+					}
+				});
+
+				game.otherPlayer.board.forEach(value => {
+					if (value.hasCardDraw) {
+						value.cardDraw({
+							player: player.id
+						}, game, eventChain);
+					}
+				});
+
+				game.currentPlayer.effects.forEach(value => {
+					if (value.hasCardDraw) {
+						value.cardDraw({
+							player: player.id
+						}, game, eventChain);
+					}
+				});
+
+				game.otherPlayer.effects.forEach(value => {
+					if (value.hasCardDraw) {
+						value.cardDraw({
+							player: player.id
+						}, game, eventChain);
+					}
+				});
+
+				if (game.currentPlayer.fieldSpell.hasCardDraw) {
+					game.currentPlayer.fieldSpell.cardDraw({
+						player: player.id
+					}, game, eventChain);
+				}
+
+				if (game.otherPlayer.fieldSpell.hasCardDraw) {
+					game.otherPlayer.fieldSpell.cardDraw({
+						player: player.id
+					}, game, eventChain);
+				}
 			}
-        }
-        
-        this.killDead(eventChain);
+		}
+
+		this.killDead(eventChain);
 
 	}
 
 	/**
-	 * This function simply goes througameVarsgh the board and kills all dead dudes.
+	 * This function simply goes through the board and kills all dead dudes.
 	 * It also will end the game if a hero is dead.
 	 * @param eventChain - An object containing the chain of events that can be sent to the frontend. If this function decides that it needs to add something to the chain, it will.
 	 */
@@ -488,11 +523,11 @@ class Game {
 			for (var i = player.board.length - 1; i >= 0; i--) {
 				if (player.board[i].currentPower <= 0) {
 
-                    let deadGuy = player.board.splice(i, 1)[0];
-                    //TODO: add effects here
-                    if(deadGuy.hasSelfDeath) {
-                        waitFor(deadGuy.selfDeath(null, this, eventChain));
-                    }
+					let deadGuy = player.board.splice(i, 1)[0];
+					//TODO: add effects here
+					if (deadGuy.hasSelfDeath) {
+						waitFor(deadGuy.selfDeath(null, this, eventChain));
+					}
 
 					deadGuys.push(deadGuy);
 					dead.push({
@@ -528,22 +563,22 @@ class Game {
 	 */
 	attack(input, eventChain) {
 
-		if(this.currentPlayer.board[input.attacker].attack(this, input.attacker, input.target, eventChain)) {
-            if(this.currentPlayer.board[input.attacker].hasSelfAttack) {
-                this.currentPlayer.board[input.attacker].selfAttack(input, this, eventChain);
-            }
-            this.otherPlayer.board.forEach((value) => {
-                if(value.hasEnemyAttack) {
-                    value.enemyAttack(input, this, eventChain);
-                }
-            });
+		if (this.currentPlayer.board[input.attacker].attack(this, input.attacker, input.target, eventChain)) {
+			if (this.currentPlayer.board[input.attacker].hasSelfAttack) {
+				this.currentPlayer.board[input.attacker].selfAttack(input, this, eventChain);
+			}
+			this.otherPlayer.board.forEach((value) => {
+				if (value.hasEnemyAttack) {
+					value.enemyAttack(input, this, eventChain);
+				}
+			});
 
-            this.otherPlayer.effects.forEach((value) => {
-                if(value.hasEnemyAttack) {
-                    value.enemyAttack(input, this, eventChain);
-                }
-            });
-            //TODO: add effects
+			this.otherPlayer.effects.forEach((value) => {
+				if (value.hasEnemyAttack) {
+					value.enemyAttack(input, this, eventChain);
+				}
+			});
+			//TODO: add effects
 			this.killDead(eventChain);
 		}
 	}
@@ -555,26 +590,26 @@ class Game {
 	 */
 	playCard(input, eventChain) {
 
-        var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
+		var temp = this.currentPlayer; //storing it so we don't waste computation time on recalculating the current player
 
-        var toPlay = temp.hand[input.handLoc];
-        
-        //TODO: add flex token implementation
+		var toPlay = temp.hand[input.handLoc];
+
+		//TODO: add flex token implementation
 		var tokens = toPlay.tokenType == 'monster' ? temp.mToks : temp.sToks;
 
 		if (toPlay.currentCost > tokens || temp.board.length == constants.MAX_BOARD_SIZE) {
 			return; //they don't have enough tokens to play the card.
-        }
-        
-        temp.hand.splice(input.handLoc, 1);
+		}
 
-        if(toPlay.type == 'spell' && toPlay.targeting) {
-            if(input.target != -1) {
-                let player = input.targetSide == 1?this.player1:this.player2;
-                if(!(player.board[input.target].actionTargetable))
-                    return;
-            }
-        }
+		temp.hand.splice(input.handLoc, 1);
+
+		if (toPlay.type == 'spell' && toPlay.targeting) {
+			if (input.target != -1) {
+				let player = input.targetSide == 1 ? this.player1 : this.player2;
+				if (!(player.board[input.target].actionTargetable))
+					return;
+			}
+		}
 
 		var event = { //now that we're sure the event is going to happen
 			view: 1,
@@ -592,29 +627,28 @@ class Game {
 		else
 			temp.sToks -= toPlay.currentCost;
 
-        eventChain.push(event);
+		eventChain.push(event);
 
 		if (toPlay.type == 'monster') {
 			temp.board.splice(input.playLoc, 0, toPlay);
-            
-            if(toPlay.hasCardPlayed)
-                toPlay.cardPlayed(input, this, eventChain);
 
-		} else if(toPlay.type == 'spell') {
+			if (toPlay.hasCardPlayed)
+				toPlay.cardPlayed(input, this, eventChain);
 
-            toPlay.cardPlayed(input, this, eventChain);
+		} else if (toPlay.type == 'spell') {
 
-            if(toPlay.field) {
-                if(temp.fieldSpell != null) {
-                    temp.graveyard.push(temp.fieldSpell);
-                }
-                temp.fieldSpell = toPlay;
-            }
-            else {
-                temp.graveyard.push(toPlay);
-            }
+			toPlay.cardPlayed(input, this, eventChain);
+
+			if (toPlay.field) {
+				if (temp.fieldSpell != null) {
+					temp.graveyard.push(temp.fieldSpell);
+				}
+				temp.fieldSpell = toPlay;
+			} else {
+				temp.graveyard.push(toPlay);
+			}
 		}
-		
+
 		this.killDead(eventChain);
 	}
 
@@ -622,8 +656,8 @@ class Game {
 
 		this.turnCounter++;
 
-        var temp = this.currentPlayer;
-        
+		var temp = this.currentPlayer;
+
 		var event = {
 			type: 'start turn',
 			view: 1,
@@ -659,27 +693,27 @@ class Game {
 		});
 
 		this.currentPlayer.board.forEach(value => {
-			if(value.hasTurnIncrement)
+			if (value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);
 		});
 		this.otherPlayer.board.forEach(value => {
-			if(value.hasTurnIncrement)
+			if (value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);
-        });
-        this.currentPlayer.effects.forEach(value => {
-			if(value.hasTurnIncrement)
+		});
+		this.currentPlayer.effects.forEach(value => {
+			if (value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);
 		});
 		this.otherPlayer.effects.forEach(value => {
-			if(value.hasTurnIncrement)
+			if (value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);
-        });
-        if(this.currentPlayer.fieldSpell != null && this.currentPlayer.fieldSpell.hasTurnIncrement) {
-            this.currentPlayer.fieldSpell.turnIncrement({}, this, eventChain);
-        }
-        if(this.otherPlayer.fieldSpell != null && this.otherPlayer.fieldSpell.hasTurnIncrement) {
-            this.otherPlayer.fieldSpell.turnIncrement({}, this, eventChain);
-        }
+		});
+		if (this.currentPlayer.fieldSpell != null && this.currentPlayer.fieldSpell.hasTurnIncrement) {
+			this.currentPlayer.fieldSpell.turnIncrement({}, this, eventChain);
+		}
+		if (this.otherPlayer.fieldSpell != null && this.otherPlayer.fieldSpell.hasTurnIncrement) {
+			this.otherPlayer.fieldSpell.turnIncrement({}, this, eventChain);
+		}
 
 		this.killDead(eventChain);
 
@@ -699,26 +733,26 @@ class Game {
 		});
 
 		this.turnCounter++;
-		
-		
+
+
 		this.currentPlayer.board.forEach(value => {
-			if(value.hasTurnIncrement)
+			if (value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);
 		});
 		this.otherPlayer.board.forEach(value => {
-			if(value.hasTurnIncrement)
+			if (value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);
-        });
-        this.currentPlayer.effects.forEach(value => {
-			if(value.hasTurnIncrement)
+		});
+		this.currentPlayer.effects.forEach(value => {
+			if (value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);
 		});
 		this.otherPlayer.effects.forEach(value => {
-			if(value.hasTurnIncrement)
+			if (value.hasTurnIncrement)
 				value.turnIncrement({}, this, eventChain);
 		});
-        this.killDead(eventChain);
-        
+		this.killDead(eventChain);
+
 		this.startTurn(eventChain);
 	}
 

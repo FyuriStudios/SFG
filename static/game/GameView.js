@@ -211,7 +211,7 @@ let GameView = (function () {
             let temp;
             game.hand.forEach((val) => val.sprite == this ? temp = val : null);
 
-            if(temp.type == 'spell' && temp.targeting) {
+            if (temp.type == 'spell' && temp.targeting) {
                 arrowDragging = true;
                 this.alpha = 0;
                 app.stage.addChild(temp.arrow);
@@ -282,11 +282,11 @@ let GameView = (function () {
      */
     let onDragFromHandEnd = function (eventObj) {
 
-        if(!this.dragging || this.dragData == undefined)
+        if (!this.dragging || this.dragData == undefined)
             return;
 
         this.dragging = false;
-        
+
 
         let temp = this;
         game.hand.forEach((val) => val.sprite == temp ? temp = val : null);
@@ -329,7 +329,7 @@ let GameView = (function () {
                     this.y > fieldBounds.y + fieldBounds.height ||
                     this.y + this.height < fieldBounds.y)) {
 
-                if(temp.forseeing) {
+                if (temp.forseeing) {
                     forsee(choice => {
                         outputFunc({
                             choice: choice,
@@ -338,8 +338,7 @@ let GameView = (function () {
                             playLoc: this.spotForCard
                         });
                     });
-                }
-                else if(temp.targeting) {
+                } else if (temp.targeting) {
                     UserChoices.target(game, (targetSide, target) => {
                         outputFunc({
                             type: 'play card',
@@ -349,8 +348,7 @@ let GameView = (function () {
                             target: target,
                         });
                     })
-                }
-                else {
+                } else {
                     outputFunc({
                         type: 'play card',
                         handLoc: handLoc,
@@ -362,36 +360,35 @@ let GameView = (function () {
             }
 
         } else {
-            
-            if(temp.targeting) {
+
+            if (temp.targeting) {
 
                 let pos = this.dragData.getLocalPosition(this.parent);
 
                 this.alpha = 1;
-                
+
                 app.stage.removeChild(temp.arrow);
 
                 game.enemyBoard.forEach((value, index) => {
                     if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
                         value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y) {
 
-                        if(temp.forseeing) {
+                        if (temp.forseeing) {
                             forsee(choice => {
                                 outputFunc({
                                     choice: choice,
                                     type: 'play card',
                                     handLoc: handLoc,
-                                    targetSide: game.id == 1?2:1,
+                                    targetSide: game.id == 1 ? 2 : 1,
                                     target: index,
                                 });
                             });
-                        }
-                        else {
+                        } else {
                             outputFunc({
                                 type: 'play card',
                                 handLoc: handLoc,
                                 target: index,
-                                targetSide: game.id == 1?2:1,
+                                targetSide: game.id == 1 ? 2 : 1,
                             });
                         }
                     }
@@ -400,7 +397,7 @@ let GameView = (function () {
                 game.ownBoard.forEach((value, index) => {
                     if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
                         value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y) {
-                        if(temp.forseeing) {
+                        if (temp.forseeing) {
                             forsee(choice => {
                                 outputFunc({
                                     choice: choice,
@@ -410,8 +407,7 @@ let GameView = (function () {
                                     target: index,
                                 });
                             });
-                        }
-                        else {
+                        } else {
                             outputFunc({
                                 type: 'play card',
                                 handLoc: handLoc,
@@ -423,29 +419,26 @@ let GameView = (function () {
                 });
 
                 if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .0121 <= pos.y && app.stage.height * .189 >= pos.y) {
-                    if(temp.forseeing) {
+                    if (temp.forseeing) {
                         forsee(choice => {
                             outputFunc({
                                 choice: choice,
                                 type: 'play card',
                                 handLoc: handLoc,
-                                targetSide: game.id == 1?2:1,
+                                targetSide: game.id == 1 ? 2 : 1,
                                 target: -1,
                             });
                         });
-                    }
-                    else {
+                    } else {
                         outputFunc({
                             type: 'play card',
                             handLoc: handLoc,
                             target: -1,
-                            targetSide: game.id == 1?2:1,
+                            targetSide: game.id == 1 ? 2 : 1,
                         });
                     }
-                }
-
-                else if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .75 <= pos.y && app.stage.height * .95 >= pos.y) {
-                    if(temp.forseeing) {
+                } else if (app.stage.width * .435 <= pos.x && app.stage.width * .548 >= pos.x && app.stage.height * .75 <= pos.y && app.stage.height * .95 >= pos.y) {
+                    if (temp.forseeing) {
                         forsee(choice => {
                             outputFunc({
                                 choice: choice,
@@ -455,8 +448,7 @@ let GameView = (function () {
                                 target: -1,
                             });
                         });
-                    }
-                    else {
+                    } else {
                         outputFunc({
                             type: 'play card',
                             handLoc: handLoc,
@@ -471,7 +463,7 @@ let GameView = (function () {
                     this.y > fieldBounds.y + fieldBounds.height ||
                     this.y + this.height < fieldBounds.y) && !temp.targeting) {
 
-                if(temp.forseeing) {
+                if (temp.forseeing) {
                     forsee(choice => {
                         outputFunc({
                             type: 'play card',
@@ -479,8 +471,7 @@ let GameView = (function () {
                             handLoc: handLoc,
                         });
                     });
-                }
-                else {
+                } else {
                     outputFunc({
                         type: 'play card',
                         handLoc: handLoc,
@@ -557,7 +548,7 @@ let GameView = (function () {
     }
 
     function flexTokens(amount, completion) {
-        
+
 
     }
 
@@ -908,7 +899,7 @@ let GameView = (function () {
         game.enemyBoard.forEach((value, index) => {
             if (value.sprite.x - value.sprite.width / 2 <= pos.x && value.sprite.x + value.sprite.width / 2 >= pos.x &&
                 value.sprite.y - value.sprite.height / 2 <= pos.y && value.sprite.y + value.sprite.height / 2 >= pos.y) {
-                if(attackerLoc != undefined)
+                if (attackerLoc != undefined)
                     outputFunc({
                         type: 'attack',
                         player: game.id,
@@ -1005,7 +996,7 @@ let GameView = (function () {
     }
 
     function mouseOutOwnFieldSpell() {
-        if(game.ownFieldSpell.popup != undefined)
+        if (game.ownFieldSpell.popup != undefined)
             app.stage.removeChild(game.ownFieldSpell.popup);
     }
 
@@ -1015,7 +1006,7 @@ let GameView = (function () {
     }
 
     function mouseOutEnemyFieldSpell() {
-        if(game.enemyFieldSpell.popup != undefined)
+        if (game.enemyFieldSpell.popup != undefined)
             app.stage.removeChild(game.enemyFieldSpell.popup);
     }
 
@@ -1127,7 +1118,7 @@ let GameView = (function () {
                     fixOwnHandSpacing();
 
                     fixOwnBoardSpacing(event.playLoc, () => {
-                        fixOwnBoardSpacing();//Calling this function again because sometimes monsters get stuck on the board.
+                        fixOwnBoardSpacing(); //Calling this function again because sometimes monsters get stuck on the board.
                         nextInEventQueue()
                     });
 
@@ -1135,9 +1126,9 @@ let GameView = (function () {
 
                     fixOwnHandSpacing();
 
-                    if(card.field) {
+                    if (card.field) {
 
-                        if(game.ownFieldSpell != null) {
+                        if (game.ownFieldSpell != null) {
                             app.stage.removeChild(game.ownFieldSpell.sprite);
                             game.ownGraveyard.push(game.ownFieldSpell);
                         }
@@ -1156,14 +1147,16 @@ let GameView = (function () {
 
                         card.sprite.off('pointermove', onDragFromHandMove);
 
-                        AnimationQueue.addMoveRequest(card.sprite, {x: app.stage.width - card.sprite.width * .75, y: app.stage.height * .75 - card.sprite.height/2}, 10, () => {
+                        AnimationQueue.addMoveRequest(card.sprite, {
+                            x: app.stage.width - card.sprite.width * .75,
+                            y: app.stage.height * .75 - card.sprite.height / 2
+                        }, 10, () => {
                             card.sprite.on('mouseover', mouseOverOwnFieldSpell);
                             card.sprite.on('mouseout', mouseOutOwnFieldSpell);
                             nextInEventQueue();
                         });
 
-                    }
-                    else {
+                    } else {
                         app.stage.removeChild(card.sprite);
                         game.ownGraveyard.push(card);
                         nextInEventQueue();
@@ -1202,34 +1195,39 @@ let GameView = (function () {
                         enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
                         nextInEventQueue();
                     });
-                    
+
 
                 } else {
 
-                    AnimationQueue.addMoveRequest(enemyCard.sprite, {x: app.stage.width * .35, y: app.stage.height * .5}, 15, () => {
+                    AnimationQueue.addMoveRequest(enemyCard.sprite, {
+                        x: app.stage.width * .35,
+                        y: app.stage.height * .5
+                    }, 15, () => {
                         fixEnemyHandSpacing();
-                        if(enemyCard.field) {
-                            if(game.enemyFieldSpell != null) {
+                        if (enemyCard.field) {
+                            if (game.enemyFieldSpell != null) {
                                 app.stage.removeChild(game.enemyFieldSpell);
                                 game.enemyGraveyard.push(game.enemyFieldSpell);
                             }
 
                             game.enemyFieldSpell = enemyCard;
                             game.enemyFieldSpell.sprite.on('mouseover', mouseOverEnemyFieldSpell);
-                            game.enemyFieldSpell.sprite.on('mouseout', mouseOutEnemyFieldSpell);//this should probably work.
+                            game.enemyFieldSpell.sprite.on('mouseout', mouseOutEnemyFieldSpell); //this should probably work.
 
-                            AnimationQueue.addMoveRequest(game.enemyFieldSpell.sprite, {x: app.stage.width - game.enemyFieldSpell.sprite.width * .75, y: app.stage.height * .25 - game.enemyFieldSpell.sprite.height/2}, 10, () => {
+                            AnimationQueue.addMoveRequest(game.enemyFieldSpell.sprite, {
+                                x: app.stage.width - game.enemyFieldSpell.sprite.width * .75,
+                                y: app.stage.height * .25 - game.enemyFieldSpell.sprite.height / 2
+                            }, 10, () => {
                                 nextInEventQueue();
                             });
 
-                        }
-                        else {
+                        } else {
                             app.stage.removeChild(enemyCard.sprite);
                             game.enemyGraveyard.push(enemyCard);
                             nextInEventQueue();
                         }
                     });
-                    
+
                 }
 
             }
@@ -1241,7 +1239,7 @@ let GameView = (function () {
             }
 
             nextInEventQueue();
-            
+
         } else if (event.type == 'start turn') {
 
             if (event.player == game.id) {
@@ -1386,46 +1384,36 @@ let GameView = (function () {
             gameOver(game.id);
         } else if (event.type == 'game over') {
             gameOver(event.player);
-        }
-        
-        else if (event.type == 'damage') {
+        } else if (event.type == 'damage') {
             //TODO: add animation for this.
-            
-            if(event.target == -1) {
-                if(event.targetSide == game.id) {
+
+            if (event.target == -1) {
+                if (event.targetSide == game.id) {
                     game.ownHealth -= event.damage;
-                }
-                else {
+                } else {
                     game.enemyHealth -= event.damage;
                 }
                 fixHealths();
-            }
-            else {
-                if(event.targetSide == game.id) {
+            } else {
+                if (event.targetSide == game.id) {
                     game.ownBoard[event.target].currentPower -= event.damage;
                     game.ownBoard[event.target].updatePower();
-                }
-                else {
+                } else {
                     game.enemyBoard[event.target].currentPower -= event.damage;
                     game.enemyBoard[event.target].updatePower();
                 }
-            }//TODO: add animation
+            } //TODO: add animation
 
             nextInEventQueue();
-        }
-
-        else if(event.type == 'fatigue') {
-            if(game.id == event.player) {
+        } else if (event.type == 'fatigue') {
+            if (game.id == event.player) {
                 game.ownHealth -= event.damage;
-            }
-            else {
+            } else {
                 game.enemyHealth -= event.damage;
             }
             fixHealths();
             nextInEventQueue();
-        }
-
-        else if(event.type == 'burn card') {
+        } else if (event.type == 'burn card') {
 
             let burnedCard = ClientCard.from(event.card);
             smallSizeCardInHandSprite(burnedCard.sprite);
@@ -1434,38 +1422,35 @@ let GameView = (function () {
 
             app.stage.addChild(burnedCard.sprite);
 
-            if(game.id == event.player) {
+            if (game.id == event.player) {
                 game.ownDeckSize -= 1;
                 burnedCard.sprite.y = app.stage.height * 0.885;
-            }
-            else {
+            } else {
                 game.enemyDeckSize -= 1;
                 burnedCard.sprite.y = app.stage.height * .1;
             }
 
-            AnimationQueue.addMoveRequest(burnedCard.sprite, {x: app.stage.width * .25, y: app.stage.height * .5}, 15, () => {
+            AnimationQueue.addMoveRequest(burnedCard.sprite, {
+                x: app.stage.width * .25,
+                y: app.stage.height * .5
+            }, 15, () => {
                 app.stage.removeChild(burnedCard.sprite);
                 nextInEventQueue();
             });
-        }
-
-        else if(event.type == 'boost') {
+        } else if (event.type == 'boost') {
 
             let target;
 
-            if(event.targetSide == game.id) {
+            if (event.targetSide == game.id) {
                 target = game.ownBoard[event.target];
-            }
-            else {
+            } else {
                 target = game.enemyBoard[event.target];
             }
 
             target.currentPower += event.boost;
             target.updatePower();
             nextInEventQueue();
-        }
-
-        else if(event.type == 'deck invoke') {
+        } else if (event.type == 'deck invoke') {
 
             let card = ClientCard.from(event.card);
 
@@ -1475,7 +1460,7 @@ let GameView = (function () {
 
             card.boardForm();
 
-            if(event.player == game.id) {
+            if (event.player == game.id) {
 
                 game.ownDeckSize -= 1;
 
@@ -1494,8 +1479,7 @@ let GameView = (function () {
                     fixOwnBoardSpacing();
                     nextInEventQueue();
                 });
-            }
-            else {
+            } else {
                 game.enemyDeckSize -= 1;
 
                 game.enemyBoard.unshift(card);
@@ -1510,11 +1494,9 @@ let GameView = (function () {
                     nextInEventQueue();
                 });
             }
-        }
+        } else if (event.type == 'hand invoke') {
 
-        else if(event.type == 'hand invoke') {
-
-            if(event.player == game.id) {
+            if (event.player == game.id) {
                 let card = game.hand.splice(event.handLoc, 1)[0]; //remove the card at the relevant location in the player's hand
 
                 game.ownBoard.unshift(card);
@@ -1542,11 +1524,10 @@ let GameView = (function () {
                 fixOwnHandSpacing();
 
                 fixOwnBoardSpacing(event.playLoc, () => {
-                    fixOwnBoardSpacing();//Calling this function again because sometimes monsters get stuck on the board.
+                    fixOwnBoardSpacing(); //Calling this function again because sometimes monsters get stuck on the board.
                     nextInEventQueue()
                 });
-            }
-            else {
+            } else {
 
                 let enemyCard = ClientCard.from(event.card);
 
@@ -1569,55 +1550,48 @@ let GameView = (function () {
                 fixEnemyBoardSpacing(event.playLoc, () => {
                     enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
                     enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
-                    nextInEventQueue()});
-                }
-            
-        }
-
-        else if(event.type == 'gain tokens') {
-            if(event.player == game.id) {
-                if(event.tokenType == 'monster')
-                    game.ownMonsterTokens += event.amount;
-                else if(event.tokenType == 'action')
-                    game.ownSpellTokens += event.amount;
-                
+                    nextInEventQueue()
+                });
             }
-            else {
-                if(event.tokenType == 'monster')
+
+        } else if (event.type == 'gain tokens') {
+            if (event.player == game.id) {
+                if (event.tokenType == 'monster')
+                    game.ownMonsterTokens += event.amount;
+                else if (event.tokenType == 'action')
+                    game.ownSpellTokens += event.amount;
+
+            } else {
+                if (event.tokenType == 'monster')
                     game.enemyMonsterTokens += event.amount;
-                else if(event.tokenType == 'action')
+                else if (event.tokenType == 'action')
                     game.enemySpellTokens += event.amount;
             }
             fixTokens();
             nextInEventQueue();
-        }
-
-        else if(event.type == 'choose card') {
+        } else if (event.type == 'choose card') {
             UserChoices.chooseCard(game, DONT_USE_THIS, nextInEventQueue);
-        }
-
-        else if(event.type == 'remove hand card') {
-            if(event.player == game.id) {
+        } else if (event.type == 'remove hand card') {
+            if (event.player == game.id) {
                 let card = game.hand.splice(event.index, 1)[0];
                 app.stage.removeChild(card.sprite);
                 fixOwnHandSpacing(() => nextInEventQueue());
-            }
-            else {
+            } else {
                 app.stage.removeChild(enemyCardsInHand.splice(event.index, 1)[0]);
                 fixEnemyHandSpacing(() => nextInEventQueue());
             }
-        }
-
-        else if(event.type == 'discard') {
-            if(event.player == game.id) {
+        } else if (event.type == 'discard') {
+            if (event.player == game.id) {
                 let card = game.hand.splice(event.index, 1)[0];
                 game.ownGraveyard.push(card);
-                AnimationQueue.addMoveRequest(card.sprite, {x: app.stage.width * .25, y: app.stage.height * .5}, 15, () => {
+                AnimationQueue.addMoveRequest(card.sprite, {
+                    x: app.stage.width * .25,
+                    y: app.stage.height * .5
+                }, 15, () => {
                     app.stage.removeChild(card.sprite);
                     fixOwnHandSpacing(() => nextInEventQueue());
                 });
-            }
-            else {
+            } else {
                 let cardSprite = enemyCardsInHand.splice(event.index, 1)[0];
 
                 let burnedCard = ClientCard.from(event.card);
@@ -1630,20 +1604,21 @@ let GameView = (function () {
 
                 app.stage.addChild(burnedCard.sprite);
 
-                game.enemyGraveyard.push(burnedCard); 
-                AnimationQueue.addMoveRequest(burnedCard.sprite, {x: app.stage.width * .25, y: app.stage.height * .5}, 15, () => {
+                game.enemyGraveyard.push(burnedCard);
+                AnimationQueue.addMoveRequest(burnedCard.sprite, {
+                    x: app.stage.width * .25,
+                    y: app.stage.height * .5
+                }, 15, () => {
                     app.stage.removeChild(burnedCard.sprite);
                     fixEnemyHandSpacing(() => nextInEventQueue());
                 });
             }
-        }
-
-        else if(event.type == 'add deck card') {
-            if(event.player == game.id)
+        } else if (event.type == 'add deck card') {
+            if (event.player == game.id)
                 game.ownDeckSize += 1;
             else
                 game.enemyDeckSize += 1;
-            
+
             nextInEventQueue();
         }
 
@@ -1667,15 +1642,14 @@ let GameView = (function () {
          * This function sets up all relevant graphics objects and listeners and data and what have you to make this module all ready
          * to display the game. Call this externally when you're ready to display everything.
          */
-        setupDisplay: function (id, ownStartingDeckSize, enemyStartingDeckSize, socket) {
-
+        setupDisplay: function (id, ownStartingDeckSize, enemyStartingDeckSize, socket, ownCharacter, enemyCharacter) {
             DONT_USE_THIS = socket;
 
             /*
             This is just a test initialization of the game data. It will get better initialized later but for now this is here just
             so that the data can be used in testing.
             */
-            game.init(id, ownStartingDeckSize, enemyStartingDeckSize);
+            game.init(id, ownStartingDeckSize, enemyStartingDeckSize, ownCharacter, enemyCharacter);
 
             /*
 
@@ -1692,10 +1666,10 @@ let GameView = (function () {
             Don't touch this. Everything breaks if you do.
             */
             setTimeout(() => {
-                if(waitGameImage != undefined)
+                if (waitGameImage != undefined)
                     waitGameImage.remove();
 
-                if(waitGif != undefined)
+                if (waitGif != undefined)
                     waitGif.remove();
 
                 app.stage.width = innerWidth;
@@ -1810,7 +1784,25 @@ let GameView = (function () {
                     endTurnButton.button.alpha = 1;
                 });
 
-                game.ownCharacterSprite = new PIXI.Sprite(textures.ownIgneaPortrait);
+                console.log("Own: " + game.ownCharacter);
+                switch (game.ownCharacter) {
+                    case "ignea":
+                        game.ownCharacterSprite = new PIXI.Sprite(textures.ownIgneaPortrait);
+                        break;
+                    case "yakov":
+                        // game.ownCharacterSprite = new PIXI.Sprite(textures.ownYakovPortrait);
+                        break;
+                    case "caius":
+                        // game.ownCharacterSprite = new PIXI.Sprite(textures.ownCaiusPortrait);
+                        break;
+                    case "lorewell":
+                        // game.ownCharacterSprite = new PIXI.Sprite(textures.ownLorewellPortrait);
+                        break;
+                    case "rinwald":
+                        // game.ownCharacterSprite = new PIXI.Sprite(textures.ownRinwaldPortrait);
+                        break;
+                }
+
                 game.ownCharacterSprite.anchor.x = .5;
                 game.ownCharacterSprite.anchor.y = 1;
 
@@ -1821,7 +1813,25 @@ let GameView = (function () {
                 game.ownCharacterSprite.height = game.ownCharacterSprite.height * .34;
                 app.stage.addChild(game.ownCharacterSprite);
 
-                game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyIgneaPortrait);
+                console.log("Enemy: " + game.enemyCharacter);
+                switch (game.enemyCharacter) {
+                    case "ignea":
+                        game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyIgneaPortrait);
+                        break;
+                    case "yakov":
+                        // game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyYakovPortrait);
+                        break;
+                    case "caius":
+                        // game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyCaiusPortrait);
+                        break;
+                    case "lorewell":
+                        // game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyLorewellPortrait);
+                        break;
+                    case "rinwald":
+                        // game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyRinwaldPortrait);
+                        break;
+                }
+
                 game.enemyCharacterSprite.anchor.x = .5;
                 game.enemyCharacterSprite.anchor.y = 0;
 
