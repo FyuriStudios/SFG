@@ -172,7 +172,6 @@ class Game {
 				currentPower: card.currentPower,
 				hasDefender: card.hasDefender,
 				isStatic: card.isStatic,
-				targeting: card.targeting,
 				forseeing: card.forseeing,
 			};
 		} else {
@@ -216,8 +215,8 @@ class Game {
 				});
 			}
 
-			setPlayer(player1);
-			setPlayer(player2);
+			setPlayer(gameReference.player1);
+			setPlayer(gameReference.player2);
 		}
 		else if (!this.player1.setDeck || !this.player2.setDeck) {
 
@@ -252,6 +251,9 @@ class Game {
 
 			this.player1.socket.emit('deck sizes', deckSizes);
 			this.player2.socket.emit('deck sizes', deckSizes);
+
+			this.player1.socket.emit('start', null);
+			this.player2.socket.emit('start', null);
 
 			this.player1.deck.shuffle();
 			this.player2.deck.shuffle();
@@ -417,48 +419,48 @@ class Game {
 				event.card = this.backendCardTranslate(temp);
 				eventChain.push(event);
 
-				game.currentPlayer.board.forEach(value => {
+				this.currentPlayer.board.forEach(value => {
 					if (value.hasCardDraw) {
 						value.cardDraw({
 							player: player.id
-						}, game, eventChain);
+						}, this, eventChain);
 					}
 				});
 
-				game.otherPlayer.board.forEach(value => {
+				this.otherPlayer.board.forEach(value => {
 					if (value.hasCardDraw) {
 						value.cardDraw({
 							player: player.id
-						}, game, eventChain);
+						}, this, eventChain);
 					}
 				});
 
-				game.currentPlayer.effects.forEach(value => {
+				this.currentPlayer.effects.forEach(value => {
 					if (value.hasCardDraw) {
 						value.cardDraw({
 							player: player.id
-						}, game, eventChain);
+						}, this, eventChain);
 					}
 				});
 
-				game.otherPlayer.effects.forEach(value => {
+				this.otherPlayer.effects.forEach(value => {
 					if (value.hasCardDraw) {
 						value.cardDraw({
 							player: player.id
-						}, game, eventChain);
+						}, this, eventChain);
 					}
 				});
 
-				if (game.currentPlayer.fieldSpell.hasCardDraw) {
-					game.currentPlayer.fieldSpell.cardDraw({
+				if (this.currentPlayer.fieldSpell.hasCardDraw) {
+					this.currentPlayer.fieldSpell.cardDraw({
 						player: player.id
-					}, game, eventChain);
+					}, this, eventChain);
 				}
 
-				if (game.otherPlayer.fieldSpell.hasCardDraw) {
-					game.otherPlayer.fieldSpell.cardDraw({
+				if (this.otherPlayer.fieldSpell.hasCardDraw) {
+					this.otherPlayer.fieldSpell.cardDraw({
 						player: player.id
-					}, game, eventChain);
+					}, this, eventChain);
 				}
 			}
 		}

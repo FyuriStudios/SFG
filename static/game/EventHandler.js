@@ -31,20 +31,19 @@ function startGame() {
         deck = passDeck.split(', ').map(Number);
     }
 
-    socket.on('player id', (input) => {
+    socket.once('player id', (input) => {
         gameVars.id = input;
         gameVars.ownCharacter = character;
-        console.log('received id');
         gameStarting = true;
-        socket.emit('deck', deck);
         socket.emit('character', character);
     });
 
     socket.once('character', (input) => {
         gameVars.enemyCharacter = input;
+        socket.emit('deck', deck);
     });
 
-    socket.on('deck sizes', (input) => {
+    socket.once('deck sizes', (input) => {
         gameVars.player1DeckSize = input.player1DeckSize;
         gameVars.player2Decksize = input.player2DeckSize;
 
@@ -59,8 +58,8 @@ function startGame() {
         }
     })
 
-    socket.on('start', (input) => {
-        GameView.setupDisplay(gameVars.id, gameVars.ownDeckSize, gameVars.enemyDeckSize, socket, gameVars.ownCharacter, gameVars.enemyCharacter);
+    socket.once('start', (input) => {
+        GameView.setupDisplay(gameVars.id, gameVars.ownDeckSize, gameVars.enemyDeckSize, socket, 'ignea', gameVars.enemyCharacter);
     });
 
     GameView.setupOutput(function (output) {

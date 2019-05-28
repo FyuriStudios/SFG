@@ -338,16 +338,6 @@ let GameView = (function () {
                             playLoc: this.spotForCard
                         });
                     });
-                } else if (temp.targeting) {
-                    UserChoices.target(game, (targetSide, target) => {
-                        outputFunc({
-                            type: 'play card',
-                            handLoc: handLoc,
-                            playLoc: this.spotForCard,
-                            targetSide: targetSide,
-                            target: target,
-                        });
-                    })
                 } else {
                     outputFunc({
                         type: 'play card',
@@ -547,10 +537,6 @@ let GameView = (function () {
 
     }
 
-    function flexTokens(amount, completion) {
-
-
-    }
 
     /**
      * This function finds all of the sprites that are in the player's hand array and animates them to the "correct" location in their 
@@ -1652,7 +1638,6 @@ let GameView = (function () {
             game.init(id, ownStartingDeckSize, enemyStartingDeckSize, ownCharacter, enemyCharacter);
 
             /*
-
             This is also a testing construct. Every time the pointer is pressed, this prints the pointer location. I've been using this
             to figure out exact decimal values for locations on the board and such.
             */
@@ -1703,8 +1688,6 @@ let GameView = (function () {
                 .add('actionTokensPanel', '/static/assets/action_tokens_panel.png')
                 .add('plusButton', '/static/assets/plus_button.png')
                 .add('playButton', '/static/assets/Play_Button.png')
-                .add('ownIgneaPortrait', '/static/assets/portraits/own-Ignea-Portrait.png')
-                .add('enemyIgneaPortrait', '/static/assets/portraits/enemy-Ignea-Portrait.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -1723,8 +1706,6 @@ let GameView = (function () {
                 textures.monsterTokensPanel = resources.monsterTokensPanel.texture;
                 textures.plusButton = resources.plusButton.texture;
                 textures.playButton = resources.playButton.texture;
-                textures.ownIgneaPortrait = resources.ownIgneaPortrait.texture;
-                textures.enemyIgneaPortrait = resources.enemyIgneaPortrait.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
@@ -1784,10 +1765,11 @@ let GameView = (function () {
                     endTurnButton.button.alpha = 1;
                 });
 
-                console.log("Own: " + game.ownCharacter);
+                console.log(game.ownCharacter);
+                
                 switch (game.ownCharacter) {
                     case "ignea":
-                        game.ownCharacterSprite = new PIXI.Sprite(textures.ownIgneaPortrait);
+                        game.ownCharacterSprite = PIXI.Sprite.from('/static/assets/portraits/own-Ignea-Portrait.png');
                         break;
                     case "yakov":
                         // game.ownCharacterSprite = new PIXI.Sprite(textures.ownYakovPortrait);
@@ -1813,10 +1795,9 @@ let GameView = (function () {
                 game.ownCharacterSprite.height = game.ownCharacterSprite.height * .34;
                 app.stage.addChild(game.ownCharacterSprite);
 
-                console.log("Enemy: " + game.enemyCharacter);
                 switch (game.enemyCharacter) {
                     case "ignea":
-                        game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyIgneaPortrait);
+                        game.enemyCharacterSprite = PIXI.Sprite.from(textures.enemyIgneaPortrait);
                         break;
                     case "yakov":
                         // game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyYakovPortrait);
