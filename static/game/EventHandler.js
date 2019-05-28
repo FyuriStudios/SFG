@@ -40,7 +40,7 @@ function startGame() {
         socket.emit('character', character);
     });
 
-    socket.on('character', (input) => {
+    socket.once('character', (input) => {
         gameVars.enemyCharacter = input;
     });
 

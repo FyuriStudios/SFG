@@ -136,7 +136,7 @@ class Game {
 			effects: [],
 			fieldSpell: null,
 			character: null,
-			ready: false,
+			setCharacter: false,
 		};
 
 		this.player2 = { //see above for details on the variables
@@ -153,7 +153,7 @@ class Game {
 			effects: [],
 			fieldSpell: null,
 			character: null,
-			ready: false,
+			setCharacter: false,
 		};
 	}
 
@@ -203,42 +203,33 @@ class Game {
 	 */
 	start(gameReference = this) {
 
-		this.player1.socket.on('character', (input) => {
-			this.player1.character = input;
-			this.player2.socket.emit('character', this.player1.character);
-			console.log(this.player1.character);
-			this.player1.ready = true;
-			if (this.player2.ready) {
-				this.player1.socket.emit('start', 0);
-				this.player2.socket.emit('start', 0);
-			}
-		});
-
-		this.player2.socket.on('character', (input) => {
-			this.player2.character = input;
-			this.player1.socket.emit('character', this.player2.character);
-			console.log(this.player2.character);
-			this.player2.ready = true;
-			if (this.player1.ready) {
-				this.player1.socket.emit('start', 0);
-				this.player2.socket.emit('start', 0);
-			}
-		});
-
-		//first, we're going to handle the case where both players haven't set their decks.
-		//When I first wrote this block, I forgot that negating an entire block also replaces && with ||, 
-		//which is likely why everything didn't work. 
-		if (!this.player1.setDeck || !this.player2.setDeck) {
+		if(!this.player1.setCharacter || !this.player2.setCharacter) {
 
 			this.player1.socket.emit('player id', this.player1.id); //Send both players their IDs just in case they need them.
 			this.player2.socket.emit('player id', this.player2.id);
+
+			function setPlayer(player) {
+				player.socket.once('character', input => {
+					player.character = input;
+					player.setCharacter = true;
+					gameReference.start();
+				});
+			}
+
+			setPlayer(player1);
+			setPlayer(player2);
+		}
+		else if (!this.player1.setDeck || !this.player2.setDeck) {
+
+			this.player1.socket.emit('character', this.player2.character);
+			this.player2.socket.emit('character', this.player2.character);
 
 			/*
 			Here, I'm making a function that constructs the deck for each player. It sets up a callback that asks for a deck input,
 			then turns that deck input into their deck.
 			*/
 			function deckConstruction(player) {
-				player.socket.on('deck', function (input) {
+				player.socket.once('deck', function (input) {
 					//TODO: deck verification and stuff!
 					if (!player.setDeck) {
 						input.forEach(value => player.deck.push(idToCard(value))); //TODO: Make this a real deck
@@ -250,7 +241,9 @@ class Game {
 
 			deckConstruction(this.player1); //we're going to run this function for each player. This design pattern has been abused a lot by me (Hughes).
 			deckConstruction(this.player2);
-		} else if (this.player1.setDeck && this.player2.setDeck) {
+		} 
+		
+		else if (this.player1.setDeck && this.player2.setDeck) {
 
 			let deckSizes = {
 				player1DeckSize: this.player1.deck.length,
