@@ -12,7 +12,7 @@ class Lugneus extends Monster {
             func: function(input, game, eventChain) {
 
                 let boosted = 0;
-                let currentIndex = 0;
+                let currentIndex = 1;
                 let deck = game.currentPlayer.deck;
                 while(boosted < 5) {
                     if(deck[deck.length - currentIndex].type == 'monster') {

@@ -12,7 +12,7 @@ class BurrowGator extends Monster {
             func: function(input, game, eventChain) {
                 input.targetSide = game.currentPlayer.id;
                 input.target = -1;
-                Damage.func(input, game, eventChain, 4);
+                Damage.func(input, game, eventChain, 3);
             }
         });
     }

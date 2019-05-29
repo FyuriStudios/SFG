@@ -451,13 +451,13 @@ class Game {
 					}
 				});
 
-				if (this.currentPlayer.fieldSpell.hasCardDraw) {
+				if (this.currentPlayer.fieldSpell != null && this.currentPlayer.fieldSpell.hasCardDraw) {
 					this.currentPlayer.fieldSpell.cardDraw({
 						player: player.id
 					}, this, eventChain);
 				}
 
-				if (this.otherPlayer.fieldSpell.hasCardDraw) {
+				if (this.otherPlayer.fieldSpell != null && this.otherPlayer.fieldSpell.hasCardDraw) {
 					this.otherPlayer.fieldSpell.cardDraw({
 						player: player.id
 					}, this, eventChain);
@@ -521,7 +521,7 @@ class Game {
 					let deadGuy = player.board.splice(i, 1)[0];
 					//TODO: add effects here
 					if (deadGuy.hasSelfDeath) {
-						waitFor(deadGuy.selfDeath(null, this, eventChain));
+						deadGuy.selfDeath(null, this, eventChain);
 					}
 
 					deadGuys.push(deadGuy);
