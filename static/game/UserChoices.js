@@ -1,7 +1,10 @@
 let UserChoices = (function() {
     return {
 
-        target: function(game, completion) {
+        target: function(game, socket, completion) {
+
+            let event = {
+            };
 
             let chooseOwnBoardEvent = function() {
 
@@ -14,7 +17,10 @@ let UserChoices = (function() {
                 game.ownCharacterSprite.off('mousedown', chooseOwnHeroEvent);
                 game.enemyCharacterSprite.off('mousedown', chooseEnemyHeroEvent);
 
-                completion(game.id, ind);
+                event.targetSide = game.id;
+                event.target = ind;
+                socket.emit('target choice', event);
+                completion();
             }
 
             let chooseEnemyBoardEvent = function() {
@@ -27,7 +33,10 @@ let UserChoices = (function() {
                 game.ownCharacterSprite.off('mousedown', chooseOwnHeroEvent);
                 game.enemyCharacterSprite.off('mousedown', chooseEnemyHeroEvent);
 
-                completion(game.id == 1?2:1, ind);
+                event.targetSide = game.id == 1?2:1;
+                event.target = ind;
+                socket.emit('target choice', event);
+                completion();
             }
 
             let chooseEnemyHeroEvent = function() {
@@ -37,7 +46,9 @@ let UserChoices = (function() {
                 game.ownCharacterSprite.off('mousedown', chooseOwnHeroEvent);
                 game.enemyCharacterSprite.off('mousedown', chooseEnemyHeroEvent);
 
-                completion(game.id == 1?2:1, -1);
+                event.targetSide = game.id == 1?2:1;
+                event.target = -1;
+                socket.emit('target choice', event);
             }
 
             let chooseOwnHeroEvent = function() {
@@ -47,7 +58,9 @@ let UserChoices = (function() {
                 game.ownCharacterSprite.off('mousedown', chooseOwnHeroEvent);
                 game.enemyCharacterSprite.off('mousedown', chooseEnemyHeroEvent);
 
-                completion(game.id, -1);
+                event.targetSide = game.id == 1?2:1;
+                event.target = -1;
+                socket.emit('target choice', event);
             }
         },
 

@@ -113,7 +113,7 @@ ClientCard = (function() {
     class Monster extends Card {
 
         constructor(backendCard) {
-            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost, backendCard.playCost, backendCard.currentPower, backendCard.forseeing);
+            super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost, backendCard.playCost, backendCard.forseeing);
             this.power = backendCard.power;
             this.currentPower = backendCard.currentPower;
             this.hasDefender = backendCard.hasDefender;
