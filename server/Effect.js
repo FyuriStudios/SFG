@@ -66,8 +66,6 @@ class Effect {
         this.cardPlayedList.forEach(function(i) {
             i.func(input, game, eventChain);
         });
-        if(this.hasEntersBoard)
-            this.entersBoard(input, game, eventChain);
     }
 
     addCardPlayed(func) {

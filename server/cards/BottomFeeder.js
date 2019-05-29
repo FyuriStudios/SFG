@@ -35,7 +35,7 @@ class BottomFeeder extends Monster {
                     card.currentPower += feeded.currentPower;
 
                     let thisIndex;
-                    game.currentPlayer.board.forEach((value, index) => value == card? thisIndex = value:null);
+                    game.currentPlayer.board.forEach((value, index) => value == card? thisIndex = index:null);
 
                     eventChain.push({
                         type: 'boost',

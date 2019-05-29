@@ -513,6 +513,8 @@ class Game {
 
 		let dead = [];
 
+		let game = this; //Create an alias here because of line 526 and the function scope created by it.
+
 		function removeDead(player) {
 			let deadGuys = [];
 			for (var i = player.board.length - 1; i >= 0; i--) {
@@ -521,7 +523,7 @@ class Game {
 					let deadGuy = player.board.splice(i, 1)[0];
 					//TODO: add effects here
 					if (deadGuy.hasSelfDeath) {
-						deadGuy.selfDeath(null, this, eventChain);
+						deadGuy.selfDeath(null, game, eventChain);
 					}
 
 					deadGuys.push(deadGuy);
@@ -629,6 +631,10 @@ class Game {
 
 			if (toPlay.hasCardPlayed)
 				toPlay.cardPlayed(input, this, eventChain);
+
+			if(toPlay.hasEntersBoard) {
+				toPlay.entersBoard(input, this, eventChain);
+			}
 
 		} else if (toPlay.type == 'spell') {
 

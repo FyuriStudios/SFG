@@ -1,6 +1,6 @@
 let Monster = require('../Monster');
 
-class AncientCur extends Monster {
+class AncientCur extends Monster { //THIS MONSTER IS BROKEN
 
     constructor() {
         super('monster', 10, 'monster', 'uncommon', 'Ancient Cur', 2, 2, 'cur');
@@ -11,6 +11,7 @@ class AncientCur extends Monster {
         this.addEntersBoard({
             name: 'untitled',
             func: function(input, game, eventChain) {
+                console.log('yep');
                 card.player = game.currentPlayer;
             }
         });
