@@ -4,7 +4,7 @@ let Damage = require('../genericEffects/Damage');
 class Habuero extends Monster {
 
     constructor() {
-        super('monster', 17, 'monster', 'secret weapon', 'Habuero', 10, 10, 'advisor', false, false, false, true, false);
+        super('monster', 17, 'monster', 'secret weapon', 'Habuero', 10, 10, 'advisor', false, false, true);
 
         this.hasCardPlayed = true;
 
