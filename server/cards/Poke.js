@@ -1,4 +1,5 @@
 let Monster = require('../Monster');
+let Damage = require('../genericEffects/Damage');
 
 class Poke extends Monster {
 
