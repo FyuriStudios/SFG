@@ -116,6 +116,10 @@ module.exports = function (id) {
         let card = require('./cards/Zhaori');
         return new card();
     }
+    else if(id == 28) {
+        let card = require('./cards/Poke');
+        return new card();
+    }
 
 
 }
