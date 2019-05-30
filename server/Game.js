@@ -598,8 +598,6 @@ class Game {
 			return; //they don't have enough tokens to play the card.
 		}
 
-		temp.hand.splice(input.handLoc, 1);
-
 		if (toPlay.type == 'spell' && toPlay.targeting) {
 			if (input.target != -1) {
 				let player = input.targetSide == 1 ? this.player1 : this.player2;
@@ -607,6 +605,8 @@ class Game {
 					return;
 			}
 		}
+
+		temp.hand.splice(input.handLoc, 1);
 
 		var event = { //now that we're sure the event is going to happen
 			view: 1,
