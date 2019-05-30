@@ -5,7 +5,7 @@ let CharacterHealing = require('../genericEffects/CharacterHealing');
 class BestialSupport extends Spell {
 
     constructor() {
-        super(21, 'spell', 'uncommon', 'Bestial Support', 30, false, false, false);
+        super(21, 'spell', 'uncommon', 'Bestial Support', 3, false, false, false);
 
         this.hasCardPlayed = true;
         this.addCardPlayed({
