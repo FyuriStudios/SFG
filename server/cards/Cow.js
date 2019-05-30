@@ -23,7 +23,7 @@ class Cow extends Monster {
 
                 if(game.turnCounter%4 == (card.creationDate + 1)%4) {
 
-                    let damageIndex = Math.random() * (game.otherPlayer.board.length + 1) - 1;
+                    let damageIndex = Math.floor(Math.random() * (game.otherPlayer.board.length + 1) - 1);
                     Damage.func({
                         targetSide: game.otherPlayer.id,
                         target: damageIndex,
