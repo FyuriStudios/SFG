@@ -1797,8 +1797,8 @@ let GameView = (function () {
                 game.ownCharacterSprite.x = app.stage.width * .5;
                 game.ownCharacterSprite.y = app.stage.height;
 
-                game.ownCharacterSprite.width = game.ownCharacterSprite.width * .33;
-                game.ownCharacterSprite.height = game.ownCharacterSprite.height * .36;
+                game.ownCharacterSprite.width = game.ownCharacterSprite.width * .31;
+                game.ownCharacterSprite.height = game.ownCharacterSprite.height * .37;
                 app.stage.addChild(game.ownCharacterSprite);
 
                 game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyIgneaPortrait);
@@ -1807,8 +1807,8 @@ let GameView = (function () {
 
                 game.enemyCharacterSprite.x = app.stage.width * .491;
                 game.enemyCharacterSprite.y = 0;
-                game.enemyCharacterSprite.height = game.enemyCharacterSprite.height * .33;
-                game.enemyCharacterSprite.width = game.enemyCharacterSprite.width * .36;
+                game.enemyCharacterSprite.height = game.enemyCharacterSprite.height * .37;
+                game.enemyCharacterSprite.width = game.enemyCharacterSprite.width * .31;
                 app.stage.addChild(game.enemyCharacterSprite);
 
                 /*
