@@ -1188,7 +1188,7 @@ let GameView = (function () {
                     AnimationQueue.addMoveRequest(enemyCard.sprite, {
                         x: app.stage.width * .35,
                         y: app.stage.height * .5
-                    }, 15, () => {
+                    }, 7, () => {
                         fixEnemyHandSpacing();
                         if (enemyCard.field) {
                             if (game.enemyFieldSpell != null) {

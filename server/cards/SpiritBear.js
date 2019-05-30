@@ -3,7 +3,7 @@ let Monster = require('../Monster');
 class SpiritBear extends Monster {
 
     constructor() {
-        super('monster', 26, 'monster', 'common', 'Spirit Bear', 6, 5, 'cur', false, false, false, false, true);
+        super('monster', 26, 'monster', 'common', 'Spirit Bear', 6, 5, 'cur', false, false, false, false, false);
 
         this.hasEntersBoard = true;
         let card = this;
