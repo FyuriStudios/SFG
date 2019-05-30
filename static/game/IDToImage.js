@@ -59,6 +59,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Corrupted_Eagle_Hand.png');
             } else if(id == 26) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Spirit_Bear_Hand.png');
+            } else if(id == 27) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Zhaori_Hand.png');
             }
         },
 
@@ -119,6 +121,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Corrupted_Eagle_Hover.png');
             } else if(id == 26) {
                 return PIXI.Sprite.from('/static/assets/popup/Spirit_Bear_Hover.png');
+            } else if(id == 27) {
+                return PIXI.Sprite.from('/static/assets/popup/Zhaori_Hover.png');
             }
         },
 
@@ -161,6 +165,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Corrupted_Eagle_Board.png')
             } else if(id == 26) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Spirit_Bear_Board.png');
+            } else if(id == 27) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Zhaori_Board_Piece.png');
             }
         }
     }

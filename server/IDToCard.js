@@ -112,5 +112,10 @@ module.exports = function (id) {
         let card = require('./cards/SpiritBear');
         return new card();
     }
+    else if(id == 27) {
+        let card = require('./cards/Zhaori');
+        return new card();
+    }
+
 
 }
