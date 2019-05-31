@@ -10,6 +10,17 @@ function startGame() {
     let deck = [];
 
     if (passDeck == "random") {
+        deck.push(1);
+        deck.push(2);
+        deck.push(3);
+        deck.push(4);
+        deck.push(5);
+        deck.push(6);
+        deck.push(7);
+        deck.push(8);
+        deck.push(9);
+        deck.push(10);
+        deck.push(11);
         deck.push(16);
         deck.push(17);
         deck.push(18);

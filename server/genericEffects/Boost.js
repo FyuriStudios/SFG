@@ -9,7 +9,7 @@ module.exports = {
             type: 'boost',
             targetSide: input.targetSide,
             target: input.target,
-            amount: amount,
+            boost: amount,
         });
     }
 }
