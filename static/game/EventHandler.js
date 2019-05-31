@@ -21,6 +21,10 @@ function startGame() {
         deck.push(9);
         deck.push(10);
         deck.push(11);
+        deck.push(12);
+        deck.push(13);
+        deck.push(14);
+        deck.push(15);
         deck.push(16);
         deck.push(17);
         deck.push(18);

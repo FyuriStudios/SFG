@@ -1202,7 +1202,7 @@ let GameView = (function () {
 
                             AnimationQueue.addMoveRequest(game.enemyFieldSpell.sprite, {
                                 x: app.stage.width - game.enemyFieldSpell.sprite.width * .75,
-                                y: app.stage.height * .25 - game.enemyFieldSpell.sprite.height / 2
+                                y: app.stage.height * .3
                             }, 10, () => {
                                 nextInEventQueue();
                             });
@@ -1797,8 +1797,8 @@ let GameView = (function () {
                 game.ownCharacterSprite.x = app.stage.width * .5;
                 game.ownCharacterSprite.y = app.stage.height;
 
-                game.ownCharacterSprite.width = game.ownCharacterSprite.width * .31;
-                game.ownCharacterSprite.height = game.ownCharacterSprite.height * .37;
+                game.ownCharacterSprite.width = app.stage.width * .118;
+                game.ownCharacterSprite.height = app.stage.height * .21;
                 app.stage.addChild(game.ownCharacterSprite);
 
                 game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyIgneaPortrait);
@@ -1807,8 +1807,8 @@ let GameView = (function () {
 
                 game.enemyCharacterSprite.x = app.stage.width * .491;
                 game.enemyCharacterSprite.y = 0;
-                game.enemyCharacterSprite.height = game.enemyCharacterSprite.height * .37;
-                game.enemyCharacterSprite.width = game.enemyCharacterSprite.width * .31;
+                game.enemyCharacterSprite.height = app.stage.width * .118;
+                game.enemyCharacterSprite.width = app.stage.height * .21;
                 app.stage.addChild(game.enemyCharacterSprite);
 
                 /*
