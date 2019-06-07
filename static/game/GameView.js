@@ -968,7 +968,7 @@ let GameView = (function () {
             return;
 
         graveyard.forEach(value => {
-            value.popup.y += event.deltaY * app.stage.height * 0.0465;
+            value.popup.y += event.deltaY * app.stage.height * 0.02325;
             if (value.popup.y < 0 || value.popup.y + value.popup.height > app.stage.height)
                 graveyardDisplay.removeChild(value.popup);
             else
@@ -1807,8 +1807,8 @@ let GameView = (function () {
 
                 game.enemyCharacterSprite.x = app.stage.width * .491;
                 game.enemyCharacterSprite.y = 0;
-                game.enemyCharacterSprite.height = app.stage.width * .118;
-                game.enemyCharacterSprite.width = app.stage.height * .21;
+                game.enemyCharacterSprite.width = app.stage.width * .118;
+                game.enemyCharacterSprite.height = app.stage.height * .21;
                 app.stage.addChild(game.enemyCharacterSprite);
 
                 /*
