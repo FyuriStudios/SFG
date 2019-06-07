@@ -137,6 +137,7 @@ class Game {
 			fieldSpell: null,
 			character: null,
 			setCharacter: false,
+			setMulligan: false,
 		};
 
 		this.player2 = { //see above for details on the variables
@@ -154,6 +155,7 @@ class Game {
 			fieldSpell: null,
 			character: null,
 			setCharacter: false,
+			setMulligan: false,
 		};
 	}
 
@@ -237,7 +239,7 @@ class Game {
 					}
 				});
 			}
-
+ 
 			deckConstruction(this.player1); //we're going to run this function for each player. This design pattern has been abused a lot by me (Hughes).
 			deckConstruction(this.player2);
 		} 
