@@ -1511,8 +1511,9 @@ let GameView = (function () {
 
                 fixOwnBoardSpacing(event.playLoc, () => {
                     fixOwnBoardSpacing(); //Calling this function again because sometimes monsters get stuck on the board.
-                    nextInEventQueue()
+                    nextInEventQueue();
                 });
+
             } else {
 
                 let enemyCard = ClientCard.from(event.card);
@@ -1536,7 +1537,7 @@ let GameView = (function () {
                 fixEnemyBoardSpacing(event.playLoc, () => {
                     enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
                     enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
-                    nextInEventQueue()
+                    nextInEventQueue();
                 });
             }
 
