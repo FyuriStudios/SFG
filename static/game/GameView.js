@@ -1507,11 +1507,10 @@ let GameView = (function () {
                 card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
                 card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
 
-                fixOwnHandSpacing();
+                fixOwnHandSpacing(nextInEventQueue);
 
                 fixOwnBoardSpacing(event.playLoc, () => {
                     fixOwnBoardSpacing(); //Calling this function again because sometimes monsters get stuck on the board.
-                    nextInEventQueue();
                 });
 
             } else {
