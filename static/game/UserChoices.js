@@ -135,6 +135,66 @@ let UserChoices = (function() {
             game.hand.forEach(value => value.sprite.on('mouseup', chooseEvent));
             game.ownBoard.forEach(value => value.sprite.interactive = false);
 
+        },
+
+        mulligan: function(app, socket, completion) {
+
+            let mulligan = new PIXI.Sprite(textures.mulligan);
+            let noMulligan = new PIXI.Sprite(textures.noMulligan);
+
+            mulligan.anchor.x = mulligan.anchor.y = noMulligan.anchor.x = noMulligan.anchor.y = .5;
+
+            mulligan.width = noMulligan.width = app.stage.width * .23;
+            mulligan.height = noMulligan.height = app.stage.height * .25;
+
+            mulligan.y = noMulligan.y = app.stage.height * .5;
+            mulligan.x = app.stage.width * .4;
+            noMulligan.x = app.stage.width * .6;
+
+            app.stage.addChild(mulligan);
+            app.stage.addChild(noMulligan);
+
+            mulligan.interactive = noMulligan.interactive = true;
+
+            function mulliganMouseUp() {
+                unsetListeners();
+                socket.emit('mulligan', 'yes');
+                completion();
+            }
+
+            function noMulliganMouseUp() {
+                unsetListeners();
+                socket.emit('mulligan', 'no');
+                completion();
+            }
+
+            function mouseOver() {
+                this.alpha = 0.6;
+            }
+
+            function mouseOut() {
+                this.alpha = 1;
+            }
+
+            function unsetListeners() {
+                mulligan.off('mouseup', mulliganMouseUp);
+                noMulligan.off('mouseup', noMulliganMouseUp);
+                mulligan.off('mouseover', mouseOver);
+                mulligan.off('mouseout', mouseOut);
+                noMulligan.off('mouseover', mouseOver);
+                noMulligan.off('mouseout', mouseOut);
+
+                app.stage.removeChild(mulligan);
+                app.stage.removeChild(noMulligan);
+            }
+
+            mulligan.on('mouseup', mulliganMouseUp);
+            noMulligan.on('mouseup', noMulliganMouseUp);
+            mulligan.on('mouseover', mouseOver);
+            mulligan.on('mouseout', mouseOut);
+            noMulligan.on('mouseover', mouseOver);
+            noMulligan.on('mouseout', mouseOut);
+
         }
     }
 })();

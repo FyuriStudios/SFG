@@ -1608,6 +1608,15 @@ let GameView = (function () {
             nextInEventQueue();
         } else if(event.type == 'choose target') {
             UserChoices.target(game, DONT_USE_THIS, nextInEventQueue);
+        } else if(event.type == 'mulligan') {
+            UserChoices.mulligan(app, DONT_USE_THIS, nextInEventQueue);
+        }
+        else if(event.type == 'mulligan hand') { //this event is what happens when a player actually chooses to mulligan. The above event just asks for a choice regarding a mulligan.
+            game.hand.forEach(value => app.stage.removeChild(value.sprite));
+            game.ownDeckSize += game.hand.length;
+            game.hand = []; //This event only asks for you to clear out your hand. That's it.
+
+            nextInEventQueue();
         }
 
     }
@@ -1691,7 +1700,9 @@ let GameView = (function () {
                 .add('plusButton', '/static/assets/plus_button.png')
                 .add('playButton', '/static/assets/Play_Button.png')
                 .add('ownIgneaPortrait', '/static/assets/portraits/own-Ignea-Portrait.png')
-                .add('enemyIgneaPortrait', '/static/assets/portraits/enemy-Ignea-Portrait.png');
+                .add('enemyIgneaPortrait', '/static/assets/portraits/enemy-Ignea-Portrait.png')
+                .add('mulligan', '/static/assets/Mulligan.png')
+                .add('noMulligan', '/static/assets/Dont_Mulligan.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -1712,6 +1723,8 @@ let GameView = (function () {
                 textures.playButton = resources.playButton.texture;
                 textures.ownIgneaPortrait = resources.ownIgneaPortrait.texture;
                 textures.enemyIgneaPortrait = resources.enemyIgneaPortrait.texture;
+                textures.mulligan = resources.mulligan.texture;
+                textures.noMulligan = resources.noMulligan.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file

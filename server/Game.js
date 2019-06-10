@@ -244,7 +244,7 @@ class Game {
 			deckConstruction(this.player2);
 		} 
 		
-		else if (this.player1.setDeck && this.player2.setDeck) {
+		else if (this.player1.setDeck && this.player2.setDeck && !this.player1.setMulligan && !this.player2.setMulligan) {
 
 			let deckSizes = {
 				player1DeckSize: this.player1.deck.length,
@@ -270,41 +270,38 @@ class Game {
 					value.creation({}, this, null);
 			});
 
-			for (var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //first, we're going to make each player draw an entire starting hand full of cards (there's a constant for this)
+			let drawChain = [];
+			this.drawHand(gameReference.player1, drawChain);
+			this.drawHand(gameReference.player2, drawChain);
+			
+			this.outputEventChain(drawChain);
 
-				let drawnCard = this.player1.deck.pop();
+			function mulligan(player) {
+				player.socket.emit('event', {type: 'mulligan'});
+				player.socket.once('mulligan', input => {
+					if(input == 'yes') {
+						let mulliganChain = [];
+						let hand = player.hand;
+						player.hand = [];
+						mulliganChain.push({
+							type: 'mulligan hand'
+						});
+						gameReference.drawHand(player, mulliganChain);
 
-				this.player1.socket.emit('event', {
-					type: 'draw card',
-					player: 1,
-					card: this.backendCardTranslate(drawnCard),
+						gameReference.outputEventChain(mulliganChain);
+						player.deck.extend(hand);
+						player.deck.shuffle();
+					}
+					player.setMulligan = true;
+					gameReference.start(gameReference);
 				});
-
-				this.player2.socket.emit('event', {
-					type: 'draw card',
-					player: 1
-				});
-
-				this.player1.hand.unshift(drawnCard);
 			}
 
-			for (var i = 0; i < constants.STARTING_CARDS_DRAWN; i++) { //draw a bunch of cards firstly
+			mulligan(gameReference.player1);
+			mulligan(gameReference.player2);
+		}
 
-				let drawnCard = this.player2.deck.pop();
-
-				this.player2.socket.emit('event', {
-					type: 'draw card',
-					player: 2,
-					card: this.backendCardTranslate(drawnCard),
-				});
-
-				this.player1.socket.emit('event', {
-					type: 'draw card',
-					player: 2
-				});
-
-				this.player2.hand.unshift(drawnCard);
-			}
+		else if(gameReference.player1.setMulligan && gameReference.player2.setMulligan) {
 
 			this.turnCounter += 1;
 			let event = {
@@ -378,6 +375,16 @@ class Game {
 				this.player2.socket.emit('event', value);
 			}
 		});
+	}
+
+	drawHand(player, eventChain) {
+		if(player.character == 'ignea') {
+			this.drawCard(player, eventChain); //draw an extra card if the character's Ignea.
+		}
+
+		for(var i = 0; i< constants.STARTING_CARDS_DRAWN; i++) {
+			this.drawCard(player, eventChain);
+		}
 	}
 
 	/**
