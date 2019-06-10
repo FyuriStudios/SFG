@@ -24,9 +24,20 @@ function startGame() {
         deck.push(12);
         deck.push(13);
         deck.push(14);
-        deck.push(14);
         deck.push(15);
-        deck.push(15);
+        deck.push(16);
+        deck.push(17);
+        deck.push(18);
+        deck.push(19);
+        deck.push(20);
+        deck.push(21);
+        deck.push(22);
+        deck.push(23);
+        deck.push(24);
+        deck.push(25);
+        deck.push(26);
+        deck.push(27);
+        deck.push(28);
     } else {
         deck = passDeck.split(', ').map(Number);
     }

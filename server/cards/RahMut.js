@@ -58,6 +58,7 @@ class RahMut extends Monster {
         });
 
         this.hasCardPlayed = true;
+        
         this.addCardPlayed({
             name: 'RahMut Signature',
             func: function(input, game, eventChain) {
@@ -71,6 +72,8 @@ class RahMut extends Monster {
                 });
 
                 if(loc != undefined) {
+
+                    card.currentPower += totalDamage;
 
                     eventChain.push({
                         type: 'boost',

@@ -23,7 +23,15 @@ class CorruptedEagle extends Monster {
                 });
 
                 player.socket.once('target choice', input => {
-                    Damage.func(input, game, eventChain, card);
+
+                    /*
+                    We have to create this because there is no event chain when the choice is triggered. Therefore,
+                    we have to emit the event ourselves right here. This is gross, I concede that.
+                    */
+                    let newEvent = [];
+                    Damage.func(input, game, newEvent, card.currentPower);
+                    game.killDead(newEvent);
+                    game.outputEventChain(newEvent);
                 });
 
             }

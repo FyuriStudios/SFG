@@ -968,7 +968,7 @@ let GameView = (function () {
             return;
 
         graveyard.forEach(value => {
-            value.popup.y += event.deltaY * app.stage.height * 0.0465;
+            value.popup.y += event.deltaY * app.stage.height * 0.02325;
             if (value.popup.y < 0 || value.popup.y + value.popup.height > app.stage.height)
                 graveyardDisplay.removeChild(value.popup);
             else
@@ -1188,7 +1188,7 @@ let GameView = (function () {
                     AnimationQueue.addMoveRequest(enemyCard.sprite, {
                         x: app.stage.width * .35,
                         y: app.stage.height * .5
-                    }, 15, () => {
+                    }, 7, () => {
                         fixEnemyHandSpacing();
                         if (enemyCard.field) {
                             if (game.enemyFieldSpell != null) {
@@ -1202,7 +1202,7 @@ let GameView = (function () {
 
                             AnimationQueue.addMoveRequest(game.enemyFieldSpell.sprite, {
                                 x: app.stage.width - game.enemyFieldSpell.sprite.width * .75,
-                                y: app.stage.height * .25 - game.enemyFieldSpell.sprite.height / 2
+                                y: app.stage.height * .3
                             }, 10, () => {
                                 nextInEventQueue();
                             });
@@ -1507,12 +1507,12 @@ let GameView = (function () {
                 card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
                 card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
 
-                fixOwnHandSpacing();
+                fixOwnHandSpacing(nextInEventQueue);
 
                 fixOwnBoardSpacing(event.playLoc, () => {
                     fixOwnBoardSpacing(); //Calling this function again because sometimes monsters get stuck on the board.
-                    nextInEventQueue()
                 });
+
             } else {
 
                 let enemyCard = ClientCard.from(event.card);
@@ -1536,7 +1536,7 @@ let GameView = (function () {
                 fixEnemyBoardSpacing(event.playLoc, () => {
                     enemyCard.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
                     enemyCard.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
-                    nextInEventQueue()
+                    nextInEventQueue();
                 });
             }
 
@@ -1608,6 +1608,15 @@ let GameView = (function () {
             nextInEventQueue();
         } else if(event.type == 'choose target') {
             UserChoices.target(game, DONT_USE_THIS, nextInEventQueue);
+        } else if(event.type == 'mulligan') {
+            UserChoices.mulligan(app, DONT_USE_THIS, nextInEventQueue);
+        }
+        else if(event.type == 'mulligan hand') { //this event is what happens when a player actually chooses to mulligan. The above event just asks for a choice regarding a mulligan.
+            game.hand.forEach(value => app.stage.removeChild(value.sprite));
+            game.ownDeckSize += game.hand.length;
+            game.hand = []; //This event only asks for you to clear out your hand. That's it.
+
+            nextInEventQueue();
         }
 
     }
@@ -1691,7 +1700,9 @@ let GameView = (function () {
                 .add('plusButton', '/static/assets/plus_button.png')
                 .add('playButton', '/static/assets/Play_Button.png')
                 .add('ownIgneaPortrait', '/static/assets/portraits/own-Ignea-Portrait.png')
-                .add('enemyIgneaPortrait', '/static/assets/portraits/enemy-Ignea-Portrait.png');
+                .add('enemyIgneaPortrait', '/static/assets/portraits/enemy-Ignea-Portrait.png')
+                .add('mulligan', '/static/assets/Mulligan.png')
+                .add('noMulligan', '/static/assets/Dont_Mulligan.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -1712,6 +1723,8 @@ let GameView = (function () {
                 textures.playButton = resources.playButton.texture;
                 textures.ownIgneaPortrait = resources.ownIgneaPortrait.texture;
                 textures.enemyIgneaPortrait = resources.enemyIgneaPortrait.texture;
+                textures.mulligan = resources.mulligan.texture;
+                textures.noMulligan = resources.noMulligan.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
@@ -1797,8 +1810,8 @@ let GameView = (function () {
                 game.ownCharacterSprite.x = app.stage.width * .5;
                 game.ownCharacterSprite.y = app.stage.height;
 
-                game.ownCharacterSprite.width = game.ownCharacterSprite.width * .31;
-                game.ownCharacterSprite.height = game.ownCharacterSprite.height * .37;
+                game.ownCharacterSprite.width = app.stage.width * .118;
+                game.ownCharacterSprite.height = app.stage.height * .21;
                 app.stage.addChild(game.ownCharacterSprite);
 
                 game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyIgneaPortrait);
@@ -1807,8 +1820,8 @@ let GameView = (function () {
 
                 game.enemyCharacterSprite.x = app.stage.width * .491;
                 game.enemyCharacterSprite.y = 0;
-                game.enemyCharacterSprite.height = game.enemyCharacterSprite.height * .37;
-                game.enemyCharacterSprite.width = game.enemyCharacterSprite.width * .31;
+                game.enemyCharacterSprite.width = app.stage.width * .118;
+                game.enemyCharacterSprite.height = app.stage.height * .21;
                 app.stage.addChild(game.enemyCharacterSprite);
 
                 /*
