@@ -124,5 +124,9 @@ module.exports = function (id) {
         let card = require('./cards/RageInducedFlurry');
         return new card();
     }
+    else if(id == 30) {
+        let card = require('./cards/StateChimp');
+        return new card();
+    }
 
 }

@@ -38,6 +38,8 @@ function startGame() {
         deck.push(26);
         deck.push(27);
         deck.push(28);
+        deck.push(29);
+        deck.push(30);
     } else {
         deck = passDeck.split(', ').map(Number);
     }
