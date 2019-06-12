@@ -40,6 +40,7 @@ function startGame() {
         deck.push(28);
         deck.push(29);
         deck.push(30);
+        deck.push(31);
     } else {
         deck = passDeck.split(', ').map(Number);
     }

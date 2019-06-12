@@ -67,6 +67,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Flurry_Hand.png');
             } else if(id == 30) {
                 return PIXI.Sprite.from('/static/assets/in_hand/State_Chimp_Hand.png');
+            } else if(id == 31) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Kingo_Hand.png');
             }
         },
 
@@ -135,6 +137,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Flurry_Hover.png');
             } else if(id == 30) {
                 return PIXI.Sprite.from('/static/assets/popup/State_Chimp_Hover.png');
+            } else if(id == 31) {
+                return PIXI.Sprite.from('/static/assets/popup/Kingo_Hover.png');
             }
         },
 
@@ -183,6 +187,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Poke_Board_Piece.png');
             } else if(id == 30) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/State_Chimp_Board.png');
+            } else if(id == 31) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Kingo_Board.png');
             }
         }
     }

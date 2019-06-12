@@ -128,5 +128,9 @@ module.exports = function (id) {
         let card = require('./cards/StateChimp');
         return new card();
     }
+    else if(id == 31) {
+        let card = require('./cards/Kingo');
+        return new card();
+    }
 
 }
