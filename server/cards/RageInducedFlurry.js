@@ -18,7 +18,9 @@ class RageInducedFlurry extends Spell {
                         }
                     }
                     else{
-                        if(game.player1.board[input.target].currentPower > 0){
+                        let dead = false;
+                        eventChain.forEach(value =>(value.type == 'kill dead' && value.targetSide == input.targetSide && value.target == input.target)?dead = true:null);
+                        if(!dead){
                             Damage.func({targetSide: gameCurrentplayer.id, target: -1}, game, eventChain, 5);
                         }
                     }
@@ -30,7 +32,9 @@ class RageInducedFlurry extends Spell {
                         }
                     }
                     else{
-                        if(game.player2.board[input.target].currentPower > 0){
+                        let dead = false;
+                        eventChain.forEach(value => (value.type == 'kill dead' && value.targetSide == input.targetSide && value.target == input.target)?dead = true:null);
+                        if(!dead){
                             Damage.func({targetSide: gameCurrentplayer.id, target: -1}, game, eventChain, 5);
                         }
                     }
