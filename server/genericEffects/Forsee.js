@@ -2,48 +2,37 @@ let Effect = require('../Effect');
 
 module.exports = {
     name: 'Forsee',
-    func: function(input, game, eventChain, amount) {
-        let forseeEffect = new ForseeEffect(game.turnCounter, input.choice, amount);
+    func: function(input, game, eventChain, amount, choice) {
+        let forseeEffect = new Effect();
+        forseeEffect.amount = amount;
+        forseeEffect.creationDate = game.turnCounter;
+        forseeEffect.choice = choice;
 
-        game.currentPlayer.effects.push(forseeEffect);
-    }
-};
-
-class ForseeEffect extends Effect {
-
-    constructor(turnCounter, choice, amount) {
-        super();
-
-        this.tokenAmount = amount;
-        this.creationDate = turnCounter;
-        this.choice = choice;
-
-        this.hasTurnIncrement = true;
-
-        let eff = this;
-
-        this.addTurnIncrement({
+        forseeEffect.hasTurnIncrement = true;
+        forseeEffect.addTurnIncrement({
             name: 'Forsee Effect',
             func: function(input, game, eventChain) {
-                if(game.turnCounter == eff.creationDate + 4) {
+                if(game.turnCounter == forseeEffect.creationDate + 4) {
                     let event = {
                         type: 'gain tokens',
                         player: game.currentPlayer.id,
-                        tokenType: eff.choice,
+                        tokenType: forseeEffect.choice,
                         view: 1,
-                        amount: eff.tokenAmount,
+                        amount: forseeEffect.amount,
                     };
 
                     eventChain.push(event);
 
-                    if(eff.choice == 'monster') {
-                        game.currentPlayer.mToks += eff.tokenAmount;
+                    if(forseeEffect.choice == 'monster') {
+                        game.currentPlayer.mToks += forseeEffect.amount;
                     }
-                    else if(eff.choice == 'action') {
-                        game.currentPlayer.sToks += eff.tokenAmount;
+                    else if(forseeEffect.choice == 'action') {
+                        game.currentPlayer.sToks += forseeEffect.amount;
                     }
                 }
             }
         });
+
+        game.currentPlayer.effects.push(forseeEffect);
     }
-}
+};
