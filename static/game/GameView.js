@@ -1625,8 +1625,8 @@ let GameView = (function () {
             nextInEventQueue();
         }
         else if(event.type == 'hand boost') {
-            this.hand[event.target].currentPower += event.boost;
-            this.hand[event.target].updateText();
+            game.hand[event.target].currentPower += event.boost;
+            game.hand[event.target].updateText();
         }
 
     }
