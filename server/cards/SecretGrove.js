@@ -3,7 +3,7 @@ var Spell = require('../Spell');
 class SecretGrove extends Spell {
 
     constructor() {
-        super(6, 'spell', 'common', 'Secret Grove', 6, false, true);
+        super(6, 'spell', 'common', 'Secret Grove', 6, false, false, false);
 
         this.hasCardPlayed = true;
         this.addCardPlayed(forseeWrapper);
