@@ -1626,10 +1626,20 @@ let GameView = (function () {
         }
         else if(event.type == 'hand boost') {
             if(event.player == game.id) {
-                game.hand[event.target].currentPower += event.boost;
-                game.hand[event.target].updateText();
-                smallSizeCardInHandSprite(game.hand[event.target].sprite);
-                game.hand[event.target].displayPopup();
+
+                let card = game.hand[event.target];
+                card.currentPower += event.boost;
+                let cardx = card.sprite.x;
+                let cardy = card.sprite.y;
+
+                app.stage.removeChild(card.sprite);
+                card.generateImages();
+
+                smallSizeCardInHandSprite(card.sprite);
+                card.sprite.x = cardx;
+                card.sprite.y = cardy;
+
+                app.stage.addChild(card.sprite);
             }
             nextInEventQueue();
         }
