@@ -69,6 +69,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/State_Chimp_Hand.png');
             } else if(id == 31) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Kingo_Hand.png');
+            } else if(id == 32) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Instinct_Hand.png');
             }
         },
 
@@ -139,6 +141,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/State_Chimp_Hover.png');
             } else if(id == 31) {
                 return PIXI.Sprite.from('/static/assets/popup/Kingo_Hover.png');
+            } else if(id == 32) {
+                return PIXI.Sprite.from('/static/assets/popup/Instinct_Hover.png');
             }
         },
 

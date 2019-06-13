@@ -132,5 +132,9 @@ module.exports = function (id) {
         let card = require('./cards/Kingo');
         return new card();
     }
+    else if(id == 32) {
+        let card = require('./cards/HeightenedInstincts');
+        return new card();
+    }
 
 }
