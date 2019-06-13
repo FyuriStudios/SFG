@@ -1628,6 +1628,7 @@ let GameView = (function () {
             if(event.player == game.id) {
                 game.hand[event.target].currentPower += event.boost;
                 game.hand[event.target].updateText();
+                smallSizeCardInHandSprite(game.hand[event.target].sprite);
                 game.hand[event.target].displayPopup();
             }
             nextInEventQueue();
