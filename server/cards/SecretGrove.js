@@ -16,7 +16,7 @@ let forseeWrapper = {
     
     func: function(input, game, eventChain) {
         let Forsee = require('../genericEffects/Forsee');
-        Forsee.func(input, game, eventChain, 6);
+        Forsee.func(input, game, eventChain, 6, 'monster');
     }
 }
 
