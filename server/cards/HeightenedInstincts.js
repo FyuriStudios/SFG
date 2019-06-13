@@ -26,6 +26,7 @@ class HeightenedInstincts extends Spell {
                                 type: 'hand boost',
                                 target: 0,
                                 boost: powerGained,
+                                view: 3,
                             };
 
                             eventChain.push(event);

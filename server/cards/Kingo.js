@@ -33,7 +33,8 @@ class Kingo extends Monster {
                 let event = {
                     type: 'hand boost',
                     target: choice,
-                    boost: boostAmount
+                    boost: boostAmount,
+                    view: 3
                 };
 
                 eventChain.push(event);
