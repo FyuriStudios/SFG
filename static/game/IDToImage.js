@@ -71,6 +71,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Kingo_Hand.png');
             } else if(id == 32) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Instinct_Hand.png');
+            } else if(id == 33) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Plague_Hand.png');
             }
         },
 
@@ -143,6 +145,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Kingo_Hover.png');
             } else if(id == 32) {
                 return PIXI.Sprite.from('/static/assets/popup/Instinct_Hover.png');
+            } else if(id == 33) {
+                return PIXI.Sprite.from('/static/assets/popup/Plague_Hover.png');
             }
         },
 

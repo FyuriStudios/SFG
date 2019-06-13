@@ -136,5 +136,9 @@ module.exports = function (id) {
         let card = require('./cards/HeightenedInstincts');
         return new card();
     }
+    else if(id == 33) {
+        let card = require('./cards/FortuitousPlague');
+        return new card();
+    }
 
 }
