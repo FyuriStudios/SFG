@@ -148,5 +148,9 @@ module.exports = function (id) {
         let card = require('./cards/GrassShoe');
         return new card();
     }
+    else if(id == 36) {
+        let card = require('./cards/ThickFur');
+        return new card();
+    }
 
 }
