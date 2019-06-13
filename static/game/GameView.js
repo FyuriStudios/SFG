@@ -1625,8 +1625,10 @@ let GameView = (function () {
             nextInEventQueue();
         }
         else if(event.type == 'hand boost') {
-            game.hand[event.target].currentPower += event.boost;
-            game.hand[event.target].updateText();
+            if(event.player == game.id) {
+                game.hand[event.target].currentPower += event.boost;
+                game.hand[event.target].updateText();
+            }
         }
 
     }

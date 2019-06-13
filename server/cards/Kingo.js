@@ -34,7 +34,7 @@ class Kingo extends Monster {
                     type: 'hand boost',
                     target: choice,
                     boost: boostAmount,
-                    view: 3
+                    player: card.player,
                 };
 
                 eventChain.push(event);
