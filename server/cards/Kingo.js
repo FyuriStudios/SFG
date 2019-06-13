@@ -25,7 +25,7 @@ class Kingo extends Monster {
                 let choice;
 
                 do {
-                    choice = Math.random()*hand.length;
+                    choice = Math.floor(Math.random()*hand.length);
                 } while(hand[choice].type != 'monster');
 
                 let boostAmount = 3;
