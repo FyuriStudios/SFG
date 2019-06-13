@@ -21,7 +21,7 @@ function startGame() {
         deck.push(9);
         deck.push(10);
         deck.push(11);
-        //deck.push(12); Wound Regeneration only gets added back once its assets are done over.
+        deck.push(12);
         deck.push(13);
         deck.push(14);
         deck.push(15);

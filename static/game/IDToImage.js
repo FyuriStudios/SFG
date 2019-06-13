@@ -108,7 +108,7 @@ IDToImage = (function () {
             } else if(id == 11) {
                 return PIXI.Sprite.from('/static/assets/popup/Sync_Horde_Hover.png');
             } else if(id == 12) {
-                return PIXI.Sprite.from('/static/assets/popup/Wound_Regen_Hover.png');
+                return PIXI.Sprite.from('/static/assets/popup/Wound_Hover.png');
             } else if(id == 13) {
                 return PIXI.Sprite.from('/static/assets/popup/Bottom_Hover.png');
             } else if(id == 14) {
