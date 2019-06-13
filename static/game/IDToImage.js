@@ -75,6 +75,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Plague_Hand.png');
             } else if(id == 34) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Panther_Hand.png');
+            } else if(id == 35) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Shoe_Hand.png');
             }
         },
 
@@ -151,6 +153,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Plague_Hover.png');
             } else if(id == 34) {
                 return PIXI.Sprite.from('/static/assets/popup/Panther_Hover.png');
+            } else if(id == 35) {
+                return PIXI.Sprite.from('/static/assets/popup/Shoe_Hover.png');
             }
         },
 
