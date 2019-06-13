@@ -73,6 +73,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Instinct_Hand.png');
             } else if(id == 33) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Plague_Hand.png');
+            } else if(id == 34) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Panther_Hand.png');
             }
         },
 
@@ -147,6 +149,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Instinct_Hover.png');
             } else if(id == 33) {
                 return PIXI.Sprite.from('/static/assets/popup/Plague_Hover.png');
+            } else if(id == 34) {
+                return PIXI.Sprite.from('/static/assets/popup/Panther_Hover.png');
             }
         },
 
@@ -197,6 +201,8 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/State_Chimp_Board.png');
             } else if(id == 31) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Kingo_Board.png');
+            } else if(id == 34) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Panther_Board.png');
             }
         }
     }

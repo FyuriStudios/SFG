@@ -43,6 +43,7 @@ function startGame() {
         deck.push(31);
         deck.push(32);
         deck.push(33);
+        deck.push(34);
     } else {
         deck = passDeck.split(', ').map(Number);
     }

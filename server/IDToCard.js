@@ -140,5 +140,9 @@ module.exports = function (id) {
         let card = require('./cards/FortuitousPlague');
         return new card();
     }
+    else if(id == 34) {
+        let card = require('./cards/BroodshadePanther');
+        return new card();
+    }
 
 }
