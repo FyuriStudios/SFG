@@ -21,14 +21,14 @@ class RageInducedFlurry extends Spell {
                         let dead = false;
                         eventChain.forEach(value =>(value.type == 'kill dead' && value.targetSide == input.targetSide && value.target == input.target)?dead = true:null);
                         if(!dead){
-                            Damage.func({targetSide: gameCurrentplayer.id, target: -1}, game, eventChain, 5);
+                            Damage.func({targetSide: game.Currentplayer.id, target: -1}, game, eventChain, 5);
                         }
                     }
                 }
                 else{
                     if(input.target == -1){
                         if(game.player2.health > 0){
-                            Damage.func({targetSide: gameCurrentplayer.id, target: -1}, game, eventChain, 5);
+                            Damage.func({targetSide: game.Currentplayer.id, target: -1}, game, eventChain, 5);
                         }
                     }
                     else{
