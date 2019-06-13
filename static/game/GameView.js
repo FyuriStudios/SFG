@@ -1612,9 +1612,15 @@ let GameView = (function () {
             UserChoices.mulligan(app, DONT_USE_THIS, nextInEventQueue);
         }
         else if(event.type == 'mulligan hand') { //this event is what happens when a player actually chooses to mulligan. The above event just asks for a choice regarding a mulligan.
-            game.hand.forEach(value => app.stage.removeChild(value.sprite));
-            game.ownDeckSize += game.hand.length;
-            game.hand = []; //This event only asks for you to clear out your hand. That's it.
+            if(event.player == game.id) {
+                game.hand.forEach(value => app.stage.removeChild(value.sprite));
+                game.ownDeckSize += game.hand.length;
+                game.hand = []; //This event only asks for you to clear out your hand. That's it.
+            } else {
+                game.enemyDeckSize += enemyCardsInHand.length;
+                enemyCardsInHand.forEach(value => app.stage.removeChild(value));
+                enemyCardsInHand = [];
+            }
 
             nextInEventQueue();
         }

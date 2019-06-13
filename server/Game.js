@@ -285,7 +285,7 @@ class Game {
 						player.hand = [];
 						mulliganChain.push({
 							type: 'mulligan hand',
-							view: 3
+							player: player.id,
 						});
 						gameReference.drawHand(player, mulliganChain);
 
