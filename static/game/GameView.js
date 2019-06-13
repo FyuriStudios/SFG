@@ -1639,7 +1639,23 @@ let GameView = (function () {
                 card.sprite.x = cardx;
                 card.sprite.y = cardy;
 
+                card.sprite.on('mouseover', mouseOverCardInHand);
+
+                card.sprite.on('mouseout', mouseOutCardInHand);
+
+                card.sprite.on('pointerdown', onDragFromHandStart);
+
+                card.sprite.on('pointerup', onDragFromHandEnd);
+
+                card.sprite.on('pointerupoutside', onDragFromHandEnd); //removing mouse events. Then we'll re-add custom events.
+
+                card.sprite.on('pointermove', onDragFromHandMove);
+
                 app.stage.addChild(card.sprite);
+
+                game.hand.forEach((value, index) => {
+                    value.sprite.zIndex = 100 + game.hand.length - index;
+                });
             }
             nextInEventQueue();
         }
