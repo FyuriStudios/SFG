@@ -195,6 +195,11 @@ let UserChoices = (function() {
             noMulligan.on('mouseover', mouseOver);
             noMulligan.on('mouseout', mouseOut);
 
-        }
+        },
+
+        yakovMulligan: function(app, socket, completion) {
+            //I'll do this later.
+        },
+        
     }
 })();

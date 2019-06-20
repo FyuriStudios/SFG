@@ -1660,6 +1660,29 @@ let GameView = (function () {
             nextInEventQueue();
         }
 
+        else if(event.type == 'drop cards') { //This doesn't send guys to the graveyard. That was intentional, because this was only designed to work with the Yakov mulligan. Just copy/paste
+            let dropList = [];                //this code if you need to include discarding as well. -Hughes
+
+            game.hand.forEach((value, index) => {
+                if(_.includes(event.choices, index))
+                    dropList.push(value);
+            });
+
+            _.pullAll(game.hand, dropList);
+
+            dropList.forEach((value, index) => {
+                AnimationQueue.addMoveRequest(value.sprite, {
+                    x: app.stage.width * .25,
+                    y: app.stage.height * .5
+                }, 15, () => {
+                    app.stage.removeChild(value.sprite);
+                    if(index == dropList.length - 1) {
+                        fixOwnHandSpacing(nextInEventQueue);
+                    }
+                });
+            });
+        }
+
     }
 
     function gameOver(playerID) {

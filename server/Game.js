@@ -298,8 +298,40 @@ class Game {
 				});
 			}
 
-			mulligan(gameReference.player1);
-			mulligan(gameReference.player2);
+			function yakovMulligan(player) {
+				//'Discard' event has 'index' as the location of the card to be discarded, not target like in some other events. Idk why I couldn't be more consistent.
+				player.socket.emit('event', {type: 'yakov mulligan'});
+				player.socket.once('yakov mulligan', input => {
+
+					let mulliganChain = [];
+					player.setMulligan = true;
+
+					let discards = []
+					input.choices.forEach(index => discards.push(player.hand[index]));
+
+					//This lodash method removes all of the cards that got mulliganed.
+					_.pullAll(player.hand, discards);
+
+					mulliganChain.push({
+						type: 'drop cards',
+						choices: input.choices
+					});
+
+					_.times(discards.length, () => gameReference.drawCard(player, mulliganChain)); //this "times" syntax is beautiful. All languages need it.
+
+					player.deck.extend(discards);
+
+					_.times(discards.length, () => mulliganChain.push({type: 'add deck card', player: player.id}));
+
+					gameReference.outputEventChain(mulliganChain);
+
+				});
+			}
+
+			gameReference.player1.character == 'yakov'? yakovMulligan(gameReference.player1) : mulligan(gameReference.player1);
+
+			gameReference.player2.character == 'yakov'? yakovMulligan(gameReference.player2) : mulligan(gameReference.player2);
+			
 		}
 
 		else if(gameReference.player1.setMulligan && gameReference.player2.setMulligan) {
