@@ -197,8 +197,62 @@ let UserChoices = (function() {
 
         },
 
-        yakovMulligan: function(app, socket, completion) {
-            //I'll do this later.
+        yakovMulligan: function(app, game, socket, completion) {
+            let hand = game.hand;
+
+            hand.forEach(value => value.selected = false);
+
+            let doneButton = new PIXI.Sprite(textures.mulligan);
+
+            doneButton.width = app.stage.width * .23;
+            doneButton.height = app.stage.height * .25;
+            doneButton.anchor.x = doneButton.anchor.y = .5;
+
+            doneButton.x = app.stage.width * .5;
+            doneButton.y = apps.stage.height * .5;
+
+            app.stage.addChild(doneButton);
+
+            let mouseUpCard = function() {
+                let temp;
+                hand.forEach(value => value.sprite == this?temp = value:null);
+
+                if(temp.selected) {
+                    this.alpha = 1;
+                    temp.popup.alpha = 1;
+                    temp.selected = false;
+                }
+                else {
+                    this.alpha = 0.6;
+                    temp.popup.alpha = 0.6;
+                    temp.selected = true;
+                }
+            }
+
+            let mouseUpDoneButton = function() {
+                let choices = [];
+                hand.forEach((value, index) => {
+                    if(value.selected)
+                        choices.push(index);
+                });
+                hand.sprite.forEach(value => value.off('mouseup', mouseUpCard));
+
+                doneButton.off('mouseup', mouseUpDoneButton);
+                app.stage.removeChild(doneButton);
+
+                socket.emit('yakov mulligan', {choices: choices});
+
+                completion();
+            }
+
+            doneButton.on('mouseup', mouseUpDoneButton);
+            
+            hand.forEach(value => {
+                value.sprite.on('mouseup', mouseUpCard);
+            });
+
+            doneButton.on('mouseover', mouseOutSprite);
+            doneButton.on('mouseout', mouseOutSprite);
         },
         
     }
