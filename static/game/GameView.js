@@ -1770,7 +1770,9 @@ let GameView = (function () {
                 .add('ownIgneaPortrait', '/static/assets/portraits/own-Ignea-Portrait.png')
                 .add('enemyIgneaPortrait', '/static/assets/portraits/enemy-Ignea-Portrait.png')
                 .add('mulligan', '/static/assets/Mulligan.png')
-                .add('noMulligan', '/static/assets/Dont_Mulligan.png');
+                .add('noMulligan', '/static/assets/Dont_Mulligan.png')
+                .add('ownYakovPortrait', '/static/assets/portraits/own-Yakov-Portrait.png')
+                .add('enemyYakovPortrait', '/static/assets/portraits/enemy-Yakov-Portrait.png');
 
             /*
             Remember the textures object from way up by, like, line 20? This is where we add stuff to it. This closure gets called when
@@ -1793,6 +1795,8 @@ let GameView = (function () {
                 textures.enemyIgneaPortrait = resources.enemyIgneaPortrait.texture;
                 textures.mulligan = resources.mulligan.texture;
                 textures.noMulligan = resources.noMulligan.texture;
+                textures.ownYakovPortrait = resources.ownYakovPortrait.texture;
+                textures.enemyYakovPortrait = resources.enemyYakovPortrait.texture;
             });
             loader.onProgress.add(() => {}); // called once per loaded/errored file //TODO: move this loading stuff into a new file
             loader.onError.add(() => {}); // called once per errored file
@@ -1871,7 +1875,11 @@ let GameView = (function () {
                 //         break;
                 // }
 
-                game.ownCharacterSprite = new PIXI.Sprite(textures.ownIgneaPortrait);
+                if(game.ownCharacter == 'ignea')
+                    game.ownCharacterSprite = new PIXI.Sprite(textures.ownIgneaPortrait);
+                else if(game.ownCharacter == 'yakov')
+                    game.enemyCharacterSprite = new PIXI.Sprite(textures.ownYakovPortrait);
+
                 game.ownCharacterSprite.anchor.x = .5;
                 game.ownCharacterSprite.anchor.y = 1;
 
@@ -1882,7 +1890,11 @@ let GameView = (function () {
                 game.ownCharacterSprite.height = app.stage.height * .21;
                 app.stage.addChild(game.ownCharacterSprite);
 
-                game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyIgneaPortrait);
+                if(game.enemyCharacter == 'ignea')
+                    game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyIgneaPortrait);
+                else if(game.enemyCharacter == 'yakov')
+                    game.enemyCharacterSprite = new PIXI.Sprite(textures.enemyYakovPortrait);
+                    
                 game.enemyCharacterSprite.anchor.x = .5;
                 game.enemyCharacterSprite.anchor.y = 0;
 
