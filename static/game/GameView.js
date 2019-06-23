@@ -1683,6 +1683,10 @@ let GameView = (function () {
             });
         }
 
+        else if(event.type == 'yakov mulligan') {
+            UserChoices.yakovMulligan(app, game, DONT_USE_THIS, nextInEventQueue);
+        }
+
     }
 
     function gameOver(playerID) {

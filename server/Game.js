@@ -328,9 +328,11 @@ class Game {
 				});
 			}
 
-			gameReference.player1.character == 'yakov'? yakovMulligan(gameReference.player1) : mulligan(gameReference.player1);
+			//gameReference.player1.character == 'yakov'? yakovMulligan(gameReference.player1) : mulligan(gameReference.player1);
+			mulligan(player1);
+			mulligan(player2);
 
-			gameReference.player2.character == 'yakov'? yakovMulligan(gameReference.player2) : mulligan(gameReference.player2);
+			//gameReference.player2.character == 'yakov'? yakovMulligan(gameReference.player2) : mulligan(gameReference.player2); Gotta make sure that portraits work first.
 			
 		}
 
