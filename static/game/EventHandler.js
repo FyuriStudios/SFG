@@ -8,6 +8,7 @@ function startGame() {
     let character = localStorage.getItem("character");
 
     let deck = [];
+    let character = 'ignea';
 
     if (passDeck == "random") {
         deck.push(1);
@@ -47,7 +48,9 @@ function startGame() {
         deck.push(35);
         deck.push(36);
     } else {
-        deck = passDeck.split(', ').map(Number);
+        deck = passDeck.split(', ');
+        character = deck.shift();
+        deck = deck.map(Number);
     }
 
     socket.once('player id', (input) => {
