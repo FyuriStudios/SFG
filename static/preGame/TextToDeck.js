@@ -3,11 +3,9 @@ function textToDeck(text) {
 
         let deckString = text.split(', ');
 
-        if (deckString.length != 30)
-            return "bad";
-
-        deckString.forEach(value => {
-            if (isNaN(value)) return 'bad';
+        deckString.forEach((value, index) => {
+            if (isNaN(value) && index != 0)
+                return 'bad';
         });
 
         if (!checkDeck(deckString.map(Number)))
