@@ -1855,25 +1855,7 @@ let GameView = (function () {
                     });
                     endTurnButton.button.alpha = 1;
                 });
-        
 
-                // switch (game.ownCharacter) {                 This doesn't work for some reason. I'll fix it later. - Hughes
-                //     case "ignea":
-                //         ownCharacterSprite = PIXI.Sprite.from('/static/assets/portraits/own-Ignea-Portrait.png');
-                //         break;
-                //     case "yakov":
-                //         // game.ownCharacterSprite = new PIXI.Sprite(textures.ownYakovPortrait);
-                //         break;
-                //     case "caius":
-                //         // game.ownCharacterSprite = new PIXI.Sprite(textures.ownCaiusPortrait);
-                //         break;
-                //     case "lorewell":
-                //         // game.ownCharacterSprite = new PIXI.Sprite(textures.ownLorewellPortrait);
-                //         break;
-                //     case "rinwald":
-                //         // game.ownCharacterSprite = new PIXI.Sprite(textures.ownRinwaldPortrait);
-                //         break;
-                // }
 
                 if(game.ownCharacter == 'ignea')
                     game.ownCharacterSprite = new PIXI.Sprite(textures.ownIgneaPortrait);
