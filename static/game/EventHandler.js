@@ -5,9 +5,9 @@ function startGame() {
     let gameVars = {};
 
     let passDeck = localStorage.getItem("deckStored");
-    let character = localStorage.getItem("character");
 
     let deck = [];
+
     let character = 'ignea';
 
     if (passDeck == "random") {
@@ -81,7 +81,7 @@ function startGame() {
     })
 
     socket.once('start', (input) => {
-        GameView.setupDisplay(gameVars.id, gameVars.ownDeckSize, gameVars.enemyDeckSize, socket, 'ignea', gameVars.enemyCharacter);
+        GameView.setupDisplay(gameVars.id, gameVars.ownDeckSize, gameVars.enemyDeckSize, socket, gameVars.ownCharacter, gameVars.enemyCharacter);
     });
 
     GameView.setupOutput(function (output) {

@@ -12,7 +12,6 @@ function textToDeck(text) {
             return "bad";
     }
     localStorage.setItem("deckStored", text);
-    localStorage.setItem("character", "ignea");
     music.stop();
     remove();
     window.location.replace('/static/game/game.html');

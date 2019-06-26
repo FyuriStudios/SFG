@@ -1878,7 +1878,7 @@ let GameView = (function () {
                 if(game.ownCharacter == 'ignea')
                     game.ownCharacterSprite = new PIXI.Sprite(textures.ownIgneaPortrait);
                 else if(game.ownCharacter == 'yakov')
-                    game.enemyCharacterSprite = new PIXI.Sprite(textures.ownYakovPortrait);
+                    game.ownCharacterSprite = new PIXI.Sprite(textures.ownYakovPortrait);
 
                 game.ownCharacterSprite.anchor.x = .5;
                 game.ownCharacterSprite.anchor.y = 1;
