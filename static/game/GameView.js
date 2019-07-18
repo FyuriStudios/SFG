@@ -1660,31 +1660,59 @@ let GameView = (function () {
             nextInEventQueue();
         }
 
-        else if(event.type == 'drop cards') { //This doesn't send guys to the graveyard. That was intentional, because this was only designed to work with the Yakov mulligan. Just copy/paste
-            let dropList = [];                //this code if you need to include discarding as well. -Hughes
+        else if(event.type == 'drop cards') {
 
-            game.hand.forEach((value, index) => {
-                if(_.includes(event.choices, index))
-                    dropList.push(value);
-            });
+            if(event.player == game.id) {
+                let dropList = [];   
 
-            _.pullAll(game.hand, dropList);
-
-            dropList.forEach((value, index) => {
-                AnimationQueue.addMoveRequest(value.sprite, {
-                    x: app.stage.width * .25,
-                    y: app.stage.height * .5
-                }, 15, () => {
-                    app.stage.removeChild(value.sprite);
-                    if(index == dropList.length - 1) {
-                        fixOwnHandSpacing(nextInEventQueue);
-                    }
+                game.hand.forEach((value, index) => {
+                    if(_.includes(event.choices, index))
+                        dropList.push(value);
                 });
-            });
+
+                _.pullAll(game.hand, dropList);
+
+                dropList.forEach((value, index) => {
+                    AnimationQueue.addMoveRequest(value.sprite, {
+                        x: app.stage.width * .25,
+                        y: app.stage.height * .5
+                    }, 15, () => {
+                        app.stage.removeChild(value.sprite);
+                        if(index == dropList.length - 1) {
+                            fixOwnHandSpacing(nextInEventQueue);
+                        }
+                    });
+                });
+            }
+            else {
+
+                let dropList = [];
+
+                enemyCardsInHand.forEach((value, index) => {
+                    if(_.includes(event.choices, index))
+                        dropList.push(value);
+                });
+
+                _.pullAll(enemyCardsInHand, dropList);
+
+                dropList.forEach((value, index) => {
+                    AnimationQueue.addMoveRequest(value, {
+                        x: app.stage.width * .25,
+                        y: app.stage.height * .5,
+                    }, 15, () => {
+                        app.stage.removeChild(value);
+                        if(index == dropList.length - 1) {
+                            fixEnemyHandSpacing(nextInEventQueue);
+                        }
+                    });
+                });
+
+            }
+        
         }
 
         else if(event.type == 'yakov mulligan') {
-            UserChoices.yakovMulligan(app, game, DONT_USE_THIS, nextInEventQueue);
+            UserChoices.yakovMulligan(app, game, DONT_USE_THIS, nextInEventQueue, onDragFromHandStart);
         }
 
     }

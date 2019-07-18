@@ -197,19 +197,25 @@ let UserChoices = (function() {
 
         },
 
-        yakovMulligan: function(app, game, socket, completion) {
+        yakovMulligan: function(app, game, socket, completion, mouseDownFunction) {
             let hand = game.hand;
 
-            hand.forEach(value => value.selected = false);
+            hand.forEach(value => {
+                value.selected = false;
+                let filter = new PIXI.filters.AlphaFilter(1);
+                value.sprite.filters = [filter];
+            });
 
             let doneButton = new PIXI.Sprite(textures.mulligan);
+
+            doneButton.interactive = true;
 
             doneButton.width = app.stage.width * .23;
             doneButton.height = app.stage.height * .25;
             doneButton.anchor.x = doneButton.anchor.y = .5;
 
             doneButton.x = app.stage.width * .5;
-            doneButton.y = apps.stage.height * .5;
+            doneButton.y = app.stage.height * .5;
 
             app.stage.addChild(doneButton);
 
@@ -218,13 +224,14 @@ let UserChoices = (function() {
                 hand.forEach(value => value.sprite == this?temp = value:null);
 
                 if(temp.selected) {
-                    this.alpha = 1;
-                    temp.popup.alpha = 1;
+                    this.filters[0].alpha = 1;
+                    //temp.popup.alpha = 1;
                     temp.selected = false;
+                   
                 }
                 else {
-                    this.alpha = 0.6;
-                    temp.popup.alpha = 0.6;
+                    this.filters[0].alpha = 0.6;
+                    //temp.popup.alpha = 0.6;
                     temp.selected = true;
                 }
             }
@@ -235,12 +242,14 @@ let UserChoices = (function() {
                     if(value.selected)
                         choices.push(index);
                 });
-                hand.sprite.forEach(value => value.off('mouseup', mouseUpCard));
+                hand.forEach(value => value.sprite.off('mouseup', mouseUpCard));
 
                 doneButton.off('mouseup', mouseUpDoneButton);
                 app.stage.removeChild(doneButton);
 
                 socket.emit('yakov mulligan', {choices: choices});
+
+                hand.forEach(value => value.sprite.on('mousedown', mouseDownFunction));
 
                 completion();
             }
@@ -249,9 +258,10 @@ let UserChoices = (function() {
             
             hand.forEach(value => {
                 value.sprite.on('mouseup', mouseUpCard);
+                value.sprite.off('mousedown', mouseDownFunction);
             });
 
-            doneButton.on('mouseover', mouseOutSprite);
+            doneButton.on('mouseover', mouseOverSprite);
             doneButton.on('mouseout', mouseOutSprite);
         },
         

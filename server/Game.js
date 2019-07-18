@@ -306,7 +306,7 @@ class Game {
 					let mulliganChain = [];
 					player.setMulligan = true;
 
-					let discards = []
+					let discards = [];
 					input.choices.forEach(index => discards.push(player.hand[index]));
 
 					//This lodash method removes all of the cards that got mulliganed.
@@ -314,6 +314,7 @@ class Game {
 
 					mulliganChain.push({
 						type: 'drop cards',
+						player: player.id,
 						choices: input.choices
 					});
 
@@ -325,14 +326,14 @@ class Game {
 
 					gameReference.outputEventChain(mulliganChain);
 
+					gameReference.start(gameReference);
+
 				});
 			}
 
-			//gameReference.player1.character == 'yakov'? yakovMulligan(gameReference.player1) : mulligan(gameReference.player1);
-			mulligan(gameReference.player1);
-			mulligan(gameReference.player2);
-
-			//gameReference.player2.character == 'yakov'? yakovMulligan(gameReference.player2) : mulligan(gameReference.player2); Gotta make sure that portraits work first.
+			gameReference.player1.character == 'yakov'? yakovMulligan(gameReference.player1) : mulligan(gameReference.player1);
+	
+			gameReference.player2.character == 'yakov'? yakovMulligan(gameReference.player2) : mulligan(gameReference.player2); 
 			
 		}
 
