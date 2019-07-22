@@ -1337,7 +1337,7 @@ let GameView = (function () {
         } else if (event.type == 'kill dead') {
             if (event.player == game.id) {
                 let dead = game.ownBoard.splice(event.target, 1)[0];
-
+                dead.currentPower = dead.power;
                 fixOwnBoardSpacing();
 
                 if (dead == undefined)

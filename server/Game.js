@@ -566,6 +566,7 @@ class Game {
 				if (player.board[i].currentPower <= 0) {
 
 					let deadGuy = player.board.splice(i, 1)[0];
+					deadGuy.curentPower = deadGuy.power;
 					//TODO: add effects here
 					if (deadGuy.hasSelfDeath) {
 						deadGuy.selfDeath(null, game, eventChain);
