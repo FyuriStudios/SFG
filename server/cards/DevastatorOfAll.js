@@ -3,7 +3,7 @@ let Monster = require('../Monster');
 class DevastatorOfAll extends Monster {
 
     constructor() {
-        super('monster', 25, 'monster', 'common', 'Devastator Of All', 5, 2, 'crow');
+        super('monster', 37, 'monster', 'common', 'Devastator Of All', 5, 2, 'crow');
 
         this.hasCardPlayed = true;
 
@@ -31,11 +31,11 @@ class DevastatorOfAll extends Monster {
                     let temp;
 
                     if(input.targetSide == game.currentPlayer.id){
-                        temp = game.currentPlayer.board.splice(input.target, 1);
+                        temp = game.currentPlayer.board.splice(input.target, 1)[0];
                         temp.currentPower = temp.power;
                         game.currentPlayer.graveyard.push(temp);
                     }else{
-                        temp = game.otherPlayer.board.splice(input.target, 1);
+                        temp = game.otherPlayer.board.splice(input.target, 1)[0];
                         temp.currentPower = temp.power;
                         game.otherPlayer.graveyard.push(temp);
                     }
