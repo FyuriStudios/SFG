@@ -160,5 +160,9 @@ module.exports = function (id) {
         let card = require('./cards/IshigurosGuidance');
         return new card();
     }
+    else if(id ==39){
+        let card = require('./cards/RocketRain');
+        return new card();
+    }
 
 }
