@@ -172,5 +172,9 @@ module.exports = function (id) {
         let card = require('./cards/TheGator');
         return new card();
     }
+    else if(id == 42) {
+        let card = require('./cards/EfsisiElixir');
+        return new card();
+    }
 
 }
