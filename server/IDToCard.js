@@ -152,20 +152,24 @@ module.exports = function (id) {
         let card = require('./cards/ThickFur');
         return new card();
     }
-    else if(id ==37){
+    else if(id == 37){
         let card = require('./cards/DevastatorOfAll');
         return new card();
     }
-    else if(id ==38){
+    else if(id == 38){
         let card = require('./cards/IshigurosGuidance');
         return new card();
     }
-    else if(id ==39){
+    else if(id == 39){
         let card = require('./cards/RocketRain');
         return new card();
     }
-    else if(id ==40){
+    else if(id == 40){
         let card = require('./cards/LuckyFrontliner');
+        return new card();
+    }
+    else if(id == 41) {
+        let card = require('./cards/TheGator');
         return new card();
     }
 
