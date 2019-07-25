@@ -1660,6 +1660,43 @@ let GameView = (function () {
             nextInEventQueue();
         }
 
+        else if(event.type == 'hand cost') {
+            if(event.player == game.id) {
+
+                let card = game.hand[event.target];
+                card.currentCost = event.cost;
+                let cardx = card.sprite.x;
+                let cardy = card.sprite.y;
+
+                app.stage.removeChild(card.sprite);
+                card.generateImages();
+
+                smallSizeCardInHandSprite(card.sprite);
+                card.sprite.x = cardx;
+                card.sprite.y = cardy;
+
+                card.sprite.on('mouseover', mouseOverCardInHand);
+
+                card.sprite.on('mouseout', mouseOutCardInHand);
+
+                card.sprite.on('pointerdown', onDragFromHandStart);
+
+                card.sprite.on('pointerup', onDragFromHandEnd);
+
+                card.sprite.on('pointerupoutside', onDragFromHandEnd); //removing mouse events. Then we'll re-add custom events.
+
+                card.sprite.on('pointermove', onDragFromHandMove);
+
+                app.stage.addChild(card.sprite);
+
+                game.hand.forEach((value, index) => {
+                    value.sprite.zIndex = 100 + game.hand.length - index;
+                });
+            }
+
+            nextInEventQueue();
+        }
+
         else if(event.type == 'drop cards') {
 
             if(event.player == game.id) {
@@ -1725,8 +1762,6 @@ let GameView = (function () {
                 let temp = game.enemyBoard.splice(event.target, 1)[0];
 
                 let card = new PIXI.Sprite(textures.cardBack);
-
-                app.stage.add(card);
 
                 card.anchor.x = .5;
                 card.anchor.y = .5;

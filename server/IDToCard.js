@@ -184,5 +184,9 @@ module.exports = function (id) {
         let card = require('./cards/LowGradeCyberzinics');
         return new card();
     }
+    else if(id == 45) {
+        let card = require('./cards/Bubbles');
+        return new card();
+    }
 
 }
