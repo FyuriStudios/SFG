@@ -176,5 +176,9 @@ module.exports = function (id) {
         let card = require('./cards/EfsisiElixir');
         return new card();
     }
+    else if(id == 43) {
+        let card = require('./cards/Gamble');
+        return new card();
+    }
 
 }
