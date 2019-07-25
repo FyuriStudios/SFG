@@ -1715,6 +1715,35 @@ let GameView = (function () {
             UserChoices.yakovMulligan(app, game, DONT_USE_THIS, nextInEventQueue, onDragFromHandStart);
         }
 
+        else if(event.type == 'humiliate') {
+            if(event.targetSide == game.id) {
+                game.hand.unshift(game.ownBoard.splice(event.target, 1)[0]);
+                fixOwnBoardSpacing();
+                fixOwnHandSpacing(nextInEventQueue);
+            }
+            else {
+                let temp = game.enemyBoard.splice(event.target, 1)[0];
+
+                let card = new PIXI.Sprite(textures.cardBack);
+
+                app.stage.add(card);
+
+                card.anchor.x = .5;
+                card.anchor.y = .5;
+
+                card.x = temp.x;
+                card.y = temp.y;
+
+                enemyCardsInHand.unshift(card);
+
+                smallSizeCardInHandSprite(card);
+
+                app.stage.addChild(card);
+
+                fixEnemyHandSpacing(() => nextInEventQueue());
+            }
+        }
+
     }
 
     function gameOver(playerID) {
