@@ -192,5 +192,9 @@ module.exports = function (id) {
         let card = require('./cards/OutOfLeftField');
         return new card();
     }
+    else if(id == 47) {
+        let card = require('./cards/DebsAtkanton');
+        return new card();
+    }
 
 }
