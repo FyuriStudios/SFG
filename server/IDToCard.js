@@ -196,5 +196,9 @@ module.exports = function (id) {
         let card = require('./cards/DebsAtkanton');
         return new card();
     }
+    else if(id == 48) {
+        let card = require('./cards/AchtungPanzer');
+        return new card();
+    }
 
 }
