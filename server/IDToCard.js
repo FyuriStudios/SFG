@@ -196,5 +196,9 @@ module.exports = function (id) {
         let card = require('./cards/TimeCube');
         return new card();
     }
+    else if(id == 48) {
+        let card = require('./cards/Makerplane');
+        return new card();
+    }
 
 }
