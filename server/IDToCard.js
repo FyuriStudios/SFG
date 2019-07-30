@@ -193,10 +193,22 @@ module.exports = function (id) {
         return new card();
     }
     else if(id == 47) {
-        let card = require('./cards/TimeCube');
+        let card = require('./cards/DebsAtkanton');
         return new card();
     }
     else if(id == 48) {
+        let card = require('./cards/AchtungPanzer');
+        return new card();
+    }
+    else if(id == 49) {
+        let card = require('./cards/Thaejo');
+        return new card();
+    }
+    else if(id == 50) {
+        let card = require('./cards/TimeCube');
+        return new card();
+    }
+    else if(id == 51) {
         let card = require('./cards/Makerplane');
         return new card();
     }
