@@ -53,7 +53,8 @@ class Makerplane extends Spell {
         this.addSelfDeath({
             name: 'untitled',
             func: function(input, game, eventChain) {
-                game.currentPlayer.board.forEach(value => {
+                let player = temp.player == 1? game.player1:game.player2;
+                player.board.forEach(value => {
                     if(!value.originallyRelentless) {
                         value.relentless = false;
                         if(value.turnsBeforeAttack == 1)
