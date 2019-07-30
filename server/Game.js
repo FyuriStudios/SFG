@@ -675,6 +675,11 @@ class Game {
 		if (toPlay.type == 'monster') {
 			temp.board.splice(input.playLoc, 0, toPlay);
 
+			game.currentPlayer.board.forEach(value => {
+				if(value.hasMonsterPlayed)
+					value.monsterPlayed(input, game, eventChain);
+			});
+
 			if (toPlay.hasCardPlayed)
 				toPlay.cardPlayed(input, this, eventChain);
 
@@ -688,6 +693,8 @@ class Game {
 
 			if (toPlay.field) {
 				if (temp.fieldSpell != null) {
+					if(temp.fieldSpell.hasSelfDeath)
+						temp.fieldSpell.selfDeath(input, this, eventChain);
 					temp.graveyard.push(temp.fieldSpell);
 				}
 				temp.fieldSpell = toPlay;

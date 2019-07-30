@@ -18,6 +18,9 @@ class Monster extends Card {
 	 * @param {Number} power 
 	 * @param {boolean} hasDefender 
 	 * @param {boolean} relentless
+	 * @param {boolean} slow
+	 * @param {boolean} vanguard
+	 * @param {boolean} actionTargetable
 	 */
 	constructor(type, id, tokenType, rarity, name, cost, power, monsterClass, hasDefender = false, relentless = false, slow = false, vanguard = false, actionTargetable = true) {
 		super(type, id, tokenType, rarity, name, cost);

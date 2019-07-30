@@ -10,6 +10,7 @@ class Effect {
         this.hasEntersBoard = false;
         this.hasCreation = false;
         this.hasCardDraw = false;
+        this.hasMonsterPlayed = false;
 
         this.selfAttackList = [];
         this.enemyAttackList = [];
@@ -20,6 +21,7 @@ class Effect {
         this.entersBoardList = [];
         this.creationList = [];
         this.cardDrawList = [];
+        this.monsterPlayedList = [];
     }
     
     selfAttack(input, game, eventChain) {
@@ -100,6 +102,14 @@ class Effect {
 
     addCardDraw(func) {
         this.cardDrawList.push(func);
+    }
+
+    addMonsterPlayed(func) {
+        this.monsterPlayedList.push(func);
+    }
+
+    monsterPlayed(input, game, eventChain) {
+        this.cardDrawList.forEach(i => i.func(input, game, eventChain));
     }
 
 }
