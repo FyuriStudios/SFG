@@ -200,5 +200,9 @@ module.exports = function (id) {
         let card = require('./cards/AchtungPanzer');
         return new card();
     }
+    else if(id == 49) {
+        let card = require('./cards/Thaejo');
+        return new card();
+    }
 
 }
