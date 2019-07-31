@@ -212,5 +212,9 @@ module.exports = function (id) {
         let card = require('./cards/Makerplane');
         return new card();
     }
+    else if(id == 52) {
+        let card = require('./cards/Darfler');
+        return new card();
+    }
 
 }
