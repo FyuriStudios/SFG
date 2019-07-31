@@ -1540,7 +1540,51 @@ let GameView = (function () {
                 });
             }
 
-        } else if (event.type == 'gain tokens') {
+        }
+        
+        else if(event.type == 'invoke') { //This is when you invoke not from deck or hand.
+            let card = ClientCard.from(event.card);
+
+            app.stage.addChild(card.sprite);
+
+            smallSizeCardInHandSprite(card.sprite);
+
+            card.boardForm();
+
+            if (event.player == game.id) {
+
+                card.sprite.x = app.stage.width * 0.0565;
+                card.sprite.y = app.stage.height * 0.885;
+
+                game.ownBoard.unshift(card);
+
+                fixOwnBoardSpacing(0, () => {
+                    card.sprite.on('mouseover', mouseOverOwnCardOnBoard);
+                    card.sprite.on('mouseout', mouseOutOwnCardOnBoard);
+                    card.sprite.on('pointerdown', onMouseDragCardOnBoardStart);
+                    card.sprite.on('pointerup', onMouseDragCardOnBoardEnd);
+                    card.sprite.on('pointerupoutside', onMouseDragCardOnBoardEnd);
+                    card.sprite.on('pointermove', onMouseDragCardOnBoardMove);
+                    fixOwnBoardSpacing();
+                    nextInEventQueue();
+                });
+            } else {
+
+                game.enemyBoard.unshift(card);
+
+                card.sprite.x = app.stage.width * .0565;
+                card.sprite.y = app.stage.height * .1;
+
+                fixEnemyBoardSpacing(0, () => {
+                    card.sprite.on('mouseover', mouseOverEnemyCardOnBoard);
+                    card.sprite.on('mouseout', mouseOutEnemyCardOnBoard);
+                    fixEnemyBoardSpacing();
+                    nextInEventQueue();
+                });
+            }
+        }
+        
+        else if (event.type == 'gain tokens') {
             if (event.player == game.id) {
                 if (event.tokenType == 'monster')
                     game.ownMonsterTokens += event.amount;
