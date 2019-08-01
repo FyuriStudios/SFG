@@ -216,5 +216,9 @@ module.exports = function (id) {
         let card = require('./cards/Darfler');
         return new card();
     }
+    else if(id == 53) {
+        let card = require('./cards/FranklinRosebud');
+        return new card();
+    }
 
 }
