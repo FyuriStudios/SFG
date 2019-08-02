@@ -162,7 +162,7 @@ let UserChoices = (function() {
 
             game.hand.forEach(value => value.sprite.on('mouseup', chooseEvent));
             game.ownBoard.forEach(value => value.sprite.interactive = false);
-        }
+        },
 
         mulligan: function(app, socket, completion) {
 

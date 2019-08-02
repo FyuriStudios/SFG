@@ -237,7 +237,7 @@ module.exports = function (id) {
         return new card();
     }
     else if(id == 58) {
-        let card = require('./cards/Resourcefullness');
+        let card = require('./cards/Resourcefulness');
         return new card();
     }
     else if(id == 59) {
