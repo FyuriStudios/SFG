@@ -224,5 +224,13 @@ module.exports = function (id) {
         let card = require('./cards/PianoRoom');
         return new card();
     }
+    else if(id == 55) {
+        let card = require('./cards/EfficientLogistics');
+        return new card();
+    }
+    else if(id == 58) {
+        let card = require('./cards/Resourcefullness');
+        return new card();
+    }
 
 }
