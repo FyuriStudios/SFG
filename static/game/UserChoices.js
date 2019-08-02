@@ -146,7 +146,6 @@ let UserChoices = (function() {
         /**
          * This is used for spell effects.
          * @param {*} game 
-         * @param {*} socket 
          * @param {*} completion 
          */
         chooseHandCard: function(game, completion) {

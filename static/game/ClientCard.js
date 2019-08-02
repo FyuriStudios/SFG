@@ -229,6 +229,7 @@ ClientCard = (function() {
             super(backendCard.type, backendCard.id, backendCard.tokenType, backendCard.rarity, backendCard.name, backendCard.cost, backendCard.playCost, backendCard.forseeing);
             this.targeting = backendCard.targeting;
             this.field = backendCard.field;
+            this.handTargeting = backendCard.handTargeting;
             this.generateImages();
         }
     }
