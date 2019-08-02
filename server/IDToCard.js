@@ -228,6 +228,14 @@ module.exports = function (id) {
         let card = require('./cards/EfficientLogistics');
         return new card();
     }
+    else if(id == 56) {
+        let card = require('./cards/Rotation');
+        return new card();
+    }
+    else if(id == 57) {
+        let card = require('./cards/JiweisDagger');
+        return new card();
+    }
     else if(id == 58) {
         let card = require('./cards/Resourcefullness');
         return new card();
