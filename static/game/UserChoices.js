@@ -118,6 +118,12 @@ let UserChoices = (function() {
 
         },
 
+        /**
+         * This event is used for monster effects - Specifically, I wrote this code for Shade of Pain.
+         * @param {*} game 
+         * @param {*} socket 
+         * @param {*} completion 
+         */
         chooseCard: function(game, socket, completion) {
 
             let chooseEvent = function() {
@@ -136,6 +142,28 @@ let UserChoices = (function() {
             game.ownBoard.forEach(value => value.sprite.interactive = false);
 
         },
+
+        /**
+         * This is used for spell effects.
+         * @param {*} game 
+         * @param {*} socket 
+         * @param {*} completion 
+         */
+        chooseHandCard: function(game, completion) {
+            let chooseEvent = function() {
+                    
+                let ind;
+                game.hand.forEach((value, index) => value.sprite == this? ind = index:null);
+                
+                game.hand.forEach(value => value.sprite.off('mouseup', chooseEvent));
+                game.ownBoard.forEach(value => value.sprite.interactive = true);
+
+                completion(ind);
+            }
+
+            game.hand.forEach(value => value.sprite.on('mouseup', chooseEvent));
+            game.ownBoard.forEach(value => value.sprite.interactive = false);
+        }
 
         mulligan: function(app, socket, completion) {
 
