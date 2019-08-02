@@ -240,5 +240,9 @@ module.exports = function (id) {
         let card = require('./cards/Resourcefullness');
         return new card();
     }
+    else if(id == 59) {
+        let card = require('./cards/SupplyCrate');
+        return new card();
+    }
 
 }
