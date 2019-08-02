@@ -3,7 +3,7 @@ var Spell = require('../Spell');
 class Makerplane extends Spell {
 
     constructor() {
-        super(48, 'spell', 'legendary', 'The Makerplane', 3, false, false, true);
+        super(51, 'spell', 'legendary', 'The Makerplane', 3, false, false, true);
 
         let temp = this;
 

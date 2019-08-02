@@ -4,7 +4,7 @@ let Humiliate = require('../genericEffects/Humiliate');
 class TimeCube extends Spell {
 
     constructor() {
-        super(47, 'spell', 'legendary', "Ryrin's Time Cube", 5, false, false, false);
+        super(50, 'spell', 'legendary', "Ryrin's Time Cube", 5, false, false, false);
         this.hasCardPlayed = true;
         this.addCardPlayed({
             name: 'Time Cube',
