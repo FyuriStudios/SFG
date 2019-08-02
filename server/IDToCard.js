@@ -244,5 +244,9 @@ module.exports = function (id) {
         let card = require('./cards/SupplyCrate');
         return new card();
     }
+    else if(id == 60) {
+        let card = require('./cards/Flank');
+        return new card();
+    }
 
 }
