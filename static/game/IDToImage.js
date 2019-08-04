@@ -79,6 +79,24 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Shoe_Hand.png');
             } else if(id == 36) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Fur_Hand.png');
+            } else if(id == 39) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Rocket_Hand.png')
+            } else if(id == 40) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Frontliner_Hand.png');
+            } else if(id == 41) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Gator_Hand.png');
+            } else if(id == 45) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Bubbles_Hand.png');
+            } else if(id == 46) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Left_Field_Hand.png');
+            } else if(id == 48) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Achtung_Hand.png');
+            } else if(id == 49) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Thaejo_Hand.png');
+            } else if(id == 50) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Cube_Hand.png');
+            } else if(id == 52) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Darfler_Hand.png');
             }
         },
 
@@ -159,6 +177,24 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Shoe_Hover.png');
             } else if(id == 36) {
                 return PIXI.Sprite.from('/static/assets/popup/Fur_Hover.png');
+            } else if(id == 39) {
+                return PIXI.Sprite.from('/static/assets/popup/Rocket_Hover.png')
+            } else if(id == 40) {
+                return PIXI.Sprite.from('/static/assets/popup/Frontliner_Hover.png');
+            } else if(id == 41) {
+                return PIXI.Sprite.from('/static/assets/popup/Gator_Hover.png')
+            } else if(id == 45) {
+                return PIXI.Sprite.from('/static/assets/popup/Bubbles_Hover.png')
+            } else if(id == 46) {
+                return PIXI.Sprite.from('/static/assets/popup/Left_Field_Hover.png');
+            } else if(id == 48) {
+                return PIXI.Sprite.from('/static/assets/popup/Achtung_Hover.png');
+            } else if(id == 49) {
+                return PIXI.Sprite.from('/static/assets/popup/Thaejo_Hover.png');
+            } else if(id == 50) {
+                return PIXI.Sprite.from('/static/assets/popup/Cube_Hover.png');
+            } else if(id == 52) {
+                return PIXI.Sprite.from('/static/assets/popup/Darfler_Hover.png');
             }
         },
 
@@ -211,6 +247,18 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Kingo_Board.png');
             } else if(id == 34) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Panther_Board.png');
+            } else if(id == 40) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Frontliner_Board_Piece.png');
+            } else if(id == 41) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Gator_Board_Piece.png')
+            } else if(id == 45) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Bubbles_Board_Piece.png')
+            } else if(id == 46) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Achtung_Board_Piece.png');
+            } else if(id == 49) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Thaejo_Board_Piece.png');
+            } else if(id == 52) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Darfler_Board_Piece.png');
             }
         }
     }
