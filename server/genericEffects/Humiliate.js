@@ -1,4 +1,4 @@
-var constants = require('../../sharedConstants/constants.js');
+var constants = require('../../constants/constants');
 
 module.exports = {
     name: 'humiliate', 
