@@ -253,7 +253,7 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Gator_Board_Piece.png')
             } else if(id == 45) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Bubbles_Board_Piece.png')
-            } else if(id == 46) {
+            } else if(id == 48) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Achtung_Board_Piece.png');
             } else if(id == 49) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Thaejo_Board_Piece.png');
