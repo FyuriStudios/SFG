@@ -13,6 +13,8 @@ class RocketRain extends Spell {
                     targetSide: game.otherPlayer.id,
                     target: -1
                 }, game, eventChain, 9);
+
+                console.log(game.otherPlayer.health);
             }
         });
     }
