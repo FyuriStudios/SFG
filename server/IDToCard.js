@@ -152,6 +152,8 @@ module.exports = function (id) {
         let card = require('./cards/ThickFur');
         return new card();
     }
+
+    
     else if(id == 37){
         let card = require('./cards/DevastatorOfAll');
         return new card();
