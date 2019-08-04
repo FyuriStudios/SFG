@@ -1,5 +1,5 @@
 let Monster = require('../Monster');
-let idToCard = require('../idToCard')
+let idToCard = require('../IDToCard');
 
 class Darfler extends Monster {
 
