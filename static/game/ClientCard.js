@@ -170,7 +170,6 @@ ClientCard = (function() {
 
             monsterContainer.addChild(sprite);
             this.monsterContainer = monsterContainer;
-
         }
 
         boardForm() {

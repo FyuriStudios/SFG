@@ -675,7 +675,7 @@ class Game {
 		if (toPlay.type == 'monster') {
 			temp.board.splice(input.playLoc, 0, toPlay);
 
-			game.currentPlayer.board.forEach(value => {
+			this.currentPlayer.board.forEach(value => {
 				if(value.hasMonsterPlayed)
 					value.monsterPlayed(input, game, eventChain);
 			});
