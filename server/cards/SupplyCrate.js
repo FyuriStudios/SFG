@@ -6,7 +6,7 @@ class SupplyCrate extends Spell {
     constructor() {
         super(59, 'spell', 'common', 'Supply Crate', 4, false, false, false);
         this.hasCardPlayed = true;
-        this.addCardPlayed = ({
+        this.addCardPlayed({
             name: 'Supply Crate Effect',
             func: function (input, game, eventChain){
                 

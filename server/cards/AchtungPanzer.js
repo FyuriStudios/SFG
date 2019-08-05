@@ -7,7 +7,7 @@ class AchtungPanzer extends Monster {
         super('monster', 48, 'monster', 'common', 'Achtung Panzer', 4, 2, 'crow');
         this.hasCardPlayed = true;
 
-        this.addCardPlayed = ({
+        this.addCardPlayed({
             name: 'Achtung Signature',
             func: function(input, game, eventChain){
                 Humiliate.func(input, game, eventChain);

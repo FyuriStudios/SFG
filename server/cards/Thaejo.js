@@ -7,7 +7,7 @@ class Thaejo extends Monster {
         super('monster', 49, 'monster', 'common', 'Thaejo', 6, 3, 'crow', true);
         this.hasCardPlayed = true;
 
-        this.addCardPlayed = ({
+        this.addCardPlayed({
             name: 'Thaejo Signature',
             func: function(input, game, eventChain){
                 Heal.func({}, game, eventChain, 10);

@@ -8,7 +8,7 @@ class Darfler extends Monster {
 
         this.hasCardPlayed = true;
 
-        this.addCardPlayed = ({
+        this.addCardPlayed({
             name: 'darfler signature',
             func: function(input, game, eventChain){
                 game.currentPlayer.deck.push(idToCard(51));
