@@ -79,24 +79,56 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/in_hand/Shoe_Hand.png');
             } else if(id == 36) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Fur_Hand.png');
+            } else if(id == 37) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Devastator_Hand.png');
+            } else if(id == 38) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Ishiguro_Hand.png');
             } else if(id == 39) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Rocket_Hand.png')
             } else if(id == 40) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Frontliner_Hand.png');
             } else if(id == 41) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Gator_Hand.png');
+            } else if(id == 42) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Efsisi_Hand.png');
+            } else if(id == 43) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Gamble_Hand.png');
+            } else if(id == 44) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Cyberzinics_Hand.png');
             } else if(id == 45) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Bubbles_Hand.png');
             } else if(id == 46) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Left_Field_Hand.png');
+            } else if(id == 47) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Debs_Hand.png');
             } else if(id == 48) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Achtung_Hand.png');
             } else if(id == 49) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Thaejo_Hand.png');
             } else if(id == 50) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Cube_Hand.png');
+            } else if(id == 51) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Makerplane_Hand.png');
             } else if(id == 52) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Darfler_Hand.png');
+            } else if(id == 53) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Franklin_Hand.png');
+            } else if(id == 54) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Piano_Hand.png');
+            } else if(id == 55) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Logistics_Hand.png');
+            } else if(id == 56) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Rotation_Hand.png');
+            } else if(id == 57) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Dagger_Hand.png');
+            } else if(id == 58) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Resource_Hand.png');
+            } else if(id == 59) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Crate_Hand.png');
+            } else if(id == 60) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Flank_Hand.png');
+            } else if(id == 61) {
+                return PIXI.Sprite.from('/static/assets/in_hand/Chef_Hand.png');
             }
         },
 
@@ -177,24 +209,56 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/popup/Shoe_Hover.png');
             } else if(id == 36) {
                 return PIXI.Sprite.from('/static/assets/popup/Fur_Hover.png');
+            } else if(id == 37) {
+                return PIXI.Sprite.from('/static/assets/popup/Devastator_Hover.png');
+            } else if(id == 38) {
+                return PIXI.Sprite.from('/static/assets/popup/Ishiguro_Hover.png');
             } else if(id == 39) {
                 return PIXI.Sprite.from('/static/assets/popup/Rocket_Hover.png')
             } else if(id == 40) {
                 return PIXI.Sprite.from('/static/assets/popup/Frontliner_Hover.png');
             } else if(id == 41) {
-                return PIXI.Sprite.from('/static/assets/popup/Gator_Hover.png')
+                return PIXI.Sprite.from('/static/assets/popup/Gator_Hover.png');
+            } else if(id == 42) {
+                return PIXI.Sprite.from('/static/assets/popup/Efsisi_Hover.png');
+            } else if(id == 43){
+                return PIXI.Sprite.from('/static/assets/popup/Gamble_Hover.png');
+            } else if(id == 44) {
+                return PIXI.Sprite.from('/static/assets/popup/Cyberzinics_Hover.png');
             } else if(id == 45) {
-                return PIXI.Sprite.from('/static/assets/popup/Bubbles_Hover.png')
+                return PIXI.Sprite.from('/static/assets/popup/Bubbles_Hover.png');
             } else if(id == 46) {
                 return PIXI.Sprite.from('/static/assets/popup/Left_Field_Hover.png');
+            } else if(id == 47) {
+                return PIXI.Sprite.from('/static/assets/popup/Debs_Hover.png');
             } else if(id == 48) {
                 return PIXI.Sprite.from('/static/assets/popup/Achtung_Hover.png');
             } else if(id == 49) {
                 return PIXI.Sprite.from('/static/assets/popup/Thaejo_Hover.png');
             } else if(id == 50) {
                 return PIXI.Sprite.from('/static/assets/popup/Cube_Hover.png');
+            } else if(id == 51) {
+                return PIXI.Sprite.from('/static/assets/popup/Makerplane_Hover.png');
             } else if(id == 52) {
                 return PIXI.Sprite.from('/static/assets/popup/Darfler_Hover.png');
+            } else if(id == 53) {
+                return PIXI.Sprite.from('/static/assets/popup/Franklin_Hover.png');
+            } else if(id == 54) {
+                return PIXI.Sprite.from('/static/assets/popup/Piano_Hover.png');
+            } else if(id == 55) {
+                return PIXI.Sprite.from('/static/assets/popup/Logistics_Hover.png');
+            } else if(id == 56) {
+                return PIXI.Sprite.from('/static/assets/popup/Rotation_Hover.png');
+            } else if(id == 57) {
+                return PIXI.Sprite.from('/static/assets/popup/Dagger_Hover.png');
+            } else if(id == 58) {
+                return PIXI.Sprite.from('/static/assets/popup/Resource_Hover.png');
+            } else if(id == 59) {
+                return PIXI.Sprite.from('/static/assets/popup/Crate_Hover.png');
+            } else if(id == 60) {
+                return PIXI.Sprite.from('/static/assets/popup/Flank_Hover.png');
+            } else if(id == 61) {
+                return PIXI.Sprite.from('/static/assets/popup/Chef_Hover.png');
             }
         },
 
@@ -247,18 +311,26 @@ IDToImage = (function () {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Kingo_Board.png');
             } else if(id == 34) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Panther_Board.png');
+            } else if(id == 37) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Devastator_Board_Piece.png');
             } else if(id == 40) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Frontliner_Board_Piece.png');
             } else if(id == 41) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Gator_Board_Piece.png')
             } else if(id == 45) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Bubbles_Board_Piece.png')
+            } else if(id == 47) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Debs_Board_Piece.png');
             } else if(id == 48) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Achtung_Board_Piece.png');
             } else if(id == 49) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Thaejo_Board_Piece.png');
             } else if(id == 52) {
                 return PIXI.Sprite.from('/static/assets/board_pieces/Darfler_Board_Piece.png');
+            } else if(id == 53) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Franklin_Board_Piece.png');
+            } else if(id == 61) {
+                return PIXI.Sprite.from('/static/assets/board_pieces/Chef_Board_Piece.png');
             }
         }
     }

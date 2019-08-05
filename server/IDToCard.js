@@ -250,5 +250,9 @@ module.exports = function (id) {
         let card = require('./cards/Flank');
         return new card();
     }
+    else if(id == 61) {
+        let card = require('./cards/EnragedChef');
+        return new card();
+    }
 
 }
