@@ -45,8 +45,6 @@ class DevastatorOfAll extends Monster {
                         target: input.target,
                         player: input.targetSide
                     });
-                    
-                    
 
                     game.outputEventChain(newEvent);
 

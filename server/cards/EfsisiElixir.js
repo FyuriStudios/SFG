@@ -1,4 +1,5 @@
 var Spell = require('../Spell');
+let _ = require('lodash');
 
 class EfsisiElixir extends Spell {
 
