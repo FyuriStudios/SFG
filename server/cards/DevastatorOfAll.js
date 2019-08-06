@@ -34,7 +34,7 @@ class DevastatorOfAll extends Monster {
                         temp = game.currentPlayer.board.splice(input.target, 1)[0];
                         temp.currentPower = temp.power;
                         game.currentPlayer.graveyard.push(temp);
-                    }else{
+                    } else {
                         temp = game.otherPlayer.board.splice(input.target, 1)[0];
                         temp.currentPower = temp.power;
                         game.otherPlayer.graveyard.push(temp);
@@ -43,7 +43,7 @@ class DevastatorOfAll extends Monster {
                     newEvent.push({
                         type: 'kill dead',
                         target: input.target,
-                        targetSide: input.targetSide
+                        player: input.targetSide
                     });
                     
                     
