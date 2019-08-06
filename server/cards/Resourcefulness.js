@@ -25,11 +25,11 @@ class Resourcefullness extends Spell {
                     */
                     let newEvent = [];
                     let temp;
-                    let ammount;
+                    let amount;
 
                     if(input.targetSide == game.currentPlayer.id){
                         temp = game.currentPlayer.board.splice(input.target, 1)[0];
-                        ammount = temp.currentPower;
+                        amount = temp.currentPower;
                         temp.currentPower = temp.power;
                         game.currentPlayer.graveyard.push(temp);
 
@@ -37,7 +37,7 @@ class Resourcefullness extends Spell {
                         Damage.func({
                             targetSide: game.otherPlayer.id,
                             target: damageIndex,
-                        }, game, eventChain, ammount);
+                        }, game, eventChain, amount);
                         
 
                         newEvent.push({

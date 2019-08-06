@@ -4,7 +4,7 @@ let Discard = require('../genericEffects/Discard');
 class Rotation extends Spell {
 
     constructor() {
-        super(56, 'spell', 'common', 'Rotation', 1, false, false, false)
+        super(56, 'spell', 'common', 'Rotation', 1, false, false, false, true);
         this.hasCardPlayed = true;
         this.addCardPlayed({
             name: 'Rotation Effect',
