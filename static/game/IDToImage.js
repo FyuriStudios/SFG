@@ -84,7 +84,7 @@ IDToImage = (function () {
             } else if(id == 38) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Ishiguro_Hand.png');
             } else if(id == 39) {
-                return PIXI.Sprite.from('/static/assets/in_hand/Rocket_Hand.png')
+                return PIXI.Sprite.from('/static/assets/in_hand/Rocket_Hand.png');
             } else if(id == 40) {
                 return PIXI.Sprite.from('/static/assets/in_hand/Frontliner_Hand.png');
             } else if(id == 41) {
