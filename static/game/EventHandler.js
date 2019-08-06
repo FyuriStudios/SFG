@@ -37,6 +37,7 @@ function startGame() {
         deck.push(38);
         deck.push(37);
         deck.push(25); //corrupted eagle for testing
+        deck.push(50);
     } else {
         deck = passDeck.split(', ');
         character = deck.shift();
