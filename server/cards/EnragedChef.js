@@ -11,7 +11,7 @@ class EnragedChef extends Monster {
         this.addCardPlayed({
             name: 'enraged signature',
             func: function(input, game, eventChain) {
-                let newChef = IDToCard(53);
+                let newChef = IDToCard(61);
                 if(game.currentPlayer.board.length < constants.MAX_BOARD_SIZE) {
                     game.currentPlayer.board.unshift(newChef);
 
