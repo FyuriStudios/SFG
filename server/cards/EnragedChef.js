@@ -5,7 +5,7 @@ let constants = require('../../constants/constants');
 class EnragedChef extends Monster {
 
     constructor() {
-        super('monster', 53, 'monster', 'common', 'Enraged Chef', 4, 2, 'mercenary', false, false, false, false, true);
+        super('monster', 61, 'monster', 'common', 'Enraged Chef', 4, 2, 'mercenary', false, false, false, false, true);
 
         this.hasCardPlayed = true;
         this.addCardPlayed({
