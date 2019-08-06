@@ -20,6 +20,22 @@ function startGame() {
         deck.push(49);
         deck.push(40);
         deck.push(39);
+        deck.push(61);
+        deck.push(60);
+        deck.push(59);
+        deck.push(58);
+        deck.push(57);
+        deck.push(56);
+        deck.push(55);
+        deck.push(54);
+        deck.push(53);
+        deck.push(51);
+        deck.push(47);
+        deck.push(44);
+        deck.push(43);
+        deck.push(42);
+        deck.push(38);
+        deck.push(37);
     } else {
         deck = passDeck.split(', ');
         character = deck.shift();
