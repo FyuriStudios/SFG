@@ -17,13 +17,13 @@ class SupplyCrate extends Spell {
                         while(boostIndex != nums[0] && boostIndex != nums[1] && boostIndex != nums[2]){
                             boostIndex = Math.floor(Math.random() * (game.currentPlayer.board.length));
                         }
-                        Boost.func(boostIndex, game, eventChain, 2);
+                        Boost.func({target: boostIndex, targetSide: game.currentPlayer.id}, game, eventChain, 2);
                         nums[i] = boostIndex
                     }
                 }
                 else{
                     for(let j = 0; j < game.currentPlayer.board.length; j++){
-                        Boost.func(game.currentPlayer.board[j], game, eventChain);
+                        Boost.func({target: game.currentPlayer.board[j], targetSide: game.currentPlayer.id}, game, eventChain, 2);
                     }
                 }
             }
