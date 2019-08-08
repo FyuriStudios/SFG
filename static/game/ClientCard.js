@@ -56,28 +56,24 @@ ClientCard = (function() {
                     fill: 0x000000, 
                     align: 'center'
                 });
+            
+            popup.addChild(image);
+            popup.addChild(cost);
 
-            let card = this;
-            setTimeout(() => {
-                popup.addChild(image);
-                popup.addChild(cost);
-    
-                cost.anchor.x = cost.anchor.y = .5;
-                cost.width = popup.width * ((card.currentCost+ '').length == 1?.09:.135);
-                cost.height = popup.height * .12;
-    
-                cost.x = popup.width * .12;
-                cost.y = popup.height * .087;
-    
-                popup.width = card.sprite.width * 2;
-                popup.height = card.sprite.height * 2;
-    
-                popup.x = card.sprite.x - popup.width/2;
-                popup.y = card.sprite.y - popup.height/1.5;
-    
-                card.popup = popup;
-            }, 500);
-           
+            cost.anchor.x = cost.anchor.y = .5;
+            cost.width = popup.width * ((this.currentCost+ '').length == 1?.09:.135);
+            cost.height = popup.height * .12;
+
+            cost.x = popup.width * .12;
+            cost.y = popup.height * .087;
+
+            popup.width = this.sprite.width * 2;
+            popup.height = this.sprite.height * 2;
+
+            popup.x = this.sprite.x - popup.width/2;
+            popup.y = this.sprite.y - popup.height/1.5;
+
+            this.popup = popup;
 
         }
 
@@ -103,14 +99,11 @@ ClientCard = (function() {
             /*
             Add the card's sprite to this new container.
             */
+            spriteContainer.addChild(backgroundImage);
 
-            setTimeout(() => {
-                spriteContainer.addChild(backgroundImage);
+            this.sprite = spriteContainer;
+            this.updateText();
 
-                this.sprite = spriteContainer;
-                this.updateText();
-            }, 500);
-        
         }
 
     }
@@ -175,11 +168,8 @@ ClientCard = (function() {
             let monsterContainer = new PIXI.Container();
             let sprite = IDToImage.monsterFromID(this.id);
 
-            setTimeout(() => {
-                monsterContainer.addChild(sprite);
-                this.monsterContainer = monsterContainer;
-            });
-            
+            monsterContainer.addChild(sprite);
+            this.monsterContainer = monsterContainer;
         }
 
         boardForm() {
