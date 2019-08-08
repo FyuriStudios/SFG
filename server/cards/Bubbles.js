@@ -6,6 +6,8 @@ class Bubbles extends Monster {
     constructor() {
         super('monster', 45, 'monster', 'secret weapon', 'Bubbles the Administrator', 4, 5, 'advisor', false, false, false, false, true);
 
+        this.hasCardPlayed = true;
+
         this.addCardPlayed({
             name: 'Bubbles signature',
             func: function(input, game, eventChain) {
@@ -18,6 +20,8 @@ class Bubbles extends Monster {
                 });
 
                 player.socket.once('target choice', input => {
+
+                    console.log('bubbles choice made');
 
                     /*
                     We have to create this because there is no event chain when the choice is triggered. Therefore,

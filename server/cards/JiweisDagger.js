@@ -11,10 +11,10 @@ class JiweisDagger extends Spell {
             name: 'Jiweis',
             func: function(input, game, eventChain) {
                 let monster;
-                if(input.player == 1) {
+                if(input.targetSide == 1) {
                     monster = game.player1.board[input.target];
                 }
-                else if(input.player == 2) {
+                else if(input.targetSide == 2) {
                     monster = game.player2.board[input.target];
                 }
 
