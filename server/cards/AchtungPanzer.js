@@ -27,6 +27,7 @@ class AchtungPanzer extends Monster {
                     let newEvent = [];
                     Humiliate.func(input, game, newEvent);
 
+                    game.killDead(newEvent);
                     game.outputEventChain(newEvent);
                 });
             }

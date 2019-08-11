@@ -28,30 +28,28 @@ class Bubbles extends Monster {
                     let newEvent = [];
                     Humiliate.func(input, game, newEvent);
 
-                    // if(input.player == game.currentPlayer) { //In the unlikely event that card draw can happen in between humiliate effects, we need to fix this card.
-                    //     newEvent.push({
-                    //         type: 'hand cost',
-                    //         player: game.currentPlayer.id,
-                    //         cost: 2,
-                    //         target: 0
-                    //     });
+                    if(input.player == game.currentPlayer) { //In the unlikely event that card draw can happen in between humiliate effects, we need to fix this card.
+                        newEvent.push({
+                            type: 'hand cost',
+                            player: game.currentPlayer.id,
+                            cost: 2,
+                            target: 0
+                        });
 
-                    //     game.currentPlayer.hand[0].currentCost = 2;
-                    // }
-                    // else {
-                    //     newEvent.push({
-                    //         type: 'hand cost',
-                    //         player: game.otherPlayer.id,
-                    //         cost: 2,
-                    //         target: 0
-                    //     });
+                        game.currentPlayer.hand[0].currentCost = 2;
+                    }
+                    else {
+                        newEvent.push({
+                            type: 'hand cost',
+                            player: game.otherPlayer.id,
+                            cost: 2,
+                            target: 0
+                        });
 
-                    //     game.otherPlayer.hand[0].currentCost = 2;
-                    // }
+                        game.otherPlayer.hand[0].currentCost = 2;
+                    }
 
-                    // console.log('all the way down here');
-
-                    // game.killDead(newEvent);
+                    game.killDead(newEvent);
                     game.outputEventChain(newEvent);
                 });
             }

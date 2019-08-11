@@ -1844,7 +1844,7 @@ let GameView = (function () {
 
                 let card = new PIXI.Sprite(textures.cardBack);
 
-                app.stage.removeChild(card.popup);
+                app.stage.removeChild(temp.popup);
 
                 card.anchor.x = .5;
                 card.anchor.y = .5;
