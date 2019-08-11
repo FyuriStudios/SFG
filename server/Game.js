@@ -390,6 +390,7 @@ class Game {
 
 	outputEventChain(eventChain) {
 		eventChain.forEach(value => {
+
 			if (value.view == 3) {
 				this.currentPlayer.socket.emit('event', value);
 			} else if (value.view == 2) {
@@ -411,6 +412,8 @@ class Game {
 				this.player2.socket.emit('event', value);
 			}
 		});
+
+		console.log('no');
 	}
 
 	drawHand(player, eventChain) {

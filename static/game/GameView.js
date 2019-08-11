@@ -1810,20 +1810,50 @@ let GameView = (function () {
 
         else if(event.type == 'humiliate') {
             if(event.targetSide == game.id) {
-                game.hand.unshift(game.ownBoard.splice(event.target, 1)[0]);
+                let card = game.ownBoard.splice(event.target, 1)[0];
+
+                let cardCoords = {
+                    x: card.sprite.x,
+                    y: card.sprite.y
+                };
+
+                game.hand.unshift(card);
+                app.stage.removeChild(card.sprite);
+                card.generateImages();
+                smallSizeCardInHandSprite(card.sprite);
+
+                card.sprite.x = cardCoords.x;
+                card.sprite.y = cardCoords.y;
+
+                app.stage.addChild(card.sprite);
+
+                card.sprite.on('mouseover', mouseOverCardInHand);
+                card.sprite.on('mouseout', mouseOutCardInHand);
+                card.sprite.on('pointerdown', onDragFromHandStart);
+                card.sprite.on('pointerup', onDragFromHandEnd);
+                card.sprite.on('pointerupoutside', onDragFromHandEnd);
+                card.sprite.on('pointermove', onDragFromHandMove);
+
                 fixOwnBoardSpacing();
                 fixOwnHandSpacing(nextInEventQueue);
             }
             else {
                 let temp = game.enemyBoard.splice(event.target, 1)[0];
 
+                app.stage.removeChild(temp.sprite);
+
                 let card = new PIXI.Sprite(textures.cardBack);
+
+                app.stage.removeChild(card.popup);
 
                 card.anchor.x = .5;
                 card.anchor.y = .5;
 
-                card.x = temp.x;
-                card.y = temp.y;
+                card.width = temp.sprite.width;
+                card.height = temp.sprite.height;
+
+                card.x = temp.sprite.x;
+                card.y = temp.sprite.y;
 
                 enemyCardsInHand.unshift(card);
 

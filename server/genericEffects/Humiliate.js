@@ -20,7 +20,7 @@ module.exports = {
         } else {
             event = {
                 type: 'humiliate',
-                player: game.currentPlayer,
+                player: game.currentPlayer.id,
                 targetSide: input.targetSide,
                 target: input.target
             };
@@ -28,5 +28,6 @@ module.exports = {
         }
 
         eventChain.push(event);
+        
     }
 }

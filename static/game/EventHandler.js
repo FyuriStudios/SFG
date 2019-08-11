@@ -12,32 +12,22 @@ function startGame() {
 
     if (passDeck == "random") {
         deck.push(45);
-        deck.push(46);
-        deck.push(52);
-        deck.push(28);
+        deck.push(45);
+        deck.push(45);
+        deck.push(45);
+        deck.push(45);
+       
         deck.push(48);
-        deck.push(41);
-        deck.push(49);
-        deck.push(40);
-        deck.push(39);
-        deck.push(61);
-        deck.push(60);
-        deck.push(59);
-        deck.push(58);
-        deck.push(57);
-        deck.push(56);
-        deck.push(55);
-        deck.push(54);
-        deck.push(53);
-        deck.push(51);
+        deck.push(48);
+        deck.push(48);
+        deck.push(48);
+        deck.push(48);
+      
         deck.push(47);
-        deck.push(44);
-        deck.push(43);
-        deck.push(42);
-        deck.push(38);
-        deck.push(37);
-        deck.push(25); //corrupted eagle for testing
-        deck.push(50);
+        deck.push(47);
+        deck.push(47);
+        deck.push(47);
+        deck.push(47);
     } else {
         deck = passDeck.split(', ');
         character = deck.shift();
