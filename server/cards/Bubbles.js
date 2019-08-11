@@ -21,16 +21,12 @@ class Bubbles extends Monster {
 
                 player.socket.once('target choice', input => {
 
-                    console.log('bubbles choice made');
-
                     /*
                     We have to create this because there is no event chain when the choice is triggered. Therefore,
                     we have to emit the event ourselves right here. This is gross, I concede that.
                     */
                     let newEvent = [];
                     Humiliate.func(input, game, newEvent);
-
-                    console.log('out of humiliate');
 
                     // if(input.player == game.currentPlayer) { //In the unlikely event that card draw can happen in between humiliate effects, we need to fix this card.
                     //     newEvent.push({
