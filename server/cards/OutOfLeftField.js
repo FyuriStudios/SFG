@@ -1,4 +1,5 @@
 var Spell = require('../Spell');
+let constants = require('../../constants/constants');
 
 class OutOfLeftField extends Spell {
 
@@ -20,8 +21,11 @@ class OutOfLeftField extends Spell {
         this.addTurnIncrement({
             name: 'Left Field',
             func: function(input, game, eventChain) {
+
+                console.log('left field effect');
+
                 if((game.turnCounter - card.creationDate)%4 == 0) {
-                    if(game.otherPlayer.mToks > game.currentPlayer.mToks) {
+                    if(game.otherPlayer.mToks > (game.currentPlayer.mToks - constants.TOKS_PER_TURN)) {
                         eventChain.push({
                             type: 'gain tokens',
                             player: game.currentPlayer.id,
@@ -32,7 +36,7 @@ class OutOfLeftField extends Spell {
 
                         game.currentPlayer.mToks += 1;
                     }
-                    if(game.otherPlayer.sToks > game.currentPlayer.sToks) {
+                    if(game.otherPlayer.sToks > (game.currentPlayer.sToks - constants.TOKS_PER_TURN)) {
                         eventChain.push({
                             type: 'gain tokens',
                             player: game.currentPlayer.id,

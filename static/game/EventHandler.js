@@ -28,6 +28,11 @@ function startGame() {
         deck.push(47);
         deck.push(47);
         deck.push(47);
+
+        deck.push(46);
+        deck.push(46);
+        deck.push(46);
+        deck.push(46);
     } else {
         deck = passDeck.split(', ');
         character = deck.shift();
