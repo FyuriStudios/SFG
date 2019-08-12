@@ -1,5 +1,6 @@
 var Spell = require('../Spell');
 let Humiliate = require('../genericEffects/Humiliate');
+let _ = require('lodash');
 
 class TimeCube extends Spell {
 
@@ -9,9 +10,20 @@ class TimeCube extends Spell {
         this.addCardPlayed({
             name: 'Time Cube',
             func: function(input, game, eventChain) {
-                _.times(game.currentPlayer.board.length, Humiliate.func({targetSide: game.currentPlayer.id, target: index}, game, eventChain));
 
-                _.times(game.otherPlayer.board.length, Humiliate.func({targetSide: game.otherPlayer.id, target: index}, game, eventChain));
+                game.currentPlayer.board.forEach((value, index) => {
+                    Humiliate.func({
+                        targetSide: game.currentPlayer.id,
+                        target: index
+                    }, game, eventChain);
+                });
+
+                game.otherPlayer.board.forEach((value, index) => {
+                    Humiliate.func({
+                        targetSide: game.otherPlayer.id,
+                        target: index
+                    }, game, eventChain);
+                });
             }
         });
     }

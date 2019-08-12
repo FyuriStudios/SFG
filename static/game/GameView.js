@@ -1861,7 +1861,8 @@ let GameView = (function () {
 
                 app.stage.addChild(card);
 
-                fixEnemyHandSpacing(() => nextInEventQueue());
+                fixEnemyBoardSpacing();
+                fixEnemyHandSpacing(nextInEventQueue);
             }
         }
 
