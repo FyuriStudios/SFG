@@ -1834,8 +1834,7 @@ let GameView = (function () {
                 card.sprite.on('pointerupoutside', onDragFromHandEnd);
                 card.sprite.on('pointermove', onDragFromHandMove);
 
-                fixOwnBoardSpacing();
-                fixOwnHandSpacing(nextInEventQueue);
+                fixOwnBoardSpacing(event.target, () => fixOwnHandSpacing(nextInEventQueue));
             }
             else {
                 let temp = game.enemyBoard.splice(event.target, 1)[0];
@@ -1861,8 +1860,7 @@ let GameView = (function () {
 
                 app.stage.addChild(card);
 
-                fixEnemyBoardSpacing();
-                fixEnemyHandSpacing(nextInEventQueue);
+                fixEnemyBoardSpacing(event.target, () => fixOwnHandSpacing(nextInEventQueue));
             }
         }
 
