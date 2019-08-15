@@ -11,28 +11,23 @@ function startGame() {
     let character = 'ignea';
 
     if (passDeck == "random") {
-        deck.push(45);
-        deck.push(45);
-        deck.push(45);
-        deck.push(45);
-        deck.push(45);
-       
-        deck.push(48);
-        deck.push(48);
-        deck.push(48);
-        deck.push(48);
-        deck.push(48);
       
         deck.push(47);
         deck.push(47);
         deck.push(47);
         deck.push(47);
         deck.push(47);
+        deck.push(47);
+        deck.push(47);
+        deck.push(47);
+        deck.push(47);
+        deck.push(47);
+        deck.push(47);
 
-        deck.push(50);
-        deck.push(50);
-        deck.push(50);
-        deck.push(50);
+        deck.push(59);
+        deck.push(59);
+        deck.push(59);
+        deck.push(59);
     } else {
         deck = passDeck.split(', ');
         character = deck.shift();

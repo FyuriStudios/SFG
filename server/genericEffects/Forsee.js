@@ -32,7 +32,7 @@ module.exports = {
 
                     if(forseeEffect.choice == 'monster') {
                         if (game.currentPlayer.mToks >= constants.MAX_TOKS - forseeEffect.amount) {
-                            var currMToks = temp.sToks;
+                            var currMToks = game.currentPlayer.mToks;
                             game.currentPlayer.mToks = constants.MAX_TOKS;
                             event.amount = constants.MAX_TOKS - currMToks;
                         } else {
@@ -42,7 +42,7 @@ module.exports = {
                     }
                     else if(forseeEffect.choice == 'action') {
                         if (game.currentPlayer.sToks >= constants.MAX_TOKS - forseeEffect.amount) {
-                            var currSToks = temp.sToks;
+                            var currSToks = game.currentPlayer.sToks;
                             game.currentPlayer.sToks = constants.MAX_TOKS;
                             event.amount = constants.MAX_TOKS - currSToks;
                         } else {
