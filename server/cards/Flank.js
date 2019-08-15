@@ -10,6 +10,8 @@ class Flank extends Spell {
             name: 'Flank Effect',
             func: function(input, game, eventChain) {
 
+                game.drawCard(game.currentPlayer, eventChain);
+
                 let removeDefender = (value) => {
                     if(value.hasDefender) {
                         value.hadDefender = true;
