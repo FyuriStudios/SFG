@@ -11,19 +11,20 @@ class SupplyCrate extends Spell {
             func: function (input, game, eventChain){
                 
                 if(game.currentPlayer.board.length > 3){
-                let nums = [-1, -2, -3];
-                    for(let i = 0; i < 3; i++){
+
+                    let nums = [-1, -2, -3];
+                    for(let i = 0; i < 3; i++) {
                         let boostIndex = Math.floor(Math.random() * (game.currentPlayer.board.length));
-                        while(boostIndex != nums[0] && boostIndex != nums[1] && boostIndex != nums[2]){
+                        while(boostIndex == nums[0] || boostIndex == nums[1] || boostIndex == nums[2]){
                             boostIndex = Math.floor(Math.random() * (game.currentPlayer.board.length));
                         }
                         Boost.func({target: boostIndex, targetSide: game.currentPlayer.id}, game, eventChain, 2);
-                        nums[i] = boostIndex
+                        nums[i] = boostIndex;
                     }
                 }
-                else{
+                else {
                     for(let j = 0; j < game.currentPlayer.board.length; j++){
-                        Boost.func({target: game.currentPlayer.board[j], targetSide: game.currentPlayer.id}, game, eventChain, 2);
+                        Boost.func({target: j, targetSide: game.currentPlayer.id}, game, eventChain, 2);
                     }
                 }
             }
