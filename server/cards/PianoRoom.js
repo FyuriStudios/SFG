@@ -1,4 +1,5 @@
 var Spell = require('../Spell');
+let Boost = require('../genericEffects/Boost');
 
 class PianoRoom extends Spell {
 
@@ -19,18 +20,16 @@ class PianoRoom extends Spell {
         this.addMonsterPlayed({
             name: 'untitled',
             func: function(input, game, eventChain) {
+
                 if(game.currentPlayer.id == temp.player) {
-                    let monsterLoc = eventChain[eventChain.length - 2].playLoc;
+                    let monsterLoc = eventChain[eventChain.length - 1].playLoc;
 
                     if(game.currentPlayer.board[monsterLoc].hasDefender) {
-                        game.currentPlayer.board[monsterLoc].currentPower += 3;
 
-                        eventChain.push({
-                            type: 'boost',
-                            player: game.currentPlayer.id,
-                            target: monsterLoc,
-                            boost: 3
-                        });
+                        Boost.func({
+                            targetSide: game.currentPlayer.id,
+                            target: monsterLoc
+                        }, game, eventChain, 3);
                     }
                 }
             }

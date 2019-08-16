@@ -678,10 +678,16 @@ class Game {
 		if (toPlay.type == 'monster') {
 			temp.board.splice(input.playLoc, 0, toPlay);
 
-			this.currentPlayer.board.forEach(value => {
+			let checkMonsterPlayed = (value) => {
 				if(value.hasMonsterPlayed)
-					value.monsterPlayed(input, game, eventChain);
-			});
+					value.monsterPlayed(input, this, eventChain);
+			}
+			if(this.currentPlayer.fieldSpell != null && this.currentPlayer.fieldSpell.hasMonsterPlayed)
+				this.currentPlayer.fieldSpell.monsterPlayed(input, this, eventChain);
+			if(this.otherPlayer.fieldSpell != null && this.otherPlayer.fieldSpell.hasMonsterPlayed)
+				this.otherPlayer.fieldSpell.monsterPlayed(input, this, eventChain);
+			this.currentPlayer.board.forEach(checkMonsterPlayed);
+			this.otherPlayer.board.forEach(checkMonsterPlayed);
 
 			if (toPlay.hasCardPlayed)
 				toPlay.cardPlayed(input, this, eventChain);

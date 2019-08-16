@@ -109,7 +109,7 @@ class Effect {
     }
 
     monsterPlayed(input, game, eventChain) {
-        this.cardDrawList.forEach(i => i.func(input, game, eventChain));
+        this.monsterPlayedList.forEach(i => i.func(input, game, eventChain));
     }
 
 }
