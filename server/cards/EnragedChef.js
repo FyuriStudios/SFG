@@ -12,6 +12,7 @@ class EnragedChef extends Monster {
             name: 'enraged signature',
             func: function(input, game, eventChain) {
                 let newChef = IDToCard(61);
+                newChef.playCost = newChef.cost;
                 if(game.currentPlayer.board.length < constants.MAX_BOARD_SIZE) {
                     game.currentPlayer.board.unshift(newChef);
 
