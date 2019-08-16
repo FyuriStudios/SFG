@@ -9,7 +9,6 @@ class EfsisiElixir extends Spell {
         this.addCardPlayed({
             name: 'Efsisi Elixir Play',
             func: function(input, game, eventChain) {
-                let choices = Array.from(Array(game.currentPlayer.hand.length).keys()); //This line creates a drop array that basically just says "drop all the cards in the hand".
 
                 let temp = game.currentPlayer.hand;
 
@@ -18,16 +17,8 @@ class EfsisiElixir extends Spell {
                 game.currentPlayer.deck.unshift(...temp);
 
                 eventChain.push({
-                    type: 'drop cards',
-                    choices: choices,
-                    player: game.currentPlayer.id 
-                });
-
-                _.times(temp.length, () => {
-                    eventChain.push({
-                        type: 'add deck card',
-                        player: game.currentPlayer.id
-                    });
+                    type: 'mulligan hand',
+                    player: game.currentPlayer.id
                 });
 
                 _.times(7, () => {
