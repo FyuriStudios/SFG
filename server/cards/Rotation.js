@@ -9,7 +9,7 @@ class Rotation extends Spell {
         this.addCardPlayed({
             name: 'Rotation Effect',
             func: function(input, game, eventChain){
-                player.hand.splice(input.target, 1)[0];
+                game.currentPlayerplayer.hand.splice(input.target, 1)[0];
                 eventChain.push({
                     type: 'remove hand card',
                     index: input.target,
