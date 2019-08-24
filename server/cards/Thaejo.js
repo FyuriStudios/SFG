@@ -10,7 +10,7 @@ class Thaejo extends Monster {
         this.addCardPlayed({
             name: 'Thaejo Signature',
             func: function(input, game, eventChain){
-                Heal.func({}, game, eventChain, 10);
+                Heal.func({targetSide: game.currentPlayer.id}, game, eventChain, 10);
             }
         });
     }

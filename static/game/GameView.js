@@ -1256,7 +1256,7 @@ let GameView = (function () {
 
             if (event.target == -1) {
 
-                if (event.player == game.id) {
+                if(event.player == game.id) {
                     let xDestination = .492 * app.stage.width;
                     let yDestination = .189 * app.stage.height;
                     let attacker = game.ownBoard[event.attacker];

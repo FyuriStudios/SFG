@@ -12,7 +12,7 @@ class WoundRegen extends Spell {
         this.addCardPlayed({
             name: 'Wound Regeneration',
             func: function(input, game, eventChain) {
-                Heal.func({}, game, eventChain, 8);
+                Heal.func({targetSide: game.currentPlayer.id}, game, eventChain, 8);
                 game.drawCard(game.currentPlayer, eventChain);
             }
         });

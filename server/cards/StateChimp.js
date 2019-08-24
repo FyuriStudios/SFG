@@ -12,7 +12,7 @@ class StateChimp extends Monster {
         this.addCardPlayed({
             name: 'State Chimp Signature',
             func: function(input, game, eventChain) {
-                CharacterHealing.func({}, game, eventChain, card.currentPower);
+                CharacterHealing.func({targetSide: game.currentPlayer.id}, game, eventChain, card.currentPower);
             }
         });
     }
