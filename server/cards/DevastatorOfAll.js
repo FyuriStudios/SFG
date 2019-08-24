@@ -3,7 +3,7 @@ let Monster = require('../Monster');
 class DevastatorOfAll extends Monster {
 
     constructor() {
-        super('monster', 37, 'monster', 'common', 'Devastator Of All', 5, 2, 'crow');
+        super('monster', 37, 'monster', 'common', 'Devastator Of All', 5, 2, 'crow', true);
 
         this.hasCardPlayed = true;
 
