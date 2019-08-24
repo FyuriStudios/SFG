@@ -306,6 +306,11 @@ class Game {
 					let mulliganChain = [];
 					player.setMulligan = true;
 
+					if(input.choices.length == 0) {
+						gameReference.start(gameReference);
+						return;
+					}
+
 					let discards = [];
 					input.choices.forEach(index => discards.push(player.hand[index]));
 
