@@ -287,7 +287,6 @@ let GameView = (function () {
 
         this.dragging = false;
 
-
         let temp = this;
         game.hand.forEach((val) => val.sprite == temp ? temp = val : null);
 
@@ -449,14 +448,15 @@ let GameView = (function () {
                 }
 
             }
-            
             else if(temp.handTargeting) {
                 UserChoices.chooseHandCard(game, (index) => {
+
                     outputFunc({
                         type: 'play card',
                         handLoc: handLoc,
-                        target: index,
-                    })
+                        index: index,
+                    });
+                    nextInEventQueue();
                 });
             }
             
@@ -1626,13 +1626,9 @@ let GameView = (function () {
             if (event.player == game.id) {
                 let card = game.hand.splice(event.index, 1)[0];
                 game.ownGraveyard.push(card);
-                AnimationQueue.addMoveRequest(card.sprite, {
-                    x: app.stage.width * .25,
-                    y: app.stage.height * .5
-                }, 15, () => {
-                    app.stage.removeChild(card.sprite);
-                    fixOwnHandSpacing(() => nextInEventQueue());
-                });
+                app.stage.removeChild(card.sprite);
+                fixOwnHandSpacing();
+                nextInEventQueue();
             } else {
                 let cardSprite = enemyCardsInHand.splice(event.index, 1)[0];
 
@@ -1652,7 +1648,7 @@ let GameView = (function () {
                     y: app.stage.height * .5
                 }, 15, () => {
                     app.stage.removeChild(burnedCard.sprite);
-                    fixEnemyHandSpacing(() => nextInEventQueue());
+                    fixEnemyHandSpacing(() => fixEnemyHandSpacing(nextInEventQueue()));
                 });
             }
         } else if (event.type == 'add deck card') {

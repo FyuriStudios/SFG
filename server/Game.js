@@ -189,6 +189,7 @@ class Game {
 				targeting: card.targeting,
 				forseeing: card.forseeing,
 				field: card.field,
+				handTargeting: card.handTargeting,
 			};
 		}
 	}

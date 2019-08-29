@@ -24,10 +24,10 @@ function startGame() {
         deck.push(47);
         deck.push(47);
 
-        deck.push(59);
-        deck.push(59);
-        deck.push(59);
-        deck.push(59);
+        deck.push(56);
+        deck.push(56);
+        deck.push(56);
+        deck.push(56);
     } else {
         deck = passDeck.split(', ');
         character = deck.shift();
