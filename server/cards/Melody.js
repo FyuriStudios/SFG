@@ -71,7 +71,7 @@ class Melody extends Monster {
                     type: 'boost',
                     targetSide: game.currentPlayer.id,
                     target: melodyIndex,
-                    boost: 2
+                    boost: 1
                 };
 
                 eventChain.push(boostEvent);

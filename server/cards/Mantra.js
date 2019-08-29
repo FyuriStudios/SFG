@@ -66,14 +66,14 @@ class Mantra extends Monster {
 
     set currentPower(value) {
 
-        if(this._currentPower - value <= 2 && !(value > this._currentPower)) {
+        if(this._currentPower - value <= 1 && !(value > this._currentPower)) {
             return;
         }
         else if(value > this._currentPower) {
             this._currentPower = value;
         }
         else {
-            this._currentPower = value + 2;
+            this._currentPower = value + 1;
         }
     }
 
