@@ -62,7 +62,7 @@ class Melody extends Monster {
         this.addSelfAttack({
             name: 'Melody Attack',
             func: function(input, game, eventChain) {
-                temp.currentPower += 2;
+                temp.currentPower += 1;
 
                 let melodyIndex;
                 game.currentPlayer.board.forEach((value, index) => value == temp? melodyIndex = index:null);
