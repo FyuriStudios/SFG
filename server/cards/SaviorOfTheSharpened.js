@@ -3,7 +3,7 @@ let Monster = require('../Monster');
 class SaviorOfTheSharpened extends Monster {
 
     constructor() {
-        super('monster', 16, 'monster', 'secret weapon', 'Savior of the Sharpened', 8, 5, 'cur');
+        super('monster', 16, 'monster', 'secret weapon', 'Savior of the Sharpened', 8, 8, 'cur');
 
         this.hasCardPlayed = true;
 

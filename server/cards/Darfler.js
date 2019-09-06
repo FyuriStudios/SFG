@@ -4,7 +4,7 @@ let idToCard = require('../IDToCard');
 class Darfler extends Monster {
 
     constructor() {
-        super('monster', 52, 'monster', 'legendary', 'Darfler The Persistent Genius', 6, 2, 'advisor');
+        super('monster', 52, 'monster', 'legendary', 'Darfler The Persistent Genius', 6, 5, 'advisor');
 
         this.hasCardPlayed = true;
 
