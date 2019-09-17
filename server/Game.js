@@ -324,11 +324,11 @@ class Game {
 						choices: input.choices
 					});
 
-					player.deck.shuffle();
-
 					_.times(discards.length, () => gameReference.drawCard(player, mulliganChain)); //this "times" syntax is beautiful. All languages need it.
 
 					player.deck.extend(discards);
+
+					player.deck.shuffle();
 
 					_.times(discards.length, () => mulliganChain.push({type: 'add deck card', player: player.id}));
 
