@@ -10,11 +10,17 @@ class SaviorOfTheSharpened extends Monster {
         this.addCardPlayed({
             name: 'Savior Signature',
             func: function(input, game, eventChain) {
-                game.currentPlayer.deck.forEach(value => {
+                let i = game.currentPlayer.deck.length - 1;
+                let cardsBoosted = 0;
+                while(cardsBoosted < 3 && i >= 0) {
+                    let value = game.currentPlayer.deck[i];
                     if(value.type == 'monster') {
-                        value.currentPower += 2;
+                        cardsBoosted++;
+                        value.currentPower += 4;
                     }
-                });
+                    i -= 1;
+                }
+
             }
         });
     }

@@ -3,7 +3,7 @@ var Spell = require('../Spell');
 class Gamble extends Spell {
 
     constructor() {
-        super(43, 'spell', 'uncommon', 'Gamble', 3, false, false, false);
+        super(43, 'spell', 'uncommon', 'Gamble', 2, false, false, false);
         this.hasCardPlayed = true;
         this.addCardPlayed({
             name: 'gamble effect',

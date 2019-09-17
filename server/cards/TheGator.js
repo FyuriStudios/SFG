@@ -4,7 +4,7 @@ class TheGator extends Monster {
 
     constructor() {
 
-        super('monster', 41, 'monster', 'common', 'The Gator', 4, 3, 'cur', false, true);
+        super('monster', 41, 'monster', 'common', 'The Gator', 5, 4, 'cur', false, true);
 
         this.hasSelfAttack = true;
 

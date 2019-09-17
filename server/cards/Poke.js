@@ -4,7 +4,7 @@ let Damage = require('../genericEffects/Damage');
 class Poke extends Monster {
 
     constructor() {
-        super('monster', 28, 'monster', 'common', 'Poke', 4, 3, 'crow')
+        super('monster', 28, 'monster', 'common', 'Poke', 2, 3, 'crow')
 
         this.hasEntersBoard = true;
         let card = this;

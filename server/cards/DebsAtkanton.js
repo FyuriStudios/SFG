@@ -4,7 +4,7 @@ let Boost = require('../genericEffects/Boost');
 class DebsAtkanton extends Monster {
 
     constructor() {
-        super('monster', 47, 'monster', 'common', 'Debs Atkanton', 2, 1, 'advisor', false, false, true, false, true);
+        super('monster', 47, 'monster', 'common', 'Debs Atkanton', 3, 3, 'advisor', false, false, true, false, true);
         this.hasCardPlayed = true;
         this.addCardPlayed({
             name: 'Debs Signature',

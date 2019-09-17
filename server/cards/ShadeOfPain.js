@@ -3,7 +3,7 @@ let Monster = require('../Monster');
 class ShadeOfPain extends Monster {
 
     constructor() {
-        super('monster', 14, 'monster', 'uncommon', 'Shade of Pain', 3, 4, 'dunkle');
+        super('monster', 14, 'monster', 'uncommon', 'Shade of Pain', 3, 3, 'dunkle');
 
         this.hasCardPlayed = true;
 
