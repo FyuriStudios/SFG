@@ -1,5 +1,7 @@
 function startGame() {
 
+    window.onbeforeunload = function() { return "Your work will be lost."; };
+
     let socket = io();
 
     let gameVars = {};
