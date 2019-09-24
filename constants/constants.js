@@ -1,5 +1,5 @@
 module.exports = {
-    MAX_TOKS : 15,
+    MAX_TOKS : 12,
     TOKS_PER_TURN : 3,
     MAX_HAND_SIZE : 10,
     MAX_BOARD_SIZE : 10,
