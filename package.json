@@ -21,7 +21,7 @@
     "create.js": "0.0.16",
     "createjs": "^1.0.1",
     "express": "^4.16.4",
-    "lodash": "^4.17.11",
+    "lodash": "^4.17.19",
     "socket.io": "^2.1.1"
   }
 }
