@@ -22,6 +22,6 @@
     "createjs": "^1.0.1",
     "express": "^4.16.4",
     "lodash": "^4.17.11",
-    "socket.io": "^2.1.1"
+    "socket.io": "^2.5.0"
   }
 }
